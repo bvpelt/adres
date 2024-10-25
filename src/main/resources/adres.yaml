@@ -1,0 +1,137 @@
+openapi: '3.0.3'
+info:
+  title: Adres API
+  version: '0.0.1'
+servers:
+  - url: https://api.server.test/opvragen/v1
+paths:
+  /persons:
+    get:
+      tags:
+        - Persons
+      summary: Retrieve all known persons
+      description: |
+        Retrieve all known persons, using paging and sorting
+      operationId: getPersons
+      responses:
+        '200':
+          $ref: '#/components/responses/Persons'
+    post:
+      tags:
+        - Persons
+      summary: Create a new person
+      description: |
+        Create a new person
+        To determine if an person is new the input is compared on the hash value of:
+        - firstName
+        - infix
+        - lastName
+        If the hash value already exists in the backend, the person is considered to exist
+      operationId: postPerson
+      responses:
+        '200':
+          $ref: '#/components/responses/Persons'          
+  /persons/{personId}:
+      get:
+        tags:
+          - Persons
+        summary: Retrieve all known persons
+        description: |
+          Retrieve all known persons, using paging and sorting
+        operationId: getPerson
+        parameters:
+          - $ref: '#/components/parameters/personId'
+        responses:
+          '200':
+            $ref: '#/components/responses/Person'         
+components:
+  examples:
+    Person-01:
+      summary: A single person with all fields
+      value:
+        personId: 1 
+        firstName: "Jos"
+        infix: "van Der"
+        lastName: "Vlist"
+    Person-02:
+      summary: A single person without infix
+      value:
+        personId: 3 
+        firstName: "Albert"
+        lastName: "Einstein"
+    Persons-01:
+      summary: An empty list of persons
+      value: []
+    Persons-02:
+      summary: An empty list of persons
+      value: 
+        - personId: 1 
+          firstName: "Jos"
+          infix: "van Der"
+          lastName: "Vlist"
+        - personId: 2
+          firstName: "Karel"
+          lastName: "Appel"
+        - personId: 3 
+          firstName: "Albert"
+          lastName: "Einstein"
+  parameters:
+    personId:
+      name: personId
+      in: path
+      description: The person identification of the person to return
+      required: true
+      schema:
+        type: integer
+        format: int64
+  schemas:
+    Person: 
+      type: object
+      required:
+        - personId
+        - firstName
+        - lastName
+      properties:
+        personId:
+          type: integer
+          format: int64
+          example: 1
+        firstName:
+          type: string
+          maxLength: 24
+          example: Jos
+        infix:
+          type: string
+          maxLength: 12
+          example: van der 
+        lastName:
+          type: string
+          maxLength: 48
+          example: Vlist
+    Persons: 
+      type: array      
+      items:
+        $ref: '#/components/schemas/Person'
+  responses:
+    Persons:
+      description: A collection of persons
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Persons'
+          examples:
+            emptylist:
+              $ref: '#/components/examples/Persons-01'
+            fulllist:
+              $ref: '#/components/examples/Persons-02'
+    Person:
+      description: A specific person
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Person'
+          examples:
+            allfields:
+              $ref: '#/components/examples/Person-01'
+            noinfix:
+              $ref: '#/components/examples/Person-02'              
