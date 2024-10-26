@@ -5,6 +5,23 @@ info:
 servers:
   - url: https://api.server.test/opvragen/v1
 paths:
+  /adresses:
+    get:
+      tags:
+        - Adresses
+      summary: Retrieve all known adresses
+      description: |
+        Retrieve all known adresses, using paging and sorting
+      operationId: getAdresses
+      responses:
+        '200':
+          $ref: '#/components/responses/Adresses'
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"    
   /persons:
     get:
       tags:
@@ -16,6 +33,12 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/Persons'
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"          
     post:
       tags:
         - Persons
@@ -28,24 +51,117 @@ paths:
         - lastName
         If the hash value already exists in the backend, the person is considered to exist
       operationId: postPerson
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonBody'
+            examples:
+              person:
+                $ref: '#/components/examples/PersonBody'
       responses:
         '200':
-          $ref: '#/components/responses/Persons'          
+          $ref: '#/components/responses/Person'  
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"                   
   /persons/{personId}:
       get:
         tags:
           - Persons
-        summary: Retrieve all known persons
+        summary: Retrieve the specified person
         description: |
-          Retrieve all known persons, using paging and sorting
+          Retrieve only one person with id personId
         operationId: getPerson
         parameters:
           - $ref: '#/components/parameters/personId'
         responses:
           '200':
-            $ref: '#/components/responses/Person'         
+            $ref: '#/components/responses/Person'   
+          "400":
+            $ref: "#/components/responses/IllegalInput"
+          "404":
+            $ref: "#/components/responses/NotFound"
+          "429":
+            $ref: "#/components/responses/ToManyRequests"
+          "5XX":
+            $ref: "#/components/responses/ServerError"              
+      delete:
+        tags:
+          - Persons
+        summary: Delete the specified person
+        description: |
+          Delete only the specified person
+        operationId: deletePerson
+        parameters:
+          - $ref: '#/components/parameters/personId'
+        responses:
+          '200':
+            $ref: '#/components/responses/Person'  
+          "400":
+            $ref: "#/components/responses/IllegalInput"
+          "404":
+            $ref: "#/components/responses/NotFound"
+          "429":
+            $ref: "#/components/responses/ToManyRequests"
+          "5XX":
+            $ref: "#/components/responses/ServerError"               
+      patch:
+        tags:
+          - Persons
+        summary: Update the specified person
+        description: |
+          Update only the person specified with personId
+        operationId: patchPerson
+        parameters:
+          - $ref: '#/components/parameters/personId'
+        requestBody:
+          description: Request parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonBody'
+              examples:
+                person:
+                  $ref: '#/components/examples/PersonBody'
+        responses:
+          '200':
+            $ref: '#/components/responses/Person'  
+          "400":
+            $ref: "#/components/responses/IllegalInput"
+          "404":
+            $ref: "#/components/responses/NotFound"
+          "429":
+            $ref: "#/components/responses/ToManyRequests"
+          "5XX":
+            $ref: "#/components/responses/ServerError"                           
 components:
   examples:
+    Adresses-01:
+      summary: An empty list of adresses
+      value: []
+    Adresses-02:
+      summary: An empty list of adresses
+      value: 
+        - adresId: 1 
+          street: "Kerkewijk"
+          housenumber: "125"
+          zipcode: "3904 JB"
+          city: "Veenendaal"
+        - adresId: 2
+          street: "Kerkstraat"
+          housenumber: "14"
+          zipcode: "1541 HA"
+          city: "Koog aan de Zaan"
+        - adresId: 3 
+          street: "Spoorlaan"
+          housenumber: "14"
+          zipcode: "5017 JS"
+          city: "Tilburg"
     Person-01:
       summary: A single person with all fields
       value:
@@ -75,6 +191,44 @@ components:
         - personId: 3 
           firstName: "Albert"
           lastName: "Einstein"
+    PersonBody:
+      summary: A new person with all fields filled
+      value:
+        firstName: "Jos"
+        infix: "van Der"
+        lastName: "Vlist"          
+    Problem-400:
+      summary: Bad Request
+      value:
+        type: "https://service.pre.omgevingswet.overheid.nl/publiek/catalogus/bad_request"
+        title: "Ongeldige combinatie  of inhoud van parameters"
+        status: 400
+        detail: "beschikbaarTot moet groter zijn dan beschikbaarOp als deze ingevuld is"
+        instance: "urn:uuid:4017fabc-1b28-11e8-accf-0ed5f89f718b"
+    Problem-404:
+      summary: Not Found
+      value:
+        type: "https://service.pre.omgevingswet.overheid.nl/publiek/catalogus/not_found"
+        title: "Geen gegevens gevonden"
+        status: 404
+        detail: "Er zijn geen gegevens gevonden op grond van de opgegeven input parameters"
+        instance: "urn:uuid:4017fabc-1b28-11e8-accf-0ed5f89f718b"
+    Problem-429:
+      summary: To many requests
+      value:
+        type: "https://service.pre.omgevingswet.overheid.nl/publiek/catalogus/to_many_requests"
+        title: "Te veel request aan de server kant"
+        status: 429
+        detail: "Er zijn teveel gelijktijdige request bij de server, probeer het later nog eens"
+        instance: "urn:uuid:4017fabc-1b28-11e8-accf-0ed5f89f718b"
+    Problem-5XX:
+      summary: Server fout
+      value:
+        type: "https://service.pre.omgevingswet.overheid.nl/publiek/catalogus/server_error"
+        title: "Fout aan de server kant"
+        status: 500
+        detail: "Detail gegevens van de server"
+        instance: "urn:uuid:4017fabc-1b28-11e8-accf-0ed5f89f718b"        
   parameters:
     personId:
       name: personId
@@ -85,17 +239,58 @@ components:
         type: integer
         format: int64
   schemas:
-    Person: 
+    Adres: 
+      allOf:
+        - type: object
+          required:
+            - adresId
+          properties: 
+            adresId:
+              type: integer
+              format: int64
+              example: 1
+        - $ref: '#/components/schemas/AdresBody'      
+    AdresBody: 
+      type: object
+      required:
+        - street
+        - housenumber        
+        - city
+      properties:
+        street: 
+          type: string
+          example: Kerkewijk
+        housenumber:
+          type: string
+          example: 125
+        zipcode:
+          type: string
+          example: 3904 JB
+        city:
+          type: string
+          example: Veenendaal
+    Adresses: 
+      type: array      
+      items:
+        $ref: '#/components/schemas/Adres'      
+    Person:
+      allOf:
+        - type: object
+          required:
+            - personId
+          properties: 
+            personId:
+              type: integer
+              format: int64
+              example: 1
+        - $ref: '#/components/schemas/PersonBody'
+    PersonBody: 
       type: object
       required:
         - personId
         - firstName
         - lastName
       properties:
-        personId:
-          type: integer
-          format: int64
-          example: 1
         firstName:
           type: string
           maxLength: 24
@@ -112,7 +307,85 @@ components:
       type: array      
       items:
         $ref: '#/components/schemas/Person'
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Absolute URI dat het probleemtype identificeert.
+          format: uri
+        title:
+          type: string
+          description: Een korte samenvatting van het probleemtype bedoeld voor ontwikkelaars.
+        status:
+          maximum: 600
+          exclusiveMaximum: true
+          minimum: 100
+          type: integer
+          description:
+            De HTTP statuscode gegenereerd door de server waar het probleem
+            zich voordoet.
+          format: int32
+          example: 500
+        detail:
+          type: string
+          description: Mens-leesbare uitleg van dit specifieke probleem.
+          example: Interne server fout
+        instance:
+          type: string
+          description: Absolute URI dat dit specifieke probleem identificeert.
+          format: uri
+      description:
+        Standaardformaat (`application/problem+json`) voor probleemdetails
+        in HTTP API's (RFC 7807).        
   responses:
+    Adresses:
+      description: A collection of adresses
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Adresses'
+          examples:
+            emptylist:
+              $ref: '#/components/examples/Adresses-01'
+            fulllist:
+              $ref: '#/components/examples/Adresses-02'    
+    IllegalInput:
+      description: Ongeldige input
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+          examples:
+            badrequest:
+              $ref: "#/components/examples/Problem-400"
+    NotFound:
+      description: Geen resultaat gevonden
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+          examples:
+            notfound:
+              $ref: "#/components/examples/Problem-404"
+    ServerError:
+      description: Ongeldige input
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+          examples:
+            servererror:
+              $ref: "#/components/examples/Problem-5XX"
+    ToManyRequests:
+      description: Ongeldige input
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+          examples:
+            tomanyrequests:
+              $ref: "#/components/examples/Problem-429"    
     Persons:
       description: A collection of persons
       content:
@@ -135,3 +408,11 @@ components:
               $ref: '#/components/examples/Person-01'
             noinfix:
               $ref: '#/components/examples/Person-02'              
+  securitySchemes:
+    ApiKeyAuth: # arbitrary name for the security scheme
+      type: apiKey
+      in: header # can be "header", "query" or "cookie"
+      name: X-API-KEY # name of the header, query parameter or cookie
+security:
+  - ApiKeyAuth: [] # use the same name as under securitySchemes
+            
