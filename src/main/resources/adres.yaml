@@ -1,7 +1,7 @@
-openapi: '3.0.3'
+openapi: "3.0.3"
 info:
   title: Adres API
-  version: '0.0.1'
+  version: "0.0.1"
 servers:
   - url: https://api.server.test/opvragen/v1
 paths:
@@ -14,14 +14,115 @@ paths:
         Retrieve all known adresses, using paging and sorting
       operationId: getAdresses
       responses:
-        '200':
-          $ref: '#/components/responses/Adresses'
+        "200":
+          $ref: "#/components/responses/Adresses"
         "404":
           $ref: "#/components/responses/NotFound"
         "429":
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
-          $ref: "#/components/responses/ServerError"    
+          $ref: "#/components/responses/ServerError"
+    post:
+      tags:
+        - Adresses
+      summary: Create a new adres
+      description: |
+        Create a new adres
+        To determine if an adres is new the input is compared on the hash value of:
+        - street
+        - housenumber
+        - zipcode
+        - city
+        If the hash value already exists in the backend, the adres is considered to exist
+      operationId: postAdres
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdresBody"
+            examples:
+              adres:
+                $ref: "#/components/examples/AdresBody"
+      responses:
+        "200":
+          $ref: "#/components/responses/Adres"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+  /adresses/{adresId}:
+    get:
+      tags:
+        - Adresses
+      summary: Retrieve the specified adres
+      description: |
+        Retrieve only one adres with id adresId
+      operationId: getAdres
+      parameters:
+        - $ref: "#/components/parameters/adresId"
+      responses:
+        "200":
+          $ref: "#/components/responses/Adres"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+    delete:
+      tags:
+        - Adresses
+      summary: Delete the specified adres
+      description: |
+        Delete only the specified adres
+      operationId: deleteAdres
+      parameters:
+        - $ref: "#/components/parameters/adresId"
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+    patch:
+      tags:
+        - Adresses
+      summary: Update the specified adres
+      description: |
+        Update only the adres specified with adresId
+      operationId: patchAdres
+      parameters:
+        - $ref: "#/components/parameters/adresId"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdresBody"
+            examples:
+              person:
+                $ref: "#/components/examples/AdresBody"
+      responses:
+        "200":
+          $ref: "#/components/responses/Adres"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
   /persons:
     get:
       tags:
@@ -31,14 +132,14 @@ paths:
         Retrieve all known persons, using paging and sorting
       operationId: getPersons
       responses:
-        '200':
-          $ref: '#/components/responses/Persons'
+        "200":
+          $ref: "#/components/responses/Persons"
         "404":
           $ref: "#/components/responses/NotFound"
         "429":
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
-          $ref: "#/components/responses/ServerError"          
+          $ref: "#/components/responses/ServerError"
     post:
       tags:
         - Persons
@@ -56,98 +157,113 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PersonBody'
+              $ref: "#/components/schemas/PersonBody"
             examples:
               person:
-                $ref: '#/components/examples/PersonBody'
+                $ref: "#/components/examples/PersonBody"
       responses:
-        '200':
-          $ref: '#/components/responses/Person'  
+        "200":
+          $ref: "#/components/responses/Person"
         "400":
           $ref: "#/components/responses/IllegalInput"
         "429":
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
-          $ref: "#/components/responses/ServerError"                   
+          $ref: "#/components/responses/ServerError"
   /persons/{personId}:
-      get:
-        tags:
-          - Persons
-        summary: Retrieve the specified person
-        description: |
-          Retrieve only one person with id personId
-        operationId: getPerson
-        parameters:
-          - $ref: '#/components/parameters/personId'
-        responses:
-          '200':
-            $ref: '#/components/responses/Person'   
-          "400":
-            $ref: "#/components/responses/IllegalInput"
-          "404":
-            $ref: "#/components/responses/NotFound"
-          "429":
-            $ref: "#/components/responses/ToManyRequests"
-          "5XX":
-            $ref: "#/components/responses/ServerError"              
-      delete:
-        tags:
-          - Persons
-        summary: Delete the specified person
-        description: |
-          Delete only the specified person
-        operationId: deletePerson
-        parameters:
-          - $ref: '#/components/parameters/personId'
-        responses:
-          '200':
-            $ref: '#/components/responses/Person'  
-          "400":
-            $ref: "#/components/responses/IllegalInput"
-          "404":
-            $ref: "#/components/responses/NotFound"
-          "429":
-            $ref: "#/components/responses/ToManyRequests"
-          "5XX":
-            $ref: "#/components/responses/ServerError"               
-      patch:
-        tags:
-          - Persons
-        summary: Update the specified person
-        description: |
-          Update only the person specified with personId
-        operationId: patchPerson
-        parameters:
-          - $ref: '#/components/parameters/personId'
-        requestBody:
-          description: Request parameters
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PersonBody'
-              examples:
-                person:
-                  $ref: '#/components/examples/PersonBody'
-        responses:
-          '200':
-            $ref: '#/components/responses/Person'  
-          "400":
-            $ref: "#/components/responses/IllegalInput"
-          "404":
-            $ref: "#/components/responses/NotFound"
-          "429":
-            $ref: "#/components/responses/ToManyRequests"
-          "5XX":
-            $ref: "#/components/responses/ServerError"                           
+    get:
+      tags:
+        - Persons
+      summary: Retrieve the specified person
+      description: |
+        Retrieve only one person with id personId
+      operationId: getPerson
+      parameters:
+        - $ref: "#/components/parameters/personId"
+      responses:
+        "200":
+          $ref: "#/components/responses/Person"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+    delete:
+      tags:
+        - Persons
+      summary: Delete the specified person
+      description: |
+        Delete only the specified person
+      operationId: deletePerson
+      parameters:
+        - $ref: "#/components/parameters/personId"
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+    patch:
+      tags:
+        - Persons
+      summary: Update the specified person
+      description: |
+        Update only the person specified with personId
+      operationId: patchPerson
+      parameters:
+        - $ref: "#/components/parameters/personId"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PersonBody"
+            examples:
+              person:
+                $ref: "#/components/examples/PersonBody"
+      responses:
+        "200":
+          $ref: "#/components/responses/Person"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
 components:
   examples:
-    Adresses-01:
+    Adres-01:
+      summary: A new Adres with all fields
+      value:
+        adresId: 1
+        street: "Kerkewijk"
+        housenumber: "125"
+        zipcode: "3904 JB"
+        city: "Veenendaal"
+    Adres-02:
+      summary: A new Adres with only required fields
+      value:
+        adresId: 2
+        street: "Kerkstraat"
+        housenumber: "14"
+        city: "Koog aan de Zaan"
+    AdresList-01:
       summary: An empty list of adresses
       value: []
-    Adresses-02:
+    AdresList-02:
       summary: An empty list of adresses
-      value: 
-        - adresId: 1 
+      value:
+        - adresId: 1
           street: "Kerkewijk"
           housenumber: "125"
           zipcode: "3904 JB"
@@ -157,38 +273,45 @@ components:
           housenumber: "14"
           zipcode: "1541 HA"
           city: "Koog aan de Zaan"
-        - adresId: 3 
+        - adresId: 3
           street: "Spoorlaan"
           housenumber: "14"
           zipcode: "5017 JS"
           city: "Tilburg"
+    AdresBody:
+      summary: A new adres
+      value:
+        - street: "Kerkewijk"
+          housenumber: "125"
+          zipcode: "3904 JB"
+          city: "Veenendaal"
     Person-01:
       summary: A single person with all fields
       value:
-        personId: 1 
+        personId: 1
         firstName: "Jos"
         infix: "van Der"
         lastName: "Vlist"
     Person-02:
       summary: A single person without infix
       value:
-        personId: 3 
+        personId: 3
         firstName: "Albert"
         lastName: "Einstein"
-    Persons-01:
+    PersonList-01:
       summary: An empty list of persons
       value: []
-    Persons-02:
+    PersonList-02:
       summary: An empty list of persons
-      value: 
-        - personId: 1 
+      value:
+        - personId: 1
           firstName: "Jos"
           infix: "van Der"
           lastName: "Vlist"
         - personId: 2
           firstName: "Karel"
           lastName: "Appel"
-        - personId: 3 
+        - personId: 3
           firstName: "Albert"
           lastName: "Einstein"
     PersonBody:
@@ -196,7 +319,7 @@ components:
       value:
         firstName: "Jos"
         infix: "van Der"
-        lastName: "Vlist"          
+        lastName: "Vlist"
     Problem-400:
       summary: Bad Request
       value:
@@ -228,8 +351,16 @@ components:
         title: "Fout aan de server kant"
         status: 500
         detail: "Detail gegevens van de server"
-        instance: "urn:uuid:4017fabc-1b28-11e8-accf-0ed5f89f718b"        
+        instance: "urn:uuid:4017fabc-1b28-11e8-accf-0ed5f89f718b"
   parameters:
+    adresId:
+      name: adresId
+      in: path
+      description: The person identification of the person to return
+      required: true
+      schema:
+        type: integer
+        format: int64
     personId:
       name: personId
       in: path
@@ -239,25 +370,25 @@ components:
         type: integer
         format: int64
   schemas:
-    Adres: 
+    Adres:
       allOf:
         - type: object
           required:
             - adresId
-          properties: 
+          properties:
             adresId:
               type: integer
               format: int64
               example: 1
-        - $ref: '#/components/schemas/AdresBody'      
-    AdresBody: 
+        - $ref: "#/components/schemas/AdresBody"
+    AdresBody:
       type: object
       required:
         - street
-        - housenumber        
+        - housenumber
         - city
       properties:
-        street: 
+        street:
           type: string
           example: Kerkewijk
         housenumber:
@@ -269,22 +400,31 @@ components:
         city:
           type: string
           example: Veenendaal
-    Adresses: 
-      type: array      
+    Adresses:
+      type: array
       items:
-        $ref: '#/components/schemas/Adres'      
+        $ref: "#/components/schemas/Adres"
+    Deleted:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - "OK"
+          description: Status of delete operationId
+          example: "OK"
     Person:
       allOf:
         - type: object
           required:
             - personId
-          properties: 
+          properties:
             personId:
               type: integer
               format: int64
               example: 1
-        - $ref: '#/components/schemas/PersonBody'
-    PersonBody: 
+        - $ref: "#/components/schemas/PersonBody"
+    PersonBody:
       type: object
       required:
         - personId
@@ -298,15 +438,15 @@ components:
         infix:
           type: string
           maxLength: 12
-          example: van der 
+          example: van der
         lastName:
           type: string
           maxLength: 48
           example: Vlist
-    Persons: 
-      type: array      
+    Persons:
+      type: array
       items:
-        $ref: '#/components/schemas/Person'
+        $ref: "#/components/schemas/Person"
     Problem:
       type: object
       properties:
@@ -337,19 +477,39 @@ components:
           format: uri
       description:
         Standaardformaat (`application/problem+json`) voor probleemdetails
-        in HTTP API's (RFC 7807).        
+        in HTTP API's (RFC 7807).
   responses:
+    Adres:
+      description: A specific adres
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Adres"
+          examples:
+            allfields:
+              $ref: "#/components/examples/Adres-01"
+            noinfix:
+              $ref: "#/components/examples/Adres-02"
     Adresses:
       description: A collection of adresses
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Adresses'
+            $ref: "#/components/schemas/Adresses"
           examples:
             emptylist:
-              $ref: '#/components/examples/Adresses-01'
+              $ref: "#/components/examples/AdresList-01"
             fulllist:
-              $ref: '#/components/examples/Adresses-02'    
+              $ref: "#/components/examples/AdresList-02"
+    Deleted:
+      description: Resource deleted
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Deleted"
+    #          examples:
+    #            deleted:
+    #              $ref: '#/components/examples/Deleted'
     IllegalInput:
       description: Ongeldige input
       content:
@@ -385,29 +545,29 @@ components:
             $ref: "#/components/schemas/Problem"
           examples:
             tomanyrequests:
-              $ref: "#/components/examples/Problem-429"    
+              $ref: "#/components/examples/Problem-429"
     Persons:
       description: A collection of persons
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Persons'
+            $ref: "#/components/schemas/Persons"
           examples:
             emptylist:
-              $ref: '#/components/examples/Persons-01'
+              $ref: "#/components/examples/PersonList-01"
             fulllist:
-              $ref: '#/components/examples/Persons-02'
+              $ref: "#/components/examples/PersonList-02"
     Person:
       description: A specific person
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Person'
+            $ref: "#/components/schemas/Person"
           examples:
             allfields:
-              $ref: '#/components/examples/Person-01'
+              $ref: "#/components/examples/Person-01"
             noinfix:
-              $ref: '#/components/examples/Person-02'              
+              $ref: "#/components/examples/Person-02"
   securitySchemes:
     ApiKeyAuth: # arbitrary name for the security scheme
       type: apiKey
@@ -415,4 +575,3 @@ components:
       name: X-API-KEY # name of the header, query parameter or cookie
 security:
   - ApiKeyAuth: [] # use the same name as under securitySchemes
-            
