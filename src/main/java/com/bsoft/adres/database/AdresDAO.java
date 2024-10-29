@@ -1,12 +1,12 @@
 package com.bsoft.adres.database;
 
+import com.bsoft.adres.generated.model.Adres;
+import com.bsoft.adres.generated.model.AdresBody;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import com.bsoft.adres.generated.model.Adres;
-import com.bsoft.adres.generated.model.AdresBody;
 
 import java.io.Serializable;
 

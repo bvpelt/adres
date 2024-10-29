@@ -8,12 +8,9 @@ import com.bsoft.adres.service.AdresService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.ErrorResponseException;
 
-import java.net.URI;
 import java.util.List;
 
 @Slf4j
@@ -31,7 +28,12 @@ public class AdresController implements AdressesApi {
 
     @Override
     public ResponseEntity<Adres> _getAdres(Long adresId) {
-        return null;
+        try {
+            Adres adres = adresService.getAdres(adresId);
+            return ResponseEntity.status(HttpStatus.OK).body(adres); // Return 201 Created with the created entity
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @Override
@@ -50,16 +52,6 @@ public class AdresController implements AdressesApi {
             Adres adres = adresService.postAdres(adresBody); // Call the service method
             return ResponseEntity.status(HttpStatus.CREATED).body(adres); // Return 201 Created with the created entity
         } catch (Exception e) {
-            /*
-            ProblemDetail pd = ProblemDetail
-                    .forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR,
-                            "Null Pointer Exception");
-            pd.setType(URI.create("http://my-app-host.com/errors/npe"));
-            pd.setTitle("Null Pointer Exception");
-            pd.setProperty("hostname", hostname);
-            throw new ErrorResponseException(HttpStatus.NOT_FOUND, pd, e);
-
-             */
             throw e;
         }
     }

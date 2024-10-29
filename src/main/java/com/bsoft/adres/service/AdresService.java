@@ -1,7 +1,7 @@
 package com.bsoft.adres.service;
 
 import com.bsoft.adres.database.AdresDAO;
-import com.bsoft.adres.exceptions.AdresException;
+import com.bsoft.adres.exceptions.AdresExistsException;
 import com.bsoft.adres.generated.model.Adres;
 import com.bsoft.adres.generated.model.AdresBody;
 import com.bsoft.adres.generated.model.Deleted;
@@ -18,7 +18,7 @@ import java.util.Optional;
 @Service
 public class AdresService {
 
-    private AdresRepository adresRepository;
+    private final AdresRepository adresRepository;
 
     @Autowired
     public AdresService(final AdresRepository adresRepository) {
@@ -29,8 +29,19 @@ public class AdresService {
         return null;
     }
 
-    public ResponseEntity<Adres> getAdres(Long adresId) {
-        return null;
+    public Adres getAdres(Long adresId) {
+        Optional<AdresDAO> optionalAdresDAO = adresRepository.findByAdresId(adresId);
+        if (!optionalAdresDAO.isPresent()) {
+            throw new AdresExistsException("Adres with id {}" + adresId + " not found");
+        }
+        Adres adres = new Adres();
+        adres.setAdresId(optionalAdresDAO.get().getAdresid());
+        adres.setStreet(optionalAdresDAO.get().getStreet());
+        adres.setHousenumber(optionalAdresDAO.get().getHousenumber());
+        adres.setZipcode(optionalAdresDAO.get().getZipcode());
+        adres.setCity(optionalAdresDAO.get().getCity());
+
+        return adres;
     }
 
     public ResponseEntity<List<Adres>> getAdresses() {
@@ -48,7 +59,7 @@ public class AdresService {
         try {
             Optional<AdresDAO> optionalAdresDAO = adresRepository.findByHash(adresDAO.getHash());
             if (optionalAdresDAO.isPresent()) {
-                throw new AdresException("Adres " + adresDAO.toString() + " already exists");
+                throw new AdresExistsException("Adres " + adresDAO + " already exists");
             }
 
             adresRepository.save(adresDAO);
