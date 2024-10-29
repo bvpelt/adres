@@ -50,6 +50,7 @@ public class AdresController implements AdressesApi {
             Adres adres = adresService.postAdres(adresBody); // Call the service method
             return ResponseEntity.status(HttpStatus.CREATED).body(adres); // Return 201 Created with the created entity
         } catch (Exception e) {
+            /*
             ProblemDetail pd = ProblemDetail
                     .forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR,
                             "Null Pointer Exception");
@@ -57,6 +58,9 @@ public class AdresController implements AdressesApi {
             pd.setTitle("Null Pointer Exception");
             pd.setProperty("hostname", hostname);
             throw new ErrorResponseException(HttpStatus.NOT_FOUND, pd, e);
+
+             */
+            throw e;
         }
     }
 }

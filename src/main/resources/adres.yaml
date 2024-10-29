@@ -323,35 +323,39 @@ components:
     Problem-400:
       summary: Bad Request
       value:
-        type: "https://service.pre.omgevingswet.overheid.nl/publiek/catalogus/bad_request"
-        title: "Ongeldige combinatie  of inhoud van parameters"
-        status: 400
-        detail: "beschikbaarTot moet groter zijn dan beschikbaarOp als deze ingevuld is"
-        instance: "urn:uuid:4017fabc-1b28-11e8-accf-0ed5f89f718b"
+        timestamp: "2024-10-29T15:56:00.887+00:00"
+        status: 400,
+        error: "Internal Server Error"
+        trace: "com.bsoft.adres.exceptions.AdresException: Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574} already exists\r\n\tat com.bsoft.adres.service.AdresService.postAdres(AdresService.java:51)\r\n\tat com.bsoft.adres.controller.AdresController._postAdres(AdresController.java:50)\r\n\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)\r\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)\r\n\tat org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)"
+        message: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574} already exists"
+        path: "/adresses"
     Problem-404:
       summary: Not Found
       value:
-        type: "https://service.pre.omgevingswet.overheid.nl/publiek/catalogus/not_found"
-        title: "Geen gegevens gevonden"
-        status: 404
-        detail: "Er zijn geen gegevens gevonden op grond van de opgegeven input parameters"
-        instance: "urn:uuid:4017fabc-1b28-11e8-accf-0ed5f89f718b"
+        timestamp: "2024-10-29T15:56:00.887+00:00"
+        status: 404,
+        error: "Not found"
+        trace: "com.bsoft.adres.exceptions.AdresException: Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574} already exists\r\n\tat com.bsoft.adres.service.AdresService.postAdres(AdresService.java:51)\r\n\tat com.bsoft.adres.controller.AdresController._postAdres(AdresController.java:50)\r\n\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)\r\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)\r\n\tat org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)"
+        message: "Not found"
+        path: "/adresses"
     Problem-429:
       summary: To many requests
       value:
-        type: "https://service.pre.omgevingswet.overheid.nl/publiek/catalogus/to_many_requests"
-        title: "Te veel request aan de server kant"
-        status: 429
-        detail: "Er zijn teveel gelijktijdige request bij de server, probeer het later nog eens"
-        instance: "urn:uuid:4017fabc-1b28-11e8-accf-0ed5f89f718b"
+        timestamp: "2024-10-29T15:56:00.887+00:00"
+        status: 429,
+        error: "To many requests"
+        trace: "com.bsoft.adres.exceptions.AdresException: Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574} already exists\r\n\tat com.bsoft.adres.service.AdresService.postAdres(AdresService.java:51)\r\n\tat com.bsoft.adres.controller.AdresController._postAdres(AdresController.java:50)\r\n\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)\r\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)\r\n\tat org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)"
+        message: "To many requests"
+        path: "/adresses"
     Problem-5XX:
       summary: Server fout
       value:
-        type: "https://service.pre.omgevingswet.overheid.nl/publiek/catalogus/server_error"
-        title: "Fout aan de server kant"
-        status: 500
-        detail: "Detail gegevens van de server"
-        instance: "urn:uuid:4017fabc-1b28-11e8-accf-0ed5f89f718b"
+        timestamp: "2024-10-29T15:56:00.887+00:00"
+        status: 500,
+        error: "Internal Server Error"
+        trace: "com.bsoft.adres.exceptions.AdresException: Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574} already exists\r\n\tat com.bsoft.adres.service.AdresService.postAdres(AdresService.java:51)\r\n\tat com.bsoft.adres.controller.AdresController._postAdres(AdresController.java:50)\r\n\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)\r\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)\r\n\tat org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)"
+        message: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574} already exists"
+        path: "/adresses"
   parameters:
     adresId:
       name: adresId
@@ -449,14 +453,13 @@ components:
         $ref: "#/components/schemas/Person"
     Problem:
       type: object
+      description: |
+        Standaardformaat (`application/problem+json`) voor probleemdetails
+        in HTTP API's (RFC 7807).
       properties:
-        type:
+        timestamp:
           type: string
-          description: Absolute URI dat het probleemtype identificeert.
-          format: uri
-        title:
-          type: string
-          description: Een korte samenvatting van het probleemtype bedoeld voor ontwikkelaars.
+          format: date-time
         status:
           maximum: 600
           exclusiveMaximum: true
@@ -467,17 +470,14 @@ components:
             zich voordoet.
           format: int32
           example: 500
-        detail:
+        error: 
           type: string
-          description: Mens-leesbare uitleg van dit specifieke probleem.
-          example: Interne server fout
-        instance:
+        trace:
           type: string
-          description: Absolute URI dat dit specifieke probleem identificeert.
-          format: uri
-      description:
-        Standaardformaat (`application/problem+json`) voor probleemdetails
-        in HTTP API's (RFC 7807).
+        message:
+          type: string
+        path:
+          type: string
   responses:
     Adres:
       description: A specific adres
