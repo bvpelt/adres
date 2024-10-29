@@ -105,6 +105,14 @@
 			<version>3.0.2</version>
 			<scope>compile</scope>
 		</dependency>
+
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.6.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -142,11 +150,11 @@
 							<library>spring-boot</library>
 							<supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
 							<configOptions>
-								<apiPackage>nl.bsoft.adres.generated.api</apiPackage>
-								<basePackage>nl.bsoft.adres.generated</basePackage>
-								<configPackage>nl.bsoft.adres.generated.generated.configuration</configPackage>
-								<invokerPackage>nl.bsoft.adres.generated.invoker</invokerPackage>
-								<modelPackage>nl.bsoft.adres.generated.model</modelPackage>
+								<apiPackage>com.bsoft.adres.generated.api</apiPackage>
+								<basePackage>com.bsoft.adres.generated</basePackage>
+								<configPackage>com.bsoft.adres.generated.generated.configuration</configPackage>
+								<invokerPackage>com.bsoft.adres.generated.invoker</invokerPackage>
+								<modelPackage>com.bsoft.adres.generated.model</modelPackage>
 								<dateLibrary>java8</dateLibrary>
 								<delegatePattern>true</delegatePattern>
 								<hideGenerationTimestamp>true</hideGenerationTimestamp>

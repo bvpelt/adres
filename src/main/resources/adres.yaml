@@ -45,7 +45,7 @@ paths:
               adres:
                 $ref: "#/components/examples/AdresBody"
       responses:
-        "200":
+        "201":
           $ref: "#/components/responses/Adres"
         "400":
           $ref: "#/components/responses/IllegalInput"
@@ -162,7 +162,7 @@ paths:
               person:
                 $ref: "#/components/examples/PersonBody"
       responses:
-        "200":
+        "201":
           $ref: "#/components/responses/Person"
         "400":
           $ref: "#/components/responses/IllegalInput"
