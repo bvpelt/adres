@@ -39,7 +39,7 @@ public class AdresController implements AdressesApi {
 
     @Override
     public ResponseEntity<List<Adres>> _getAdresses() {
-        return null;
+        return ResponseEntity.status(HttpStatus.OK).body(adresService.getAdresses());
     }
 
     @Override
