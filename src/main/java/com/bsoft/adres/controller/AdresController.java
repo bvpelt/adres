@@ -1,5 +1,6 @@
 package com.bsoft.adres.controller;
 
+import com.bsoft.adres.exceptions.AdresExistsException;
 import com.bsoft.adres.generated.api.AdressesApi;
 import com.bsoft.adres.generated.model.Adres;
 import com.bsoft.adres.generated.model.AdresBody;
