@@ -1,7 +1,6 @@
 package com.bsoft.adres.service;
 
 import com.bsoft.adres.database.AdresDAO;
-import com.bsoft.adres.exceptions.AdresExistsException;
 import com.bsoft.adres.generated.model.Adres;
 import com.bsoft.adres.generated.model.AdresBody;
 import com.bsoft.adres.generated.model.Deleted;
@@ -32,7 +31,7 @@ public class AdresService {
     public Adres getAdres(Long adresId) {
         Optional<AdresDAO> optionalAdresDAO = adresRepository.findByAdresId(adresId);
         if (!optionalAdresDAO.isPresent()) {
-            throw new AdresExistsException("Adres with id {}" + adresId + " not found");
+            throw new AdresNotExistsException("Adres with id {}" + adresId + " not found");
         }
         Adres adres = new Adres();
         adres.setAdresId(optionalAdresDAO.get().getAdresid());

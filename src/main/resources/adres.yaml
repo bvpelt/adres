@@ -478,6 +478,30 @@ components:
           type: string
         path:
           type: string
+    ProblemDetail:
+      type: object
+      description: |
+        Standaardformaat (`application/problem+json`) voor probleemdetails
+        in HTTP API's (RFC 7807).
+      properties:
+        type:
+          type: string
+        title:  
+          type: string
+        status:
+          maximum: 600
+          exclusiveMaximum: true
+          minimum: 100
+          type: integer
+          description:
+            De HTTP statuscode gegenereerd door de server waar het probleem
+            zich voordoet.
+          format: int32
+          example: 500
+        detail: 
+          type: string
+        instance:
+          type: string       
   responses:
     Adres:
       description: A specific adres

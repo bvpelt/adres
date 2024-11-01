@@ -36,10 +36,20 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+            <properties>
+                <spring.profiles.active>dev</spring.profiles.active>
+            </properties>
         </profile>
         <profile>
             <id>runtime</id>
+            <properties>
+                <spring.profiles.active>runtime</spring.profiles.active>
+            </properties>
             <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-security</artifactId>
+                </dependency>
                 <dependency>
                     <groupId>org.springframework.security</groupId>
                     <artifactId>spring-security-test</artifactId>
@@ -61,10 +71,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

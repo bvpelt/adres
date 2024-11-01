@@ -5,16 +5,16 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AdresExistsException extends RuntimeException {
+public class AdresNotExistsException extends RuntimeException {
 
     private String url;
 
-    public AdresExistsException() {
+    public AdresNotExistsException() {
         super("Adres already exists");
         this.url = "/";
     }
 
-    public AdresExistsException(final String message, final String url) {
+    public AdresNotExistsException(final String message, final String url) {
         super(message);
         this.url = url;
     }

@@ -16,6 +16,7 @@ public interface AdresRepository extends PagingAndSortingRepository<AdresDAO, Lo
         JpaSpecificationExecutor<AdresDAO> {
     @Query(value = "SELECT * FROM adres WHERE adresid = :adresid", nativeQuery = true)
     Optional<AdresDAO> findByAdresId(@Param("adresid") Long adresid);
+
     @Query(value = "SELECT * FROM adres WHERE hash = :hash", nativeQuery = true)
     Optional<AdresDAO> findByHash(@Param("hash") Integer hash);
 }

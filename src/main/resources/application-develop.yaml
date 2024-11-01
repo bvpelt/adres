@@ -62,6 +62,8 @@ spring:
     url: jdbc:postgresql://localhost:5432/adres
     username: testuser
     password: 12345
+  devtools:
+    add-properties: true
   flyway:
     enabled: true
     url: jdbc:postgresql://localhost:5432/adres
@@ -69,14 +71,19 @@ spring:
     password: 12345
     validateMigrationNaming: true
     locations: classpath:db/migration
+  jpa:
+    open-in-view: false
   mvc:
     problemdetails:
       enabled: true
+  profiles:
+    active=@spring.profiles.active@:
 
-springdoc:
-  enable-spring-security: false
-  show-actuator: true
-  swagger-ui:
-    show-common-extensions: true
-    with-credentials: false
-    url: http://localhost:8080/swagger-ui/index.html
+
+#springdoc:
+#  enable-spring-security: false
+#  show-actuator: true
+#  swagger-ui:
+#    show-common-extensions: true
+#    with-credentials: false
+#    url: http://localhost:8080/swagger-ui/index.html
