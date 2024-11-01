@@ -16,8 +16,6 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/Adresses"
-        "404":
-          $ref: "#/components/responses/NotFound"
         "429":
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
@@ -47,8 +45,8 @@ paths:
       responses:
         "201":
           $ref: "#/components/responses/Adres"
-        "400":
-          $ref: "#/components/responses/IllegalInput"
+        "303":
+          $ref: "#/components/responses/AlreadyExists"
         "429":
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
@@ -320,41 +318,49 @@ components:
         firstName: "Jos"
         infix: "van Der"
         lastName: "Vlist"
+    Problem-303:
+      summary: Bad Request
+      value:
+        type: "http://localhost:8080/already-existed"
+        title: "Adres alreay existed, not expected"
+        status: 303                
+        detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574} already exists"
+        path: "/adresses"
     Problem-400:
       summary: Bad Request
       value:
-        timestamp: "2024-10-29T15:56:00.887+00:00"
+        type: "http://localhost:8080/bad-request"
+        title: "Bad request"
         status: 400,
-        error: "Internal Server Error"
-        trace: "com.bsoft.adres.exceptions.AdresException: Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574} already exists\r\n\tat com.bsoft.adres.service.AdresService.postAdres(AdresService.java:51)\r\n\tat com.bsoft.adres.controller.AdresController._postAdres(AdresController.java:50)\r\n\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)\r\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)\r\n\tat org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)"
-        message: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574} already exists"
+        error: "Bad request"
+        detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574}"
         path: "/adresses"
     Problem-404:
       summary: Not Found
       value:
-        timestamp: "2024-10-29T15:56:00.887+00:00"
+        type: "http://localhost:8080/not-found"
+        title: "Not Found"
         status: 404,
         error: "Not found"
-        trace: "com.bsoft.adres.exceptions.AdresException: Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574} already exists\r\n\tat com.bsoft.adres.service.AdresService.postAdres(AdresService.java:51)\r\n\tat com.bsoft.adres.controller.AdresController._postAdres(AdresController.java:50)\r\n\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)\r\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)\r\n\tat org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)"
-        message: "Not found"
+        detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574}"
         path: "/adresses"
     Problem-429:
       summary: To many requests
       value:
-        timestamp: "2024-10-29T15:56:00.887+00:00"
+        type: "http://localhost:8080/to-many-requests"
+        title: "To many requests"
         status: 429,
         error: "To many requests"
-        trace: "com.bsoft.adres.exceptions.AdresException: Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574} already exists\r\n\tat com.bsoft.adres.service.AdresService.postAdres(AdresService.java:51)\r\n\tat com.bsoft.adres.controller.AdresController._postAdres(AdresController.java:50)\r\n\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)\r\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)\r\n\tat org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)"
-        message: "To many requests"
+        detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574}"
         path: "/adresses"
     Problem-5XX:
       summary: Server fout
       value:
-        timestamp: "2024-10-29T15:56:00.887+00:00"
+        type: "http://localhost:8080/server-error"
+        title: "Internal Server Error"
         status: 500,
         error: "Internal Server Error"
-        trace: "com.bsoft.adres.exceptions.AdresException: Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574} already exists\r\n\tat com.bsoft.adres.service.AdresService.postAdres(AdresService.java:51)\r\n\tat com.bsoft.adres.controller.AdresController._postAdres(AdresController.java:50)\r\n\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)\r\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)\r\n\tat org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)"
-        message: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574} already exists"
+        detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574}"
         path: "/adresses"
   parameters:
     adresId:
@@ -478,6 +484,22 @@ components:
           type: string
         path:
           type: string
+    ProblemDetail:
+      type: object
+      required:
+        - status
+      properties:
+        type: 
+          type: string
+        title: 
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail: 
+          type: string
+        instance: 
+          type: string
   responses:
     Adres:
       description: A specific adres
@@ -510,12 +532,21 @@ components:
     #          examples:
     #            deleted:
     #              $ref: '#/components/examples/Deleted'
+    AlreadyExists:
+      description: Resource already exists
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetail"
+          examples:
+            badrequest:
+              $ref: "#/components/examples/Problem-303"
     IllegalInput:
       description: Ongeldige input
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/Problem"
+            $ref: "#/components/schemas/ProblemDetail"
           examples:
             badrequest:
               $ref: "#/components/examples/Problem-400"
@@ -524,7 +555,7 @@ components:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/Problem"
+            $ref: "#/components/schemas/ProblemDetail"
           examples:
             notfound:
               $ref: "#/components/examples/Problem-404"
@@ -533,7 +564,7 @@ components:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/Problem"
+            $ref: "#/components/schemas/ProblemDetail"
           examples:
             servererror:
               $ref: "#/components/examples/Problem-5XX"
@@ -542,7 +573,7 @@ components:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/Problem"
+            $ref: "#/components/schemas/ProblemDetail"
           examples:
             tomanyrequests:
               $ref: "#/components/examples/Problem-429"

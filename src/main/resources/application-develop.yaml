@@ -12,17 +12,17 @@ logging:
   level:
     org:
       apache:
-        http: INFO
+        http: info
+      springframework: info
     com:
-      bsoft: DEBUG
-    web: DEBUG
+      bsoft: debug
 
 management:
   endpoint:
     env:
-      show-values: ALWAYS
+      show-values: always
     configprops:
-      show-values: ALWAYS
+      show-values: always
     health:
       show-details: always
     metrics:

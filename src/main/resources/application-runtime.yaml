@@ -13,6 +13,7 @@ logging:
     org:
       apache:
         http: INFO
+      springframework: INFO
     com:
       bsoft: DEBUG
     web: DEBUG

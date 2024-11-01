@@ -5,7 +5,6 @@ import com.bsoft.adres.exceptions.AdresExistsException;
 import com.bsoft.adres.exceptions.AdresNotExistsException;
 import com.bsoft.adres.generated.model.Adres;
 import com.bsoft.adres.generated.model.AdresBody;
-import com.bsoft.adres.generated.model.Deleted;
 import com.bsoft.adres.repositories.AdresRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,22 +26,28 @@ public class AdresService {
         this.adresRepository = adresRepository;
     }
 
-    public ResponseEntity<Deleted> deleteAdres(Long adresId) {
-        return null;
+    public boolean deleteAdres(Long adresId) {
+        boolean deleted = false;
+        try {
+            Optional<AdresDAO> optionalAdresDAO = adresRepository.findByAdresId(adresId);
+            if (!optionalAdresDAO.isPresent()) {
+                throw new AdresNotExistsException("Adres with id " + adresId + " not found and not deleted");
+            }
+            adresRepository.deleteById(adresId);
+            deleted = true;
+        } catch (Exception e) {
+            log.error("Delete adres failed", e);
+            throw e;
+        }
+        return deleted;
     }
 
     public Adres getAdres(Long adresId) {
         Optional<AdresDAO> optionalAdresDAO = adresRepository.findByAdresId(adresId);
         if (!optionalAdresDAO.isPresent()) {
-            throw new AdresNotExistsException("Adres with id {}" + adresId + " not found");
+            throw new AdresNotExistsException("Adres with id " + adresId + " not found");
         }
-        Adres adres = new Adres();
-        adres.setAdresId(optionalAdresDAO.get().getAdresid());
-        adres.setStreet(optionalAdresDAO.get().getStreet());
-        adres.setHousenumber(optionalAdresDAO.get().getHousenumber());
-        adres.setZipcode(optionalAdresDAO.get().getZipcode());
-        adres.setCity(optionalAdresDAO.get().getCity());
-
+        Adres adres = AdresDAO2Adres(optionalAdresDAO.get());
         return adres;
     }
 
@@ -52,12 +56,7 @@ public class AdresService {
         Iterable<AdresDAO> iadres = adresRepository.findAll();
 
         iadres.forEach(adresDAO -> {
-            Adres newAdres = new Adres();
-            newAdres.setAdresId(adresDAO.getAdresid());
-            newAdres.setCity(adresDAO.getCity());
-            newAdres.setHousenumber(adresDAO.getHousenumber());
-            newAdres.setStreet(adresDAO.getStreet());
-            newAdres.setZipcode(adresDAO.getZipcode());
+            Adres newAdres = AdresDAO2Adres(adresDAO);
             result.add(newAdres);
         });
 
@@ -71,7 +70,6 @@ public class AdresService {
     public Adres postAdres(AdresBody adresBody) {
         AdresDAO adresDAO = new AdresDAO(adresBody);
 
-        // Save entry
         try {
             Optional<AdresDAO> optionalAdresDAO = adresRepository.findByHash(adresDAO.getHash());
             if (optionalAdresDAO.isPresent()) {
@@ -79,12 +77,7 @@ public class AdresService {
             }
 
             adresRepository.save(adresDAO);
-            Adres adres = new Adres();
-            adres.setAdresId(adresDAO.getAdresid());
-            adres.setStreet(adresDAO.getStreet());
-            adres.setHousenumber(adresDAO.getHousenumber());
-            adres.setZipcode(adresDAO.getZipcode());
-            adres.setCity(adresDAO.getCity());
+            Adres adres = AdresDAO2Adres(adresDAO);
 
             return adres; // Return 201 Created with the created entity
         } catch (Error e) {
@@ -93,4 +86,45 @@ public class AdresService {
         }
     }
 
+    public Adres patch(Long adresId, AdresBody adresBody) {
+        Adres adres = new Adres();
+
+        try {
+            Optional<AdresDAO> optionalAdresDAO = adresRepository.findByAdresId(adresId);
+            if (!optionalAdresDAO.isPresent()) {
+                throw new AdresNotExistsException("Adres with id " + adresId + " not found");
+            }
+            AdresDAO foundAdres = optionalAdresDAO.get();
+            if (adresBody.getStreet() != null) {
+                foundAdres.setStreet(adresBody.getStreet());
+            }
+            if (adresBody.getHousenumber() != null) {
+                foundAdres.setHousenumber(adresBody.getHousenumber());
+            }
+            if (adresBody.getZipcode() != null) {
+                foundAdres.setZipcode(adresBody.getZipcode());
+            }
+            if (adresBody.getCity() != null) {
+                foundAdres.setCity(adresBody.getCity());
+            }
+
+            adresRepository.save(foundAdres);
+
+            adres = AdresDAO2Adres(foundAdres);
+            return adres;
+        } catch (Error e) {
+            throw e;
+        }
+
+    }
+
+    private Adres AdresDAO2Adres(AdresDAO adresDAO) {
+        Adres adres = new Adres();
+        adres.setAdresId(adresDAO.getAdresid());
+        adres.setStreet(adresDAO.getStreet());
+        adres.setHousenumber(adresDAO.getHousenumber());
+        adres.setZipcode(adresDAO.getZipcode());
+        adres.setCity(adresDAO.getCity());
+        return adres;
+    }
 }

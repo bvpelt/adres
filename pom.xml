@@ -198,6 +198,7 @@
                                 <validateSpec>true</validateSpec>
                             </configOptions>
                             <schemaMappings>
+                                <schemaMapping>ProblemDetail=org.springframework.http.ProblemDetail</schemaMapping>
                                 <!--
                                 <schemaMapping>GeoJSONGeometry=org.wololo.geojson.GeoJSON</schemaMapping>
                                 <schemaMapping>Point=org.wololo.geojson.Point</schemaMapping>

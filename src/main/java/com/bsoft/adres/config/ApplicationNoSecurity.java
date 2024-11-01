@@ -1,6 +1,5 @@
 package com.bsoft.adres.config;
 
-import jakarta.annotation.security.PermitAll;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;

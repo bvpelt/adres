@@ -1,6 +1,5 @@
 package com.bsoft.adres.controller;
 
-import com.bsoft.adres.exceptions.AdresExistsException;
 import com.bsoft.adres.generated.api.AdressesApi;
 import com.bsoft.adres.generated.model.Adres;
 import com.bsoft.adres.generated.model.AdresBody;
@@ -24,7 +23,14 @@ public class AdresController implements AdressesApi {
 
     @Override
     public ResponseEntity<Deleted> _deleteAdres(Long adresId) {
-        return null;
+
+        try {
+            boolean deleted = adresService.deleteAdres(adresId);
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @Override
@@ -44,7 +50,13 @@ public class AdresController implements AdressesApi {
 
     @Override
     public ResponseEntity<Adres> _patchAdres(Long adresId, AdresBody adresBody) {
-        return null;
+        try {
+            Adres adres = adresService.patch(adresId, adresBody);
+            return ResponseEntity.status(HttpStatus.OK).body(adres); // Return 201 Created with the created entity
+        } catch (Exception e) {
+            throw e;
+        }
+
     }
 
     @Override
