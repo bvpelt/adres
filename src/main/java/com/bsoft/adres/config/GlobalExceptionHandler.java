@@ -3,6 +3,7 @@ package com.bsoft.adres.config;
 
 import com.bsoft.adres.exceptions.AdresExistsException;
 import com.bsoft.adres.exceptions.AdresNotExistsException;
+import com.bsoft.adres.exceptions.InvalidParameterException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -31,5 +32,14 @@ public class GlobalExceptionHandler {
         problemDetail.setType(ex.getType());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
+    }
+
+    @ExceptionHandler(InvalidParameterException.class)
+    public ResponseEntity<ProblemDetail> handleExcehandleInvalidParameterException(InvalidParameterException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+        problemDetail.setTitle("Invalid parameter");
+        problemDetail.setType(ex.getType());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
     }
 }

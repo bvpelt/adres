@@ -72,9 +72,11 @@ spring:
   h2:
     console.enabled: true
   jpa:
+    database: h2
     hibernate:
-      ddl-auto=none
+      ddl-auto: none
     open-in-view: false
+    show-sql: true
   mvc:
     problemdetails:
       enabled: true

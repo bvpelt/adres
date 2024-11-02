@@ -8,6 +8,7 @@ import com.bsoft.adres.generated.model.AdresBody;
 import com.bsoft.adres.repositories.AdresRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -61,6 +62,17 @@ public class AdresService {
         });
 
         return result;
+    }
+
+    public List<Adres> getAdresses(PageRequest pageRequest) {
+        List<Adres> adresList = new ArrayList<Adres>();
+        Iterable<AdresDAO> adresDAOIterable = adresRepository.findAllByPaged(pageRequest);
+
+        adresDAOIterable.forEach(adresDAO -> {
+            adresList.add(AdresDAO2Adres(adresDAO));
+        });
+
+        return adresList;
     }
 
     public ResponseEntity<Adres> patchAdres(Long adresId, AdresBody adresBody) {

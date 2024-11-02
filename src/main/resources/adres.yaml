@@ -13,6 +13,10 @@ paths:
       description: |
         Retrieve all known adresses, using paging and sorting
       operationId: getAdresses
+      parameters:
+        - $ref: "#/components/parameters/page"      
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/sort"            
       responses:
         "200":
           $ref: "#/components/responses/Adresses"
@@ -371,6 +375,15 @@ components:
       schema:
         type: integer
         format: int64
+    page:
+      name: page
+      in: query
+      description: pagenumber starts on 1
+      required: false
+      schema:
+        type: integer        
+        minimum: 1
+        format: int32        
     personId:
       name: personId
       in: path
@@ -379,6 +392,28 @@ components:
       schema:
         type: integer
         format: int64
+    size:
+      name: size
+      in: query
+      description: |
+        number of elements on each page
+        - minimum    1
+        - default   25
+        - maximum: 100
+      required: false      
+      schema:
+        type: integer        
+        maximum: 100
+        default: 25
+        minimum: 1
+        format: int32   
+    sort:
+      name: sort
+      in: query
+      description: field names to sort on
+      required: false      
+      schema: 
+        type: string
   schemas:
     Adres:
       allOf:
@@ -422,7 +457,7 @@ components:
           enum:
             - "OK"
           description: Status of delete operationId
-          example: "OK"
+          example: "OK"    
     Person:
       allOf:
         - type: object
