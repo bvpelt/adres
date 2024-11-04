@@ -22,43 +22,31 @@ import java.util.List;
 public class AdresController implements AdressesApi {
 
     private final AdresService adresService;
-    private final String hostname = "localhost";
 
     @Override
     public ResponseEntity<Deleted> _deleteAdres(Long adresId) {
 
-        try {
-            boolean deleted = adresService.deleteAdres(adresId);
+        boolean deleted = adresService.deleteAdres(adresId);
 
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            throw e;
-        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Adres> _getAdres(Long adresId) {
-        try {
-            Adres adres = adresService.getAdres(adresId);
-            return ResponseEntity.status(HttpStatus.OK).body(adres); // Return 201 Created with the created entity
-        } catch (Exception e) {
-            throw e;
-        }
+        Adres adres = adresService.getAdres(adresId);
+        return ResponseEntity.status(HttpStatus.OK).body(adres); // Return 201 Created with the created entity
     }
 
-    /**
-     * @param pageNumber pagenumber defaults to 1 (optional), for the server side this corresponds to page 0
-     * @param pageSize   number of elements on each page - minimum    1 - default   25 - maximum: 100  (optional, default to 25)
-     * @param sortBy     field names to sort on (optional)
-     * @return
-     */
     @Override
     public ResponseEntity<List<Adres>> _getAdresses(Integer pageNumber, Integer pageSize, String sortBy) {
         List<Sort.Order> sortParameter;
         PageRequest pageRequest;
         log.info("Get adresses for pagenumber: {} pagesize: {}, sort: {}", pageNumber, pageSize, sortBy);
         // Validate input parameters
-        if (pageNumber == null || pageNumber < 1) {
+        if (pageNumber == null) {
+            pageNumber = 1;
+        }
+        if (pageNumber < 1) {
             throw new InvalidParameterException("Page number must be greater than 0");
         }
         if (pageSize == null) { // set to default
@@ -80,22 +68,17 @@ public class AdresController implements AdressesApi {
 
     @Override
     public ResponseEntity<Adres> _patchAdres(Long adresId, AdresBody adresBody) {
-        try {
-            Adres adres = adresService.patch(adresId, adresBody);
-            return ResponseEntity.status(HttpStatus.OK).body(adres); // Return 201 Created with the created entity
-        } catch (Exception e) {
-            throw e;
-        }
+        Adres adres = adresService.patch(adresId, adresBody);
+        return ResponseEntity.status(HttpStatus.OK).body(adres); // Return 201 Created with the created entity
 
     }
 
     @Override
-    public ResponseEntity<Adres> _postAdres(AdresBody adresBody) {
-        try {
-            Adres adres = adresService.postAdres(adresBody); // Call the service method
-            return ResponseEntity.status(HttpStatus.CREATED).body(adres); // Return 201 Created with the created entity
-        } catch (Exception e) {
-            throw e;
+    public ResponseEntity<Adres> _postAdres(Boolean override, AdresBody adresBody) {
+        if (override == null) {
+            override = false;
         }
+        Adres adres = adresService.postAdres(override, adresBody); // Call the service method
+        return ResponseEntity.status(HttpStatus.CREATED).body(adres); // Return 201 Created with the created entity
     }
 }

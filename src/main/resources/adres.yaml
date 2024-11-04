@@ -37,6 +37,8 @@ paths:
         - city
         If the hash value already exists in the backend, the adres is considered to exist
       operationId: postAdres
+      parameters:
+        - $ref: "#/components/parameters/override"      
       requestBody:
         description: Request parameters
         content:
@@ -375,6 +377,14 @@ components:
       schema:
         type: integer
         format: int64
+    override:
+      name: override
+      in: query
+      description: parameter to override check on existence
+      required: false
+      schema:
+        type: boolean
+        default: false         
     page:
       name: page
       in: query

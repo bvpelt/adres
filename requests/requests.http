@@ -1,0 +1,112 @@
+POST http://localhost:8080/adresses
+Content-Type: application/json
+
+{
+  "street": "Kerkewijk",
+  "housenumber": "125",
+  "zipcode": "3904 JB",
+  "city": "Veenendaal",
+}
+
+> {%
+    console.log('response status: ' + response.status)
+    console.log(response)
+    console.log('"body": ' + JSON.stringify(response.body, null, " "))
+%}
+
+###
+POST http://localhost:8080/adresses?override=true
+Content-Type: application/json
+
+{
+  "street": "Kerkewijk",
+  "housenumber": "125",
+  "zipcode": "3904 JB",
+  "city": "Veenendaal",
+}
+
+> {%
+    console.log('response status: ' + response.status)
+    console.log(response)
+    console.log('"body": ' + JSON.stringify(response.body, null, " "))
+%}
+
+
+###
+GET http://localhost:8080/adresses
+Accept: application/json
+
+###
+GET http://localhost:8080/adresses?page=1
+Accept: application/json
+
+###
+GET http://localhost:8080/adresses?page=1&size=2
+Accept: application/json
+
+###
+GET http://localhost:8080/adresses?page=2&size=2
+Accept: application/json
+
+###
+GET http://localhost:8080/adresses?sort=zipcode
+Accept: application/json
+
+###
+GET http://localhost:8080/adresses/2
+Accept: application/json
+
+###
+PATCH http://localhost:8080/adresses/2
+Content-Type: application/json
+
+{
+  "street": "Molenplein",
+  "housenumber": "5",
+  "zipcode": "4021 XY",
+  "city": "Waalwijk"
+}
+
+###
+PATCH http://localhost:8080/adresses/2
+Content-Type: application/json
+
+{
+  "street": "Kerkewijk"
+}
+
+###
+PATCH http://localhost:8080/adresses/2
+Content-Type: application/json
+
+{
+  "housenumber": "124"
+}
+
+###
+PATCH http://localhost:8080/adresses/2
+Content-Type: application/json
+
+{
+  "zipcode": "3904 JB"
+}
+
+###
+PATCH http://localhost:8080/adresses/2
+Content-Type: application/json
+
+{
+  "city": "Veenendaal"
+}
+
+###
+PATCH http://localhost:8080/adresses/2
+Content-Type: application/json
+
+{
+  "street": "Kerkewijk",
+  "housenumber": "124",
+  "zipcode": "3904 JB",
+  "city": "Veenendaal",
+  "adresId": 3
+}

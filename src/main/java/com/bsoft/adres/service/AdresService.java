@@ -79,13 +79,15 @@ public class AdresService {
         return null;
     }
 
-    public Adres postAdres(AdresBody adresBody) {
+    public Adres postAdres(Boolean override, AdresBody adresBody) {
         AdresDAO adresDAO = new AdresDAO(adresBody);
 
         try {
-            Optional<AdresDAO> optionalAdresDAO = adresRepository.findByHash(adresDAO.getHash());
-            if (optionalAdresDAO.isPresent()) {
-                throw new AdresExistsException("Adres " + adresDAO + " already exists cannot insert again");
+            if (override) {
+                Optional<AdresDAO> optionalAdresDAO = adresRepository.findByHash(adresDAO.getHash());
+                if (optionalAdresDAO.isPresent()) {
+                    throw new AdresExistsException("Adres " + adresDAO + " already exists cannot insert again");
+                }
             }
 
             adresRepository.save(adresDAO);
