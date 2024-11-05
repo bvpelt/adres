@@ -289,6 +289,9 @@ components:
           housenumber: "125"
           zipcode: "3904 JB"
           city: "Veenendaal"
+    Deleted:
+      summary: An entry is deleted succesfull
+      value:
     Person-01:
       summary: A single person with all fields
       value:
@@ -570,13 +573,13 @@ components:
               $ref: "#/components/examples/AdresList-02"
     Deleted:
       description: Resource deleted
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/Deleted"
-    #          examples:
-    #            deleted:
-    #              $ref: '#/components/examples/Deleted'
+#      content:
+#        application/json:
+#          schema:
+#            $ref: "#/components/schemas/Deleted"
+#          examples:
+#            deleted:
+#              $ref: '#/components/examples/Deleted'
     AlreadyExists:
       description: Resource already exists
       content:

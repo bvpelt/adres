@@ -1,10 +1,10 @@
 package com.bsoft.adres.controller;
 
+import com.bsoft.adres.exceptions.AdresNotDeletedException;
 import com.bsoft.adres.exceptions.InvalidParameterException;
 import com.bsoft.adres.generated.api.AdressesApi;
 import com.bsoft.adres.generated.model.Adres;
 import com.bsoft.adres.generated.model.AdresBody;
-import com.bsoft.adres.generated.model.Deleted;
 import com.bsoft.adres.service.AdresService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +24,14 @@ public class AdresController implements AdressesApi {
     private final AdresService adresService;
 
     @Override
-    public ResponseEntity<Deleted> _deleteAdres(Long adresId) {
+    public ResponseEntity<Void> _deleteAdres(Long adresId) {
 
         boolean deleted = adresService.deleteAdres(adresId);
+        if (!deleted) {
+            throw new AdresNotDeletedException("Adres not deleted");
+        }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
     @Override
