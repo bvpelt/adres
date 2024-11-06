@@ -25,7 +25,13 @@ public class AdresService {
     public AdresService(final AdresRepository adresRepository) {
         this.adresRepository = adresRepository;
     }
-
+    public void deleteAll() {
+        try {
+            adresRepository.deleteAll();
+        } catch (Exception e) {
+            log.error("Deleting all adresses failed: {}",e);
+        }
+    }
     public boolean deleteAdres(Long adresId) {
         boolean deleted = false;
         try {
@@ -36,7 +42,7 @@ public class AdresService {
             adresRepository.deleteById(adresId);
             deleted = true;
         } catch (Exception e) {
-            log.error("Delete adres failed", e);
+            log.error("Delete adres failed: {}", e);
             throw e;
         }
         return deleted;
@@ -136,4 +142,6 @@ public class AdresService {
         adres.setCity(adresDAO.getCity());
         return adres;
     }
+
+
 }

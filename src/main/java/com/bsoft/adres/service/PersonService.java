@@ -19,31 +19,39 @@ import java.util.Optional;
 @Service
 public class PersonService {
 
-    private final PersonRepository PersonRepository;
+    private final PersonRepository personRepository;
 
     @Autowired
     public PersonService(final PersonRepository PersonRepository) {
-        this.PersonRepository = PersonRepository;
+        this.personRepository = PersonRepository;
     }
 
+    public void deleteAll() {
+        try {
+            personRepository.deleteAll();
+        } catch (Exception e) {
+            log.error("Deleting all persons failed: {}", e);
+            throw e;
+        }
+    }
     public boolean deletePerson(Long personId) {
         boolean deleted = false;
         try {
-            Optional<PersonDAO> optionalPersonDAO = PersonRepository.findByPersonId(personId);
+            Optional<PersonDAO> optionalPersonDAO = personRepository.findByPersonId(personId);
             if (!optionalPersonDAO.isPresent()) {
                 throw new PersonNotExistsException("Person with id " + personId + " not found and not deleted");
             }
-            PersonRepository.deleteById(personId);
+            personRepository.deleteById(personId);
             deleted = true;
         } catch (Exception e) {
-            log.error("Delete person failed", e);
+            log.error("Delete person failed: {}", e);
             throw e;
         }
         return deleted;
     }
 
     public Person getPerson(Long personId) {
-        Optional<PersonDAO> optionalPersonDAO = PersonRepository.findByPersonId(personId);
+        Optional<PersonDAO> optionalPersonDAO = personRepository.findByPersonId(personId);
         if (!optionalPersonDAO.isPresent()) {
             throw new PersonNotExistsException("Person with id " + personId + " not found");
         }
@@ -53,7 +61,7 @@ public class PersonService {
 
     public List<Person> getPersons() {
         List<Person> result = new ArrayList<Person>();
-        Iterable<PersonDAO> iPerson = PersonRepository.findAll();
+        Iterable<PersonDAO> iPerson = personRepository.findAll();
 
         iPerson.forEach(PersonDAO -> {
             Person newPerson = PersonDAO2Person(PersonDAO);
@@ -65,7 +73,7 @@ public class PersonService {
 
     public List<Person> getPersons(final PageRequest pageRequest) {
         List<Person> PersonList = new ArrayList<Person>();
-        Iterable<PersonDAO> PersonDAOIterable = PersonRepository.findAllByPaged(pageRequest);
+        Iterable<PersonDAO> PersonDAOIterable = personRepository.findAllByPaged(pageRequest);
 
         PersonDAOIterable.forEach(PersonDAO -> {
             PersonList.add(PersonDAO2Person(PersonDAO));
@@ -79,13 +87,13 @@ public class PersonService {
 
         try {
             if (!override) {
-                Optional<PersonDAO> optionalPersonDAO = PersonRepository.findByHash(PersonDAO.getHash());
+                Optional<PersonDAO> optionalPersonDAO = personRepository.findByHash(PersonDAO.getHash());
                 if (optionalPersonDAO.isPresent()) {
                     throw new PersonExistsException("Person " + PersonDAO + " already exists cannot insert again");
                 }
             }
 
-            PersonRepository.save(PersonDAO);
+            personRepository.save(PersonDAO);
             Person Person = PersonDAO2Person(PersonDAO);
 
             return Person; // Return 201 Created with the created entity
@@ -99,7 +107,7 @@ public class PersonService {
         Person Person = new Person();
 
         try {
-            Optional<PersonDAO> optionalPersonDAO = PersonRepository.findByPersonId(PersonId);
+            Optional<PersonDAO> optionalPersonDAO = personRepository.findByPersonId(PersonId);
             if (!optionalPersonDAO.isPresent()) {
                 throw new PersonNotExistsException("Person with id " + PersonId + " not found");
             }
@@ -117,7 +125,7 @@ public class PersonService {
                 foundPerson.setDateofbirth(PersonBody.getDateOfBirth());
             }
 
-            PersonRepository.save(foundPerson);
+            personRepository.save(foundPerson);
 
             Person = PersonDAO2Person(foundPerson);
             return Person;
@@ -136,4 +144,6 @@ public class PersonService {
         person.setDateOfBirth(personDAO.getDateofbirth());
         return person;
     }
+
+
 }

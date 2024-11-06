@@ -24,6 +24,24 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
+    delete:
+      tags:
+        - Adresses
+      summary: Delete all
+      description: |
+        Delete all adres
+      operationId: deleteAllAdreses     
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"          
     post:
       tags:
         - Adresses
@@ -127,6 +145,27 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
+  /adresses/{adresId}/persons:    
+    get:
+      tags:
+        - Adresses
+      summary: Retrieve the specified adres with references to all persons
+      description: |
+        Retrieve only one adres with id adresId and references to all persons on that adress
+      operationId: getAdres
+      parameters:
+        - $ref: "#/components/parameters/adresId"
+      responses:
+        "200":
+          $ref: "#/components/responses/AdresPerson"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"        
   /persons:
     get:
       tags:
@@ -148,6 +187,24 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
+    delete:
+      tags:
+        - Persons
+      summary: Delete all persons
+      description: |
+        Delete all persons
+      operationId: deleteAllPersons     
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError" 
     post:
       tags:
         - Persons
@@ -447,10 +504,12 @@ components:
             - adresId
           properties:
             adresId:
-              type: integer
-              format: int64
-              example: 1
+              $ref: '#/components/schemas/AdresId'
         - $ref: "#/components/schemas/AdresBody"
+    AdresId: 
+      type: integer
+      format: int64
+      example: 1
     AdresBody:
       type: object
       required:
@@ -470,6 +529,29 @@ components:
         city:
           type: string
           example: Veenendaal
+    AdresPerson:
+      type: object
+      required:
+        - street
+        - housenumber
+        - city
+      properties:
+        street:
+          type: string
+          example: Kerkewijk
+        housenumber:
+          type: string
+          example: 125
+        zipcode:
+          type: string
+          example: 3904 JB
+        city:
+          type: string
+          example: Veenendaal
+        persons: 
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonId'
     Adresses:
       type: array
       items:
@@ -482,7 +564,7 @@ components:
           enum:
             - "OK"
           description: Status of delete operationId
-          example: "OK"
+          example: "OK"   
     Person:
       allOf:
         - type: object
@@ -490,14 +572,15 @@ components:
             - personId
           properties:
             personId:
-              type: integer
-              format: int64
-              example: 1
+              $ref: '#/components/schemas/PersonId'
         - $ref: "#/components/schemas/PersonBody"
+    PersonId: 
+      type: integer
+      format: int64
+      example: 1
     PersonBody:
       type: object
-      required:
-        - personId
+      required:        
         - firstName
         - lastName
       properties:
@@ -517,6 +600,10 @@ components:
           type: string
           format: date
           example: 2022-03-04
+        adresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdresId'
     Persons:
       type: array
       items:
@@ -566,7 +653,7 @@ components:
           type: string
   responses:
     Adres:
-      description: A specific adres
+      description: An adres
       content:
         application/json:
           schema:
@@ -576,6 +663,17 @@ components:
               $ref: "#/components/examples/Adres-01"
             noinfix:
               $ref: "#/components/examples/Adres-02"
+    AdresPerson:
+      description: An adres with references to a person
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AdresPerson"
+          examples:
+            allfields:
+              $ref: "#/components/examples/Adres-01"
+            noinfix:
+              $ref: "#/components/examples/Adres-02"              
     Adresses:
       description: A collection of adresses
       content:

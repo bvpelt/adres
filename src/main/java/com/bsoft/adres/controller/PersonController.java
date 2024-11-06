@@ -24,6 +24,12 @@ public class PersonController implements PersonsApi {
     private final PersonService personService;
 
     @Override
+    public ResponseEntity<Void> _deleteAllPersons() {
+        personService.deleteAll();
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+    }
+
+    @Override
     public ResponseEntity<Void> _deletePerson(Long personId) {
 
         boolean deleted = personService.deletePerson(personId);

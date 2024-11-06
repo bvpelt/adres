@@ -35,6 +35,12 @@ public class AdresController implements AdressesApi {
     }
 
     @Override
+    public ResponseEntity<Void> _deleteAllAdreses() {
+        adresService.deleteAll();
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+    }
+
+    @Override
     public ResponseEntity<Adres> _getAdres(Long adresId) {
         Adres adres = adresService.getAdres(adresId);
         return ResponseEntity.status(HttpStatus.OK).body(adres); // Return 201 Created with the created entity
