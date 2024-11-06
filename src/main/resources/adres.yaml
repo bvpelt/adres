@@ -14,9 +14,9 @@ paths:
         Retrieve all known adresses, using paging and sorting
       operationId: getAdresses
       parameters:
-        - $ref: "#/components/parameters/page"      
+        - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
-        - $ref: "#/components/parameters/sort"            
+        - $ref: "#/components/parameters/sort"
       responses:
         "200":
           $ref: "#/components/responses/Adresses"
@@ -38,7 +38,7 @@ paths:
         If the hash value already exists in the backend, the adres is considered to exist
       operationId: postAdres
       parameters:
-        - $ref: "#/components/parameters/override"      
+        - $ref: "#/components/parameters/override"
       requestBody:
         description: Request parameters
         content:
@@ -135,6 +135,10 @@ paths:
       description: |
         Retrieve all known persons, using paging and sorting
       operationId: getPersons
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/sort"
       responses:
         "200":
           $ref: "#/components/responses/Persons"
@@ -156,6 +160,8 @@ paths:
         - lastName
         If the hash value already exists in the backend, the person is considered to exist
       operationId: postPerson
+      parameters:
+        - $ref: "#/components/parameters/override"
       requestBody:
         description: Request parameters
         content:
@@ -263,7 +269,7 @@ components:
         city: "Koog aan de Zaan"
     AdresList-01:
       summary: An empty list of adresses
-      value: []
+      value: [ ]
     AdresList-02:
       summary: An empty list of adresses
       value:
@@ -299,15 +305,17 @@ components:
         firstName: "Jos"
         infix: "van Der"
         lastName: "Vlist"
+        dateOfBirth: "2022-01-04"
     Person-02:
       summary: A single person without infix
       value:
         personId: 3
         firstName: "Albert"
         lastName: "Einstein"
+        dateOfBirth: "2022-01-04"     
     PersonList-01:
       summary: An empty list of persons
-      value: []
+      value: [ ]
     PersonList-02:
       summary: An empty list of persons
       value:
@@ -315,24 +323,28 @@ components:
           firstName: "Jos"
           infix: "van Der"
           lastName: "Vlist"
+          dateOfBirth: "2022-01-04"
         - personId: 2
           firstName: "Karel"
           lastName: "Appel"
+          dateOfBirth: "2022-01-04"
         - personId: 3
           firstName: "Albert"
           lastName: "Einstein"
+          dateOfBirth: "2022-01-04"
     PersonBody:
       summary: A new person with all fields filled
       value:
         firstName: "Jos"
         infix: "van Der"
         lastName: "Vlist"
+        dateOfBirth: "2022-01-04"
     Problem-303:
       summary: Bad Request
       value:
         type: "http://localhost:8080/already-existed"
         title: "Adres alreay existed, not expected"
-        status: 303                
+        status: 303
         detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574} already exists"
         path: "/adresses"
     Problem-400:
@@ -387,16 +399,16 @@ components:
       required: false
       schema:
         type: boolean
-        default: false         
+        default: false
     page:
       name: page
       in: query
       description: pagenumber starts on 1
       required: false
       schema:
-        type: integer        
+        type: integer
         minimum: 1
-        format: int32        
+        format: int32
     personId:
       name: personId
       in: path
@@ -413,19 +425,19 @@ components:
         - minimum    1
         - default   25
         - maximum: 100
-      required: false      
+      required: false
       schema:
-        type: integer        
+        type: integer
         maximum: 100
         default: 25
         minimum: 1
-        format: int32   
+        format: int32
     sort:
       name: sort
       in: query
       description: field names to sort on
-      required: false      
-      schema: 
+      required: false
+      schema:
         type: string
   schemas:
     Adres:
@@ -470,7 +482,7 @@ components:
           enum:
             - "OK"
           description: Status of delete operationId
-          example: "OK"    
+          example: "OK"
     Person:
       allOf:
         - type: object
@@ -501,6 +513,10 @@ components:
           type: string
           maxLength: 48
           example: Vlist
+        dateOfBirth:
+          type: string
+          format: date
+          example: 2022-03-04
     Persons:
       type: array
       items:
@@ -524,7 +540,7 @@ components:
             zich voordoet.
           format: int32
           example: 500
-        error: 
+        error:
           type: string
         trace:
           type: string
@@ -537,16 +553,16 @@ components:
       required:
         - status
       properties:
-        type: 
+        type:
           type: string
-        title: 
+        title:
           type: string
         status:
           type: integer
           format: int32
-        detail: 
+        detail:
           type: string
-        instance: 
+        instance:
           type: string
   responses:
     Adres:
@@ -573,13 +589,6 @@ components:
               $ref: "#/components/examples/AdresList-02"
     Deleted:
       description: Resource deleted
-#      content:
-#        application/json:
-#          schema:
-#            $ref: "#/components/schemas/Deleted"
-#          examples:
-#            deleted:
-#              $ref: '#/components/examples/Deleted'
     AlreadyExists:
       description: Resource already exists
       content:
@@ -653,4 +662,4 @@ components:
       in: header # can be "header", "query" or "cookie"
       name: X-API-KEY # name of the header, query parameter or cookie
 security:
-  - ApiKeyAuth: [] # use the same name as under securitySchemes
+  - ApiKeyAuth: [ ] # use the same name as under securitySchemes

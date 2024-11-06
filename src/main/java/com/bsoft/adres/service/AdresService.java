@@ -9,7 +9,6 @@ import com.bsoft.adres.repositories.AdresRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -64,7 +63,7 @@ public class AdresService {
         return result;
     }
 
-    public List<Adres> getAdresses(PageRequest pageRequest) {
+    public List<Adres> getAdresses(final PageRequest pageRequest) {
         List<Adres> adresList = new ArrayList<Adres>();
         Iterable<AdresDAO> adresDAOIterable = adresRepository.findAllByPaged(pageRequest);
 
@@ -75,15 +74,11 @@ public class AdresService {
         return adresList;
     }
 
-    public ResponseEntity<Adres> patchAdres(Long adresId, AdresBody adresBody) {
-        return null;
-    }
-
-    public Adres postAdres(Boolean override, AdresBody adresBody) {
+    public Adres postAdres(Boolean override, final AdresBody adresBody) {
         AdresDAO adresDAO = new AdresDAO(adresBody);
 
         try {
-            if (override) {
+            if (!override) {
                 Optional<AdresDAO> optionalAdresDAO = adresRepository.findByHash(adresDAO.getHash());
                 if (optionalAdresDAO.isPresent()) {
                     throw new AdresExistsException("Adres " + adresDAO + " already exists cannot insert again");
@@ -100,7 +95,7 @@ public class AdresService {
         }
     }
 
-    public Adres patch(Long adresId, AdresBody adresBody) {
+    public Adres patch(Long adresId, final AdresBody adresBody) {
         Adres adres = new Adres();
 
         try {
@@ -132,7 +127,7 @@ public class AdresService {
 
     }
 
-    private Adres AdresDAO2Adres(AdresDAO adresDAO) {
+    private Adres AdresDAO2Adres(final AdresDAO adresDAO) {
         Adres adres = new Adres();
         adres.setAdresId(adresDAO.getAdresid());
         adres.setStreet(adresDAO.getStreet());
