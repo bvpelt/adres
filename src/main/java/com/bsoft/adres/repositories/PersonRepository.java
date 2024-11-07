@@ -26,4 +26,7 @@ public interface PersonRepository extends PagingAndSortingRepository<PersonDAO, 
             countQuery = "SELECT * FROM person",
             nativeQuery = true)
     List<PersonDAO> findAllByPaged(Pageable pageable);
+
+    @Query(value = "SELECT person.* FROM person, adres_person WHERE person.personid = adres_person.personid and adres_person.adresid = :adresId", nativeQuery = true)
+    List<PersonDAO> findPersonsByAdresId(Long adresId);
 }

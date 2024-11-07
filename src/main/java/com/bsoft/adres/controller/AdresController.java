@@ -5,6 +5,7 @@ import com.bsoft.adres.exceptions.InvalidParameterException;
 import com.bsoft.adres.generated.api.AdressesApi;
 import com.bsoft.adres.generated.model.Adres;
 import com.bsoft.adres.generated.model.AdresBody;
+import com.bsoft.adres.generated.model.AdresPerson;
 import com.bsoft.adres.service.AdresService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +45,12 @@ public class AdresController implements AdressesApi {
     public ResponseEntity<Adres> _getAdres(Long adresId) {
         Adres adres = adresService.getAdres(adresId);
         return ResponseEntity.status(HttpStatus.OK).body(adres); // Return 201 Created with the created entity
+    }
+
+    @Override
+    public ResponseEntity<AdresPerson> _getAdresPerons(Long adresId) {
+        AdresPerson adresPerson = adresService.getAdresPerson(adresId);
+        return ResponseEntity.status(HttpStatus.OK).body(adresPerson); // Return 201 Created with the created entity
     }
 
     @Override

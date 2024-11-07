@@ -152,7 +152,7 @@ paths:
       summary: Retrieve the specified adres with references to all persons
       description: |
         Retrieve only one adres with id adresId and references to all persons on that adress
-      operationId: getAdres
+      operationId: getAdresPerons
       parameters:
         - $ref: "#/components/parameters/adresId"
       responses:
@@ -536,6 +536,8 @@ components:
         - housenumber
         - city
       properties:
+        adresId:
+          $ref: '#/components/schemas/AdresId'
         street:
           type: string
           example: Kerkewijk

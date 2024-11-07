@@ -8,9 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @Setter
 public class AdresNotDeletedException extends RuntimeException {
-
-    private final String host = "http://localhost:8080";
-
     public AdresNotDeletedException(final String message) {
         super(message);
     }

@@ -1,11 +1,16 @@
 package com.bsoft.adres.service;
 
 import com.bsoft.adres.database.AdresDAO;
+import com.bsoft.adres.database.PersonDAO;
 import com.bsoft.adres.exceptions.AdresExistsException;
 import com.bsoft.adres.exceptions.AdresNotExistsException;
 import com.bsoft.adres.generated.model.Adres;
+import com.bsoft.adres.generated.model.AdresPerson;
 import com.bsoft.adres.generated.model.AdresBody;
+import com.bsoft.adres.generated.model.Person;
 import com.bsoft.adres.repositories.AdresRepository;
+import com.bsoft.adres.repositories.PersonRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -20,10 +25,12 @@ import java.util.Optional;
 public class AdresService {
 
     private final AdresRepository adresRepository;
+    private final PersonRepository personRepository;
 
     @Autowired
-    public AdresService(final AdresRepository adresRepository) {
+    public AdresService(final AdresRepository adresRepository, final PersonRepository personRepository) {
         this.adresRepository = adresRepository;
+        this.personRepository = personRepository;
     }
     public void deleteAll() {
         try {
@@ -144,4 +151,27 @@ public class AdresService {
     }
 
 
+    public AdresPerson getAdresPerson(Long adresId) {
+        Optional<AdresDAO> adresDAO = adresRepository.findByAdresId(adresId);
+        if (adresDAO.isPresent()) {
+            List<Long> personIds = new ArrayList<Long>();
+            List<PersonDAO> personList = personRepository.findPersonsByAdresId(adresId);
+
+            personList.forEach(personDAO -> {
+                personIds.add(personDAO.getPersonid());
+            });
+
+            AdresPerson adresPerson = new AdresPerson();
+            adresPerson.setAdresId(adresDAO.get().getAdresid());
+            adresPerson.setStreet(adresDAO.get().getStreet());
+            adresPerson.setHousenumber(adresDAO.get().getHousenumber());
+            adresPerson.setZipcode(adresDAO.get().getZipcode());
+            adresPerson.setCity(adresDAO.get().getCity());
+            adresPerson.setPersons(personIds);
+
+            return adresPerson;
+        } else {
+            throw new AdresNotExistsException("Adres with id: " + adresId + " not found");
+        }
+    }
 }
