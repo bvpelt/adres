@@ -1,3 +1,9 @@
+info:
+  project:
+    name: @project.name@
+    version: @project.version@
+    description: @project.description@
+
 logging:
   level:
     org:
@@ -11,11 +17,14 @@ management:
   endpoint:
     health:
       show-details: always
-    info:
-      enabled: true
     metrics:
       enabled: true
     prometheus:
+      enabled: true
+  info:
+    build:
+      enabled: false
+    env:
       enabled: true
   endpoints:
     web:
@@ -23,7 +32,7 @@ management:
         info: app-info
         health: app-health
       exposure:
-        include: '*'
+        include: 'health,info'
         exclude:
   server:
     port: 8081
@@ -44,9 +53,9 @@ spring:
     user: testuser
     password: 12345
     validateMigrationNaming: true
-    locations: classpath:db/migration
+    locations: classpath:db/migration/postgresql
   jpa:
-    database: postgresql
+    database: POSTGRESQL
     hibernate:
       ddl-auto: none
     open-in-view: false

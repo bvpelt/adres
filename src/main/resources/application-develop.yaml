@@ -1,8 +1,5 @@
 info:
-  project:
-    name: @project.name@
-    version: @project.version@
-    description: @project.description@
+  environment: runtime
 
 logging:
   level:
@@ -10,33 +7,6 @@ logging:
       springframework: info
     com:
       bsoft: debug
-
-spring:
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:./adres
-    username: sa
-    password: sa
-  flyway:
-    enabled: true
-    url: jdbc:h2:./adres
-    user: sa
-    password: sa
-    validateMigrationNaming: true
-    locations: classpath:db/migration
-  h2:
-    console.enabled: true
-  jpa:
-    database: h2
-    hibernate:
-      ddl-auto: none
-    open-in-view: false
-    show-sql: true
-  security:
-    user:
-      name: testuser
-      password: 12345
-      roles: admin, user
 
 management:
   endpoint:
@@ -60,6 +30,41 @@ management:
       enabled: true
     process:
       enabled: true
+  endpoints:
+    web:
+      path-mapping:
+        info: app-info
+        health: app-health
+      exposure:
+        include: '*'
+        exclude:
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:./adres
+    username: sa
+    password: sa
+  flyway:
+    enabled: true
+    url: jdbc:h2:./adres
+    user: sa
+    password: sa
+    validateMigrationNaming: true
+    locations: classpath:db/migration/h2
+  h2:
+    console.enabled: true
+  jpa:
+    database: h2
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    show-sql: true
+  security:
+    user:
+      name: testuser
+      password: 12345
+      roles: admin, user
 
 springdoc:
   enable-spring-security: false

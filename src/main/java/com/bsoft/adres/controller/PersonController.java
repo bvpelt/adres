@@ -8,6 +8,7 @@ import com.bsoft.adres.generated.model.PersonBody;
 import com.bsoft.adres.service.PersonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,9 @@ import java.util.List;
 public class PersonController implements PersonsApi {
 
     private final PersonService personService;
+
+    @Value("${info.project.version}")
+    private String version;
 
     @Override
     public ResponseEntity<Void> _deleteAllPersons() {
@@ -43,7 +47,9 @@ public class PersonController implements PersonsApi {
     @Override
     public ResponseEntity<Person> _getPerson(Long personId) {
         Person person = personService.getPerson(personId);
-        return ResponseEntity.status(HttpStatus.OK).body(person); // Return 201 Created with the created entity
+        return ResponseEntity.status(HttpStatus.OK)
+                .header("Version", version)
+                .body(person); // Return 201 Created with the created entity
     }
 
     @Override
@@ -72,13 +78,17 @@ public class PersonController implements PersonsApi {
         } else {
             pageRequest = PageRequest.of(pageNumber - 1, pageSize);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(personService.getPersons(pageRequest));
+        return ResponseEntity.status(HttpStatus.OK)
+                .header("Version", version)
+                .body(personService.getPersons(pageRequest));
     }
 
     @Override
     public ResponseEntity<Person> _patchPerson(Long adresId, PersonBody adresBody) {
         Person person = personService.patch(adresId, adresBody);
-        return ResponseEntity.status(HttpStatus.OK).body(person); // Return 201 Created with the created entity
+        return ResponseEntity.status(HttpStatus.OK)
+                .header("Version", version)
+                .body(person); // Return 201 Created with the created entity
 
     }
 
@@ -88,6 +98,8 @@ public class PersonController implements PersonsApi {
             override = false;
         }
         Person person = personService.postPerson(override, adresBody); // Call the service method
-        return ResponseEntity.status(HttpStatus.CREATED).body(person); // Return 201 Created with the created entity
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .header("Version", version)
+                .body(person); // Return 201 Created with the created entity
     }
 }

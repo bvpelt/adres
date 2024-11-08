@@ -440,6 +440,12 @@ components:
         error: "Internal Server Error"
         detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574}"
         path: "/adresses"
+  headers:
+    version:
+      required: true
+      schema:
+        type: string
+      example: "0.0.1"        
   parameters:
     adresId:
       name: adresId
@@ -602,10 +608,6 @@ components:
           type: string
           format: date
           example: 2022-03-04
-        adresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AdresId'
     Persons:
       type: array
       items:
@@ -665,6 +667,9 @@ components:
               $ref: "#/components/examples/Adres-01"
             noinfix:
               $ref: "#/components/examples/Adres-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"              
     AdresPerson:
       description: An adres with references to a person
       content:
@@ -675,7 +680,10 @@ components:
             allfields:
               $ref: "#/components/examples/Adres-01"
             noinfix:
-              $ref: "#/components/examples/Adres-02"              
+              $ref: "#/components/examples/Adres-02"  
+      headers:
+        version:
+          $ref: "#/components/headers/version"                      
     Adresses:
       description: A collection of adresses
       content:
@@ -687,8 +695,11 @@ components:
               $ref: "#/components/examples/AdresList-01"
             fulllist:
               $ref: "#/components/examples/AdresList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"                      
     Deleted:
-      description: Resource deleted
+      description: Resource deleted      
     AlreadyExists:
       description: Resource already exists
       content:
@@ -745,6 +756,9 @@ components:
               $ref: "#/components/examples/PersonList-01"
             fulllist:
               $ref: "#/components/examples/PersonList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"                      
     Person:
       description: A specific person
       content:
@@ -756,6 +770,9 @@ components:
               $ref: "#/components/examples/Person-01"
             noinfix:
               $ref: "#/components/examples/Person-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"                      
   securitySchemes:
     ApiKeyAuth: # arbitrary name for the security scheme
       type: apiKey

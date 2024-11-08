@@ -1,4 +1,2 @@
 info:
-  app:
-    name: '@project.name@ - runtime'
-
+  environment: runtime
