@@ -5,12 +5,10 @@ import com.bsoft.adres.database.PersonDAO;
 import com.bsoft.adres.exceptions.AdresExistsException;
 import com.bsoft.adres.exceptions.AdresNotExistsException;
 import com.bsoft.adres.generated.model.Adres;
-import com.bsoft.adres.generated.model.AdresPerson;
 import com.bsoft.adres.generated.model.AdresBody;
-import com.bsoft.adres.generated.model.Person;
+import com.bsoft.adres.generated.model.AdresPerson;
 import com.bsoft.adres.repositories.AdresRepository;
 import com.bsoft.adres.repositories.PersonRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -32,13 +30,15 @@ public class AdresService {
         this.adresRepository = adresRepository;
         this.personRepository = personRepository;
     }
+
     public void deleteAll() {
         try {
             adresRepository.deleteAll();
         } catch (Exception e) {
-            log.error("Deleting all adresses failed: {}",e);
+            log.error("Deleting all adresses failed: {}", e);
         }
     }
+
     public boolean deleteAdres(Long adresId) {
         boolean deleted = false;
         try {

@@ -34,6 +34,7 @@ public class PersonService {
             throw e;
         }
     }
+
     public boolean deletePerson(Long personId) {
         boolean deleted = false;
         try {

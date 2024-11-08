@@ -1,3 +1,8 @@
+info:
+  project:
+    name: @project.name@
+    version: @project.version@
+    description: @project.description@
 
 logging:
   level:
@@ -41,8 +46,21 @@ management:
       show-values: always
     shutdown:
       enabled: true
+  info:
+    build:
+      enabled: true
+    env:
+      enabled: true
+    git:
+      enabled: true
+      mode: full
+    java:
+      enabled: true
+    os:
+      enabled: true
+    process:
+      enabled: true
 
 springdoc:
   enable-spring-security: false
   show-actuator: true
-
