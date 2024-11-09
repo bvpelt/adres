@@ -66,6 +66,7 @@ public class WebSecurityConfig {
         return http.build();
     }
 
+    // [TODO - Fix security basic authentication]
     @Bean
     @Order(1)
     public SecurityFilterChain addressesFilterChain(HttpSecurity http) throws Exception {
@@ -78,7 +79,10 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
                                 .requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PATCH).hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST).hasRole("ADMIN")
                                 .requestMatchers("/adresses/**").hasAnyRole("USER", "ADMIN")
+                                .requestMatchers("/person/**").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers("/swagger-ui/**").permitAll()
                                 .requestMatchers("/login/**").permitAll()
                                 .anyRequest().authenticated())
@@ -112,7 +116,7 @@ public class WebSecurityConfig {
     UrlBasedCorsConfigurationSource apiConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:8080"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "PATCH"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "DELETE", "PATCH", "POST"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

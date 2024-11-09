@@ -62,10 +62,10 @@ public class AdresController implements AdressesApi {
     }
 
     @Override
-    public ResponseEntity<List<Adres>> _getAdresses(Integer pageNumber, Integer pageSize, String sortBy) {
+    public ResponseEntity<List<Adres>> _getAdresses(String X_API_KEY, Integer pageNumber, Integer pageSize, String sortBy) {
         List<Sort.Order> sortParameter;
         PageRequest pageRequest;
-        log.info("Get adresses for pagenumber: {} pagesize: {}, sort: {}", pageNumber, pageSize, sortBy);
+        log.info("Get adresses for pagenumber: {} pagesize: {}, sort: {}, api-key: {}", pageNumber, pageSize, sortBy, X_API_KEY);
         // Validate input parameters
         if (pageNumber == null) {
             pageNumber = 1;

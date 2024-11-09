@@ -1,9 +1,10 @@
 openapi: "3.0.3"
 info:
   title: Adres API
-  version: 0.0.1
+  version: 0.0.2
 servers:
   - url: https://api.server.test/opvragen/v1
+
 paths:
   /adresses:
     get:
@@ -17,6 +18,9 @@ paths:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/sort"
+        - $ref: '#/components/parameters/X-API-KEY'
+      security:
+        - ApiKeyAuth: [] # use the same name as under securitySchemes
       responses:
         "200":
           $ref: "#/components/responses/Adresses"
@@ -30,7 +34,10 @@ paths:
       summary: Delete all
       description: |
         Delete all adres
-      operationId: deleteAllAdreses     
+      operationId: deleteAllAdreses
+      security:
+        - basicAuth: []      
+          ApiKeyAuth: [] # use the same name as under securitySchemes
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -41,7 +48,7 @@ paths:
         "429":
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
-          $ref: "#/components/responses/ServerError"          
+          $ref: "#/components/responses/ServerError"
     post:
       tags:
         - Adresses
@@ -66,6 +73,9 @@ paths:
             examples:
               adres:
                 $ref: "#/components/examples/AdresBody"
+      security:
+        - basicAuth: []    
+          ApiKeyAuth: [] # use the same name as under securitySchemes
       responses:
         "201":
           $ref: "#/components/responses/Adres"
@@ -75,6 +85,7 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
+
   /adresses/{adresId}:
     get:
       tags:
@@ -85,6 +96,8 @@ paths:
       operationId: getAdres
       parameters:
         - $ref: "#/components/parameters/adresId"
+      security:
+        - ApiKeyAuth: [] # use the same name as under securitySchemes
       responses:
         "200":
           $ref: "#/components/responses/Adres"
@@ -105,6 +118,9 @@ paths:
       operationId: deleteAdres
       parameters:
         - $ref: "#/components/parameters/adresId"
+      security:
+        - basicAuth: []        
+        - ApiKeyAuth: [] # use the same name as under securitySchemes
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -134,6 +150,9 @@ paths:
             examples:
               person:
                 $ref: "#/components/examples/AdresBody"
+      security:
+        - basicAuth: []                
+        - ApiKeyAuth: [] # use the same name as under securitySchemes
       responses:
         "200":
           $ref: "#/components/responses/Adres"
@@ -145,7 +164,8 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
-  /adresses/{adresId}/persons:    
+
+  /adresses/{adresId}/persons:
     get:
       tags:
         - Adresses
@@ -155,6 +175,8 @@ paths:
       operationId: getAdresPerons
       parameters:
         - $ref: "#/components/parameters/adresId"
+      security:
+        - ApiKeyAuth: [] # use the same name as under securitySchemes
       responses:
         "200":
           $ref: "#/components/responses/AdresPerson"
@@ -165,7 +187,8 @@ paths:
         "429":
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
-          $ref: "#/components/responses/ServerError"        
+          $ref: "#/components/responses/ServerError"
+
   /persons:
     get:
       tags:
@@ -178,6 +201,8 @@ paths:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/sort"
+      security:
+        - ApiKeyAuth: [] # use the same name as under securitySchemes
       responses:
         "200":
           $ref: "#/components/responses/Persons"
@@ -193,7 +218,10 @@ paths:
       summary: Delete all persons
       description: |
         Delete all persons
-      operationId: deleteAllPersons     
+      operationId: deleteAllPersons
+      security:
+        - basicAuth: []      
+        - ApiKeyAuth: [] # use the same name as under securitySchemes
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -204,7 +232,7 @@ paths:
         "429":
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
-          $ref: "#/components/responses/ServerError" 
+          $ref: "#/components/responses/ServerError"
     post:
       tags:
         - Persons
@@ -228,6 +256,9 @@ paths:
             examples:
               person:
                 $ref: "#/components/examples/PersonBody"
+      security:
+        - basicAuth: []       
+        - ApiKeyAuth: [] # use the same name as under securitySchemes        
       responses:
         "201":
           $ref: "#/components/responses/Person"
@@ -237,6 +268,7 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
+
   /persons/{personId}:
     get:
       tags:
@@ -247,6 +279,8 @@ paths:
       operationId: getPerson
       parameters:
         - $ref: "#/components/parameters/personId"
+      security:
+        - ApiKeyAuth: [] # use the same name as under securitySchemes
       responses:
         "200":
           $ref: "#/components/responses/Person"
@@ -267,6 +301,9 @@ paths:
       operationId: deletePerson
       parameters:
         - $ref: "#/components/parameters/personId"
+      security:
+        - basicAuth: []        
+        - ApiKeyAuth: [] # use the same name as under securitySchemes
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -296,6 +333,9 @@ paths:
             examples:
               person:
                 $ref: "#/components/examples/PersonBody"
+      security:
+        - basicAuth: []     
+        - ApiKeyAuth: [] # use the same name as under securitySchemes
       responses:
         "200":
           $ref: "#/components/responses/Person"
@@ -307,6 +347,7 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
+
   /persons/{personId}/adresses:
     get:
       tags:
@@ -317,6 +358,8 @@ paths:
       operationId: getPeronsAdresses
       parameters:
         - $ref: "#/components/parameters/personId"
+      security:
+        - ApiKeyAuth: [] # use the same name as under securitySchemes
       responses:
         "200":
           $ref: "#/components/responses/PersonAdres"
@@ -327,7 +370,8 @@ paths:
         "429":
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
-          $ref: "#/components/responses/ServerError"               
+          $ref: "#/components/responses/ServerError"
+
 components:
   examples:
     Adres-01:
@@ -338,6 +382,7 @@ components:
         housenumber: "125"
         zipcode: "3904 JB"
         city: "Veenendaal"
+
     Adres-02:
       summary: A new Adres with only required fields
       value:
@@ -345,9 +390,19 @@ components:
         street: "Kerkstraat"
         housenumber: "14"
         city: "Koog aan de Zaan"
+
+    AdresBody:
+      summary: A new adres
+      value:
+        - street: "Kerkewijk"
+          housenumber: "125"
+          zipcode: "3904 JB"
+          city: "Veenendaal"
+
     AdresList-01:
       summary: An empty list of adresses
-      value: [ ]
+      value: []
+
     AdresList-02:
       summary: An empty list of adresses
       value:
@@ -366,16 +421,11 @@ components:
           housenumber: "14"
           zipcode: "5017 JS"
           city: "Tilburg"
-    AdresBody:
-      summary: A new adres
-      value:
-        - street: "Kerkewijk"
-          housenumber: "125"
-          zipcode: "3904 JB"
-          city: "Veenendaal"
+
     Deleted:
       summary: An entry is deleted succesfull
       value:
+
     Person-01:
       summary: A single person with all fields
       value:
@@ -384,13 +434,15 @@ components:
         infix: "van Der"
         lastName: "Vlist"
         dateOfBirth: "2022-01-04"
+
     Person-02:
       summary: A single person without infix
       value:
         personId: 3
         firstName: "Albert"
         lastName: "Einstein"
-        dateOfBirth: "2022-01-04" 
+        dateOfBirth: "2022-01-04"
+
     PersonAdres-01:
       summary: A person with all fields and no adresses
       value:
@@ -400,6 +452,7 @@ components:
         lastName: "Vlist"
         dateOfBirth: "2022-01-04"
         adresses: []
+
     PersonAdres-02:
       summary: A person with all fields and no adresses
       value:
@@ -408,12 +461,22 @@ components:
         infix: "van Der"
         lastName: "Vlist"
         dateOfBirth: "2022-01-04"
-        adresses: 
+        adresses:
           - 1
           - 2
+
+    PersonBody:
+      summary: A new person with all fields filled
+      value:
+        firstName: "Jos"
+        infix: "van Der"
+        lastName: "Vlist"
+        dateOfBirth: "2022-01-04"
+
     PersonList-01:
       summary: An empty list of persons
-      value: [ ]
+      value: []
+
     PersonList-02:
       summary: An empty list of persons
       value:
@@ -430,13 +493,7 @@ components:
           firstName: "Albert"
           lastName: "Einstein"
           dateOfBirth: "2022-01-04"
-    PersonBody:
-      summary: A new person with all fields filled
-      value:
-        firstName: "Jos"
-        infix: "van Der"
-        lastName: "Vlist"
-        dateOfBirth: "2022-01-04"
+
     Problem-303:
       summary: Bad Request
       value:
@@ -445,6 +502,7 @@ components:
         status: 303
         detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574} already exists"
         path: "/adresses"
+
     Problem-400:
       summary: Bad Request
       value:
@@ -454,6 +512,7 @@ components:
         error: "Bad request"
         detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574}"
         path: "/adresses"
+
     Problem-404:
       summary: Not Found
       value:
@@ -463,6 +522,7 @@ components:
         error: "Not found"
         detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574}"
         path: "/adresses"
+
     Problem-429:
       summary: To many requests
       value:
@@ -472,6 +532,7 @@ components:
         error: "To many requests"
         detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574}"
         path: "/adresses"
+
     Problem-5XX:
       summary: Server fout
       value:
@@ -481,12 +542,15 @@ components:
         error: "Internal Server Error"
         detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574}"
         path: "/adresses"
+
   headers:
     version:
       required: true
       schema:
         type: string
-      example: "0.0.1"        
+      example: "0.0.2"
+
+
   parameters:
     adresId:
       name: adresId
@@ -496,6 +560,7 @@ components:
       schema:
         type: integer
         format: int64
+
     override:
       name: override
       in: query
@@ -504,6 +569,7 @@ components:
       schema:
         type: boolean
         default: false
+
     page:
       name: page
       in: query
@@ -513,6 +579,7 @@ components:
         type: integer
         minimum: 1
         format: int32
+
     personId:
       name: personId
       in: path
@@ -521,6 +588,7 @@ components:
       schema:
         type: integer
         format: int64
+
     size:
       name: size
       in: query
@@ -536,6 +604,7 @@ components:
         default: 25
         minimum: 1
         format: int32
+
     sort:
       name: sort
       in: query
@@ -543,6 +612,18 @@ components:
       required: false
       schema:
         type: string
+
+    X-API-KEY:
+      name: X-API-KEY
+      in: header
+      description: An api key used to track usage of the api
+      required: true
+      schema:
+        type: string
+        pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+      example:
+        "f0583805-03f6-4c7f-8e40-f83f55b7c077"        
+
   schemas:
     Adres:
       allOf:
@@ -551,12 +632,9 @@ components:
             - adresId
           properties:
             adresId:
-              $ref: '#/components/schemas/AdresId'
+              $ref: "#/components/schemas/AdresId"
         - $ref: "#/components/schemas/AdresBody"
-    AdresId: 
-      type: integer
-      format: int64
-      example: 1
+
     AdresBody:
       type: object
       required:
@@ -576,35 +654,41 @@ components:
         city:
           type: string
           example: Veenendaal
-    AdresPerson:
+
+    AdresId:
+      type: integer
+      format: int64
+      example: 1
+
+    AdresIds:
       type: object
-      required:
-        - street
-        - housenumber
-        - city
       properties:
-        adresId:
-          $ref: '#/components/schemas/AdresId'
-        street:
-          type: string
-          example: Kerkewijk
-        housenumber:
-          type: string
-          example: 125
-        zipcode:
-          type: string
-          example: 3904 JB
-        city:
-          type: string
-          example: Veenendaal
-        persons: 
+        adresses:
           type: array
           items:
-            $ref: '#/components/schemas/PersonId'
+            $ref: "#/components/schemas/AdresId"
+
+    AdresPerson:
+      allOf:
+        - $ref: "#/components/schemas/Adres"
+        - $ref: "#/components/schemas/PersonIds"
+
+    AdresPerson1:
+      allOf:
+        - type: object
+          required:
+            - adresId
+          properties:
+            adresId:
+              $ref: "#/components/schemas/AdresId"
+        - $ref: "#/components/schemas/AdresBody"
+        - $ref: "#/components/schemas/PersonIds"
+
     Adresses:
       type: array
       items:
         $ref: "#/components/schemas/Adres"
+
     Deleted:
       type: object
       properties:
@@ -613,7 +697,8 @@ components:
           enum:
             - "OK"
           description: Status of delete operationId
-          example: "OK"   
+          example: "OK"
+
     Person:
       allOf:
         - type: object
@@ -621,40 +706,28 @@ components:
             - personId
           properties:
             personId:
-              $ref: '#/components/schemas/PersonId'
+              $ref: "#/components/schemas/PersonId"
         - $ref: "#/components/schemas/PersonBody"
+
     PersonAdres:
-      type: object
-      properties:
-        personId:
-          $ref: '#/components/schemas/PersonId'
-        firstName:
-          type: string
-          maxLength: 24
-          example: Jos
-        infix:
-          type: string
-          maxLength: 12
-          example: van der
-        lastName:
-          type: string
-          maxLength: 48
-          example: Vlist
-        dateOfBirth:
-          type: string
-          format: date
-          example: 2022-03-04
-        adresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AdresId'
-    PersonId: 
-      type: integer
-      format: int64
-      example: 1
+      allOf:
+        - $ref: "#/components/schemas/Person"
+        - $ref: "#/components/schemas/AdresIds"
+
+    PersonAdres1:
+      allOf:
+        - type: object
+          required:
+            - personId
+          properties:
+            personId:
+              $ref: "#/components/schemas/PersonId"
+        - $ref: "#/components/schemas/PersonBody"
+        - $ref: "#/components/schemas/AdresIds"
+
     PersonBody:
       type: object
-      required:        
+      required:
         - firstName
         - lastName
       properties:
@@ -674,10 +747,25 @@ components:
           type: string
           format: date
           example: 2022-03-04
+
+    PersonId:
+      type: integer
+      format: int64
+      example: 1
+
+    PersonIds:
+      type: object
+      properties:
+        persons:
+          type: array
+          items:
+            $ref: "#/components/schemas/PersonId"
+
     Persons:
       type: array
       items:
         $ref: "#/components/schemas/Person"
+
     Problem:
       type: object
       description: |
@@ -705,6 +793,7 @@ components:
           type: string
         path:
           type: string
+
     ProblemDetail:
       type: object
       required:
@@ -721,6 +810,7 @@ components:
           type: string
         instance:
           type: string
+
   responses:
     Adres:
       description: An adres
@@ -735,7 +825,7 @@ components:
               $ref: "#/components/examples/Adres-02"
       headers:
         version:
-          $ref: "#/components/headers/version"              
+          $ref: "#/components/headers/version"
     AdresPerson:
       description: An adres with references to a person
       content:
@@ -746,10 +836,10 @@ components:
             allfields:
               $ref: "#/components/examples/Adres-01"
             noinfix:
-              $ref: "#/components/examples/Adres-02"  
+              $ref: "#/components/examples/Adres-02"
       headers:
         version:
-          $ref: "#/components/headers/version"                      
+          $ref: "#/components/headers/version"
     Adresses:
       description: A collection of adresses
       content:
@@ -763,9 +853,9 @@ components:
               $ref: "#/components/examples/AdresList-02"
       headers:
         version:
-          $ref: "#/components/headers/version"                      
+          $ref: "#/components/headers/version"
     Deleted:
-      description: Resource deleted      
+      description: Resource deleted
     AlreadyExists:
       description: Resource already exists
       content:
@@ -824,7 +914,7 @@ components:
               $ref: "#/components/examples/PersonList-02"
       headers:
         version:
-          $ref: "#/components/headers/version"                      
+          $ref: "#/components/headers/version"
     Person:
       description: A specific person
       content:
@@ -838,7 +928,7 @@ components:
               $ref: "#/components/examples/Person-02"
       headers:
         version:
-          $ref: "#/components/headers/version"          
+          $ref: "#/components/headers/version"
     PersonAdres:
       description: An person with references to adresses
       content:
@@ -849,14 +939,16 @@ components:
             allfields:
               $ref: "#/components/examples/PersonAdres-01"
             noinfix:
-              $ref: "#/components/examples/PersonAdres-02"  
+              $ref: "#/components/examples/PersonAdres-02"
       headers:
         version:
-          $ref: "#/components/headers/version"                        
+          $ref: "#/components/headers/version"
   securitySchemes:
     ApiKeyAuth: # arbitrary name for the security scheme
       type: apiKey
       in: header # can be "header", "query" or "cookie"
       name: X-API-KEY # name of the header, query parameter or cookie
-security:
-  - ApiKeyAuth: [ ] # use the same name as under securitySchemes
+    basicAuth: # <-- arbitrary name for the security scheme
+      type: http
+      scheme: basic      
+

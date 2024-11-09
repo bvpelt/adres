@@ -4,6 +4,7 @@ import com.bsoft.adres.exceptions.InvalidParameterException;
 import com.bsoft.adres.exceptions.PersonNotDeletedException;
 import com.bsoft.adres.generated.api.PersonsApi;
 import com.bsoft.adres.generated.model.Person;
+import com.bsoft.adres.generated.model.PersonAdres;
 import com.bsoft.adres.generated.model.PersonBody;
 import com.bsoft.adres.service.PersonService;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,14 @@ public class PersonController implements PersonsApi {
         }
 
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+    }
+
+    @Override
+    public ResponseEntity<PersonAdres> _getPeronsAdresses(Long personId) {
+        PersonAdres personAdres = personService.getPersonAdres(personId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .header("Version", version)
+                .body(personAdres);
     }
 
     @Override
