@@ -1,6 +1,5 @@
 package com.bsoft.adres.config;
 
-
 import com.bsoft.adres.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.net.URI;
-
 
 @RestControllerAdvice
 @Slf4j
@@ -45,6 +43,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
     }
+
     @ExceptionHandler(PersonNotExistsException.class)
     public ResponseEntity<ProblemDetail> handleExcehandlePersonNotExistsExceptionption(PersonNotExistsException ex) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());

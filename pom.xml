@@ -177,7 +177,7 @@
                         </goals>
                         <configuration>
 
-                            <inputSpec>${project.basedir}/src/main/resources/adres.0.0.2.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/adres.0.0.3.yaml</inputSpec>
 
                             <generatorName>spring</generatorName>
                             <library>spring-boot</library>
@@ -186,12 +186,13 @@
                                 <apiPackage>com.bsoft.adres.generated.api</apiPackage>
                                 <basePackage>com.bsoft.adres.generated</basePackage>
                                 <configPackage>com.bsoft.adres.generated.generated.configuration</configPackage>
-                                <invokerPackage>com.bsoft.adres.generated.invoker</invokerPackage>
-                                <modelPackage>com.bsoft.adres.generated.model</modelPackage>
                                 <dateLibrary>java8</dateLibrary>
                                 <delegatePattern>true</delegatePattern>
+                                <generateAliasAsModel>true</generateAliasAsModel>
                                 <hideGenerationTimestamp>true</hideGenerationTimestamp>
                                 <interfaceOnly>true</interfaceOnly>
+                                <invokerPackage>com.bsoft.adres.generated.invoker</invokerPackage>
+                                <modelPackage>com.bsoft.adres.generated.model</modelPackage>
                                 <requestMappingMode>none</requestMappingMode>
                                 <serializationLibrary>jackson</serializationLibrary>
                                 <skipDefaultInterface>true</skipDefaultInterface>
@@ -248,6 +249,7 @@
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
+                <version>4.9.10</version>
             </plugin>
         </plugins>
     </build>

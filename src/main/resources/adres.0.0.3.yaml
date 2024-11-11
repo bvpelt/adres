@@ -189,6 +189,84 @@ paths:
         "5XX":
           $ref: "#/components/responses/ServerError"
 
+
+  /roles:
+    get:
+      tags:
+        - Roles
+      summary: Retrieve all known roles
+      description: |
+        Retrieve all known roles, using paging and sorting
+      operationId: getRoles
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/sort"
+      security:
+        - ApiKeyAuth: [] # use the same name as under securitySchemes
+      responses:
+        "200":
+          $ref: "#/components/responses/Roles"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"  
+    delete:
+      tags:
+        - Roles
+      summary: Delete all
+      description: |
+        Delete all roles
+      operationId: deleteAllRoles
+      security:
+        - basicAuth: []      
+          ApiKeyAuth: [] # use the same name as under securitySchemes
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"     
+    post:
+      tags:
+        - Roles
+      summary: Create a new role
+      description: |
+        Create a new role
+        To determine if an role is new the input is compared on the hash value of:
+        - rolename
+        - description
+        If the hash value already exists in the backend, the role is considered to exist
+      operationId: postRole
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoleBody"
+#            examples:
+#              adres:
+#                $ref: "#/components/examples/UserBody"
+      security:
+        - basicAuth: []    
+          ApiKeyAuth: [] # use the same name as under securitySchemes
+      responses:
+        "201":
+          $ref: "#/components/responses/Role"
+        "303":
+          $ref: "#/components/responses/AlreadyExists"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"      
+
   /persons:
     get:
       tags:
@@ -371,7 +449,241 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
-
+  /roles/{roleId}:
+    get:
+      tags:
+        - Roles
+      summary: Retrieve the specified role
+      description: |
+        Retrieve only one role with id roleId
+      operationId: getRole
+      parameters:
+        - $ref: "#/components/parameters/roleId"
+      security:
+        - ApiKeyAuth: [] # use the same name as under securitySchemes
+      responses:
+        "200":
+          $ref: "#/components/responses/Role"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"      
+    delete:
+      tags:
+        - Roles
+      summary: Delete the specified role
+      description: |
+        Delete only the specified role
+      operationId: deleteRole
+      parameters:
+        - $ref: "#/components/parameters/roleId"
+      security:
+        - basicAuth: []        
+        - ApiKeyAuth: [] # use the same name as under securitySchemes
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"  
+    patch:
+      tags:
+        - Roles
+      summary: Update the specified role
+      description: |
+        Update only the role specified with roleId
+      operationId: patchRole
+      parameters:
+        - $ref: "#/components/parameters/roleId"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoleBody"
+#            examples:
+#              user:
+#                $ref: "#/components/examples/UserBody"
+      security:
+        - basicAuth: []                
+        - ApiKeyAuth: [] # use the same name as under securitySchemes
+      responses:
+        "200":
+          $ref: "#/components/responses/Role"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"  
+                  
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Retrieve all known users
+      description: |
+        Retrieve all known users, using paging and sorting
+      operationId: getUsers
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/sort"
+      security:
+        - ApiKeyAuth: [] # use the same name as under securitySchemes
+      responses:
+        "200":
+          $ref: "#/components/responses/Users"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+    delete:
+      tags:
+        - Users
+      summary: Delete all
+      description: |
+        Delete all users
+      operationId: deleteAllUsers
+      security:
+        - basicAuth: []      
+          ApiKeyAuth: [] # use the same name as under securitySchemes
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+    post:
+      tags:
+        - Users
+      summary: Create a new user
+      description: |
+        Create a new user
+        To determine if an user is new the input is compared on the hash value of:
+        - username
+        - password
+        - email
+        - phone
+        If the hash value already exists in the backend, the user is considered to exist
+      operationId: postUser
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserBody"
+#            examples:
+#              adres:
+#                $ref: "#/components/examples/UserBody"
+      security:
+        - basicAuth: []    
+          ApiKeyAuth: [] # use the same name as under securitySchemes
+      responses:
+        "201":
+          $ref: "#/components/responses/Adres"
+        "303":
+          $ref: "#/components/responses/AlreadyExists"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"         
+  /users/{userId}:
+    get:
+      tags:
+        - Users
+      summary: Retrieve the specified user
+      description: |
+        Retrieve only one user with id userId
+      operationId: getUser
+      parameters:
+        - $ref: "#/components/parameters/userId"
+      security:
+        - ApiKeyAuth: [] # use the same name as under securitySchemes
+      responses:
+        "200":
+          $ref: "#/components/responses/User"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"      
+    delete:
+      tags:
+        - Users
+      summary: Delete the specified user
+      description: |
+        Delete only the specified user
+      operationId: deleteUser
+      parameters:
+        - $ref: "#/components/parameters/userId"
+      security:
+        - basicAuth: []        
+        - ApiKeyAuth: [] # use the same name as under securitySchemes
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"  
+    patch:
+      tags:
+        - Users
+      summary: Update the specified user
+      description: |
+        Update only the user specified with userId
+      operationId: patchUser
+      parameters:
+        - $ref: "#/components/parameters/userId"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserBody"
+#            examples:
+#              user:
+#                $ref: "#/components/examples/UserBody"
+      security:
+        - basicAuth: []                
+        - ApiKeyAuth: [] # use the same name as under securitySchemes
+      responses:
+        "200":
+          $ref: "#/components/responses/User"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"                 
 components:
   examples:
     Adres-01:
@@ -555,7 +867,7 @@ components:
     adresId:
       name: adresId
       in: path
-      description: The person identification of the person to return
+      description: The adres identification of the adres to return
       required: true
       schema:
         type: integer
@@ -589,6 +901,16 @@ components:
         type: integer
         format: int64
 
+    roleId:
+      name: roleId
+      in: path
+      description: The role identification of the role to return
+      required: true
+      schema:
+        type: integer
+        format: int64
+
+
     size:
       name: size
       in: query
@@ -612,6 +934,15 @@ components:
       required: false
       schema:
         type: string
+
+    userId:
+      name: userId
+      in: path
+      description: The user identification of the user to return
+      required: true
+      schema:
+        type: integer
+        format: int64
 
     X-API-KEY:
       name: X-API-KEY
@@ -766,6 +1097,90 @@ components:
       items:
         $ref: "#/components/schemas/Person"
 
+    Role:
+      allOf:
+        - type: object
+          required:
+            - roleId
+          properties:
+            personId:
+              $ref: "#/components/schemas/RoleId"
+        - $ref: "#/components/schemas/RoleBody"
+
+    RoleId:
+      type: integer
+      format: int64
+      example: 1
+
+    RoleBody:
+      type: object
+      required:
+        - rolename
+      properties:       
+        rolename:
+          type: string
+          maxLength: 32
+          example: reader
+        description:
+          type: string          
+          maxLength: 128
+          example: This role gives read access
+
+    Roles:
+      allOf:
+        - type: object
+          required:
+            - roleId
+          properties:
+            roleId:
+              $ref: "#/components/schemas/RoleId"
+        - $ref: "#/components/schemas/RoleBody"
+
+    User:
+      allOf:
+        - type: object
+          required:
+            - personId
+          properties:
+            personId:
+              $ref: "#/components/schemas/UserId"
+        - $ref: "#/components/schemas/UserBody"
+
+    UserBody:
+      type: object
+      required:
+        - username
+        - password
+        - email
+      properties:       
+        username:
+          type: string
+          maxLength: 24
+          example: user
+        password:
+          type: string
+          description: base64 encode password
+          maxLength: 48
+          example: kasjdkfkei
+        email:
+          type: string
+          pattern: '^(.[^@]*)@(.[^@]*)\.(.[^@]*)$'
+          maxLength: 128
+          example: mymail@gmail.com
+        phone:
+          type: string
+          maxLength: 24
+          example: "+316409493445"
+    UserId:
+      type: integer
+      format: int64
+      example: 1
+
+    Users:
+      type: array
+      items:
+        $ref: "#/components/schemas/User"
+
     Problem:
       type: object
       description: |
@@ -901,20 +1316,7 @@ components:
           examples:
             tomanyrequests:
               $ref: "#/components/examples/Problem-429"
-    Persons:
-      description: A collection of persons
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/Persons"
-          examples:
-            emptylist:
-              $ref: "#/components/examples/PersonList-01"
-            fulllist:
-              $ref: "#/components/examples/PersonList-02"
-      headers:
-        version:
-          $ref: "#/components/headers/version"
+
     Person:
       description: A specific person
       content:
@@ -942,6 +1344,76 @@ components:
               $ref: "#/components/examples/PersonAdres-02"
       headers:
         version:
+          $ref: "#/components/headers/version"              
+    Persons:
+      description: A collection of persons
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Persons"
+          examples:
+            emptylist:
+              $ref: "#/components/examples/PersonList-01"
+            fulllist:
+              $ref: "#/components/examples/PersonList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+    Role:
+      description: A role
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Role"
+#          examples:
+#            allfields:
+#              $ref: "#/components/examples/Role-01"
+#            noinfix:
+#              $ref: "#/components/examples/Role-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"          
+    Roles:
+      description: A collection of roles
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Roles"
+#          examples:
+#            emptylist:
+#              $ref: "#/components/examples/UserList-01"
+#            fulllist:
+#              $ref: "#/components/examples/UserList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"          
+    User:
+      description: An user
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/User"
+#          examples:
+#            allfields:
+#              $ref: "#/components/examples/User-01"
+#            noinfix:
+#              $ref: "#/components/examples/User-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"          
+    Users:
+      description: A collection of users
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Users"
+#          examples:
+#            emptylist:
+#              $ref: "#/components/examples/UserList-01"
+#            fulllist:
+#              $ref: "#/components/examples/UserList-02"
+      headers:
+        version:
           $ref: "#/components/headers/version"
   securitySchemes:
     ApiKeyAuth: # arbitrary name for the security scheme
@@ -951,3 +1423,4 @@ components:
     basicAuth: # <-- arbitrary name for the security scheme
       type: http
       scheme: basic      
+

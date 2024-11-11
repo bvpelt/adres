@@ -50,63 +50,102 @@ public class WebSecurityConfig {
     @Order(0)
     public SecurityFilterChain actuatorFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/actuator/**")
+                .securityMatcher("/actuator/**") // Match all adresses endpoints
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors((cors) -> cors
-                        .configurationSource(apiConfigurationSource())
+                .cors((cors) -> cors.configurationSource(apiConfigurationSource()))
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers(HttpMethod.GET, "/actuator/**").hasAnyRole("USER", "ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/actuator/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/actuator/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/actuator/**").hasRole("ADMIN")
+                                .anyRequest().authenticated()
                 )
-                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-                        authorizationManagerRequestMatcherRegistry
-                                .requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
-                                .requestMatchers("/actuator/**").hasAnyRole("ADMIN")
-                                .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
 
-    // [TODO - Fix security basic authentication]
+
     @Bean
     @Order(1)
-    public SecurityFilterChain addressesFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain swaggerFilterChain(HttpSecurity http) throws Exception {
+
         http
-                .securityMatcher("/adresses/**")
+                .securityMatcher("/swagger_ui/**") // Match all adresses endpoints
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors((cors) -> cors
-                        .configurationSource(apiConfigurationSource())
+                .cors((cors) -> cors.configurationSource(apiConfigurationSource()))
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers("/swagger_ui/**").permitAll()
+                                .anyRequest().authenticated()
                 )
-                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-                        authorizationManagerRequestMatcherRegistry
-                                .requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.PATCH).hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.POST).hasRole("ADMIN")
-                                .requestMatchers("/adresses/**").hasAnyRole("USER", "ADMIN")
-                                .requestMatchers("/person/**").hasAnyRole("USER", "ADMIN")
-                                .requestMatchers("/swagger-ui/**").permitAll()
-                                .requestMatchers("/login/**").permitAll()
-                                .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
 
+    // TODO - Fix security basic authentication
     @Bean
     @Order(2)
-    public SecurityFilterChain swaggerFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain addressesFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/swagger_ui/**")
+                .securityMatcher("/adresses/**") // Match all adresses endpoints
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors((cors) -> cors
-                        .configurationSource(apiConfigurationSource())
+                .cors((cors) -> cors.configurationSource(apiConfigurationSource()))
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers(HttpMethod.GET, "/adresses/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/adresses/**").hasRole("USER")
+                                .requestMatchers(HttpMethod.PUT, "/adresses/**").hasRole("USER")
+                                .requestMatchers(HttpMethod.DELETE, "/adresses/**").hasRole("ADMIN")
+                                .anyRequest().authenticated()
                 )
-                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-                        authorizationManagerRequestMatcherRegistry
-                                .requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
-                                .requestMatchers("/swagger-ui/**").permitAll()
+                .httpBasic(Customizer.withDefaults())
+                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        return http.build();
+    }
+
+
+    // TODO - Fix security basic authentication
+    @Bean
+    @Order(3)
+    public SecurityFilterChain personsFilterChain(HttpSecurity http) throws Exception {
+
+        http
+                .securityMatcher("/persons/**") // Match all adresses endpoints
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors((cors) -> cors.configurationSource(apiConfigurationSource()))
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers(HttpMethod.GET, "/persons/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/persons/**").hasRole("USER")
+                                .requestMatchers(HttpMethod.PUT, "/persons/**").hasRole("USER")
+                                .requestMatchers(HttpMethod.DELETE, "/persons/**").hasRole("ADMIN")
+                                .anyRequest().authenticated()
+                )
+                .httpBasic(Customizer.withDefaults())
+                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        return http.build();
+    }
+
+
+    @Bean
+    @Order(4)
+    public SecurityFilterChain loginFilterChainxx(HttpSecurity http) throws Exception {
+        http
+                .securityMatcher("/login/**") // Match all adresses endpoints
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors((cors) -> cors.configurationSource(apiConfigurationSource()))
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
                                 .requestMatchers("/login/**").permitAll()
-                                .anyRequest().authenticated())
+                                .anyRequest().authenticated()
+                )
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
