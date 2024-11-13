@@ -1,7 +1,7 @@
 openapi: "3.0.3"
 info:
   title: Adres API
-  version: 0.0.2
+  version: 0.0.3
 servers:
   - url: https://api.server.test/opvragen/v1
 
@@ -599,7 +599,7 @@ paths:
           ApiKeyAuth: [] # use the same name as under securitySchemes
       responses:
         "201":
-          $ref: "#/components/responses/Adres"
+          $ref: "#/components/responses/User"
         "303":
           $ref: "#/components/responses/AlreadyExists"
         "429":
@@ -1140,9 +1140,9 @@ components:
       allOf:
         - type: object
           required:
-            - personId
+            - userId
           properties:
-            personId:
+            userId:
               $ref: "#/components/schemas/UserId"
         - $ref: "#/components/schemas/UserBody"
 
@@ -1171,6 +1171,26 @@ components:
           type: string
           maxLength: 24
           example: "+316409493445"
+        accountNonExpired:
+          type: boolean
+          default: true
+          example: true
+        accountNonLocked:
+          type: boolean
+          default: true
+          example: true
+        credentialsNonExpired:
+          type: boolean
+          default: true
+          example: true
+        enabled:
+          type: boolean
+          default: true
+          example: true
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Role'
     UserId:
       type: integer
       format: int64

@@ -3,7 +3,8 @@ create table role
     roleid      bigint      not null primary key,
     rolename    varchar(32) not null,
     description varchar(128),
-    userid      bigint
+    userid      bigint,
+    hash        int
 );
 
 ALTER TABLE role
