@@ -1,6 +1,7 @@
 package com.bsoft.adres.config;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -9,11 +10,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
@@ -25,10 +28,23 @@ import java.util.List;
 @Profile("runtime")
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig {
+public class WebSecurityConfig  {
+
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -56,9 +72,9 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers(HttpMethod.GET, "/actuator/**").hasAnyRole("USER", "ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/actuator/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.PUT, "/actuator/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.DELETE, "/actuator/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/actuator/**").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.PATCH, "/actuator/**").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/actuator/**").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
@@ -92,15 +108,15 @@ public class WebSecurityConfig {
     @Order(2)
     public SecurityFilterChain addressesFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/adresses/**") // Match all adresses endpoints
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors((cors) -> cors.configurationSource(apiConfigurationSource()))
+//                .securityMatcher("/adresses/**") // Match all adresses endpoints
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .cors((cors) -> cors.configurationSource(apiConfigurationSource()))
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers(HttpMethod.GET, "/adresses/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/adresses/**").hasRole("USER")
-                                .requestMatchers(HttpMethod.PUT, "/adresses/**").hasRole("USER")
-                                .requestMatchers(HttpMethod.DELETE, "/adresses/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/adresses/**").hasAuthority("USER")
+                                .requestMatchers(HttpMethod.PATCH, "/adresses/**").hasAuthority("USER")
+                                .requestMatchers(HttpMethod.DELETE, "/adresses/**").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
@@ -122,9 +138,9 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers(HttpMethod.GET, "/persons/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/persons/**").hasRole("USER")
-                                .requestMatchers(HttpMethod.PUT, "/persons/**").hasRole("USER")
-                                .requestMatchers(HttpMethod.DELETE, "/persons/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/persons/**").hasAuthority("USER")
+                                .requestMatchers(HttpMethod.PATCH, "/persons/**").hasAuthority("USER")
+                                .requestMatchers(HttpMethod.DELETE, "/persons/**").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())

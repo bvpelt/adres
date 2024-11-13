@@ -9,6 +9,7 @@ import lombok.Setter;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,4 +40,33 @@ public class UserDAO {
 
     @OneToMany(mappedBy = "user")
     private List<RoleDAO> role = new ArrayList<>();
+
+    @Column(name = "hash")
+    private int hash;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDAO userDAO = (UserDAO) o;
+        return Objects.equals(username, userDAO.username) && Objects.equals(password, userDAO.password) && Objects.equals(email, userDAO.email) && Objects.equals(phone, userDAO.phone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, password, email, phone);
+    }
+
+    @Override
+    public String toString() {
+        return "UserDAO{" +
+                "userid=" + userid +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", role=" + role +
+                ", hash=" + hash +
+                '}';
+    }
 }
