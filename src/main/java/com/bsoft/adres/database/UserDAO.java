@@ -8,9 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serial;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -52,8 +50,17 @@ public class UserDAO {
     private Boolean enabled = true;
 
     // TODO change to Many to Many
-    @OneToMany(mappedBy = "user")
-    private List<RoleDAO> role = new ArrayList<RoleDAO>();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // owning site
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = {
+                    @JoinColumn(name = "userid", referencedColumnName = "userid")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "roleid", referencedColumnName = "roleid")
+            }
+    )
+    private Set<RoleDAO> roles = new HashSet<RoleDAO>();
 
     @Column(name = "hash")
     private int hash;
@@ -67,19 +74,41 @@ public class UserDAO {
         this.setAccountNonLocked(userbody.getAccountNonLocked());
         this.setCredentialsNonExpired(userbody.getCredentialsNonExpired());
         this.setEnabled(userbody.getEnabled());
-        this.setRole(new ArrayList<>());
+        this.setRoles(new HashSet<>());
+        this.hash = hashCode();
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserDAO userDAO = (UserDAO) o;
-        return Objects.equals(username, userDAO.username) && Objects.equals(password, userDAO.password) && Objects.equals(email, userDAO.email) && Objects.equals(phone, userDAO.phone) && Objects.equals(accountNonExpired, userDAO.accountNonExpired) && Objects.equals(accountNonLocked, userDAO.accountNonLocked) && Objects.equals(credentialsNonExpired, userDAO.credentialsNonExpired) && Objects.equals(enabled, userDAO.enabled);
+        if (!(o instanceof UserDAO userDAO)) return false;
+
+        if (getUsername() != null ? !getUsername().equals(userDAO.getUsername()) : userDAO.getUsername() != null)
+            return false;
+        if (getPassword() != null ? !getPassword().equals(userDAO.getPassword()) : userDAO.getPassword() != null)
+            return false;
+        if (getEmail() != null ? !getEmail().equals(userDAO.getEmail()) : userDAO.getEmail() != null) return false;
+        if (getPhone() != null ? !getPhone().equals(userDAO.getPhone()) : userDAO.getPhone() != null) return false;
+        if (getAccountNonExpired() != null ? !getAccountNonExpired().equals(userDAO.getAccountNonExpired()) : userDAO.getAccountNonExpired() != null)
+            return false;
+        if (getAccountNonLocked() != null ? !getAccountNonLocked().equals(userDAO.getAccountNonLocked()) : userDAO.getAccountNonLocked() != null)
+            return false;
+        if (getCredentialsNonExpired() != null ? !getCredentialsNonExpired().equals(userDAO.getCredentialsNonExpired()) : userDAO.getCredentialsNonExpired() != null)
+            return false;
+        return getEnabled() != null ? getEnabled().equals(userDAO.getEnabled()) : userDAO.getEnabled() == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, password, email, phone, accountNonExpired, accountNonLocked, credentialsNonExpired, enabled);
+        int result = getUsername() != null ? getUsername().hashCode() : 0;
+        result = 31 * result + (getPassword() != null ? getPassword().hashCode() : 0);
+        result = 31 * result + (getEmail() != null ? getEmail().hashCode() : 0);
+        result = 31 * result + (getPhone() != null ? getPhone().hashCode() : 0);
+        result = 31 * result + (getAccountNonExpired() != null ? getAccountNonExpired().hashCode() : 0);
+        result = 31 * result + (getAccountNonLocked() != null ? getAccountNonLocked().hashCode() : 0);
+        result = 31 * result + (getCredentialsNonExpired() != null ? getCredentialsNonExpired().hashCode() : 0);
+        result = 31 * result + (getEnabled() != null ? getEnabled().hashCode() : 0);
+        return result;
     }
 
     @Override
@@ -94,7 +123,7 @@ public class UserDAO {
                 ", accountNonLocked=" + accountNonLocked +
                 ", credentialsNonExpired=" + credentialsNonExpired +
                 ", enabled=" + enabled +
-                ", role=" + role +
+                ", roles=" + roles +
                 ", hash=" + hash +
                 '}';
     }

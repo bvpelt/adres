@@ -6,9 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.userdetails.User;
 
 import java.io.Serial;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,28 +34,37 @@ public class RoleDAO {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "userid")
-    private UserDAO user;
-
     @Column(name = "hash")
     private int hash;
+
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    private Set<UserDAO> users = new HashSet<UserDAO>();
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        RoleDAO roleDAO = (RoleDAO) o;
-        return Objects.equals(rolename, roleDAO.rolename) && Objects.equals(description, roleDAO.description);
+        if (!(o instanceof RoleDAO roleDAO)) return false;
+
+        if (getRolename() != null ? !getRolename().equals(roleDAO.getRolename()) : roleDAO.getRolename() != null)
+            return false;
+        return getDescription() != null ? getDescription().equals(roleDAO.getDescription()) : roleDAO.getDescription() == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(rolename, description);
+        int result = getRolename() != null ? getRolename().hashCode() : 0;
+        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
+        return result;
     }
 
     @Override
     public String toString() {
-        return rolename;
+        return "RoleDAO{" +
+                "roleid=" + roleid +
+                ", rolename='" + rolename + '\'' +
+                ", description='" + description + '\'' +
+                ", hash=" + hash +
+                ", users=" + users +
+                '}';
     }
 }
