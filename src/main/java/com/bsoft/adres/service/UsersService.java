@@ -1,9 +1,8 @@
 package com.bsoft.adres.service;
 
 import com.bsoft.adres.database.UserDAO;
-
-import com.bsoft.adres.exceptions.UserNotExistsException;
 import com.bsoft.adres.exceptions.UserExistsException;
+import com.bsoft.adres.exceptions.UserNotExistsException;
 import com.bsoft.adres.generated.model.User;
 import com.bsoft.adres.generated.model.UserBody;
 import com.bsoft.adres.repositories.UsersRepository;
@@ -136,7 +135,7 @@ public class UsersService {
 
     private User UserDAO2User(final UserDAO userDAO) {
         User user = new User();
-        user.setUserId(user.getUserId());
+        user.setId(user.getId());
         user.setUsername(userDAO.getUsername());
         user.setPassword(userDAO.getPassword());
         user.setEmail(userDAO.getEmail());

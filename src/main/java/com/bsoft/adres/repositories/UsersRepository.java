@@ -1,6 +1,5 @@
 package com.bsoft.adres.repositories;
 
-import com.bsoft.adres.database.AdresDAO;
 import com.bsoft.adres.database.UserDAO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -18,17 +17,17 @@ public interface UsersRepository extends PagingAndSortingRepository<UserDAO, Lon
         CrudRepository<UserDAO, Long>,
         JpaSpecificationExecutor<UserDAO> {
 
-    @Query(value = "SELECT user.* FROM users where username = :username" , nativeQuery = true)
+    @Query(value = "SELECT * FROM \"user\" where username = :username", nativeQuery = true)
     Optional<UserDAO> findByUsername(final String username);
 
-    @Query(value = "SELECT user.* FROM users where userid = :userId" , nativeQuery = true)
+    @Query(value = "SELECT * FROM \"user\" where userid = :userId", nativeQuery = true)
     Optional<UserDAO> findByUserId(Long userId);
 
-    @Query(value = "SELECT * FROM users",
-            countQuery = "SELECT * FROM users",
+    @Query(value = "SELECT * FROM \"user\"",
+            countQuery = "SELECT * FROM \"user\"",
             nativeQuery = true)
     List<UserDAO> findAllByPaged(Pageable pageable);
 
-    @Query(value = "SELECT * FROM users WHERE hash = :hash", nativeQuery = true)
+    @Query(value = "SELECT * FROM \"user\" WHERE hash = :hash", nativeQuery = true)
     Optional<UserDAO> findByHash(@Param("hash") Integer hash);
 }

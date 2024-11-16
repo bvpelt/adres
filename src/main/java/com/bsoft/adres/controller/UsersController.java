@@ -1,12 +1,10 @@
 package com.bsoft.adres.controller;
 
-import com.bsoft.adres.exceptions.AdresNotDeletedException;
 import com.bsoft.adres.exceptions.InvalidParameterException;
 import com.bsoft.adres.exceptions.UserNotDeletedException;
-import com.bsoft.adres.generated.api.AdressesApi;
 import com.bsoft.adres.generated.api.UsersApi;
-import com.bsoft.adres.generated.model.*;
-import com.bsoft.adres.service.AdresService;
+import com.bsoft.adres.generated.model.User;
+import com.bsoft.adres.generated.model.UserBody;
 import com.bsoft.adres.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

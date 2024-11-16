@@ -75,11 +75,11 @@ public class PersonService {
         List<AdresDAO> adresList = adresRepository.findAdresByPersonId(personId);
 
         adresList.forEach(adres -> {
-            adresIds.add(adres.getAdresid());
+            adresIds.add(adres.getId());
         });
 
         PersonAdres personAdres = new PersonAdres();
-        personAdres.setPersonId(optionalPersonDAO.get().getPersonid());
+        personAdres.setId(optionalPersonDAO.get().getId());
         personAdres.setFirstName(optionalPersonDAO.get().getFirstname());
         personAdres.setInfix(optionalPersonDAO.get().getInfix());
         personAdres.setLastName(optionalPersonDAO.get().getLastname());
@@ -168,7 +168,7 @@ public class PersonService {
     private Person PersonDAO2Person(final PersonDAO personDAO) {
         Person person = new Person();
         person.setFirstName(personDAO.getFirstname());
-        person.setPersonId(personDAO.getPersonid());
+        person.setId(personDAO.getId());
         person.setInfix(personDAO.getInfix());
         person.setLastName(personDAO.getLastname());
         person.setDateOfBirth(personDAO.getDateofbirth());

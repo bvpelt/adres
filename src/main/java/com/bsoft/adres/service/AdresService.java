@@ -142,7 +142,7 @@ public class AdresService {
 
     private Adres AdresDAO2Adres(final AdresDAO adresDAO) {
         Adres adres = new Adres();
-        adres.setAdresId(adresDAO.getAdresid());
+        adres.setId(adresDAO.getId());
         adres.setStreet(adresDAO.getStreet());
         adres.setHousenumber(adresDAO.getHousenumber());
         adres.setZipcode(adresDAO.getZipcode());
@@ -160,11 +160,11 @@ public class AdresService {
         List<PersonDAO> personList = personRepository.findPersonsByAdresId(adresId);
 
         personList.forEach(personDAO -> {
-            personIds.add(personDAO.getPersonid());
+            personIds.add(personDAO.getId());
         });
 
         AdresPerson adresPerson = new AdresPerson();
-        adresPerson.setAdresId(adresDAO.get().getAdresid());
+        adresPerson.setId(adresDAO.get().getId());
         adresPerson.setStreet(adresDAO.get().getStreet());
         adresPerson.setHousenumber(adresDAO.get().getHousenumber());
         adresPerson.setZipcode(adresDAO.get().getZipcode());

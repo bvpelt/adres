@@ -30,7 +30,7 @@ paths:
       summary: Delete all
       description: |
         Delete all adres
-      operationId: deleteAllAdreses     
+      operationId: deleteAllAdreses
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -41,7 +41,7 @@ paths:
         "429":
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
-          $ref: "#/components/responses/ServerError"          
+          $ref: "#/components/responses/ServerError"
     post:
       tags:
         - Adresses
@@ -145,7 +145,7 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
-  /adresses/{adresId}/persons:    
+  /adresses/{adresId}/persons:
     get:
       tags:
         - Adresses
@@ -165,7 +165,7 @@ paths:
         "429":
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
-          $ref: "#/components/responses/ServerError"        
+          $ref: "#/components/responses/ServerError"
   /persons:
     get:
       tags:
@@ -193,7 +193,7 @@ paths:
       summary: Delete all persons
       description: |
         Delete all persons
-      operationId: deleteAllPersons     
+      operationId: deleteAllPersons
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -204,7 +204,7 @@ paths:
         "429":
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
-          $ref: "#/components/responses/ServerError" 
+          $ref: "#/components/responses/ServerError"
     post:
       tags:
         - Persons
@@ -327,7 +327,7 @@ paths:
         "429":
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
-          $ref: "#/components/responses/ServerError"               
+          $ref: "#/components/responses/ServerError"
 components:
   examples:
     Adres-01:
@@ -390,7 +390,7 @@ components:
         personId: 3
         firstName: "Albert"
         lastName: "Einstein"
-        dateOfBirth: "2022-01-04" 
+        dateOfBirth: "2022-01-04"
     PersonAdres-01:
       summary: A person with all fields and no adresses
       value:
@@ -399,7 +399,7 @@ components:
         infix: "van Der"
         lastName: "Vlist"
         dateOfBirth: "2022-01-04"
-        adresses: []
+        adresses: [ ]
     PersonAdres-02:
       summary: A person with all fields and no adresses
       value:
@@ -408,7 +408,7 @@ components:
         infix: "van Der"
         lastName: "Vlist"
         dateOfBirth: "2022-01-04"
-        adresses: 
+        adresses:
           - 1
           - 2
     PersonList-01:
@@ -486,7 +486,7 @@ components:
       required: true
       schema:
         type: string
-      example: "0.0.1"        
+      example: "0.0.1"
   parameters:
     adresId:
       name: adresId
@@ -553,7 +553,7 @@ components:
             adresId:
               $ref: '#/components/schemas/AdresId'
         - $ref: "#/components/schemas/AdresBody"
-    AdresId: 
+    AdresId:
       type: integer
       format: int64
       example: 1
@@ -597,7 +597,7 @@ components:
         city:
           type: string
           example: Veenendaal
-        persons: 
+        persons:
           type: array
           items:
             $ref: '#/components/schemas/PersonId'
@@ -613,7 +613,7 @@ components:
           enum:
             - "OK"
           description: Status of delete operationId
-          example: "OK"   
+          example: "OK"
     Person:
       allOf:
         - type: object
@@ -648,13 +648,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AdresId'
-    PersonId: 
+    PersonId:
       type: integer
       format: int64
       example: 1
     PersonBody:
       type: object
-      required:        
+      required:
         - firstName
         - lastName
       properties:
@@ -735,7 +735,7 @@ components:
               $ref: "#/components/examples/Adres-02"
       headers:
         version:
-          $ref: "#/components/headers/version"              
+          $ref: "#/components/headers/version"
     AdresPerson:
       description: An adres with references to a person
       content:
@@ -746,10 +746,10 @@ components:
             allfields:
               $ref: "#/components/examples/Adres-01"
             noinfix:
-              $ref: "#/components/examples/Adres-02"  
+              $ref: "#/components/examples/Adres-02"
       headers:
         version:
-          $ref: "#/components/headers/version"                      
+          $ref: "#/components/headers/version"
     Adresses:
       description: A collection of adresses
       content:
@@ -763,9 +763,9 @@ components:
               $ref: "#/components/examples/AdresList-02"
       headers:
         version:
-          $ref: "#/components/headers/version"                      
+          $ref: "#/components/headers/version"
     Deleted:
-      description: Resource deleted      
+      description: Resource deleted
     AlreadyExists:
       description: Resource already exists
       content:
@@ -824,7 +824,7 @@ components:
               $ref: "#/components/examples/PersonList-02"
       headers:
         version:
-          $ref: "#/components/headers/version"                      
+          $ref: "#/components/headers/version"
     Person:
       description: A specific person
       content:
@@ -838,7 +838,7 @@ components:
               $ref: "#/components/examples/Person-02"
       headers:
         version:
-          $ref: "#/components/headers/version"          
+          $ref: "#/components/headers/version"
     PersonAdres:
       description: An person with references to adresses
       content:
@@ -849,10 +849,10 @@ components:
             allfields:
               $ref: "#/components/examples/PersonAdres-01"
             noinfix:
-              $ref: "#/components/examples/PersonAdres-02"  
+              $ref: "#/components/examples/PersonAdres-02"
       headers:
         version:
-          $ref: "#/components/headers/version"                        
+          $ref: "#/components/headers/version"
   securitySchemes:
     ApiKeyAuth: # arbitrary name for the security scheme
       type: apiKey

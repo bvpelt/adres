@@ -11,6 +11,7 @@ import lombok.Setter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,8 +25,8 @@ public class PersonDAO implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "personid")
-    private Long personid;
+    @Column(name = "id")
+    private Long id;
     @Column(name = "firstname")
     private String firstname;
     @Column(name = "infix")
@@ -38,7 +39,7 @@ public class PersonDAO implements Serializable {
     private LocalDate dateofbirth;
 
     public PersonDAO(final Person person) {
-        this.personid = person.getPersonId();
+        this.id = person.getId();
         this.firstname = person.getFirstName();
         this.infix = person.getInfix();
         this.lastname = person.getLastName();
@@ -47,7 +48,7 @@ public class PersonDAO implements Serializable {
     }
 
     public PersonDAO(final PersonBody person) {
-        this.personid = null;
+        this.id = null;
         this.firstname = person.getFirstName();
         this.infix = person.getInfix();
         this.lastname = person.getLastName();
@@ -57,30 +58,20 @@ public class PersonDAO implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof PersonDAO personDAO)) return false;
-
-        if (getFirstname() != null ? !getFirstname().equals(personDAO.getFirstname()) : personDAO.getFirstname() != null)
-            return false;
-        if (getInfix() != null ? !getInfix().equals(personDAO.getInfix()) : personDAO.getInfix() != null) return false;
-        if (getLastname() != null ? !getLastname().equals(personDAO.getLastname()) : personDAO.getLastname() != null)
-            return false;
-        return getDateofbirth() != null ? getDateofbirth().equals(personDAO.getDateofbirth()) : personDAO.getDateofbirth() == null;
+        if (o == null || getClass() != o.getClass()) return false;
+        PersonDAO personDAO = (PersonDAO) o;
+        return Objects.equals(firstname, personDAO.firstname) && Objects.equals(infix, personDAO.infix) && Objects.equals(lastname, personDAO.lastname) && Objects.equals(dateofbirth, personDAO.dateofbirth);
     }
 
     @Override
     public int hashCode() {
-        int result = getFirstname() != null ? getFirstname().hashCode() : 0;
-        result = 31 * result + (getInfix() != null ? getInfix().hashCode() : 0);
-        result = 31 * result + (getLastname() != null ? getLastname().hashCode() : 0);
-        result = 31 * result + (getDateofbirth() != null ? getDateofbirth().hashCode() : 0);
-        return result;
+        return Objects.hash(firstname, infix, lastname, dateofbirth);
     }
 
     @Override
     public String toString() {
         return "PersonDAO{" +
-                "personid=" + personid +
+                "id=" + id +
                 ", firstname='" + firstname + '\'' +
                 ", infix='" + infix + '\'' +
                 ", lastname='" + lastname + '\'' +

@@ -8,22 +8,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serial;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "users", schema = "public", catalog = "adres")
+@Table(name = "user", schema = "public", catalog = "adres")
 public class UserDAO {
     @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userid")
-    private Long userid;
+    @Column(name = "id")
+    private Long id;
 
     @Column(name = "username")
     private String username;
@@ -37,14 +39,14 @@ public class UserDAO {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "accountNonExpired")
-    private Boolean accountNonExpired = true;
+    @Column(name = "account_non_expired")
+    private Boolean account_non_expired = true;
 
-    @Column(name = "accountNonLocked")
-    private Boolean accountNonLocked = true;
+    @Column(name = "account_non_locked")
+    private Boolean account_non_locked = true;
 
-    @Column(name = "credentialsNonExpired")
-    private Boolean credentialsNonExpired = true;
+    @Column(name = "credentials_non_expired")
+    private Boolean credentials_non_expired = true;
 
     @Column(name = "enabled")
     private Boolean enabled = true;
@@ -54,22 +56,24 @@ public class UserDAO {
     @JoinTable(
             name = "users_roles",
             joinColumns = {
-                    @JoinColumn(name = "userid", referencedColumnName = "userid")
+                    @JoinColumn(name = "userid", referencedColumnName = "id")
             },
             inverseJoinColumns = {
-                    @JoinColumn(name = "roleid", referencedColumnName = "roleid")
+                    @JoinColumn(name = "roleid", referencedColumnName = "id")
             }
     )
-    private Set<RoleDAO> roles = new HashSet<RoleDAO>();
+    private Collection<RoleDAO> roles = new HashSet<RoleDAO>();
 
     @Column(name = "hash")
     private int hash;
 
+    // TODO fix account / crentials in java / database
     public UserDAO(final UserBody userbody) {
         this.setUsername(userbody.getUsername());
         this.setPassword(userbody.getPassword());
         this.setEmail(userbody.getEmail());
         this.setPhone(userbody.getPhone());
+        this.setAccount_non_expired();
         this.setAccountNonExpired(userbody.getAccountNonExpired());
         this.setAccountNonLocked(userbody.getAccountNonLocked());
         this.setCredentialsNonExpired(userbody.getCredentialsNonExpired());
@@ -80,41 +84,20 @@ public class UserDAO {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof UserDAO userDAO)) return false;
-
-        if (getUsername() != null ? !getUsername().equals(userDAO.getUsername()) : userDAO.getUsername() != null)
-            return false;
-        if (getPassword() != null ? !getPassword().equals(userDAO.getPassword()) : userDAO.getPassword() != null)
-            return false;
-        if (getEmail() != null ? !getEmail().equals(userDAO.getEmail()) : userDAO.getEmail() != null) return false;
-        if (getPhone() != null ? !getPhone().equals(userDAO.getPhone()) : userDAO.getPhone() != null) return false;
-        if (getAccountNonExpired() != null ? !getAccountNonExpired().equals(userDAO.getAccountNonExpired()) : userDAO.getAccountNonExpired() != null)
-            return false;
-        if (getAccountNonLocked() != null ? !getAccountNonLocked().equals(userDAO.getAccountNonLocked()) : userDAO.getAccountNonLocked() != null)
-            return false;
-        if (getCredentialsNonExpired() != null ? !getCredentialsNonExpired().equals(userDAO.getCredentialsNonExpired()) : userDAO.getCredentialsNonExpired() != null)
-            return false;
-        return getEnabled() != null ? getEnabled().equals(userDAO.getEnabled()) : userDAO.getEnabled() == null;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDAO userDAO = (UserDAO) o;
+        return Objects.equals(username, userDAO.username) && Objects.equals(password, userDAO.password) && Objects.equals(email, userDAO.email) && Objects.equals(phone, userDAO.phone) && Objects.equals(accountNonExpired, userDAO.accountNonExpired) && Objects.equals(accountNonLocked, userDAO.accountNonLocked) && Objects.equals(credentialsNonExpired, userDAO.credentialsNonExpired) && Objects.equals(enabled, userDAO.enabled);
     }
 
     @Override
     public int hashCode() {
-        int result = getUsername() != null ? getUsername().hashCode() : 0;
-        result = 31 * result + (getPassword() != null ? getPassword().hashCode() : 0);
-        result = 31 * result + (getEmail() != null ? getEmail().hashCode() : 0);
-        result = 31 * result + (getPhone() != null ? getPhone().hashCode() : 0);
-        result = 31 * result + (getAccountNonExpired() != null ? getAccountNonExpired().hashCode() : 0);
-        result = 31 * result + (getAccountNonLocked() != null ? getAccountNonLocked().hashCode() : 0);
-        result = 31 * result + (getCredentialsNonExpired() != null ? getCredentialsNonExpired().hashCode() : 0);
-        result = 31 * result + (getEnabled() != null ? getEnabled().hashCode() : 0);
-        return result;
+        return Objects.hash(username, password, email, phone, accountNonExpired, accountNonLocked, credentialsNonExpired, enabled);
     }
 
     @Override
     public String toString() {
         return "UserDAO{" +
-                "userid=" + userid +
+                "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
