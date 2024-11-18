@@ -44,17 +44,17 @@ public class MyUserPrincipal implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return user.getAccountNonExpired();
+        return user.getAccount_non_expired();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return user.getAccountNonLocked();
+        return user.getAccount_non_locked();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return user.getCredentialsNonExpired();
+        return user.getCredentials_non_expired();
     }
 
     @Override

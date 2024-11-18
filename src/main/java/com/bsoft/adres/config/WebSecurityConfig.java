@@ -22,6 +22,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+    // TODO add loadUserByUsername https://www.codejava.net/frameworks/spring-boot/user-registration-and-login-tutorial
+
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -49,12 +51,13 @@ public class WebSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
+                                .requestMatchers("/login/**").permitAll()
+                                .requestMatchers("/swagger-ui/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/adresses/**", "/persons/**").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST).hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PATCH).hasRole("ADMIN")
                                 .requestMatchers("/actuator/**", "/user/**", "/roles/**").hasAnyRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/adresses/**", "/persons/**").hasAnyRole("USER", "ADMIN")
-                                .requestMatchers("/login/**").permitAll()
                                 .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

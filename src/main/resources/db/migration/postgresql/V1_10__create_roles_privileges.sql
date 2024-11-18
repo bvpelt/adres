@@ -1,8 +1,8 @@
 create table roles_privileges
 (
-    id     bigint not null primary key,
+    id          bigint not null primary key,
     privilegeid bigint,
-    roleid bigint
+    roleid      bigint
 );
 
 ALTER TABLE roles_privileges

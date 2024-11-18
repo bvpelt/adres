@@ -73,10 +73,10 @@ public class UserDAO {
         this.setPassword(userbody.getPassword());
         this.setEmail(userbody.getEmail());
         this.setPhone(userbody.getPhone());
-        this.setAccount_non_expired();
-        this.setAccountNonExpired(userbody.getAccountNonExpired());
-        this.setAccountNonLocked(userbody.getAccountNonLocked());
-        this.setCredentialsNonExpired(userbody.getCredentialsNonExpired());
+        this.setAccount_non_expired(userbody.getAccountNonExpired());
+        this.setAccount_non_expired(userbody.getAccountNonExpired());
+        this.setAccount_non_locked(userbody.getAccountNonLocked());
+        this.setCredentials_non_expired(userbody.getCredentialsNonExpired());
         this.setEnabled(userbody.getEnabled());
         this.setRoles(new HashSet<>());
         this.hash = hashCode();
@@ -86,12 +86,12 @@ public class UserDAO {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         UserDAO userDAO = (UserDAO) o;
-        return Objects.equals(username, userDAO.username) && Objects.equals(password, userDAO.password) && Objects.equals(email, userDAO.email) && Objects.equals(phone, userDAO.phone) && Objects.equals(accountNonExpired, userDAO.accountNonExpired) && Objects.equals(accountNonLocked, userDAO.accountNonLocked) && Objects.equals(credentialsNonExpired, userDAO.credentialsNonExpired) && Objects.equals(enabled, userDAO.enabled);
+        return Objects.equals(username, userDAO.username) && Objects.equals(password, userDAO.password) && Objects.equals(email, userDAO.email) && Objects.equals(phone, userDAO.phone) && Objects.equals(account_non_expired, userDAO.account_non_expired) && Objects.equals(account_non_locked, userDAO.account_non_locked) && Objects.equals(credentials_non_expired, userDAO.credentials_non_expired) && Objects.equals(enabled, userDAO.enabled);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, password, email, phone, accountNonExpired, accountNonLocked, credentialsNonExpired, enabled);
+        return Objects.hash(username, password, email, phone, account_non_expired, account_non_locked, credentials_non_expired, enabled);
     }
 
     @Override
@@ -102,9 +102,9 @@ public class UserDAO {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
-                ", accountNonExpired=" + accountNonExpired +
-                ", accountNonLocked=" + accountNonLocked +
-                ", credentialsNonExpired=" + credentialsNonExpired +
+                ", accountNonExpired=" + account_non_expired +
+                ", accountNonLocked=" + account_non_locked +
+                ", credentialsNonExpired=" + credentials_non_expired +
                 ", enabled=" + enabled +
                 ", roles=" + roles +
                 ", hash=" + hash +

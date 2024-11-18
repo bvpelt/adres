@@ -140,9 +140,9 @@ public class UsersService {
         user.setPassword(userDAO.getPassword());
         user.setEmail(userDAO.getEmail());
         user.setPhone(userDAO.getPhone());
-        user.setAccountNonExpired(userDAO.getAccountNonExpired());
-        user.setAccountNonLocked(userDAO.getAccountNonLocked());
-        user.setCredentialsNonExpired(userDAO.getCredentialsNonExpired());
+        user.setAccountNonExpired(userDAO.getAccount_non_expired());
+        user.setAccountNonLocked(userDAO.getAccount_non_locked());
+        user.setCredentialsNonExpired(userDAO.getCredentials_non_expired());
         user.setEnabled(userDAO.getEnabled());
 
         return user;
