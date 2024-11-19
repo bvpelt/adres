@@ -17,7 +17,7 @@ public class MyUserPrincipal implements UserDetails {
 
     public MyUserPrincipal(UserDAO user) {
         this.user = user;
-        log.info("MyUserPrincipal created {}", user.getUsername());
+        log.info("MyUserPrincipal created {}", user);
     }
 
     @Override
@@ -26,8 +26,12 @@ public class MyUserPrincipal implements UserDetails {
 
         user.getRoles().forEach(role -> {
             //authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
-            authorities.add(new SimpleGrantedAuthority(role.getRolename()));
-            log.info("Add role: {}", role.getRolename());
+            //authorities.add(new SimpleGrantedAuthority(role.getRolename()));
+            log.info("get role: {}", role.getRolename());
+            role.getPrivileges().forEach(principle -> {
+                log.info("get principle: {}", principle.getName());
+                authorities.add(new SimpleGrantedAuthority(principle.getName()));
+            });
         });
         return authorities;
     }

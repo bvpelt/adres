@@ -18,11 +18,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<UserDAO> user = userRepository.findByUsername(username);
-        if (user.isEmpty()) {
+        try {
+            Optional<UserDAO> user = userRepository.findByUsername(username);
+            if (user.isEmpty()) {
+                throw new UsernameNotFoundException("User: " + username + " not found");
+            }
+            return new MyUserPrincipal(user.get());
+        } catch (Exception e) {
             throw new UsernameNotFoundException("User: " + username + " not found");
         }
-        return new MyUserPrincipal(user.get());
     }
 
 }

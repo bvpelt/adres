@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serial;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Objects;
 
 @AllArgsConstructor
@@ -37,12 +37,24 @@ public class RoleDAO {
     private int hash;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-    private Collection<UserDAO> users = new HashSet<UserDAO>();
+    private Collection<UserDAO> users = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(name = "roles_privileges", joinColumns = @JoinColumn(name = "roleid", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "privilegeid", referencedColumnName = "id"))
-    private Collection<Privilege> privileges;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "roles_privileges",
+            joinColumns = @JoinColumn(name = "roleid", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "privilegeid", referencedColumnName = "id"))
+    private Collection<PrivilegeDAO> privileges = new ArrayList<>();
 
+    public void addUser(UserDAO user) {
+        users.add(user);
+    }
+
+    public void setPrivileges(Collection<PrivilegeDAO> privileges) {
+        privileges.forEach(privilege -> {
+            privilege.addRole(this);
+            this.privileges.add(privilege);
+        });
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -64,6 +76,7 @@ public class RoleDAO {
                 ", description='" + description + '\'' +
                 ", hash=" + hash +
                 ", users=" + users +
+                ", privileges=" + privileges +
                 '}';
     }
 }

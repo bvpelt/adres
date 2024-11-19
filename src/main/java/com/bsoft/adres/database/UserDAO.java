@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serial;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
@@ -51,8 +52,10 @@ public class UserDAO {
     @Column(name = "enabled")
     private Boolean enabled = true;
 
-    // TODO change to Many to Many
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // owning site
+    @Column(name = "hash")
+    private Integer hash = -1;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL) // owning site
     @JoinTable(
             name = "users_roles",
             joinColumns = {
@@ -62,12 +65,8 @@ public class UserDAO {
                     @JoinColumn(name = "roleid", referencedColumnName = "id")
             }
     )
-    private Collection<RoleDAO> roles = new HashSet<RoleDAO>();
+    private Collection<RoleDAO> roles = new ArrayList<>();
 
-    @Column(name = "hash")
-    private int hash;
-
-    // TODO fix account / crentials in java / database
     public UserDAO(final UserBody userbody) {
         this.setUsername(userbody.getUsername());
         this.setPassword(userbody.getPassword());
@@ -80,6 +79,13 @@ public class UserDAO {
         this.setEnabled(userbody.getEnabled());
         this.setRoles(new HashSet<>());
         this.hash = hashCode();
+    }
+
+    public void setRoles(Collection<RoleDAO> roles) {
+        roles.forEach(role -> {
+            role.addUser(this);
+            this.roles.add(role);
+        });
     }
 
     @Override
@@ -106,7 +112,7 @@ public class UserDAO {
                 ", accountNonLocked=" + account_non_locked +
                 ", credentialsNonExpired=" + credentials_non_expired +
                 ", enabled=" + enabled +
-                ", roles=" + roles +
+                // ", roles=" + roles +
                 ", hash=" + hash +
                 '}';
     }
