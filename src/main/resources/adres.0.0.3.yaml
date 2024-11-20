@@ -14,9 +14,11 @@ paths:
       description: |
         Delete all adres
       operationId: deleteAllAdreses
+      parameters:
+        - $ref: '#/components/parameters/x-api-key'        
       security:
+        - apikey: [ ]
         - basicAuth: [ ]
-          ApiKeyAuth: [ ] # use the same name as under securitySchemes
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -39,9 +41,9 @@ paths:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/sort"
-        - $ref: '#/components/parameters/X-API-KEY'
+        - $ref: '#/components/parameters/x-api-key'
       security:
-        - ApiKeyAuth: [ ] # use the same name as under securitySchemes
+        - apikey: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Adresses"
@@ -64,6 +66,7 @@ paths:
       operationId: postAdres
       parameters:
         - $ref: "#/components/parameters/override"
+        - $ref: '#/components/parameters/x-api-key'
       requestBody:
         description: Request parameters
         content:
@@ -74,8 +77,8 @@ paths:
               adres:
                 $ref: "#/components/examples/AdresBody"
       security:
+        - apikey: [ ]
         - basicAuth: [ ]
-          ApiKeyAuth: [ ] # use the same name as under securitySchemes
       responses:
         "201":
           $ref: "#/components/responses/Adres"
@@ -96,8 +99,9 @@ paths:
       operationId: getAdres
       parameters:
         - $ref: "#/components/parameters/id"
+        - $ref: '#/components/parameters/x-api-key'        
       security:
-        - ApiKeyAuth: [ ] # use the same name as under securitySchemes
+        - apikey: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Adres"
@@ -118,9 +122,10 @@ paths:
       operationId: deleteAdres
       parameters:
         - $ref: "#/components/parameters/id"
+        - $ref: '#/components/parameters/x-api-key'        
       security:
+        - apikey: [ ]
         - basicAuth: [ ]
-        - ApiKeyAuth: [ ] # use the same name as under securitySchemes
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -141,6 +146,7 @@ paths:
       operationId: patchAdres
       parameters:
         - $ref: "#/components/parameters/id"
+        - $ref: '#/components/parameters/x-api-key'        
       requestBody:
         description: Request parameters
         content:
@@ -151,8 +157,8 @@ paths:
               person:
                 $ref: "#/components/examples/AdresBody"
       security:
+        - apikey: [ ]
         - basicAuth: [ ]
-        - ApiKeyAuth: [ ] # use the same name as under securitySchemes
       responses:
         "200":
           $ref: "#/components/responses/Adres"
@@ -175,8 +181,9 @@ paths:
       operationId: getAdresPerons
       parameters:
         - $ref: "#/components/parameters/id"
+        - $ref: '#/components/parameters/x-api-key'        
       security:
-        - ApiKeyAuth: [ ] # use the same name as under securitySchemes
+        - apikey: [ ]
       responses:
         "200":
           $ref: "#/components/responses/AdresPerson"
@@ -188,7 +195,6 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
-
 
 
   /persons:
@@ -203,8 +209,9 @@ paths:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/sort"
+        - $ref: '#/components/parameters/x-api-key'
       security:
-        - ApiKeyAuth: [ ] # use the same name as under securitySchemes
+        - apikey: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Persons"
@@ -221,9 +228,11 @@ paths:
       description: |
         Delete all persons
       operationId: deleteAllPersons
+      parameters:
+        - $ref: '#/components/parameters/x-api-key'        
       security:
+        - apikey: [ ]
         - basicAuth: [ ]
-        - ApiKeyAuth: [ ] # use the same name as under securitySchemes
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -249,6 +258,7 @@ paths:
       operationId: postPerson
       parameters:
         - $ref: "#/components/parameters/override"
+        - $ref: '#/components/parameters/x-api-key'        
       requestBody:
         description: Request parameters
         content:
@@ -259,8 +269,8 @@ paths:
               person:
                 $ref: "#/components/examples/PersonBody"
       security:
+        - apikey: [ ]
         - basicAuth: [ ]
-        - ApiKeyAuth: [ ] # use the same name as under securitySchemes
       responses:
         "201":
           $ref: "#/components/responses/Person"
@@ -281,8 +291,9 @@ paths:
       operationId: getPerson
       parameters:
         - $ref: "#/components/parameters/id"
+        - $ref: '#/components/parameters/x-api-key'        
       security:
-        - ApiKeyAuth: [ ] # use the same name as under securitySchemes
+        - apikey: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Person"
@@ -303,9 +314,10 @@ paths:
       operationId: deletePerson
       parameters:
         - $ref: "#/components/parameters/id"
+        - $ref: '#/components/parameters/x-api-key'        
       security:
+        - apikey: [ ]
         - basicAuth: [ ]
-        - ApiKeyAuth: [ ] # use the same name as under securitySchemes
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -326,6 +338,7 @@ paths:
       operationId: patchPerson
       parameters:
         - $ref: "#/components/parameters/id"
+        - $ref: '#/components/parameters/x-api-key'        
       requestBody:
         description: Request parameters
         content:
@@ -336,8 +349,8 @@ paths:
               person:
                 $ref: "#/components/examples/PersonBody"
       security:
+        - apikey: [ ]
         - basicAuth: [ ]
-        - ApiKeyAuth: [ ] # use the same name as under securitySchemes
       responses:
         "200":
           $ref: "#/components/responses/Person"
@@ -360,8 +373,9 @@ paths:
       operationId: getPeronsAdresses
       parameters:
         - $ref: "#/components/parameters/id"
+        - $ref: '#/components/parameters/x-api-key'        
       security:
-        - ApiKeyAuth: [ ] # use the same name as under securitySchemes
+        - apikey: [ ]
       responses:
         "200":
           $ref: "#/components/responses/PersonAdres"
@@ -386,8 +400,10 @@ paths:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/sort"
+        - $ref: '#/components/parameters/x-api-key'        
       security:
-        - ApiKeyAuth: [ ] # use the same name as under securitySchemes
+        - apikey: [ ]
+        - basicAuth: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Roles"
@@ -404,9 +420,11 @@ paths:
       description: |
         Delete all roles
       operationId: deleteAllRoles
+      parameters:
+        - $ref: '#/components/parameters/x-api-key'        
       security:
+        - apikey: [ ]
         - basicAuth: [ ]
-          ApiKeyAuth: [ ] # use the same name as under securitySchemes
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -429,6 +447,8 @@ paths:
         - description
         If the hash value already exists in the backend, the role is considered to exist
       operationId: postRole
+      parameters:
+        - $ref: '#/components/parameters/x-api-key'        
       requestBody:
         description: Request parameters
         content:
@@ -439,8 +459,8 @@ paths:
       #              adres:
       #                $ref: "#/components/examples/UserBody"
       security:
+        - apikey: [ ]
         - basicAuth: [ ]
-          ApiKeyAuth: [ ] # use the same name as under securitySchemes
       responses:
         "201":
           $ref: "#/components/responses/Role"
@@ -461,8 +481,10 @@ paths:
       operationId: getRole
       parameters:
         - $ref: "#/components/parameters/id"
+        - $ref: '#/components/parameters/x-api-key'        
       security:
-        - ApiKeyAuth: [ ] # use the same name as under securitySchemes
+        - apikey: [ ]
+        - basicAuth: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Role"
@@ -483,9 +505,10 @@ paths:
       operationId: deleteRole
       parameters:
         - $ref: "#/components/parameters/id"
+        - $ref: '#/components/parameters/x-api-key'        
       security:
+        - apikey: [ ]
         - basicAuth: [ ]
-        - ApiKeyAuth: [ ] # use the same name as under securitySchemes
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -506,6 +529,7 @@ paths:
       operationId: patchRole
       parameters:
         - $ref: "#/components/parameters/id"
+        - $ref: '#/components/parameters/x-api-key'        
       requestBody:
         description: Request parameters
         content:
@@ -516,8 +540,8 @@ paths:
       #              user:
       #                $ref: "#/components/examples/UserBody"
       security:
+        - apikey: [ ]
         - basicAuth: [ ]
-        - ApiKeyAuth: [ ] # use the same name as under securitySchemes
       responses:
         "200":
           $ref: "#/components/responses/Role"
@@ -542,8 +566,10 @@ paths:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/sort"
+        - $ref: '#/components/parameters/x-api-key'        
       security:
-        - ApiKeyAuth: [ ] # use the same name as under securitySchemes
+        - apikey: [ ]
+        - basicAuth: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Users"
@@ -560,9 +586,11 @@ paths:
       description: |
         Delete all users
       operationId: deleteAllUsers
+      parameters:
+        - $ref: '#/components/parameters/x-api-key'        
       security:
+        - apikey: [ ]
         - basicAuth: [ ]
-          ApiKeyAuth: [ ] # use the same name as under securitySchemes
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -587,6 +615,8 @@ paths:
         - phone
         If the hash value already exists in the backend, the user is considered to exist
       operationId: postUser
+      parameters:
+        - $ref: '#/components/parameters/x-api-key'
       requestBody:
         description: Request parameters
         content:
@@ -597,8 +627,8 @@ paths:
       #              adres:
       #                $ref: "#/components/examples/UserBody"
       security:
+        - apikey: [ ]
         - basicAuth: [ ]
-          ApiKeyAuth: [ ] # use the same name as under securitySchemes
       responses:
         "201":
           $ref: "#/components/responses/User"
@@ -618,8 +648,10 @@ paths:
       operationId: getUser
       parameters:
         - $ref: "#/components/parameters/id"
+        - $ref: '#/components/parameters/x-api-key'        
       security:
-        - ApiKeyAuth: [ ] # use the same name as under securitySchemes
+        - apikey: [ ]
+        - basicAuth: [ ]
       responses:
         "200":
           $ref: "#/components/responses/User"
@@ -640,9 +672,10 @@ paths:
       operationId: deleteUser
       parameters:
         - $ref: "#/components/parameters/id"
+        - $ref: '#/components/parameters/x-api-key'        
       security:
+        - apikey: [ ]
         - basicAuth: [ ]
-        - ApiKeyAuth: [ ] # use the same name as under securitySchemes
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -663,6 +696,7 @@ paths:
       operationId: patchUser
       parameters:
         - $ref: "#/components/parameters/id"
+        - $ref: '#/components/parameters/x-api-key'
       requestBody:
         description: Request parameters
         content:
@@ -673,8 +707,8 @@ paths:
       #              user:
       #                $ref: "#/components/examples/UserBody"
       security:
+        - apikey: [ ]
         - basicAuth: [ ]
-        - ApiKeyAuth: [ ] # use the same name as under securitySchemes
       responses:
         "200":
           $ref: "#/components/responses/User"
@@ -862,7 +896,7 @@ components:
       required: true
       schema:
         type: string
-      example: "0.0.2"
+      example: "0.0.3"
 
 
   parameters:
@@ -918,8 +952,8 @@ components:
       schema:
         type: string
 
-    X-API-KEY:
-      name: X-API-KEY
+    x-api-key:
+      name: x-api-key
       in: header
       description: An api key used to track usage of the api
       required: true
@@ -1396,11 +1430,15 @@ components:
         version:
           $ref: "#/components/headers/version"
   securitySchemes:
-    ApiKeyAuth: # arbitrary name for the security scheme
+    apikey:
       type: apiKey
-      in: header # can be "header", "query" or "cookie"
-      name: X-API-KEY # name of the header, query parameter or cookie
-    basicAuth: # <-- arbitrary name for the security scheme
+      in: header
+      name: x-api-key
+    basicAuth:
       type: http
-      scheme: basic      
+      scheme: basic
+security:
+  - apikey: [ ]
+
+      
 
