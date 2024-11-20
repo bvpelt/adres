@@ -1,4 +1,4 @@
-package com.bsoft.adres.service;
+package com.bsoft.adres.security;
 
 import com.bsoft.adres.database.UserDAO;
 import lombok.extern.slf4j.Slf4j;

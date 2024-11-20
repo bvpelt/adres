@@ -1,15 +1,6 @@
-package com.bsoft.adres.service;
+package com.bsoft.adres.security;
 
-import com.bsoft.adres.database.UserDAO;
-import com.bsoft.adres.repositories.UsersRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-
+/*
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -30,3 +21,4 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
 }
+*/

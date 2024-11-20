@@ -1,11 +1,15 @@
 package com.bsoft.adres.config;
 
 
+import com.bsoft.adres.security.MyAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,12 +29,19 @@ public class WebSecurityConfig {
 
     // TODO see https://stackoverflow.com/questions/22821695/how-to-fix-hibernate-lazyinitializationexception-failed-to-lazily-initialize-a
 
+   // @Autowired
+   // private UserDetailsService userDetailsService;
+
     @Autowired
-    private UserDetailsService userDetailsService;
+    private MyAuthenticationProvider authProvider;
+
+    @Bean
+    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
+        return new ProviderManager(authProvider);
+    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
-
         return new BCryptPasswordEncoder();
     }
 
@@ -53,7 +64,7 @@ public class WebSecurityConfig {
                 .build());
         return manager;
     }
-     */
+
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -63,6 +74,7 @@ public class WebSecurityConfig {
 
         return authProvider;
     }
+     */
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -77,8 +89,9 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.PATCH).hasRole("ADMIN")
                                 .requestMatchers("/actuator/**", "/user/**", "/roles/**").hasAnyRole("ADMIN")
                                 .anyRequest().permitAll())
-//                .httpBasic(Customizer.withDefaults())
-                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .httpBasic(Customizer.withDefaults())
+//                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        ;
 
         return http.build();
     }

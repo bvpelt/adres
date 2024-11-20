@@ -26,7 +26,7 @@ public class PrivilegeDAO {
     private String name;
 
     @Column(name = "hash")
-    private Integer hash;
+    private Integer hash = -1;
 
     @ManyToMany(mappedBy = "privileges")
     private Collection<RoleDAO> roles = new ArrayList<>();

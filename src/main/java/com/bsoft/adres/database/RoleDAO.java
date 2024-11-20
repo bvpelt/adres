@@ -34,7 +34,7 @@ public class RoleDAO {
     private String description;
 
     @Column(name = "hash")
-    private int hash;
+    private Integer hash = -1;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private Collection<UserDAO> users = new ArrayList<>();
