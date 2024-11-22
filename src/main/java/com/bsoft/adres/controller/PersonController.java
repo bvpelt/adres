@@ -29,13 +29,13 @@ public class PersonController implements PersonsApi {
     private String version;
 
     @Override
-    public ResponseEntity<Void> _deleteAllPersons() {
+    public ResponseEntity<Void> _deleteAllPersons(String xApiKey, String authorization) {
         personService.deleteAll();
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
     @Override
-    public ResponseEntity<Void> _deletePerson(Long personId) {
+    public ResponseEntity<Void> _deletePerson(Long personId, String xApiKey, String authorization) {
 
         boolean deleted = personService.deletePerson(personId);
         if (!deleted) {
@@ -46,7 +46,7 @@ public class PersonController implements PersonsApi {
     }
 
     @Override
-    public ResponseEntity<PersonAdres> _getPeronsAdresses(Long personId) {
+    public ResponseEntity<PersonAdres> _getPeronsAdresses(Long personId, String xApiKey) {
         PersonAdres personAdres = personService.getPersonAdres(personId);
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
@@ -54,7 +54,7 @@ public class PersonController implements PersonsApi {
     }
 
     @Override
-    public ResponseEntity<Person> _getPerson(Long personId) {
+    public ResponseEntity<Person> _getPerson(Long personId, String xApiKey) {
         Person person = personService.getPerson(personId);
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
@@ -62,7 +62,7 @@ public class PersonController implements PersonsApi {
     }
 
     @Override
-    public ResponseEntity<List<Person>> _getPersons(Integer pageNumber, Integer pageSize, String sortBy) {
+    public ResponseEntity<List<Person>> _getPersons(String xApiKey, Integer pageNumber, Integer pageSize, String sortBy) {
         List<Sort.Order> sortParameter;
         PageRequest pageRequest;
         log.info("Get persons for pagenumber: {} pagesize: {}, sort: {}", pageNumber, pageSize, sortBy);
@@ -93,7 +93,7 @@ public class PersonController implements PersonsApi {
     }
 
     @Override
-    public ResponseEntity<Person> _patchPerson(Long adresId, PersonBody adresBody) {
+    public ResponseEntity<Person> _patchPerson(Long adresId, String xApiKey, String authorization, PersonBody adresBody) {
         Person person = personService.patch(adresId, adresBody);
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
@@ -102,7 +102,7 @@ public class PersonController implements PersonsApi {
     }
 
     @Override
-    public ResponseEntity<Person> _postPerson(Boolean override, PersonBody adresBody) {
+    public ResponseEntity<Person> _postPerson(String xApiKey, String authorization, Boolean override, PersonBody adresBody) {
         if (override == null) {
             override = false;
         }

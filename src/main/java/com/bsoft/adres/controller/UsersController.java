@@ -31,7 +31,7 @@ public class UsersController implements UsersApi {
 
 
     @Override
-    public ResponseEntity<Void> _deleteUser(Long userId) {
+    public ResponseEntity<Void> _deleteUser(Long userId, String xApiKey, String authorization) {
         boolean deleted = usersService.deleteUser(userId);
         if (!deleted) {
             throw new UserNotDeletedException("User not deleted");
@@ -40,14 +40,14 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<Void> _deleteAllUsers() {
+    public ResponseEntity<Void> _deleteAllUsers(String xApiKey, String authorization) {
         usersService.deleteAll();
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
 
     @Override
-    public ResponseEntity<User> _getUser(Long userId) {
+    public ResponseEntity<User> _getUser(Long userId, String xApiKey) {
         User user = usersService.getUser(userId);
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
@@ -55,7 +55,7 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<List<User>> _getUsers(Integer page, Integer size, String sort) {
+    public ResponseEntity<List<User>> _getUsers(String xApiKey, Integer page, Integer size, String sort) {
         List<Sort.Order> sortParameter;
         PageRequest pageRequest;
         log.info("Get adresses for pagenumber: {} pagesize: {}, sort: {}", page, size, sort);
@@ -86,7 +86,7 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<User> _patchUser(Long userId, UserBody userBody) {
+    public ResponseEntity<User> _patchUser(Long userId, String xApiKey, String authorization, UserBody userBody) {
         User user = usersService.patch(userId, userBody);
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
@@ -95,7 +95,7 @@ public class UsersController implements UsersApi {
 
 
     @Override
-    public ResponseEntity<User> _postUser(UserBody userBody) {
+    public ResponseEntity<User> _postUser(String xApiKey, String authorization, UserBody userBody) {
 /*
         if (override == null) {
             override = false;

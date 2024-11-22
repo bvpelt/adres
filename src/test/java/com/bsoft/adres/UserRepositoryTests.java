@@ -20,7 +20,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Slf4j
@@ -29,19 +28,15 @@ import java.util.List;
 @Rollback(false)
 public class UserRepositoryTests {
 
+    private final PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
     @Autowired
     private TestEntityManager entityManager;
-
     @Autowired
     private UsersRepository usersRepository;
-
     @Autowired
     private RoleRepository roleRepository;
-
     @Autowired
     private PrivilegeRepository privilegeRepository;
-
-    private PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
     // test methods go below
 
@@ -241,7 +236,7 @@ public class UserRepositoryTests {
             });
 
         } catch (Exception e) {
-            log.error( "Error: {} ", e);
+            log.error("Error: {} ", e);
         } finally {
             if (existUser != null) {
                 entityManager.remove(existUser);
