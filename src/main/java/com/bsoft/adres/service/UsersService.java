@@ -1,8 +1,10 @@
 package com.bsoft.adres.service;
 
+import com.bsoft.adres.database.RoleDAO;
 import com.bsoft.adres.database.UserDAO;
 import com.bsoft.adres.exceptions.UserExistsException;
 import com.bsoft.adres.exceptions.UserNotExistsException;
+import com.bsoft.adres.generated.model.Role;
 import com.bsoft.adres.generated.model.User;
 import com.bsoft.adres.generated.model.UserBody;
 import com.bsoft.adres.repositories.UsersRepository;
@@ -76,7 +78,11 @@ public class UsersService {
         Iterable<UserDAO> userDAOIterable = usersRepository.findAllByPaged(pageRequest);
 
         userDAOIterable.forEach(userDAO -> {
-            userList.add(UserDAO2User(userDAO));
+            User user = UserDAO2User(userDAO);
+            userDAO.getRoles().forEach(role -> {
+                user.getRoles().add(RoleDAOtoRole(role));
+            });
+            userList.add(user);
         });
 
         return userList;
@@ -135,7 +141,7 @@ public class UsersService {
 
     private User UserDAO2User(final UserDAO userDAO) {
         User user = new User();
-        user.setId(user.getId());
+        user.setId(userDAO.getId());
         user.setUsername(userDAO.getUsername());
         user.setPassword(userDAO.getPassword());
         user.setEmail(userDAO.getEmail());
@@ -144,8 +150,16 @@ public class UsersService {
         user.setAccountNonLocked(userDAO.getAccount_non_locked());
         user.setCredentialsNonExpired(userDAO.getCredentials_non_expired());
         user.setEnabled(userDAO.getEnabled());
+        user.setRoles(new ArrayList<>());
 
         return user;
     }
 
+    public Role RoleDAOtoRole(RoleDAO roleDAO) {
+        Role role = new Role();
+        role.setId(roleDAO.getId());
+        role.setRolename(roleDAO.getRolename());
+        role.setDescription(roleDAO.getDescription());
+        return role;
+    }
 }

@@ -1,6 +1,7 @@
 package com.bsoft.adres.database;
 
 
+import com.bsoft.adres.generated.model.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
