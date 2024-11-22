@@ -32,6 +32,7 @@ public class UsersController implements UsersApi {
 
     @Override
     public ResponseEntity<Void> _deleteUser(Long userId, String xApiKey, String authorization) {
+        log.debug("_deleteUser apikey: {} authorization: {}", xApiKey, authorization);
         boolean deleted = usersService.deleteUser(userId);
         if (!deleted) {
             throw new UserNotDeletedException("User not deleted");
@@ -41,6 +42,7 @@ public class UsersController implements UsersApi {
 
     @Override
     public ResponseEntity<Void> _deleteAllUsers(String xApiKey, String authorization) {
+        log.debug("_deleteAllUsers apikey: {} authorization: {}", xApiKey, authorization);
         usersService.deleteAll();
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
@@ -48,6 +50,7 @@ public class UsersController implements UsersApi {
 
     @Override
     public ResponseEntity<User> _getUser(Long userId, String xApiKey) {
+        log.debug("_getUser apikey: {}", xApiKey);
         User user = usersService.getUser(userId);
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
@@ -56,6 +59,7 @@ public class UsersController implements UsersApi {
 
     @Override
     public ResponseEntity<List<User>> _getUsers(String xApiKey, Integer page, Integer size, String sort) {
+        log.debug("_getUsers apikey: {}", xApiKey);
         List<Sort.Order> sortParameter;
         PageRequest pageRequest;
         log.info("Get adresses for pagenumber: {} pagesize: {}, sort: {}", page, size, sort);
@@ -87,6 +91,7 @@ public class UsersController implements UsersApi {
 
     @Override
     public ResponseEntity<User> _patchUser(Long userId, String xApiKey, String authorization, UserBody userBody) {
+        log.debug("_patchUser apikey: {} authorization: {}", xApiKey, authorization);
         User user = usersService.patch(userId, userBody);
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
@@ -96,6 +101,7 @@ public class UsersController implements UsersApi {
 
     @Override
     public ResponseEntity<User> _postUser(String xApiKey, String authorization, UserBody userBody) {
+        log.debug("_postUser apikey: {} authorization: {}", xApiKey, authorization);
 /*
         if (override == null) {
             override = false;

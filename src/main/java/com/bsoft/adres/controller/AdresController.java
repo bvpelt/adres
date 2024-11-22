@@ -14,7 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -31,7 +30,7 @@ public class AdresController implements AdressesApi {
 
     @Override
     public ResponseEntity<Void> _deleteAdres(Long adresId, String xApiKey, String authorization) {
-
+        log.debug("_deleteAdres apikey: {} authorization: {}", xApiKey, authorization);
         boolean deleted = adresService.deleteAdres(adresId);
         if (!deleted) {
             throw new AdresNotDeletedException("Adres not deleted");
@@ -42,12 +41,14 @@ public class AdresController implements AdressesApi {
 
     @Override
     public ResponseEntity<Void> _deleteAllAdreses(String xApiKey, String authorization) {
+        log.debug("_deleteAllAdreses apikey: {} authorization: {}", xApiKey, authorization);
         adresService.deleteAll();
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
     @Override
     public ResponseEntity<Adres> _getAdres(Long adresId, String xApiKey) {
+        log.debug("_getAdres apikey: {}", xApiKey);
         Adres adres = adresService.getAdres(adresId);
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
@@ -56,6 +57,7 @@ public class AdresController implements AdressesApi {
 
     @Override
     public ResponseEntity<AdresPerson> _getAdresPerons(Long adresId, String xApiKey) {
+        log.debug("_getAdresPerons apikey: {}", xApiKey);
         AdresPerson adresPerson = adresService.getAdresPerson(adresId);
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
@@ -64,6 +66,7 @@ public class AdresController implements AdressesApi {
 
     @Override
     public ResponseEntity<List<Adres>> _getAdresses(String xApiKey, Integer pageNumber, Integer pageSize, String sortBy) {
+        log.debug("_getAdresses apikey: {}", xApiKey);
         List<Sort.Order> sortParameter;
         PageRequest pageRequest;
         log.info("Get adresses for pagenumber: {} pagesize: {}, sort: {}, api-key: {}", pageNumber, pageSize, sortBy, xApiKey);
@@ -95,6 +98,7 @@ public class AdresController implements AdressesApi {
 
     @Override
     public ResponseEntity<Adres> _patchAdres(Long adresId, String xApiKey, String authorization, AdresBody adresBody) {
+        log.debug("_patchAdres apikey: {} authorization: {}", xApiKey, authorization);
         Adres adres = adresService.patch(adresId, adresBody);
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
@@ -104,6 +108,7 @@ public class AdresController implements AdressesApi {
 
     @Override
     public ResponseEntity<Adres> _postAdres(String xApiKey, String authorization, Boolean override, AdresBody adresBody) {
+        log.debug("_postAdres apikey: {} authorization: {}", xApiKey, authorization);
         if (override == null) {
             override = false;
         }

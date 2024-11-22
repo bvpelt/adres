@@ -7,4 +7,5 @@ drop table if exists roles_privileges;
 drop table if exists "user";
 drop table if exists users_roles;
 
-delete from flyway_schema_history;
+delete
+from flyway_schema_history;

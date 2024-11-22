@@ -12,7 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -21,7 +20,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Slf4j
 @Profile("runtime")
@@ -63,14 +61,14 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/auth/login").permitAll()
-                                .requestMatchers("/swagger-ui/**", "/login/**", "/error").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/adresses/**", "/persons/**").permitAll()
-                                .requestMatchers(HttpMethod.DELETE, "/adresses/**", "/persons/**").hasAnyAuthority("READ", "WRITE")
-                                .requestMatchers(HttpMethod.POST, "/adresses/**", "/persons/**").hasAnyAuthority("READ", "WRITE")
-                                .requestMatchers(HttpMethod.PATCH, "/adresses/**", "/persons/**").hasAnyAuthority("READ", "WRITE")
-                                .requestMatchers("/actuator/**", "/user/**", "/roles/**").hasAuthority("WRITE")
+                        .requestMatchers("/swagger-ui/**", "/login/**", "/error").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/adresses/**", "/persons/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/adresses/**", "/persons/**").hasAnyAuthority("READ", "WRITE")
+                        .requestMatchers(HttpMethod.POST, "/adresses/**", "/persons/**").hasAnyAuthority("READ", "WRITE")
+                        .requestMatchers(HttpMethod.PATCH, "/adresses/**", "/persons/**").hasAnyAuthority("READ", "WRITE")
+                        .requestMatchers("/actuator/**", "/user/**", "/roles/**").hasAuthority("WRITE")
                         .anyRequest().authenticated())
-               .httpBasic(Customizer.withDefaults())
+                .httpBasic(Customizer.withDefaults())
         ;
 
         return http.build();

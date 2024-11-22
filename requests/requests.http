@@ -1,11 +1,14 @@
 POST http://localhost:8080/adresses
+Accept: application/json
 Content-Type: application/json
+x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
+Authorization: Basic bvpelt 12345
 
 {
   "street": "Kerkewijk",
   "housenumber": "125",
   "zipcode": "3904 JB",
-  "city": "Veenendaal",
+  "city": "Veenendaal"
 }
 
 > {%
@@ -16,13 +19,16 @@ Content-Type: application/json
 
 ###
 POST http://localhost:8080/adresses?override=true
+Accept: application/json
 Content-Type: application/json
+x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
+Authorization: Basic bvpelt 12345
 
 {
   "street": "Kerkewijk",
   "housenumber": "125",
   "zipcode": "3904 JB",
-  "city": "Veenendaal",
+  "city": "Veenendaal"
 }
 
 > {%
@@ -35,30 +41,50 @@ Content-Type: application/json
 ###
 GET http://localhost:8080/adresses
 Accept: application/json
+Content-Type: application/json
+x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
+
 
 ###
 GET http://localhost:8080/adresses?page=1
 Accept: application/json
+Content-Type: application/json
+x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
 
 ###
 GET http://localhost:8080/adresses?page=1&size=2
 Accept: application/json
+Content-Type: application/json
+x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
+
 
 ###
 GET http://localhost:8080/adresses?page=2&size=2
 Accept: application/json
+Accept: application/json
+Content-Type: application/json
+x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
 
 ###
 GET http://localhost:8080/adresses?sort=zipcode
 Accept: application/json
+Accept: application/json
+Content-Type: application/json
+x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
 
 ###
 GET http://localhost:8080/adresses/2
 Accept: application/json
+Content-Type: application/json
+x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
+
 
 ###
 PATCH http://localhost:8080/adresses/2
+Accept: application/json
 Content-Type: application/json
+x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
+Authorization: Basic bvpelt 12345
 
 {
   "street": "Molenplein",
@@ -69,7 +95,10 @@ Content-Type: application/json
 
 ###
 PATCH http://localhost:8080/adresses/2
+Accept: application/json
 Content-Type: application/json
+x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
+Authorization: Basic bvpelt 12345
 
 {
   "street": "Kerkewijk"
@@ -77,7 +106,10 @@ Content-Type: application/json
 
 ###
 PATCH http://localhost:8080/adresses/2
+Accept: application/json
 Content-Type: application/json
+x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
+Authorization: Basic bvpelt 12345
 
 {
   "housenumber": "124"
@@ -85,7 +117,10 @@ Content-Type: application/json
 
 ###
 PATCH http://localhost:8080/adresses/2
+Accept: application/json
 Content-Type: application/json
+x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
+Authorization: Basic bvpelt 12345
 
 {
   "zipcode": "3904 JB"
@@ -93,7 +128,10 @@ Content-Type: application/json
 
 ###
 PATCH http://localhost:8080/adresses/2
+Accept: application/json
 Content-Type: application/json
+x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
+Authorization: Basic bvpelt 12345
 
 {
   "city": "Veenendaal"
@@ -101,7 +139,10 @@ Content-Type: application/json
 
 ###
 PATCH http://localhost:8080/adresses/2
+Accept: application/json
 Content-Type: application/json
+x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
+Authorization: Basic bvpelt 12345
 
 {
   "street": "Kerkewijk",
@@ -113,32 +154,7 @@ Content-Type: application/json
 
 ###
 GET http://localhost:8080/adresses
-accept: application/json
-x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
-Content-Type: application/json
-
-###
-POST http://localhost:8080/adresses?override=false
-Accept: application/json
-x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
-Content-Type: application/json
-Authorization: Basic bvpelt 12345
-
-{
-  "street": "Kerkewijk",
-  "housenumber": "125",
-  "zipcode": "3904 JB",
-  "city": "Veenendaal"
-}
-
-
-
-###
-POST http://localhost:8080/auth/login
 Accept: application/json
 Content-Type: application/json
+x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
 
-{
-  "email": "Kerkewijk",
-  "password": "125"
-}

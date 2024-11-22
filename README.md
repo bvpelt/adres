@@ -1,16 +1,18 @@
 # Adres
+
 Adres data
 
-
 ## Environment
-On my windows laptop start with [setup](setup.cmd) 
+
+On my windows laptop start with [setup](setup.cmd)
 Setup java 21 environment
 
 ## Basic Authentication
 
 See https://docs.spring.io/spring-security/site/apidocs/org/springframework/security/web/authentication/www/BasicAuthenticationFilter.html
-In summary, this filter is responsible for processing any request that has a HTTP request header of Authorization with an authentication scheme of Basic and a Base64-encoded username:password token. For example, to authenticate user "Aladdin" with password "open sesame" the following header would be presented:
-
+In summary, this filter is responsible for processing any request that has a HTTP request header of Authorization with
+an authentication scheme of Basic and a Base64-encoded username:password token. For example, to authenticate user "
+Aladdin" with password "open sesame" the following header would be presented:
 
 Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
 
@@ -29,7 +31,9 @@ curl -v -X 'POST'   'http://localhost:8080/adresses?override=false' \
 }'
 
 ```
+
 ## References
+
 - [Spring security](https://www.baeldung.com/security-spring)
 - [Maven profiles](https://www.baeldung.com/maven-profiles)
 - [Baeldung pageing and sorting](https://www.baeldung.com/spring-data-jpa-pagination-sorting)
