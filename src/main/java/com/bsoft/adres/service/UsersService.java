@@ -59,18 +59,22 @@ public class UsersService {
             throw new UserNotExistsException("User with id " + userId + " not found");
         }
 
-        return UserDAO2User(optionalUserDAO.get());
+        UserDAO userDAO = optionalUserDAO.get();
+        User user = UserDAO2User(userDAO);
+
+        return user;
     }
 
     public List<User> getUsers() {
-        List<User> result = new ArrayList<User>();
-        Iterable<UserDAO> iuser = usersRepository.findAll();
+        List<User> userList = new ArrayList<User>();
+        Iterable<UserDAO> userDAOIterable = usersRepository.findAll();
 
-        iuser.forEach(userDAO -> {
-            result.add(UserDAO2User(userDAO));
+        userDAOIterable.forEach(userDAO -> {
+            User user = UserDAO2User(userDAO);
+            userList.add(user);
         });
 
-        return result;
+        return userList;
     }
 
     public List<User> getUsers(final PageRequest pageRequest) {
@@ -79,9 +83,6 @@ public class UsersService {
 
         userDAOIterable.forEach(userDAO -> {
             User user = UserDAO2User(userDAO);
-            userDAO.getRoles().forEach(role -> {
-                user.getRoles().add(RoleDAOtoRole(role));
-            });
             userList.add(user);
         });
 
@@ -151,7 +152,9 @@ public class UsersService {
         user.setCredentialsNonExpired(userDAO.getCredentials_non_expired());
         user.setEnabled(userDAO.getEnabled());
         user.setRoles(new ArrayList<>());
-
+        userDAO.getRoles().forEach(role -> {
+            user.getRoles().add(RoleDAOtoRole(role));
+        });
         return user;
     }
 
