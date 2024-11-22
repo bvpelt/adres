@@ -27,7 +27,6 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @Profile("runtime")
 @Configuration
 @EnableWebSecurity
-//@EnableMethodSecurity
 public class WebSecurityConfig {
 
     @Autowired
@@ -45,18 +44,6 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
-    /*
-    @Bean
-    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(myUserDetailsService)
-                .passwordEncoder(passwordEncoder())
-                .and()
-                .build();
-    }
-     */
-
     @Bean
     public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -64,27 +51,12 @@ public class WebSecurityConfig {
         return new ProviderManager(daoAuthenticationProvider);
     }
 
-/*
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*"));
-        configuration.setAllowedMethods(List.of("*"));
-        configuration.setAllowedHeaders(List.of("*"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
-
- */
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
-//                .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .securityMatcher("/**")
@@ -99,9 +71,6 @@ public class WebSecurityConfig {
                                 .requestMatchers("/actuator/**", "/user/**", "/roles/**").hasAuthority("WRITE")
                         .anyRequest().authenticated())
                .httpBasic(Customizer.withDefaults())
-        // .addFilterBefore(new ApiKeyFilter(), BasicAuthenticationFilter.class)
-         //.addFilterBefore(new CustomBasicAuthenticationFilter(authManager(http)), BasicAuthenticationFilter.class)
-
         ;
 
         return http.build();

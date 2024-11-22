@@ -16,8 +16,8 @@ import java.util.Optional;
 public interface AdresRepository extends PagingAndSortingRepository<AdresDAO, Long>,
         CrudRepository<AdresDAO, Long>,
         JpaSpecificationExecutor<AdresDAO> {
-    @Query(value = "SELECT * FROM adres WHERE adresid = :adresid", nativeQuery = true)
-    Optional<AdresDAO> findByAdresId(@Param("adresid") Long adresid);
+    @Query(value = "SELECT * FROM adres WHERE id = :id", nativeQuery = true)
+    Optional<AdresDAO> findByAdresId(@Param("id") Long id);
 
     @Query(value = "SELECT * FROM adres WHERE hash = :hash", nativeQuery = true)
     Optional<AdresDAO> findByHash(@Param("hash") Integer hash);

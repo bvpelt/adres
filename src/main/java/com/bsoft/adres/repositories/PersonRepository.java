@@ -16,8 +16,8 @@ import java.util.Optional;
 public interface PersonRepository extends PagingAndSortingRepository<PersonDAO, Long>,
         CrudRepository<PersonDAO, Long>,
         JpaSpecificationExecutor<PersonDAO> {
-    @Query(value = "SELECT * FROM person WHERE personid = :personid", nativeQuery = true)
-    Optional<PersonDAO> findByPersonId(@Param("personid") Long personid);
+    @Query(value = "SELECT * FROM person WHERE id = :id", nativeQuery = true)
+    Optional<PersonDAO> findByPersonId(@Param("id") Long id);
 
     @Query(value = "SELECT * FROM person WHERE hash = :hash", nativeQuery = true)
     Optional<PersonDAO> findByHash(@Param("hash") Integer hash);
@@ -27,6 +27,6 @@ public interface PersonRepository extends PagingAndSortingRepository<PersonDAO, 
             nativeQuery = true)
     List<PersonDAO> findAllByPaged(Pageable pageable);
 
-    @Query(value = "SELECT person.* FROM person, adres_person WHERE person.personid = adres_person.personid and adres_person.adresid = :adresId", nativeQuery = true)
+    @Query(value = "SELECT person.* FROM person, adres_person WHERE person.id = adres_person.personid and adres_person.adresid = :adresId", nativeQuery = true)
     List<PersonDAO> findPersonsByAdresId(Long adresId);
 }

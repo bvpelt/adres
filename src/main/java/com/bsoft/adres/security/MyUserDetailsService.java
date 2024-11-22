@@ -20,7 +20,7 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public MyUserPrincipal
     loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("loadUserByUsername check user: {}", username);
+        log.debug("loadUserByUsername check user: {}", username);
         Optional<UserDAO> userDAO = usersRepository.findByUsername(username);
         if (userDAO.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
