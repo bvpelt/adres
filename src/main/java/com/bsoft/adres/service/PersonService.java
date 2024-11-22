@@ -1,10 +1,13 @@
 package com.bsoft.adres.service;
 
+import com.bsoft.adres.database.AdresDAO;
 import com.bsoft.adres.database.PersonDAO;
 import com.bsoft.adres.exceptions.PersonExistsException;
 import com.bsoft.adres.exceptions.PersonNotExistsException;
 import com.bsoft.adres.generated.model.Person;
+import com.bsoft.adres.generated.model.PersonAdres;
 import com.bsoft.adres.generated.model.PersonBody;
+import com.bsoft.adres.repositories.AdresRepository;
 import com.bsoft.adres.repositories.PersonRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +23,12 @@ import java.util.Optional;
 public class PersonService {
 
     private final PersonRepository personRepository;
+    private final AdresRepository adresRepository;
 
     @Autowired
-    public PersonService(final PersonRepository PersonRepository) {
-        this.personRepository = PersonRepository;
+    public PersonService(final PersonRepository personRepository, final AdresRepository adresRepository) {
+        this.personRepository = personRepository;
+        this.adresRepository = adresRepository;
     }
 
     public void deleteAll() {
@@ -58,6 +63,30 @@ public class PersonService {
         }
         Person person = PersonDAO2Person(optionalPersonDAO.get());
         return person;
+    }
+
+
+    public PersonAdres getPersonAdres(Long personId) {
+        Optional<PersonDAO> optionalPersonDAO = personRepository.findByPersonId(personId);
+        if (!optionalPersonDAO.isPresent()) {
+            throw new PersonNotExistsException("Person with id " + personId + " not found");
+        }
+        List<Long> adresIds = new ArrayList<Long>();
+        List<AdresDAO> adresList = adresRepository.findAdresByPersonId(personId);
+
+        adresList.forEach(adres -> {
+            adresIds.add(adres.getId());
+        });
+
+        PersonAdres personAdres = new PersonAdres();
+        personAdres.setId(optionalPersonDAO.get().getId());
+        personAdres.setFirstName(optionalPersonDAO.get().getFirstname());
+        personAdres.setInfix(optionalPersonDAO.get().getInfix());
+        personAdres.setLastName(optionalPersonDAO.get().getLastname());
+        personAdres.setDateOfBirth(optionalPersonDAO.get().getDateofbirth());
+        personAdres.setAdresses(adresIds);
+
+        return personAdres;
     }
 
     public List<Person> getPersons() {
@@ -139,7 +168,7 @@ public class PersonService {
     private Person PersonDAO2Person(final PersonDAO personDAO) {
         Person person = new Person();
         person.setFirstName(personDAO.getFirstname());
-        person.setPersonId(personDAO.getPersonid());
+        person.setId(personDAO.getId());
         person.setInfix(personDAO.getInfix());
         person.setLastName(personDAO.getLastname());
         person.setDateOfBirth(personDAO.getDateofbirth());

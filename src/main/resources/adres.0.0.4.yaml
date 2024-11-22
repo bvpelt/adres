@@ -1,11 +1,41 @@
 openapi: "3.0.3"
 info:
   title: Adres API
-  version: 0.0.1
+  version: 0.0.3
 servers:
   - url: https://api.server.test/opvragen/v1
+
+
+security:
+  - basicAuth: [ ]
+
 paths:
   /adresses:
+    delete:
+      tags:
+        - Adresses
+      summary: Delete all
+      description: |
+        Delete all adres
+      operationId: deleteAllAdreses
+      parameters:
+        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/basicauth"
+      security:
+        - basicAuth:
+            - "READ"
+            - "WRITE"
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
     get:
       tags:
         - Adresses
@@ -17,27 +47,11 @@ paths:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/x-api-key"
+      security: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Adresses"
-        "429":
-          $ref: "#/components/responses/ToManyRequests"
-        "5XX":
-          $ref: "#/components/responses/ServerError"
-    delete:
-      tags:
-        - Adresses
-      summary: Delete all
-      description: |
-        Delete all adres
-      operationId: deleteAllAdreses
-      responses:
-        "204":
-          $ref: "#/components/responses/Deleted"
-        "400":
-          $ref: "#/components/responses/IllegalInput"
-        "404":
-          $ref: "#/components/responses/NotFound"
         "429":
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
@@ -57,6 +71,8 @@ paths:
       operationId: postAdres
       parameters:
         - $ref: "#/components/parameters/override"
+        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/basicauth"
       requestBody:
         description: Request parameters
         content:
@@ -66,6 +82,8 @@ paths:
             examples:
               adres:
                 $ref: "#/components/examples/AdresBody"
+      security:
+        - basicAuth: [ ]
       responses:
         "201":
           $ref: "#/components/responses/Adres"
@@ -75,7 +93,8 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
-  /adresses/{adresId}:
+
+  /adresses/{id}:
     get:
       tags:
         - Adresses
@@ -84,7 +103,9 @@ paths:
         Retrieve only one adres with id adresId
       operationId: getAdres
       parameters:
-        - $ref: "#/components/parameters/adresId"
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/x-api-key"
+      security: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Adres"
@@ -104,7 +125,11 @@ paths:
         Delete only the specified adres
       operationId: deleteAdres
       parameters:
-        - $ref: "#/components/parameters/adresId"
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/basicauth"
+      security:
+        - basicAuth: [ ]
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -124,7 +149,9 @@ paths:
         Update only the adres specified with adresId
       operationId: patchAdres
       parameters:
-        - $ref: "#/components/parameters/adresId"
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/basicauth"
       requestBody:
         description: Request parameters
         content:
@@ -134,6 +161,8 @@ paths:
             examples:
               person:
                 $ref: "#/components/examples/AdresBody"
+      security:
+        - basicAuth: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Adres"
@@ -145,7 +174,8 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
-  /adresses/{adresId}/persons:
+
+  /adresses/{id}/persons:
     get:
       tags:
         - Adresses
@@ -154,7 +184,9 @@ paths:
         Retrieve only one adres with id adresId and references to all persons on that adress
       operationId: getAdresPerons
       parameters:
-        - $ref: "#/components/parameters/adresId"
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/x-api-key"
+      security: [ ]
       responses:
         "200":
           $ref: "#/components/responses/AdresPerson"
@@ -166,6 +198,7 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
+
   /persons:
     get:
       tags:
@@ -178,6 +211,8 @@ paths:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/x-api-key"
+      security: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Persons"
@@ -194,6 +229,11 @@ paths:
       description: |
         Delete all persons
       operationId: deleteAllPersons
+      parameters:
+        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/basicauth"
+      security:
+        - basicAuth: [ ]
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -219,6 +259,8 @@ paths:
       operationId: postPerson
       parameters:
         - $ref: "#/components/parameters/override"
+        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/basicauth"
       requestBody:
         description: Request parameters
         content:
@@ -228,6 +270,8 @@ paths:
             examples:
               person:
                 $ref: "#/components/examples/PersonBody"
+      security:
+        - basicAuth: [ ]
       responses:
         "201":
           $ref: "#/components/responses/Person"
@@ -237,7 +281,8 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
-  /persons/{personId}:
+
+  /persons/{id}:
     get:
       tags:
         - Persons
@@ -246,7 +291,9 @@ paths:
         Retrieve only one person with id personId
       operationId: getPerson
       parameters:
-        - $ref: "#/components/parameters/personId"
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/x-api-key"
+      security: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Person"
@@ -266,7 +313,11 @@ paths:
         Delete only the specified person
       operationId: deletePerson
       parameters:
-        - $ref: "#/components/parameters/personId"
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/basicauth"
+      security:
+        - basicAuth: [ ]
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -286,7 +337,9 @@ paths:
         Update only the person specified with personId
       operationId: patchPerson
       parameters:
-        - $ref: "#/components/parameters/personId"
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/basicauth"
       requestBody:
         description: Request parameters
         content:
@@ -296,6 +349,8 @@ paths:
             examples:
               person:
                 $ref: "#/components/examples/PersonBody"
+      security:
+        - basicAuth: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Person"
@@ -307,7 +362,8 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
-  /persons/{personId}/adresses:
+
+  /persons/{id}/adresses:
     get:
       tags:
         - Persons
@@ -316,7 +372,9 @@ paths:
         Retrieve only one person with id personId and references to all adreses for that person
       operationId: getPeronsAdresses
       parameters:
-        - $ref: "#/components/parameters/personId"
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/x-api-key"
+      security: [ ]
       responses:
         "200":
           $ref: "#/components/responses/PersonAdres"
@@ -328,44 +386,356 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
+
+  /roles:
+    get:
+      tags:
+        - Roles
+      summary: Retrieve all known roles
+      description: |
+        Retrieve all known roles, using paging and sorting
+      operationId: getRoles
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/x-api-key"
+      security:
+        - basicAuth: [ ]
+      responses:
+        "200":
+          $ref: "#/components/responses/Roles"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+    delete:
+      tags:
+        - Roles
+      summary: Delete all
+      description: |
+        Delete all roles
+      operationId: deleteAllRoles
+      parameters:
+        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/basicauth"
+      security:
+        - basicAuth: [ ]
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+    post:
+      tags:
+        - Roles
+      summary: Create a new role
+      description: |
+        Create a new role
+        To determine if an role is new the input is compared on the hash value of:
+        - rolename
+        - description
+        If the hash value already exists in the backend, the role is considered to exist
+      operationId: postRole
+      parameters:
+        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/basicauth"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoleBody"
+      #            examples:
+      #              adres:
+      #                $ref: "#/components/examples/UserBody"
+      security:
+        - basicAuth: [ ]
+      responses:
+        "201":
+          $ref: "#/components/responses/Role"
+        "303":
+          $ref: "#/components/responses/AlreadyExists"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+  /roles/{id}:
+    get:
+      tags:
+        - Roles
+      summary: Retrieve the specified role
+      description: |
+        Retrieve only one role with id roleId
+      operationId: getRole
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/x-api-key"
+      security:
+        - basicAuth: [ ]
+      responses:
+        "200":
+          $ref: "#/components/responses/Role"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+    delete:
+      tags:
+        - Roles
+      summary: Delete the specified role
+      description: |
+        Delete only the specified role
+      operationId: deleteRole
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/basicauth"
+      security:
+        - basicAuth: [ ]
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+    patch:
+      tags:
+        - Roles
+      summary: Update the specified role
+      description: |
+        Update only the role specified with roleId
+      operationId: patchRole
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/basicauth"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoleBody"
+      #            examples:
+      #              user:
+      #                $ref: "#/components/examples/UserBody"
+      security:
+        - basicAuth: [ ]
+      responses:
+        "200":
+          $ref: "#/components/responses/Role"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Retrieve all known users
+      description: |
+        Retrieve all known users, using paging and sorting
+      operationId: getUsers
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/x-api-key"
+      security:
+        - basicAuth: [ ]
+      responses:
+        "200":
+          $ref: "#/components/responses/Users"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+    delete:
+      tags:
+        - Users
+      summary: Delete all
+      description: |
+        Delete all users
+      operationId: deleteAllUsers
+      parameters:
+        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/basicauth"
+      security:
+        - basicAuth: [ ]
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+    post:
+      tags:
+        - Users
+      summary: Create a new user
+      description: |
+        Create a new user
+        To determine if an user is new the input is compared on the hash value of:
+        - username
+        - password
+        - email
+        - phone
+        If the hash value already exists in the backend, the user is considered to exist
+      operationId: postUser
+      parameters:
+        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/basicauth"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserBody"
+      #            examples:
+      #              adres:
+      #                $ref: "#/components/examples/UserBody"
+      security:
+        - basicAuth: [ ]
+      responses:
+        "201":
+          $ref: "#/components/responses/User"
+        "303":
+          $ref: "#/components/responses/AlreadyExists"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Retrieve the specified user
+      description: |
+        Retrieve only one user with id userId
+      operationId: getUser
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/x-api-key"
+      security:
+        - basicAuth: [ ]
+      responses:
+        "200":
+          $ref: "#/components/responses/User"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+    delete:
+      tags:
+        - Users
+      summary: Delete the specified user
+      description: |
+        Delete only the specified user
+      operationId: deleteUser
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/basicauth"
+      security:
+        - basicAuth: [ ]
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+    patch:
+      tags:
+        - Users
+      summary: Update the specified user
+      description: |
+        Update only the user specified with userId
+      operationId: patchUser
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/basicauth"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserBody"
+      #            examples:
+      #              user:
+      #                $ref: "#/components/examples/UserBody"
+      security:
+        - basicAuth: [ ]
+      responses:
+        "200":
+          $ref: "#/components/responses/User"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+
 components:
   examples:
     Adres-01:
       summary: A new Adres with all fields
       value:
-        adresId: 1
+        id: 1
         street: "Kerkewijk"
         housenumber: "125"
         zipcode: "3904 JB"
         city: "Veenendaal"
+
     Adres-02:
       summary: A new Adres with only required fields
       value:
-        adresId: 2
+        id: 2
         street: "Kerkstraat"
         housenumber: "14"
         city: "Koog aan de Zaan"
-    AdresList-01:
-      summary: An empty list of adresses
-      value: [ ]
-    AdresList-02:
-      summary: An empty list of adresses
-      value:
-        - adresId: 1
-          street: "Kerkewijk"
-          housenumber: "125"
-          zipcode: "3904 JB"
-          city: "Veenendaal"
-        - adresId: 2
-          street: "Kerkstraat"
-          housenumber: "14"
-          zipcode: "1541 HA"
-          city: "Koog aan de Zaan"
-        - adresId: 3
-          street: "Spoorlaan"
-          housenumber: "14"
-          zipcode: "5017 JS"
-          city: "Tilburg"
+
     AdresBody:
       summary: A new adres
       value:
@@ -373,37 +743,65 @@ components:
           housenumber: "125"
           zipcode: "3904 JB"
           city: "Veenendaal"
+
+    AdresList-01:
+      summary: An empty list of adresses
+      value: [ ]
+
+    AdresList-02:
+      summary: An empty list of adresses
+      value:
+        - id: 1
+          street: "Kerkewijk"
+          housenumber: "125"
+          zipcode: "3904 JB"
+          city: "Veenendaal"
+        - id: 2
+          street: "Kerkstraat"
+          housenumber: "14"
+          zipcode: "1541 HA"
+          city: "Koog aan de Zaan"
+        - id: 3
+          street: "Spoorlaan"
+          housenumber: "14"
+          zipcode: "5017 JS"
+          city: "Tilburg"
+
     Deleted:
       summary: An entry is deleted succesfull
       value:
+
     Person-01:
       summary: A single person with all fields
       value:
-        personId: 1
+        id: 1
         firstName: "Jos"
         infix: "van Der"
         lastName: "Vlist"
         dateOfBirth: "2022-01-04"
+
     Person-02:
       summary: A single person without infix
       value:
-        personId: 3
+        id: 3
         firstName: "Albert"
         lastName: "Einstein"
         dateOfBirth: "2022-01-04"
+
     PersonAdres-01:
       summary: A person with all fields and no adresses
       value:
-        personId: 1
+        id: 1
         firstName: "Jos"
         infix: "van Der"
         lastName: "Vlist"
         dateOfBirth: "2022-01-04"
         adresses: [ ]
+
     PersonAdres-02:
       summary: A person with all fields and no adresses
       value:
-        personId: 1
+        id: 1
         firstName: "Jos"
         infix: "van Der"
         lastName: "Vlist"
@@ -411,25 +809,7 @@ components:
         adresses:
           - 1
           - 2
-    PersonList-01:
-      summary: An empty list of persons
-      value: [ ]
-    PersonList-02:
-      summary: An empty list of persons
-      value:
-        - personId: 1
-          firstName: "Jos"
-          infix: "van Der"
-          lastName: "Vlist"
-          dateOfBirth: "2022-01-04"
-        - personId: 2
-          firstName: "Karel"
-          lastName: "Appel"
-          dateOfBirth: "2022-01-04"
-        - personId: 3
-          firstName: "Albert"
-          lastName: "Einstein"
-          dateOfBirth: "2022-01-04"
+
     PersonBody:
       summary: A new person with all fields filled
       value:
@@ -437,6 +817,28 @@ components:
         infix: "van Der"
         lastName: "Vlist"
         dateOfBirth: "2022-01-04"
+
+    PersonList-01:
+      summary: An empty list of persons
+      value: [ ]
+
+    PersonList-02:
+      summary: An empty list of persons
+      value:
+        - id: 1
+          firstName: "Jos"
+          infix: "van Der"
+          lastName: "Vlist"
+          dateOfBirth: "2022-01-04"
+        - id: 2
+          firstName: "Karel"
+          lastName: "Appel"
+          dateOfBirth: "2022-01-04"
+        - id: 3
+          firstName: "Albert"
+          lastName: "Einstein"
+          dateOfBirth: "2022-01-04"
+
     Problem-303:
       summary: Bad Request
       value:
@@ -445,6 +847,7 @@ components:
         status: 303
         detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574} already exists"
         path: "/adresses"
+
     Problem-400:
       summary: Bad Request
       value:
@@ -454,6 +857,7 @@ components:
         error: "Bad request"
         detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574}"
         path: "/adresses"
+
     Problem-404:
       summary: Not Found
       value:
@@ -463,6 +867,7 @@ components:
         error: "Not found"
         detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574}"
         path: "/adresses"
+
     Problem-429:
       summary: To many requests
       value:
@@ -472,6 +877,7 @@ components:
         error: "To many requests"
         detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574}"
         path: "/adresses"
+
     Problem-5XX:
       summary: Server fout
       value:
@@ -481,21 +887,34 @@ components:
         error: "Internal Server Error"
         detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574}"
         path: "/adresses"
+
   headers:
     version:
       required: true
       schema:
         type: string
-      example: "0.0.1"
+      example: "0.0.4"
+
   parameters:
-    adresId:
-      name: adresId
+    id:
+      name: id
       in: path
-      description: The person identification of the person to return
+      description: The identification of the resource to return
       required: true
       schema:
         type: integer
         format: int64
+
+    basicauth:
+      name: Authorization
+      in: header
+      required: true
+      schema:
+        type: string
+        default: "Basic YWRtaW46MTIzNDU="
+        pattern: '\^(Basic) (.+)$'
+      example: "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=="
+
     override:
       name: override
       in: query
@@ -504,6 +923,7 @@ components:
       schema:
         type: boolean
         default: false
+
     page:
       name: page
       in: query
@@ -513,14 +933,7 @@ components:
         type: integer
         minimum: 1
         format: int32
-    personId:
-      name: personId
-      in: path
-      description: The person identification of the person to return
-      required: true
-      schema:
-        type: integer
-        format: int64
+
     size:
       name: size
       in: query
@@ -536,6 +949,7 @@ components:
         default: 25
         minimum: 1
         format: int32
+
     sort:
       name: sort
       in: query
@@ -543,20 +957,29 @@ components:
       required: false
       schema:
         type: string
+
+    x-api-key:
+      name: "x-api-key"
+      in: header
+      description: An api key used to track usage of the api
+      required: true
+      schema:
+        type: string
+        default: "f0583805-03f6-4c7f-8e40-f83f55b7c077"
+        pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+      example: "f0583805-03f6-4c7f-8e40-f83f55b7c077"
+
   schemas:
     Adres:
       allOf:
         - type: object
           required:
-            - adresId
+            - id
           properties:
-            adresId:
-              $ref: '#/components/schemas/AdresId'
+            id:
+              $ref: "#/components/schemas/Id"
         - $ref: "#/components/schemas/AdresBody"
-    AdresId:
-      type: integer
-      format: int64
-      example: 1
+
     AdresBody:
       type: object
       required:
@@ -576,35 +999,41 @@ components:
         city:
           type: string
           example: Veenendaal
-    AdresPerson:
+
+    Id:
+      type: integer
+      format: int64
+      example: 1
+
+    AdresIds:
       type: object
-      required:
-        - street
-        - housenumber
-        - city
       properties:
-        adresId:
-          $ref: '#/components/schemas/AdresId'
-        street:
-          type: string
-          example: Kerkewijk
-        housenumber:
-          type: string
-          example: 125
-        zipcode:
-          type: string
-          example: 3904 JB
-        city:
-          type: string
-          example: Veenendaal
-        persons:
+        adresses:
           type: array
           items:
-            $ref: '#/components/schemas/PersonId'
+            $ref: "#/components/schemas/Id"
+
+    AdresPerson:
+      allOf:
+        - $ref: "#/components/schemas/Adres"
+        - $ref: "#/components/schemas/PersonIds"
+
+    AdresPerson1:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              $ref: "#/components/schemas/Id"
+        - $ref: "#/components/schemas/AdresBody"
+        - $ref: "#/components/schemas/PersonIds"
+
     Adresses:
       type: array
       items:
         $ref: "#/components/schemas/Adres"
+
     Deleted:
       type: object
       properties:
@@ -614,44 +1043,33 @@ components:
             - "OK"
           description: Status of delete operationId
           example: "OK"
+
     Person:
       allOf:
         - type: object
           required:
-            - personId
+            - id
           properties:
-            personId:
-              $ref: '#/components/schemas/PersonId'
+            id:
+              $ref: "#/components/schemas/Id"
         - $ref: "#/components/schemas/PersonBody"
+
     PersonAdres:
-      type: object
-      properties:
-        personId:
-          $ref: '#/components/schemas/PersonId'
-        firstName:
-          type: string
-          maxLength: 24
-          example: Jos
-        infix:
-          type: string
-          maxLength: 12
-          example: van der
-        lastName:
-          type: string
-          maxLength: 48
-          example: Vlist
-        dateOfBirth:
-          type: string
-          format: date
-          example: 2022-03-04
-        adresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AdresId'
-    PersonId:
-      type: integer
-      format: int64
-      example: 1
+      allOf:
+        - $ref: "#/components/schemas/Person"
+        - $ref: "#/components/schemas/AdresIds"
+
+    PersonAdres1:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              $ref: "#/components/schemas/Id"
+        - $ref: "#/components/schemas/PersonBody"
+        - $ref: "#/components/schemas/AdresIds"
+
     PersonBody:
       type: object
       required:
@@ -674,10 +1092,115 @@ components:
           type: string
           format: date
           example: 2022-03-04
+
+    PersonIds:
+      type: object
+      properties:
+        persons:
+          type: array
+          items:
+            $ref: "#/components/schemas/Id"
+
     Persons:
       type: array
       items:
         $ref: "#/components/schemas/Person"
+
+    Role:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              $ref: "#/components/schemas/Id"
+        - $ref: "#/components/schemas/RoleBody"
+
+    RoleBody:
+      type: object
+      required:
+        - rolename
+      properties:
+        rolename:
+          type: string
+          maxLength: 32
+          example: reader
+        description:
+          type: string
+          maxLength: 128
+          example: This role gives read access
+
+    Roles:
+      allOf:
+        - type: object
+          required:
+            - Id
+          properties:
+            Id:
+              $ref: "#/components/schemas/Id"
+        - $ref: "#/components/schemas/RoleBody"
+
+    User:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              $ref: "#/components/schemas/Id"
+        - $ref: "#/components/schemas/UserBody"
+
+    UserBody:
+      type: object
+      required:
+        - username
+        - password
+        - email
+      properties:
+        username:
+          type: string
+          maxLength: 24
+          example: user
+        password:
+          type: string
+          description: base64 encode password
+          maxLength: 48
+          example: kasjdkfkei
+        email:
+          type: string
+          pattern: '^(.[^@]*)@(.[^@]*)\.(.[^@]*)$'
+          maxLength: 128
+          example: mymail@gmail.com
+        phone:
+          type: string
+          maxLength: 24
+          example: "+316409493445"
+        accountNonExpired:
+          type: boolean
+          default: true
+          example: true
+        accountNonLocked:
+          type: boolean
+          default: true
+          example: true
+        credentialsNonExpired:
+          type: boolean
+          default: true
+          example: true
+        enabled:
+          type: boolean
+          default: true
+          example: true
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/Role"
+
+    Users:
+      type: array
+      items:
+        $ref: "#/components/schemas/User"
+
     Problem:
       type: object
       description: |
@@ -705,6 +1228,7 @@ components:
           type: string
         path:
           type: string
+
     ProblemDetail:
       type: object
       required:
@@ -721,6 +1245,7 @@ components:
           type: string
         instance:
           type: string
+
   responses:
     Adres:
       description: An adres
@@ -811,20 +1336,7 @@ components:
           examples:
             tomanyrequests:
               $ref: "#/components/examples/Problem-429"
-    Persons:
-      description: A collection of persons
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/Persons"
-          examples:
-            emptylist:
-              $ref: "#/components/examples/PersonList-01"
-            fulllist:
-              $ref: "#/components/examples/PersonList-02"
-      headers:
-        version:
-          $ref: "#/components/headers/version"
+
     Person:
       description: A specific person
       content:
@@ -853,10 +1365,78 @@ components:
       headers:
         version:
           $ref: "#/components/headers/version"
+    Persons:
+      description: A collection of persons
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Persons"
+          examples:
+            emptylist:
+              $ref: "#/components/examples/PersonList-01"
+            fulllist:
+              $ref: "#/components/examples/PersonList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+    Role:
+      description: A role
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Role"
+      #          examples:
+      #            allfields:
+      #              $ref: "#/components/examples/Role-01"
+      #            noinfix:
+      #              $ref: "#/components/examples/Role-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+    Roles:
+      description: A collection of roles
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Roles"
+      #          examples:
+      #            emptylist:
+      #              $ref: "#/components/examples/UserList-01"
+      #            fulllist:
+      #              $ref: "#/components/examples/UserList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+    User:
+      description: An user
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/User"
+      #          examples:
+      #            allfields:
+      #              $ref: "#/components/examples/User-01"
+      #            noinfix:
+      #              $ref: "#/components/examples/User-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+    Users:
+      description: A collection of users
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Users"
+      #          examples:
+      #            emptylist:
+      #              $ref: "#/components/examples/UserList-01"
+      #            fulllist:
+      #              $ref: "#/components/examples/UserList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
   securitySchemes:
-    ApiKeyAuth: # arbitrary name for the security scheme
-      type: apiKey
-      in: header # can be "header", "query" or "cookie"
-      name: X-API-KEY # name of the header, query parameter or cookie
-security:
-  - ApiKeyAuth: [ ] # use the same name as under securitySchemes
+    BasicAuth:
+      type: http
+      scheme: basic

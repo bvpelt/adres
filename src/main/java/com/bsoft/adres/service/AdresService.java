@@ -142,7 +142,7 @@ public class AdresService {
 
     private Adres AdresDAO2Adres(final AdresDAO adresDAO) {
         Adres adres = new Adres();
-        adres.setAdresId(adresDAO.getAdresid());
+        adres.setId(adresDAO.getId());
         adres.setStreet(adresDAO.getStreet());
         adres.setHousenumber(adresDAO.getHousenumber());
         adres.setZipcode(adresDAO.getZipcode());
@@ -153,25 +153,25 @@ public class AdresService {
 
     public AdresPerson getAdresPerson(Long adresId) {
         Optional<AdresDAO> adresDAO = adresRepository.findByAdresId(adresId);
-        if (adresDAO.isPresent()) {
-            List<Long> personIds = new ArrayList<Long>();
-            List<PersonDAO> personList = personRepository.findPersonsByAdresId(adresId);
-
-            personList.forEach(personDAO -> {
-                personIds.add(personDAO.getPersonid());
-            });
-
-            AdresPerson adresPerson = new AdresPerson();
-            adresPerson.setAdresId(adresDAO.get().getAdresid());
-            adresPerson.setStreet(adresDAO.get().getStreet());
-            adresPerson.setHousenumber(adresDAO.get().getHousenumber());
-            adresPerson.setZipcode(adresDAO.get().getZipcode());
-            adresPerson.setCity(adresDAO.get().getCity());
-            adresPerson.setPersons(personIds);
-
-            return adresPerson;
-        } else {
+        if (!adresDAO.isPresent()) {
             throw new AdresNotExistsException("Adres with id: " + adresId + " not found");
         }
+        List<Long> personIds = new ArrayList<Long>();
+        List<PersonDAO> personList = personRepository.findPersonsByAdresId(adresId);
+
+        personList.forEach(personDAO -> {
+            personIds.add(personDAO.getId());
+        });
+
+        AdresPerson adresPerson = new AdresPerson();
+        adresPerson.setId(adresDAO.get().getId());
+        adresPerson.setStreet(adresDAO.get().getStreet());
+        adresPerson.setHousenumber(adresDAO.get().getHousenumber());
+        adresPerson.setZipcode(adresDAO.get().getZipcode());
+        adresPerson.setCity(adresDAO.get().getCity());
+        adresPerson.setPersons(personIds);
+
+        return adresPerson;
+
     }
 }

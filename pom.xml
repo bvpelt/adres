@@ -30,6 +30,13 @@
         <url/>
     </scm>
 
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <profiles>
         <profile>
             <id>develop</id>
@@ -45,13 +52,16 @@
                     <groupId>com.h2database</groupId>
                     <artifactId>h2</artifactId>
                     <version>2.2.220</version>
-                    <scope>runtime</scope>
                 </dependency>
             </dependencies>
         </profile>
         <profile>
             <id>runtime</id>
             <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-security</artifactId>
+                </dependency>
                 <dependency>
                     <groupId>org.springframework.security</groupId>
                     <artifactId>spring-security-test</artifactId>
@@ -64,17 +74,16 @@
                 <dependency>
                     <groupId>org.postgresql</groupId>
                     <artifactId>postgresql</artifactId>
-                    <scope>runtime</scope>
                 </dependency>
             </dependencies>
         </profile>
     </profiles>
 
-    <properties>
-        <java.version>21</java.version>
-    </properties>
-
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -82,14 +91,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.flywaydb</groupId>
@@ -138,11 +139,29 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.6.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>24.0.1</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <verbose>false</verbose>
+                    <!--
+                    <source>21</source>
+                    <target>21</target>
+                    <release>21</release>
+                    -->
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -177,7 +196,7 @@
                         </goals>
                         <configuration>
 
-                            <inputSpec>${project.basedir}/src/main/resources/adres.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/adres.0.0.4.yaml</inputSpec>
 
                             <generatorName>spring</generatorName>
                             <library>spring-boot</library>
@@ -186,12 +205,13 @@
                                 <apiPackage>com.bsoft.adres.generated.api</apiPackage>
                                 <basePackage>com.bsoft.adres.generated</basePackage>
                                 <configPackage>com.bsoft.adres.generated.generated.configuration</configPackage>
-                                <invokerPackage>com.bsoft.adres.generated.invoker</invokerPackage>
-                                <modelPackage>com.bsoft.adres.generated.model</modelPackage>
                                 <dateLibrary>java8</dateLibrary>
                                 <delegatePattern>true</delegatePattern>
+                                <generateAliasAsModel>true</generateAliasAsModel>
                                 <hideGenerationTimestamp>true</hideGenerationTimestamp>
                                 <interfaceOnly>true</interfaceOnly>
+                                <invokerPackage>com.bsoft.adres.generated.invoker</invokerPackage>
+                                <modelPackage>com.bsoft.adres.generated.model</modelPackage>
                                 <requestMappingMode>none</requestMappingMode>
                                 <serializationLibrary>jackson</serializationLibrary>
                                 <skipDefaultInterface>true</skipDefaultInterface>
@@ -248,6 +268,7 @@
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
+                <version>4.9.10</version>
             </plugin>
         </plugins>
     </build>

@@ -1,120 +1,77 @@
 package com.bsoft.adres.config;
 
 
+import com.bsoft.adres.security.MyUserDetailsService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-import java.util.List;
-
+@Slf4j
 @Profile("runtime")
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+    @Autowired
+    private MyUserDetailsService myUserDetailsService;
+
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        log.debug("Starting bCryptPasswordEncoder");
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public UserDetailsService userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder) {
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("user")
-                .password(bCryptPasswordEncoder.encode("12345"))
-                .roles("USER")
-                .build());
-        manager.createUser(User.withUsername("admin")
-                .password(bCryptPasswordEncoder.encode("54321"))
-                .roles("USER", "ADMIN")
-                .build());
-        return manager;
+    public PasswordEncoder passwordEncoder() {
+        //return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
-    @Order(0)
-    public SecurityFilterChain actuatorFilterChain(HttpSecurity http) throws Exception {
+    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+        return new ProviderManager(daoAuthenticationProvider);
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
-                .securityMatcher("/actuator/**")
+                .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors((cors) -> cors
-                        .configurationSource(apiConfigurationSource())
-                )
-                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-                        authorizationManagerRequestMatcherRegistry
-                                .requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
-                                .requestMatchers("/actuator/**").hasAnyRole("ADMIN")
-                                .anyRequest().authenticated())
+                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .formLogin(AbstractHttpConfigurer::disable)
+                .securityMatcher("/**")
+                .authorizeHttpRequests(registry -> registry
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/auth/login").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/login/**", "/error").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/adresses/**", "/persons/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/adresses/**", "/persons/**").hasAnyAuthority("READ", "WRITE")
+                        .requestMatchers(HttpMethod.POST, "/adresses/**", "/persons/**").hasAnyAuthority("READ", "WRITE")
+                        .requestMatchers(HttpMethod.PATCH, "/adresses/**", "/persons/**").hasAnyAuthority("READ", "WRITE")
+                        .requestMatchers("/actuator/**", "/user/**", "/roles/**").hasAuthority("WRITE")
+                        .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
-                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        ;
 
         return http.build();
     }
 
-    @Bean
-    @Order(1)
-    public SecurityFilterChain addressesFilterChain(HttpSecurity http) throws Exception {
-        http
-                .securityMatcher("/adresses/**")
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors((cors) -> cors
-                        .configurationSource(apiConfigurationSource())
-                )
-                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-                        authorizationManagerRequestMatcherRegistry
-                                .requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
-                                .requestMatchers("/adresses/**").hasAnyRole("USER", "ADMIN")
-                                .requestMatchers("/swagger-ui/**").permitAll()
-                                .requestMatchers("/login/**").permitAll()
-                                .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults())
-                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        return http.build();
-    }
-
-    @Bean
-    @Order(2)
-    public SecurityFilterChain swaggerFilterChain(HttpSecurity http) throws Exception {
-        http
-                .securityMatcher("/swagger_ui/**")
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors((cors) -> cors
-                        .configurationSource(apiConfigurationSource())
-                )
-                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-                        authorizationManagerRequestMatcherRegistry
-                                .requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
-                                .requestMatchers("/swagger-ui/**").permitAll()
-                                .requestMatchers("/login/**").permitAll()
-                                .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults())
-                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        return http.build();
-    }
-
-    UrlBasedCorsConfigurationSource apiConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:8080"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "PATCH"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
 }

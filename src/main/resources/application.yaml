@@ -9,9 +9,10 @@ logging:
     org:
       apache:
         http: info
-      springframework: info
+      springframework:
+        security: info
     com:
-      bsoft: info
+      bsoft: debug
 
 management:
   endpoint:

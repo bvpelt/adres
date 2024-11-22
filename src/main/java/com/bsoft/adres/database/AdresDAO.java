@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,8 +24,8 @@ public class AdresDAO implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "adresid")
-    private Long adresid;
+    @Column(name = "id")
+    private Long id;
     @Column(name = "street")
     private String street;
     @Column(name = "housenumber")
@@ -37,7 +38,7 @@ public class AdresDAO implements Serializable {
     private Integer hash;
 
     public AdresDAO(final Adres adres) {
-        this.adresid = adres.getAdresId();
+        this.id = adres.getId();
         this.city = adres.getCity();
         this.housenumber = adres.getHousenumber();
         this.street = adres.getStreet();
@@ -46,7 +47,7 @@ public class AdresDAO implements Serializable {
     }
 
     public AdresDAO(final AdresBody adres) {
-        this.adresid = null;
+        this.id = null;
         this.city = adres.getCity();
         this.housenumber = adres.getHousenumber();
         this.street = adres.getStreet();
@@ -56,30 +57,20 @@ public class AdresDAO implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AdresDAO adresDAO)) return false;
-
-        if (getStreet() != null ? !getStreet().equals(adresDAO.getStreet()) : adresDAO.getStreet() != null)
-            return false;
-        if (getHousenumber() != null ? !getHousenumber().equals(adresDAO.getHousenumber()) : adresDAO.getHousenumber() != null)
-            return false;
-        if (!getZipcode().equals(adresDAO.getZipcode())) return false;
-        return getCity() != null ? getCity().equals(adresDAO.getCity()) : adresDAO.getCity() == null;
+        if (o == null || getClass() != o.getClass()) return false;
+        AdresDAO adresDAO = (AdresDAO) o;
+        return Objects.equals(street, adresDAO.street) && Objects.equals(housenumber, adresDAO.housenumber) && Objects.equals(zipcode, adresDAO.zipcode) && Objects.equals(city, adresDAO.city);
     }
 
     @Override
     public int hashCode() {
-        int result = getStreet() != null ? getStreet().hashCode() : 0;
-        result = 31 * result + (getHousenumber() != null ? getHousenumber().hashCode() : 0);
-        result = 31 * result + getZipcode().hashCode();
-        result = 31 * result + (getCity() != null ? getCity().hashCode() : 0);
-        return result;
+        return Objects.hash(street, housenumber, zipcode, city);
     }
 
     @Override
     public String toString() {
         return "AdresDAO{" +
-                "adresid=" + adresid +
+                "id=" + id +
                 ", street='" + street + '\'' +
                 ", housenumber='" + housenumber + '\'' +
                 ", zipcode='" + zipcode + '\'' +
