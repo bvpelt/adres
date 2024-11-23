@@ -130,6 +130,8 @@ public class AdresService {
                 foundAdres.setCity(adresBody.getCity());
             }
 
+            foundAdres.setHash(foundAdres.getHash());
+
             adresRepository.save(foundAdres);
 
             adres = AdresDAO2Adres(foundAdres);
@@ -147,6 +149,7 @@ public class AdresService {
         adres.setHousenumber(adresDAO.getHousenumber());
         adres.setZipcode(adresDAO.getZipcode());
         adres.setCity(adresDAO.getCity());
+
         return adres;
     }
 

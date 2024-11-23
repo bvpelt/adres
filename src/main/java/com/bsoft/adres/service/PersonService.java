@@ -154,6 +154,7 @@ public class PersonService {
             if (PersonBody.getDateOfBirth() != null) {
                 foundPerson.setDateofbirth(PersonBody.getDateOfBirth());
             }
+            foundPerson.setHash(foundPerson.getHash());
 
             personRepository.save(foundPerson);
 

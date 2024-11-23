@@ -122,6 +122,8 @@ public class RolesService {
             if (roleBody.getDescription() != null) {
                 foundRole.setDescription(roleBody.getDescription());
             }
+            foundRole.setHash(foundRole.getHash());
+
             roleRepository.save(foundRole);
 
             return RoleDAO2Role(foundRole);

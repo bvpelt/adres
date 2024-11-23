@@ -130,11 +130,13 @@ public class UsersService {
             if (userBody.getPhone() != null) {
                 foundUser.setPhone(userBody.getPhone());
             }
+            foundUser.setHash(foundUser.getHash());
 
             usersRepository.save(foundUser);
 
             return UserDAO2User(foundUser);
         } catch (Error e) {
+            log.error("Error patching adres: {}", e);
             throw e;
         }
 
