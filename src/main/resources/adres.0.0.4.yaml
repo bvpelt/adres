@@ -1131,14 +1131,9 @@ components:
           example: This role gives read access
 
     Roles:
-      allOf:
-        - type: object
-          required:
-            - Id
-          properties:
-            Id:
-              $ref: "#/components/schemas/Id"
-        - $ref: "#/components/schemas/RoleBody"
+      type: array
+      items:
+        $ref: "#/components/schemas/Role"          
 
     User:
       allOf:

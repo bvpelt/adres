@@ -1,7 +1,7 @@
 package com.bsoft.adres.database;
 
 
-import com.bsoft.adres.generated.model.Role;
+import com.bsoft.adres.generated.model.RoleBody;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -45,6 +45,12 @@ public class RoleDAO {
             joinColumns = @JoinColumn(name = "roleid", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "privilegeid", referencedColumnName = "id"))
     private Collection<PrivilegeDAO> privileges = new ArrayList<>();
+
+    public RoleDAO(RoleBody roleBody) {
+        this.description = roleBody.getDescription();
+        this.rolename = roleBody.getRolename();
+        this.hash = this.hashCode();
+    }
 
     public void addUser(UserDAO user) {
         users.add(user);
