@@ -52,3 +52,43 @@ HELP.md
 spring.log
 adres.mv.db
 adres.trace.db
+
+### Adresbook
+
+# Compiled output
+/adresbook/dist
+/adresbook/tmp
+/adresbook/out-tsc
+/adresbook/bazel-out
+
+# Node
+/adresbook/node_modules
+/adresbook/npm-debug.log
+/adresbook/yarn-error.log
+
+# IDEs and editors
+/adresbook/.c9/
+/adresbook/*.launch
+/adresbook/.settings/
+/adresbook/*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+/adresbook/.angular/cache
+/adresbook/.sass-cache/
+/adresbook//connect.lock
+/adresbook//coverage
+/adresbook//libpeerconnection.log
+/adresbook/testem.log
+/adresbook//typings
+
+# System files
+/adresbook/.DS_Store
+/adresbook/Thumbs.db

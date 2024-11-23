@@ -1,9 +1,9 @@
 openapi: "3.0.3"
 info:
   title: Adres API
-  version: 0.0.3
+  version: 1.0.0
 servers:
-  - url: https://api.server.test/opvragen/v1
+  - url: /adres/api/v1
 
 
 security:

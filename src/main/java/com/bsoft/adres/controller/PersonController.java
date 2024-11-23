@@ -15,11 +15,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
+@RequestMapping( "/adres/api/v1")
 @Controller
 public class PersonController implements PersonsApi {
 
