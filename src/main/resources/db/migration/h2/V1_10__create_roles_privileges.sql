@@ -5,6 +5,4 @@ create table roles_privileges
     roleid      bigint
 );
 
-create index roles_privileges_userid_ix on roles_privileges (privilegeid);
-create index roles_privileges_roleid_ix on roles_privileges (roleid);
-
+create unique index roles_privileges_userid_ix on roles_privileges (roleid, privilegeid);

@@ -20,7 +20,7 @@ import { AdresesComponent } from './adreses/adreses.component';
     HttpClientModule
   ],
   providers: [
-    { provide: BASE_PATH, useValue: "http:/localhost:8080" }
+//    { provide: BASE_PATH, useValue: "http:/localhost:8080/adres/api/v1" } 
   ],
   bootstrap: [AppComponent]
 })

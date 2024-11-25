@@ -5,5 +5,4 @@ create table adres_person
     personid bigint not null
 );
 
-create index ap_adres_ix on adres_person (adresid);
-create index ap_person_ix on adres_person (personid);
+create index ap_adresperson_ix on adres_person (adresid, personid);

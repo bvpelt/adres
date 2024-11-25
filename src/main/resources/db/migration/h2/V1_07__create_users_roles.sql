@@ -6,6 +6,4 @@ create table users_roles
 );
 
 
-create index users_roles_userid_ix on users_roles_role (userid);
-create index users_roles_userid_ix on users_roles_role (roleid);
-
+create unique index users_roles_userid_ix on users_roles (userid, roleid);

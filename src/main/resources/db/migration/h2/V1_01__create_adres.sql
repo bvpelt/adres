@@ -8,4 +8,4 @@ create table adres
     hash        int
 );
 
-
+create unique index zipcodehousenr_ix on adres(zipcode, housenumber);

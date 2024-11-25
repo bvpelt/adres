@@ -1,4 +1,4 @@
-create table user
+create table "user"
 (
     id                      bigint       not null auto_increment primary key,
     username                varchar(24)  not null,
@@ -12,5 +12,5 @@ create table user
     enabled                 boolean
 );
 
-create index user_username_ix on user (username);
-create unique index user_email_ix on user (email);
+create unique index user_username_ix on "user" (username);
+create unique index user_email_ix on "user" (email);

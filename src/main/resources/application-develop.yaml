@@ -66,6 +66,3 @@ spring:
       password: 12345
       roles: admin, user
 
-springdoc:
-  enable-spring-security: false
-  show-actuator: true

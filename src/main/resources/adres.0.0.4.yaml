@@ -3,7 +3,7 @@ info:
   title: Adres API
   version: 1.0.0
 servers:
-  - url: /adres/api/v1
+  - url: http://localhost:8080/adres/api/v1
 
 
 security:
