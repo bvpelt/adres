@@ -1,6 +1,11 @@
 <h2>Adres</h2>
 
-<div>
-    <p>straat: {{adres.street}} {{adres.housenumber}}</p>
-    <p>city: {{adres.zipcode}} {{adres.city}}</p>
+<div *ngIf="adres.length > 0">
+    <li *ngFor="let adres of adres">
+        {{adres.id}} {{adres.street}} {{adres.housenumber}} {{adres.zipcode}} {{adres.city}}
+    </li>
+</div>
+
+<div *ngIf="errormessage.length > 0">
+    {{errormessage}}
 </div>

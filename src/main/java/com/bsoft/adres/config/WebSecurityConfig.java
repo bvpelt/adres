@@ -58,7 +58,7 @@ public class WebSecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(Arrays.asList("http://localhost:4000"));
+                    config.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
                     config.setAllowedMethods(Arrays.asList("*")); // Allow all HTTP methods
                     config.setAllowedHeaders(Arrays.asList("*")); // Allow all headers
                     return config;
