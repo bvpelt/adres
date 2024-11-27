@@ -1,11 +1,23 @@
 <h2>Adres</h2>
+<a routerLink="/addadres">Add adres</a>
 
+<div *ngIf="selectedAdres">
+    <h3>selected: {{selectedAdres.id}} {{selectedAdres.street}} {{selectedAdres.housenumber}} {{selectedAdres.zipcode}} {{selectedAdres.city}}</h3>
+</div>
 <div *ngIf="adres.length > 0">
-    <li *ngFor="let adres of adres">
-        {{adres.id}} {{adres.street}} {{adres.housenumber}} {{adres.zipcode}} {{adres.city}}
-    </li>
+    <ul class="adresses">
+        <li *ngFor="let adres of adres">
+            <button [class.selected]="adres === selectedAdres" type="button" (click)="onSelect(adres)">
+                <span class="badge">{{adres.id}}</span>
+                <span class="adres">{{adres.street}} {{adres.housenumber}} {{adres.zipcode}} {{adres.city}} </span>
+                <a routerLink="/adresdetail/{{adres.id}}">view</a>
+            </button> 
+            
+        </li>
+    </ul>
 </div>
 
-<div *ngIf="errormessage.length > 0">
+<div *ngIf="errormessage!=undefined && errormessage.length>0">
     {{errormessage}}
 </div>
+

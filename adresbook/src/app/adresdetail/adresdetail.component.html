@@ -1,0 +1,10 @@
+<h2>Adres</h2>
+
+<div *ngIf="adres!=undefined">
+{{adres.id}} {{adres.street}} {{adres.housenumber}} {{adres.zipcode}} {{adres.city}}
+</div>
+
+<div *ngIf="errormessage!=undefined && errormessage.length>0">
+    {{errormessage}}
+</div>
+

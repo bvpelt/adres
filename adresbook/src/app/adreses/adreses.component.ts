@@ -10,15 +10,17 @@ import { AdresService } from '../services/adres.service';
   styleUrl: './adreses.component.css'
 })
 export class AdresesComponent {
-  //adres: Adres = { city: 'Veenendaal', housenumber: '12a', id: 1, street: 'Kerkewijk', zipcode: '3903 GA'};
+  user = 'bvpelt';
+  password = '12345';  
   xApiKey: string = 'f0583805-03f6-4c7f-8e40-f83f55b7c077';
+
   page: number = 1;
   size: number = 10;
-  adresList: Adresses = [];
+  
   adres: Adres[] = [];
-  user = 'bvpelt';
-  password = '12345';
-  errormessage: string = "";
+  selectedAdres?: Adres = undefined;
+  
+  errormessage?: string = undefined;
 
   constructor(private adresService: AdresService) {
   }
@@ -28,16 +30,14 @@ export class AdresesComponent {
     this.getAdresses(this.user, this.password, this.xApiKey, this.page, this.size);
   }
 
-
-  getAdresses(user: string, password: string, xApiKey: string, page: number, size: number): void {
-    this.adresService.getAdresses(user, password, xApiKey, page, size)
+  getAdresses(user: string, password: string, xApiKey: string, page: number, size: number): void {    
+    this.adresService.getAdresses(xApiKey, page, size)
       .subscribe({
         next:
           response => {
             if (response.body) {
               const adresses: Adres[] = response.body as Adres[];
-              this.adres = adresses;
-              console.log(response);
+              this.adres = adresses;              
             }
           },
 
@@ -52,5 +52,9 @@ export class AdresesComponent {
           this.errormessage = 'Status: ' + error.status + ' details: ' + error.error.detail;
         }
       });
+  }
+
+  onSelect(adres: Adres): void {
+    this.selectedAdres = adres;
   }
 }

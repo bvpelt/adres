@@ -30,12 +30,25 @@ curl -v -X 'POST'   'http://localhost:8080/adresses?override=false' \
   "city": "Veenendaal"
 }'
 ```
+## Converting google contacts
+- export google contacts to a csv file
+
 
 ## Angular
 Releases https://angular.dev/reference/releases 
 
 ## H2 console
 Setup h2 console with spring security see https://springframework.guru/using-the-h2-database-console-in-spring-boot-with-spring-security/
+
+
+Fields:
+First Name,Middle Name,Last Name,Phonetic First Name,Phonetic Middle Name,Phonetic Last Name,Name Prefix,Name Suffix,Nickname,File As,Organization Name,Organization Title,Organization Department,Birthday,Notes,Photo,Labels,E-mail 1 - Label,E-mail 1 - Value,E-mail 2 - Label,E-mail 2 - Value,E-mail 3 - Label,E-mail 3 - Value,E-mail 4 - Label,E-mail 4 - Value,Phone 1 - Label,Phone 1 - Value,Phone 2 - Label,Phone 2 - Value,Phone 3 - Label,Phone 3 - Value,Address 1 - Label,Address 1 - Formatted,Address 1 - Street,Address 1 - City,Address 1 - PO Box,Address 1 - Region,Address 1 - Postal Code,Address 1 - Country,Address 1 - Extended Address,Website 1 - Label,Website 1 - Value,Event 1 - Label,Event 1 - Value,Event 2 - Label,Event 2 - Value,Custom Field 1 - Label,Custom Field 1 - Value
+a1         a2          a3        a4                  a5                   a6                 a7          a8           a9      a10     a11               a12                a13                     a14      a15   a16   a17    a18              a19              a20              a21              a22              a23              a24              a25              a26             a27             a28             a29             a30             a31             a32               a33                   a34                a35              a36                a37                a38                     a39                 a40
+
+
+```bash
+cat ~/Downloads/contacts.csv | awk '{split($0, a, ","); printf("%s\t--%s\t--%s\t--%s\t--%s\t--%s\t--%s\t--%s\t--%s\t--%s====\n", a[1], a[3], a[33], a[34], a[35], a[36], a[37], a[38], a[39], a[40])}'
+```
 
 ## References
 
