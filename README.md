@@ -29,8 +29,10 @@ curl -v -X 'POST'   'http://localhost:8080/adresses?override=false' \
   "zipcode": "3904 JB",
   "city": "Veenendaal"
 }'
-
 ```
+
+## H2 console
+Setup h2 console with spring security see https://springframework.guru/using-the-h2-database-console-in-spring-boot-with-spring-security/
 
 ## References
 
