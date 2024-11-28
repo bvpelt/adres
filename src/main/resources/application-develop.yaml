@@ -60,9 +60,9 @@ spring:
       ddl-auto: none
     open-in-view: false
     show-sql: true
-  security:
-    user:
-      name: testuser
-      password: 12345
-      roles: admin, user
+#  security:
+#    user:
+#      name: testuser
+#      password: 12345
+#      roles: admin, user
 
