@@ -47,17 +47,11 @@
                 <spring.profiles.active>develop</spring.profiles.active>
             </properties>
             <dependencies>
-<!--
-                <dependency>
-                    <groupId>org.flywaydb</groupId>
-                    <artifactId>flyway-database-hsqldb</artifactId>
-                </dependency>
--->
                 <dependency>
                     <groupId>com.h2database</groupId>
                     <artifactId>h2</artifactId>
                     <version>2.2.220</version>
-                </dependency>               
+                </dependency>
             </dependencies>
         </profile>
         <profile>
@@ -66,11 +60,7 @@
                 <spring.profiles.active>runtime</spring.profiles.active>
             </properties>
             <dependencies>
-                <dependency>
-                    <groupId>org.springframework.security</groupId>
-                    <artifactId>spring-security-test</artifactId>
-                    <scope>test</scope>
-                </dependency>
+
                 <dependency>
                     <groupId>org.flywaydb</groupId>
                     <artifactId>flyway-database-postgresql</artifactId>
@@ -122,7 +112,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.openapitools</groupId>
             <artifactId>jackson-databind-nullable</artifactId>
@@ -174,9 +168,9 @@
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
-   
-                <version>10.17.0</version> 
-   
+
+                <version>10.17.0</version>
+
             </plugin>
 -->
             <plugin>
