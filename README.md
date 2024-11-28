@@ -31,6 +31,9 @@ curl -v -X 'POST'   'http://localhost:8080/adresses?override=false' \
 }'
 ```
 
+## Angular
+Releases https://angular.dev/reference/releases 
+
 ## H2 console
 Setup h2 console with spring security see https://springframework.guru/using-the-h2-database-console-in-spring-boot-with-spring-security/
 
