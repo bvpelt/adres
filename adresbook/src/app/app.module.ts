@@ -28,12 +28,12 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     AppRoutingModule,
     ApiModule,
     HttpClientModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {
+    environment.enableServiceWorker ? ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
-    })
+    }) : []
   ],
   providers: [
 //    { provide: BASE_PATH, useValue: "http:/localhost:8080/adres/api/v1" }     
