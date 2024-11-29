@@ -7,7 +7,7 @@ import { CacheService } from '../services/cache.service';
 @Injectable()
 export class CachingInterceptor implements HttpInterceptor {
 
-  constructor(private cacheService: CacheService) {}
+  constructor(private cacheService: CacheService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (req.method !== 'GET') {
@@ -22,7 +22,7 @@ export class CachingInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       tap(event => {
         if (event instanceof HttpResponse) {
-          this.cacheService.set(req.url, event.body);
+          this.cacheService.set(req.url, event.body, 300000); // Cache for 5 minutes (300000 ms)
         }
       })
     );
