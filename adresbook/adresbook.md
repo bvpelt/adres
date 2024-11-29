@@ -13,6 +13,11 @@ ng new -g --no-standalone adresbook
 - install openapi (see https://pguso.medium.com/using-openapi-generator-in-angular-projects-4c2813f55a91)
 - generate code from openapi specification from directory $HOME/adres/adresbook execute the following command
 
+Make sure the openapi-generator is installed
+
+```bash
+npm install @openapitools/openapi-generator-cli -g
+```
 
 ```bash
 npx openapi-generator-cli generate -i ../src/main/resources/adres.0.0.4.yaml -g typescript-angular -o src/app/core/modules/openapi --additional-properties fileNaming=kebab-case,withInterfaces=true,ngVersion=17.3.12 --generate-alias-as-model

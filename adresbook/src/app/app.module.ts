@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ApiModule } from './core/modules/openapi';
+import { ApiModule, Configuration, ConfigurationParameters } from './core/modules/openapi';
 import { environment } from '../environments/environment';
 
 import { HttpClientModule } from '@angular/common/http';
@@ -14,6 +14,16 @@ import { AdresesComponent } from './adreses/adreses.component';
 import { AdresComponent } from './adres/adres.component';
 import { AdresdetailComponent } from './adresdetail/adresdetail.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+
+
+export function apiConfigFactory (): Configuration {
+  const params: ConfigurationParameters = {
+    // set configuration parameters here.
+    basePath: environment.apiUrl,
+  }
+  return new Configuration(params);
+}
+
 
 @NgModule({
   declarations: [
@@ -26,7 +36,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    ApiModule,
+    ApiModule.forRoot(apiConfigFactory),
     HttpClientModule,
     environment.enableServiceWorker ? ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
@@ -41,3 +51,4 @@ import { ServiceWorkerModule } from '@angular/service-worker';
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

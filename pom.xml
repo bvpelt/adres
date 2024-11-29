@@ -207,7 +207,7 @@
                         </goals>
                         <configuration>
 
-                            <inputSpec>${project.basedir}/src/main/resources/adres.0.0.4.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/adres.0.0.5.yaml</inputSpec>
 
                             <generatorName>spring</generatorName>
                             <library>spring-boot</library>

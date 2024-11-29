@@ -1,4 +1,5 @@
 export const environment = {
     production: true,
-    enableServiceWorker: true
+    enableServiceWorker: true,
+    apiUrl: 'http://localhost/adres/api/v1'
   };
