@@ -44,7 +44,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <spring.profiles.active>develop</spring.profiles.active>
+                <spring-boot.run.profiles>develop</spring-boot.run.profiles>
             </properties>
             <dependencies>
                 <dependency>
@@ -57,7 +57,7 @@
         <profile>
             <id>runtime</id>
             <properties>
-                <spring.profiles.active>runtime</spring.profiles.active>
+                <spring-boot.run.profiles>runtime</spring-boot.run.profiles>
             </properties>
             <dependencies>
 

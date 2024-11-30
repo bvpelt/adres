@@ -42,7 +42,8 @@ export function apiConfigFactory (): Configuration {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
+      registrationStrategy: 'registerWhenStable:30000',  
+      // Add a unique identifier to the service worker configuration   
     }) : []
   ],
   providers: [
