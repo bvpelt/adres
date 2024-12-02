@@ -72,13 +72,15 @@ public class WebSecurityConfig {
                         .requestMatchers("/favicon.ico").permitAll()
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/login/**", "/error").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**","/error").permitAll()
+                        .requestMatchers("/adres/api/v1/login/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("READ", "WRITE")
                         .requestMatchers(HttpMethod.POST, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("READ", "WRITE")
                         .requestMatchers(HttpMethod.PATCH, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("READ", "WRITE")
                         .requestMatchers("/actuator/**", "/adres/api/v1/user/**", "/adres/api/v1/roles/**").hasAuthority("WRITE")
-                        .anyRequest().authenticated())
+//                        .anyRequest().authenticated()
+                )
                 .httpBasic(Customizer.withDefaults())
         ;
 

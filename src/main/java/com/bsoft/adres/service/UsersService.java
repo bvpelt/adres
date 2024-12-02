@@ -65,6 +65,18 @@ public class UsersService {
         return user;
     }
 
+    public User getUserByName(String username) {
+        Optional<UserDAO> optionalUserDAO = usersRepository.findByUserName(username);
+        if (optionalUserDAO.isEmpty()) {
+            throw new UserNotExistsException("User with name " + username + " not found");
+        }
+
+        UserDAO userDAO = optionalUserDAO.get();
+        User user = UserDAO2User(userDAO);
+
+        return user;
+    }
+
     public List<User> getUsers() {
         List<User> userList = new ArrayList<User>();
         Iterable<UserDAO> userDAOIterable = usersRepository.findAll();

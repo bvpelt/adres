@@ -26,6 +26,9 @@ public interface UsersRepository extends PagingAndSortingRepository<UserDAO, Lon
     @Query(value = "SELECT * FROM \"user\" where id = :Id", nativeQuery = true)
     Optional<UserDAO> findByUserId(Long Id);
 
+    @Query(value = "SELECT * FROM \"user\" where username = :username", nativeQuery = true)
+    Optional<UserDAO> findByUserName(String username);
+
     @Query(value = "SELECT * FROM \"user\"",
             countQuery = "SELECT * FROM \"user\"",
             nativeQuery = true)
