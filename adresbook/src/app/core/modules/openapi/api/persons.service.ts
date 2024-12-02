@@ -41,7 +41,7 @@ import {
 })
 export class PersonsService implements PersonsServiceInterface {
 
-    protected basePath = 'http://localhost:8080/adres/api/v1';
+    protected basePath = 'http://localhost:8080';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
     public encoder: HttpParameterCodec;

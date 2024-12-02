@@ -21,7 +21,7 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping( "/adres/api/v1")
+@RequestMapping("/adres/api/v1")
 @Controller
 public class AdresController implements AdressesApi {
 
