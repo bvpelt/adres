@@ -27,6 +27,6 @@ public interface AdresRepository extends PagingAndSortingRepository<AdresDAO, Lo
             nativeQuery = true)
     List<AdresDAO> findAllByPaged(Pageable pageable);
 
-    @Query(value = "SELECT adres.* FROM adres, adres_person WHERE adres.adresid = adres_person.adresid and adres_person.personid = :personId", nativeQuery = true)
+    @Query(value = "SELECT adres.* FROM adres, adres_person WHERE adres.id = adres_person.adresid and adres_person.personid = :personId", nativeQuery = true)
     List<AdresDAO> findAdresByPersonId(Long personId);
 }
