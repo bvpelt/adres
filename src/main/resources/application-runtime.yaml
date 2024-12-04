@@ -1,6 +1,47 @@
 info:
   environment: runtime
 
+management:
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+# debug
+    env:
+      show-values: always
+    configprops:
+      show-values: always
+# end debug
+
+  info:
+    build:
+      enabled: false
+    env:
+      enabled: true
+# debug
+    git:
+      enabled: true
+      mode: full
+    java:
+      enabled: true
+    os:
+      enabled: true
+    process:
+      enabled: true
+# end debug
+  endpoints:
+    web:
+      path-mapping:
+        info: app-info
+        health: app-health
+      exposure:
+        include: 'health,info'
+        exclude:
+  server:
+    port: 8081
 
 spring:
   datasource:
@@ -21,3 +62,11 @@ spring:
       ddl-auto: none
     open-in-view: false
     show-sql: true
+
+springdoc:
+  enable-spring-security: true
+  show-actuator: true
+  swagger-ui:
+    show-common-extensions: true
+    with-credentials: true
+    url: http://localhost:8080/swagger-ui/index.html

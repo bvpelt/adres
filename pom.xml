@@ -11,10 +11,10 @@
 
     <groupId>com.bsoft</groupId>
     <artifactId>adres</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.6</version>
     <name>adres</name>
 
-    <description>Adressen service</description>
+    <description>Adres Book</description>
 
     <url/>
     <licenses>
@@ -29,7 +29,6 @@
         <tag/>
         <url/>
     </scm>
-
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -105,6 +104,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.36</version>
             <optional>true</optional>
         </dependency>
         <dependency>

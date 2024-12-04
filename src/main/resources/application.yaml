@@ -10,33 +10,9 @@ logging:
       apache:
         http: info
       springframework:
-        security: info
+        security: debug
     com:
       bsoft: debug
-
-management:
-  endpoint:
-    health:
-      show-details: always
-    metrics:
-      enabled: true
-    prometheus:
-      enabled: true
-  info:
-    build:
-      enabled: false
-    env:
-      enabled: true
-  endpoints:
-    web:
-      path-mapping:
-        info: app-info
-        health: app-health
-      exposure:
-        include: 'health,info'
-        exclude:
-  server:
-    port: 8081
 
 spring:
   application:
@@ -47,10 +23,4 @@ spring:
     problemdetails:
       enabled: true
 
-springdoc:
-  enable-spring-security: false
-  show-actuator: true
-  swagger-ui:
-    show-common-extensions: true
-    with-credentials: false
-    url: http://localhost:8080/swagger-ui/index.html
+

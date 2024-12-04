@@ -14,6 +14,12 @@ management:
       show-values: always
     configprops:
       show-values: always
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
     shutdown:
       enabled: true
   info:
@@ -38,6 +44,9 @@ management:
       exposure:
         include: '*'
         exclude:
+  server:
+    port: 8080
+
 
 spring:
   datasource:
@@ -66,3 +75,11 @@ spring:
 #      password: 12345
 #      roles: admin, user
 
+springdoc:
+  enable-spring-security: false
+  show-actuator: true
+  swagger-ui:
+    show-common-extensions: true
+    with-credentials: false
+    url: "http://localhost:8080/swagger-ui/index.html"
+    version: "3.0.1"

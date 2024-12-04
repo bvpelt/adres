@@ -3,7 +3,8 @@
 Adres data
 
 ## Spring boot
-Documentation https://docs.spring.io/spring-boot/index.html
+- Documentation https://docs.spring.io/spring-boot/index.html
+- Application properties https://docs.spring.io/spring-boot/appendix/application-properties/index.html#appendix.application-properties.actuator
 
 ## Environment
 
