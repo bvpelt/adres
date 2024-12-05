@@ -1,6 +1,9 @@
 export * from './adresses.service';
 import { AdressesService } from './adresses.service';
 export * from './adresses.serviceInterface';
+export * from './login.service';
+import { LoginService } from './login.service';
+export * from './login.serviceInterface';
 export * from './persons.service';
 import { PersonsService } from './persons.service';
 export * from './persons.serviceInterface';
@@ -10,4 +13,4 @@ export * from './roles.serviceInterface';
 export * from './users.service';
 import { UsersService } from './users.service';
 export * from './users.serviceInterface';
-export const APIS = [AdressesService, PersonsService, RolesService, UsersService];
+export const APIS = [AdressesService, LoginService, PersonsService, RolesService, UsersService];

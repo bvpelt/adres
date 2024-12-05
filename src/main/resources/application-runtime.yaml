@@ -2,6 +2,30 @@ info:
   environment: runtime
 
 
+management:
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  info:
+    build:
+      enabled: false
+    env:
+      enabled: true
+  endpoints:
+    web:
+      path-mapping:
+        info: app-info
+        health: app-health
+      exposure:
+        include: 'health,info'
+        exclude:
+  server:
+    port: 8081
+
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver

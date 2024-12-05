@@ -14,6 +14,8 @@ import { AdresesComponent } from './adreses/adreses.component';
 import { AdresComponent } from './adres/adres.component';
 import { AdresdetailComponent } from './adresdetail/adresdetail.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { LoginComponent } from './login/login.component';
+import { LogoutComponent } from './logout/logout.component';
 
 
 export function apiConfigFactory (): Configuration {
@@ -30,7 +32,9 @@ export function apiConfigFactory (): Configuration {
     AppComponent,
     AdresesComponent,
     AdresComponent,
-    AdresdetailComponent
+    AdresdetailComponent,
+    LoginComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,
