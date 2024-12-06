@@ -16,7 +16,7 @@ export class LogoutComponent {
 
   ngOnInit(): void {
     this.logonService.doLogOut();
-    this.router.navigate(['/']);
+    this.router.navigate(['/adresses']);
   }
 
 }

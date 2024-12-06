@@ -18,6 +18,6 @@ export class LoginComponent {
 
   onLogon() {
       this.logonService.doLogin(this.username, this.password);
-      this.router.navigate(['/']);
+      this.router.navigate(['/adresses']);
   }
 }

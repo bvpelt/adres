@@ -1,15 +1,5 @@
-<h2>Adres</h2>
+<h2>Add Adres</h2>
 
-<!--
-<div *ngIf="adres!=undefined">
-{{adres.id}} {{adres.street}} {{adres.housenumber}} {{adres.zipcode}} {{adres.city}}
-</div>
-
-<div *ngIf="errormessage!=undefined && errormessage.length>0">
-    {{errormessage}}
-</div>
-
--->
 <div *ngIf="adres.id != undefined && adres.id != 0" class="form-group">
     <label for="id">id: </label>
     <p id="street"> {{adres.id}}</p>
@@ -32,7 +22,7 @@
     <input id="city" [(ngModel)]="adres.city" placeholder="city">
 </div>
 
-<button type="button" (click)="onSave(adres)">save</button>
+<button type="button" (click)="onSave(adres)">Save</button>
 
 <div *ngIf="errormessage!=undefined && errormessage.length>0">
     {{errormessage}}

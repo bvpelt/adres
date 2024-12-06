@@ -1,9 +1,10 @@
 <h2>Adres</h2>
-<a routerLink="/addadres"  *ngIf="isLoggedIn$ | async" >Add adres</a>
+<a routerLink="/addadres" *ngIf="isLoggedIn$ | async" >Add adres</a>
 
 <div *ngIf="selectedAdres">
     <h3>selected: {{selectedAdres.id}} {{selectedAdres.street}} {{selectedAdres.housenumber}} {{selectedAdres.zipcode}} {{selectedAdres.city}}</h3>
 </div>
+
 <div *ngIf="adres.length > 0">
     <ul class="adresses">
         <li *ngFor="let adres of adres">
