@@ -4,6 +4,8 @@ api.module.ts
 api/adresses.service.ts
 api/adresses.serviceInterface.ts
 api/api.ts
+api/login.service.ts
+api/login.serviceInterface.ts
 api/persons.service.ts
 api/persons.serviceInterface.ts
 api/roles.service.ts
@@ -21,6 +23,8 @@ model/adres-person1.ts
 model/adres.ts
 model/adresses.ts
 model/deleted.ts
+model/login-request.ts
+model/login-response.ts
 model/models.ts
 model/person-adres.ts
 model/person-adres1.ts
