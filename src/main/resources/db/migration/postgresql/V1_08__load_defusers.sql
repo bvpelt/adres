@@ -20,14 +20,16 @@ insert into role (id, rolename, description)
 values (1, 'ADMIN', 'Administrator');
 insert into role (id, rolename, description)
 values (2, 'USER', 'User');
+insert into role (id, rolename, description)
+values (3, 'OPERATOR', 'OPERATOR');
 
 insert into users_roles (id, userid, roleid)
 values (1, 1, 1);
 insert into users_roles (id, userid, roleid)
 values (2, 2, 2);
 insert into users_roles (id, userid, roleid)
-values (3, 3, 2);
+values (3, 3, 3);
 
 SELECT setval('user_id_seq', 3, true); -- next value will be 4
-SELECT setval('role_id_seq', 2, true); -- next value will be 3
+SELECT setval('role_id_seq', 3, true); -- next value will be 4
 SELECT setval('users_roles_id_seq', 3, true); -- next value will be 4

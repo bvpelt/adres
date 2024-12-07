@@ -73,3 +73,7 @@ import { HttpClientModule } from '@angular/common/http';
 })
 export class AppModule { }
 ```
+
+## Font Awesom
+See https://www.npmjs.com/package/@fortawesome/angular-fontawesome
+

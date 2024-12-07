@@ -69,3 +69,9 @@
     align-self: center; /* Align vertically within button */
     margin-left: auto;  /* Push to the right side of the button */
   }
+
+  fa-icon {
+    margin-top: 9px;
+    margin-left: 5px;
+    text-align: right;
+  }

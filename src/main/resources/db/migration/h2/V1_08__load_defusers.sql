@@ -20,10 +20,12 @@ insert into role (id, rolename, description)
 values (1, 'ADMIN', 'Administrator');
 insert into role (id, rolename, description)
 values (2, 'USER', 'User');
+insert into role (id, rolename, description)
+values (3, 'OPERATOR', 'OPERATOR');
 
 insert into users_roles (id, userid, roleid)
 values (1, 1, 1);
 insert into users_roles (id, userid, roleid)
 values (2, 2, 2);
 insert into users_roles (id, userid, roleid)
-values (3, 3, 2);
+values (3, 3, 3);

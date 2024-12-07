@@ -10,3 +10,5 @@ insert into roles_privileges (id, privilegeid, roleid)
 values (2, 1, 1); -- read - admin
 insert into roles_privileges (id, privilegeid, roleid)
 values (3, 2, 1); -- write - admin
+insert into roles_privileges (id, privilegeid, roleid)
+values (4, 2, 3); -- write - operator

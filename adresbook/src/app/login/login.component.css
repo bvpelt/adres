@@ -19,3 +19,16 @@
     margin-top: 20px;
     width: 150px;
   }
+
+  .pwd {
+    margin-left: 4px;
+  }
+
+  input {
+    /* ... your existing styles ... */
+    position: relative; /* Necessary for absolute positioning of the icon */
+  }
+
+ fa-icon {
+  margin-left: 5px;
+ }

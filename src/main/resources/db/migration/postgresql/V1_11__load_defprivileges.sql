@@ -10,7 +10,9 @@ insert into roles_privileges (id, privilegeid, roleid)
 values (2, 1, 1); -- read - admin
 insert into roles_privileges (id, privilegeid, roleid)
 values (3, 2, 1); -- write - admin
+insert into roles_privileges (id, privilegeid, roleid)
+values (4, 2, 3); -- write - operator
 
 SELECT setval('privilege_id_seq', 2, true); -- next value will be 4
 
-SELECT setval('roles_privileges_id_seq', 3, true); -- next value will be 4
+SELECT setval('roles_privileges_id_seq', 4, true); -- next value will be 5
