@@ -37,7 +37,7 @@ import {
 })
 export class LoginService implements LoginServiceInterface {
 
-    protected basePath = 'http://localhost:8080';
+    protected basePath = 'http://localhost:8080/adres/api/v1';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
     public encoder: HttpParameterCodec;

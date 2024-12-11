@@ -31,3 +31,4 @@ springdoc:
     show-common-extensions: true
     with-credentials: false
     url: http://localhost:8080/swagger-ui/index.html
+    tagsSorter: alpha

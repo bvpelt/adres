@@ -87,9 +87,9 @@ export class Configuration {
             this.credentials = {};
         }
 
-        // init default BasicAuth credential
-        if (!this.credentials['BasicAuth']) {
-            this.credentials['BasicAuth'] = () => {
+        // init default basicAuth credential
+        if (!this.credentials['basicAuth']) {
+            this.credentials['basicAuth'] = () => {
                 return (this.username || this.password)
                     ? btoa(this.username + ':' + this.password)
                     : undefined;

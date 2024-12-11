@@ -78,7 +78,7 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.DELETE, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("WRITE")
                                 .requestMatchers(HttpMethod.POST, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority( "WRITE")
                                 .requestMatchers(HttpMethod.PATCH, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("WRITE")
-                                .requestMatchers("/adres/api/v1/user/**", "/adres/api/v1/roles/**").hasAuthority("WRITE")
+                                .requestMatchers("/adres/api/v1/user/**", "/adres/api/v1/roles/**").hasAnyAuthority("WRITE", "OPERATOR")
 //                        .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())

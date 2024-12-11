@@ -39,7 +39,7 @@ import {
 })
 export class UsersService implements UsersServiceInterface {
 
-    protected basePath = 'http://localhost:8080';
+    protected basePath = 'http://localhost:8080/adres/api/v1';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
     public encoder: HttpParameterCodec;
@@ -126,6 +126,13 @@ export class UsersService implements UsersServiceInterface {
             localVarHeaders = localVarHeaders.set('Authorization', String(authorization));
         }
 
+        let localVarCredential: string | undefined;
+        // authentication (basicAuth) required
+        localVarCredential = this.configuration.lookupCredential('basicAuth');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
+        }
+
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
@@ -205,6 +212,13 @@ export class UsersService implements UsersServiceInterface {
             localVarHeaders = localVarHeaders.set('Authorization', String(authorization));
         }
 
+        let localVarCredential: string | undefined;
+        // authentication (basicAuth) required
+        localVarCredential = this.configuration.lookupCredential('basicAuth');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
+        }
+
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
@@ -275,6 +289,13 @@ export class UsersService implements UsersServiceInterface {
         let localVarHeaders = this.defaultHeaders;
         if (xApiKey !== undefined && xApiKey !== null) {
             localVarHeaders = localVarHeaders.set('x-api-key', String(xApiKey));
+        }
+
+        let localVarCredential: string | undefined;
+        // authentication (basicAuth) required
+        localVarCredential = this.configuration.lookupCredential('basicAuth');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -363,6 +384,13 @@ export class UsersService implements UsersServiceInterface {
             localVarHeaders = localVarHeaders.set('x-api-key', String(xApiKey));
         }
 
+        let localVarCredential: string | undefined;
+        // authentication (basicAuth) required
+        localVarCredential = this.configuration.lookupCredential('basicAuth');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
+        }
+
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
@@ -443,6 +471,13 @@ export class UsersService implements UsersServiceInterface {
         }
         if (authorization !== undefined && authorization !== null) {
             localVarHeaders = localVarHeaders.set('Authorization', String(authorization));
+        }
+
+        let localVarCredential: string | undefined;
+        // authentication (basicAuth) required
+        localVarCredential = this.configuration.lookupCredential('basicAuth');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -530,6 +565,13 @@ export class UsersService implements UsersServiceInterface {
         }
         if (authorization !== undefined && authorization !== null) {
             localVarHeaders = localVarHeaders.set('Authorization', String(authorization));
+        }
+
+        let localVarCredential: string | undefined;
+        // authentication (basicAuth) required
+        localVarCredential = this.configuration.lookupCredential('basicAuth');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
