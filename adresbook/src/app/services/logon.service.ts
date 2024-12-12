@@ -11,47 +11,48 @@ export class LogonService {
   xApiKey: string = 'f0583805-03f6-4c7f-8e40-f83f55b7c077';
   loginResponse?: LoginResponse = undefined;
   errormessage?: string = undefined;
-  
+
+  authenticatedUser?: string = undefined;
+  authenticatedPassword?: string = undefined;
+
   private isLoggedIn = new BehaviorSubject<boolean>(false);
-  private username = new BehaviorSubject<string>(""); 
-  private password = new BehaviorSubject<string>(""); 
 
   isLoggedIn$ = this.isLoggedIn.asObservable();
-  username$ = this.username.asObservable();
-  password$ = this.password.asObservable();
 
-  constructor(private api: LoginService) {    
+  constructor(private api: LoginService) {
   }
 
   doLogOut() {
-    this.username.next("");
-    this.password.next("");
     this.isLoggedIn.next(false);
+    this.authenticatedUser = undefined;
+    this.authenticatedPassword = undefined;
   }
 
   doLogin(username: string, password: string) {
     this.postLogin(this.xApiKey, username, password)
-    .subscribe({
-      next:
-        response => {
-          if (response.body) {
-            this.loginResponse = response.body;
-            if (this.loginResponse.authenticated) {
-              this.username.next(username);
-              this.password.next(password);
-              this.isLoggedIn.next(true);
-            } else {
-              this.username.next("");
-              this.password.next("");
-              this.isLoggedIn.next(false);
+      .subscribe({
+        next:
+          response => {
+            if (response.body) {
+              this.loginResponse = response.body;
+              if (this.loginResponse.authenticated) {
+                this.isLoggedIn.next(true);
+                this.authenticatedUser = username;
+                this.authenticatedPassword = password;
+              } else {
+                this.isLoggedIn.next(false);
+                this.authenticatedUser = undefined;
+                this.authenticatedPassword = undefined;
+              }
             }
-          }
-        },
-      error: error => {
-        this.errormessage = 'Status: ' + error.status + ' details: ' + error.error.detail;
-        console.log('LogonService: '  + this.errormessage);
-      }
-    });
+          },
+        error: error => {
+          this.errormessage = 'Status: ' + error.status + ' details: ' + error.error.detail;
+          this.authenticatedUser = undefined;
+          this.authenticatedPassword = undefined;
+          console.log('LogonService: ' + this.errormessage);
+        }
+      });
   }
 
   /**
@@ -62,14 +63,14 @@ export class LogonService {
      */
   //
   //public postLogin(xApiKey: string, loginRequest?: LoginRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LoginResponse>>;
-  private postLogin(xApiKey: string, username: string, password: string):  Observable<HttpResponse<LoginResponse>> {
+  private postLogin(xApiKey: string, username: string, password: string): Observable<HttpResponse<LoginResponse>> {
     const loginRequest: LoginRequest = { username: username, password: password };
     const headers: HttpHeaders = new HttpHeaders({
-      'x-api-key' : xApiKey
+      'x-api-key': xApiKey
     });
 
-    const options:any = {  
-      headers: headers,   
+    const options: any = {
+      headers: headers,
       httpHeaderAccept: 'application/json'
     };
 

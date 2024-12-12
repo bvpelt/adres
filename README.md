@@ -66,6 +66,7 @@ cat ~/Downloads/contacts.csv | awk '{split($0, a, ","); printf("%s\t--%s\t--%s\t
 - [Spring Security user authentication](https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/dao-authentication-provider.html)
 - [Password encoders](https://www.baeldung.com/spring-security-5-default-password-encoder)
 - [Spring security tutorial](https://www.javainuse.com/boot3/sec)
+- [JWT Token](https://www.youtube.com/watch?v=KxqlJblhzfI)
 
 
 

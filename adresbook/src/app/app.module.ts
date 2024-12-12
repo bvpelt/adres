@@ -22,7 +22,6 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 
-
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
     // set configuration parameters here.
@@ -39,7 +38,7 @@ export function apiConfigFactory (): Configuration {
     AdresComponent,
     AdresdetailComponent,    
     LoginComponent,
-    LogoutComponent
+    LogoutComponent,
   ],
   imports: [
     BrowserModule,

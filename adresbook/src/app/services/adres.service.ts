@@ -24,7 +24,7 @@ export class AdresService {
     const authorisation: string = 'Basic ' + btoa(credentials);
     const options:any = {
       headers: headers,
-      httpHeaderAccept: 'application/json'
+    //  httpHeaderAccept: 'application/json'
     }
 
     return this.api.deleteAdres(id, xApiKey, authorisation, 'response', false, options);

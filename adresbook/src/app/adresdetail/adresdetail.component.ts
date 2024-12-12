@@ -12,49 +12,19 @@ import { Observable } from 'rxjs';
   templateUrl: './adresdetail.component.html',
   styleUrl: './adresdetail.component.css'
 })
-export class AdresdetailComponent {  
+export class AdresdetailComponent {
   adres?: Adres = undefined;
   errormessage?: string = undefined;
 
-  user: string = '';
-  password: string = '';
-
   isLoggedIn$: Observable<boolean>;
-  username$: Observable<string>;
-  password$: Observable<string>;
 
-  constructor(private route: ActivatedRoute, 
-    private adresService: AdresService, 
-    private router: Router, 
+  constructor(private route: ActivatedRoute,
+    private adresService: AdresService,
+    private router: Router,
     private logonService: LogonService) {
     this.getAdres(this.logonService.xApiKey);
 
     this.isLoggedIn$ = this.logonService.isLoggedIn$;
-
-    this.username$ = this.logonService.username$;
-    this.username$.subscribe({
-      next:
-        value => {
-          this.user = value;
-        },
-      error:
-        error => {
-          console.log('AdresdetailComponent LogonService: ' + this.errormessage);
-        }
-    });
-
-    this.password$ = this.logonService.password$;
-    this.password$.subscribe({
-      next:
-        value => {
-          this.password = value;
-        },
-      error:
-        error => {
-          this.errormessage = 'Status: ' + error.status + ' details: ' + error.error.detail;
-          console.log('AdresdetailComponent LogonService: ' + this.errormessage);
-        }
-    });
   }
 
 
@@ -79,7 +49,7 @@ export class AdresdetailComponent {
     console.log("udpate adres");
 
     const adresbody: AdresBody = { street: adres.street, housenumber: adres.housenumber, zipcode: adres.zipcode, city: adres.city };
-    this.adresService.patchAdres(this.user, this.password, adres.id, this.logonService.xApiKey, adresbody)
+    this.adresService.patchAdres(this.logonService.authenticatedUser!, this.logonService.authenticatedPassword!, adres.id, this.logonService.xApiKey, adresbody)
       .subscribe({
         next:
           response => {
@@ -89,7 +59,7 @@ export class AdresdetailComponent {
           this.errormessage = 'AdresdetailComponent Status: ' + error.status + ' details: ' + error.error.detail;
         }
       });
-      
+
     this.router.navigate(['/adresses']);
   }
 
