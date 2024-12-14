@@ -1,5 +1,4 @@
-package com.bsoft.adres.auth;
-
+package com.bsoft.adres.config;
 
 import com.bsoft.adres.security.MyUserDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class AppConfig {
     private final MyUserDetailsService myUserDetailsService;
+
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
@@ -43,6 +43,5 @@ public class AppConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
 
 }

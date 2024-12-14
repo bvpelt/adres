@@ -6,6 +6,12 @@ Adres data
 - Documentation https://docs.spring.io/spring-boot/index.html
 - Springdoc https://springdoc.org/
 
+## Intellij
+Change settings to use performance indicators without being root
+```bash
+sudo sh -c 'echo 1 > /proc/sys/kernel/perf_event_paranoid'
+sudo sh -c 'echo 0 > /proc/sys/kernel/kptr_restrict'
+```
 ## Environment
 
 On my windows laptop start with [setup](setup.cmd)

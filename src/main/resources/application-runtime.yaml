@@ -1,6 +1,5 @@
 info:
-  environment: runtime
-
+  environment: '@activeProfile'
 
 management:
   endpoint:
@@ -48,4 +47,5 @@ spring:
     properties:
       hibernate:
         fomat_sql: true
-
+  profiles:
+    active: runtime

@@ -2,28 +2,19 @@ package com.bsoft.adres.auth;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Slf4j
-@Configuration
-@EnableWebSecurity
+//@Configuration
+//@EnableWebSecurity
 @RequiredArgsConstructor
 public class JwtFilterChain {
 
 
     //private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    private final AuthenticationProvider authenticationProvider;
+    //private final AuthenticationProvider authenticationProvider;
 
-
+/*
     @Bean
     // @Order(2)
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
@@ -42,4 +33,6 @@ public class JwtFilterChain {
         ;
         return http.build();
     }
+
+ */
 }

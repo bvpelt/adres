@@ -14,7 +14,6 @@ logging:
     com:
       bsoft: debug
 
-
 spring:
   application:
     name: '@project.name@'
@@ -23,6 +22,15 @@ spring:
   mvc:
     problemdetails:
       enabled: true
+
+#spring-boot:
+#  run:
+#    profiles: '@activeProfile'
+#  test:
+#    profiles: '@activeProfile'
+#  active:
+#    profile: '@activeProfile'
+
 
 springdoc:
   enable-spring-security: false

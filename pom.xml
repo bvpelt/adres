@@ -44,7 +44,8 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <spring-boot.run.profiles>develop</spring-boot.run.profiles>
+                <activeProfile>develop</activeProfile>
+                <spring.profiles.active>develop</spring.profiles.active>
             </properties>
             <dependencies>
                 <dependency>
@@ -57,10 +58,10 @@
         <profile>
             <id>runtime</id>
             <properties>
-                <spring-boot.run.profiles>runtime</spring-boot.run.profiles>
+                <activeProfile>runtime</activeProfile>
+                <spring.profiles.active>runtime</spring.profiles.active>
             </properties>
             <dependencies>
-
                 <dependency>
                     <groupId>org.flywaydb</groupId>
                     <artifactId>flyway-database-postgresql</artifactId>
