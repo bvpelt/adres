@@ -41,7 +41,6 @@ spring:
     locations: classpath:db/migration/postgresql
   jpa:
     database: POSTGRESQL
-    database-platform: org.hibernate.dialect.PostreSQLDialect
     hibernate:
       ddl-auto: none
     open-in-view: false

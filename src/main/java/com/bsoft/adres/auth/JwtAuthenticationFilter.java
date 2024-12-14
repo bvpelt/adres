@@ -1,4 +1,4 @@
-package com.bsoft.adres.config;
+package com.bsoft.adres.auth;
 
 import com.bsoft.adres.security.MyUserDetailsService;
 import jakarta.servlet.FilterChain;
@@ -43,11 +43,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if ((username != null) && (SecurityContextHolder.getContext().getAuthentication() == null)) { // user not connected
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
             if (jwtService.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 }

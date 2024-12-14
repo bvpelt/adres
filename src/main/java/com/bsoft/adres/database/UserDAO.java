@@ -81,6 +81,10 @@ public class UserDAO {
         this.hash = hashCode();
     }
 
+    public void addRole(RoleDAO role) {
+        roles.add(role);
+    }
+
     public void setRoles(Collection<RoleDAO> roles) {
         roles.forEach(role -> {
             role.addUser(this);

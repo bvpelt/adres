@@ -1,4 +1,4 @@
-package com.bsoft.adres.config;
+package com.bsoft.adres.auth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -48,6 +48,7 @@ public class JwtService {
     ) {
         return Jwts
                 .builder()
+                .setHeaderParam("typ", "JWT")
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
