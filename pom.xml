@@ -46,6 +46,7 @@
             <properties>
                 <activeProfile>develop</activeProfile>
                 <spring.profiles.active>develop</spring.profiles.active>
+                <spring-boot.run.profiles>develop</spring-boot.run.profiles>
             </properties>
             <dependencies>
                 <dependency>
@@ -60,6 +61,7 @@
             <properties>
                 <activeProfile>runtime</activeProfile>
                 <spring.profiles.active>runtime</spring.profiles.active>
+                <spring-boot.run.profiles>runtime</spring-boot.run.profiles>
             </properties>
             <dependencies>
                 <dependency>
@@ -166,7 +168,12 @@
             <version>24.0.1</version>
             <scope>compile</scope>
         </dependency>
-
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.2.220</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

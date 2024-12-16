@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
@@ -26,15 +27,14 @@ import org.springframework.util.Assert;
 import java.util.ArrayList;
 import java.util.List;
 
-@ActiveProfiles("runtime")
 @Slf4j
-//@DataJpaTest
-@SpringBootTest
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Rollback(false)
 public class UserRepositoryTests {
 
-    private PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    
+    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(); // = PasswordEncoderFactories.createDelegatingPasswordEncoder();
     @Autowired
     private TestEntityManager entityManager;
     @Autowired
@@ -76,7 +76,7 @@ public class UserRepositoryTests {
         user.setHash(1);
 
         //BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         log.info("user: {}, password: {} - encoded: {}", user.getUsername(), user.getPassword(), encodedPassword);
         user.setPassword(encodedPassword);
         UserDAO savedUser = usersRepository.save(user);
@@ -100,7 +100,7 @@ public class UserRepositoryTests {
         user.setHash(1);
 
         //BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         log.info("user: {}, password: {} - encoded: {}", user.getUsername(), user.getPassword(), encodedPassword);
         user.setPassword(encodedPassword);
         UserDAO savedUser = usersRepository.save(user);
@@ -124,7 +124,7 @@ public class UserRepositoryTests {
         user.setHash(1);
 
         //BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         log.info("user: {}, password: {} - encoded: {}", user.getUsername(), user.getPassword(), encodedPassword);
         user.setPassword(encodedPassword);
         UserDAO savedUser = usersRepository.save(user);
@@ -192,7 +192,7 @@ public class UserRepositoryTests {
             user.setRoles(roles);
 
             //BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String encodedPassword = passwordEncoder.encode(user.getPassword());
+            String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
             log.info("user: {}, password: {} - encoded: {}", user.getUsername(), user.getPassword(), encodedPassword);
             user.setPassword(encodedPassword);
             UserDAO savedUser = usersRepository.save(user);

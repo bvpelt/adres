@@ -18,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class AppConfig {
     private final MyUserDetailsService myUserDetailsService;
 
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         log.debug("Starting authenticationProvider");
@@ -34,11 +33,13 @@ public class AppConfig {
         return new BCryptPasswordEncoder();
     }
 
+    /*
     @Bean
     public PasswordEncoder passwordEncoder() {
+        log.debug("Starting passwordEncoder returning bCryptPasswordEncoder");
         return new BCryptPasswordEncoder();
     }
-
+*/
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
