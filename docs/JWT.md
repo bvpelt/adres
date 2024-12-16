@@ -20,6 +20,17 @@ The JWT token consists of:
   - claims
 - signature used to verify the claim.
 
+## IntelliJ testsetup with profiles
+
+See
+![image](./images/Intellij-testconfig.png)
+
+## Maven test run
+
+```bash
+(export SPRING_PROFILES_ACTIVE=develop && mvn clean test)
+```
+
 ## Required depedencies
 
 ```xml

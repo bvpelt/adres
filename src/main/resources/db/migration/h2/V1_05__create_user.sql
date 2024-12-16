@@ -1,6 +1,6 @@
 create table "user"
 (
-    id                      bigint       not null auto_increment primary key,
+    id                      bigint       not null primary key,
     username                varchar(24)  not null,
     password                varchar(128) not null,
     email                   varchar(128) not null,

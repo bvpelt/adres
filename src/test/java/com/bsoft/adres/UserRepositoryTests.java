@@ -3,29 +3,26 @@ package com.bsoft.adres;
 import com.bsoft.adres.database.PrivilegeDAO;
 import com.bsoft.adres.database.RoleDAO;
 import com.bsoft.adres.database.UserDAO;
-import com.bsoft.adres.generated.model.Adres;
+import com.bsoft.adres.exceptions.UserExistsException;
 import com.bsoft.adres.repositories.PrivilegeRepository;
 import com.bsoft.adres.repositories.RoleRepository;
 import com.bsoft.adres.repositories.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @DataJpaTest
@@ -33,8 +30,8 @@ import java.util.List;
 @Rollback(false)
 public class UserRepositoryTests {
 
-    
-    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(); // = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(); // = PasswordEncoderFactories.createDelegatingPasswordEncoder();
     @Autowired
     private TestEntityManager entityManager;
     @Autowired
@@ -45,7 +42,7 @@ public class UserRepositoryTests {
     private PrivilegeRepository privilegeRepository;
 
     // test methods go below
-
+    @DisplayName("testCreateUser")
     @Test
     public void testCreateUser() {
         UserDAO user = new UserDAO();
@@ -66,16 +63,16 @@ public class UserRepositoryTests {
         }
     }
 
+    @DisplayName("testPasswordEncoder01")
     @Test
     public void testPasswordEncoder01() {
 
         UserDAO user = new UserDAO();
         user.setEmail("admin-11@gmail.com");
         user.setPassword("12345");
-        user.setUsername("admin");
+        user.setUsername("admin-11");
         user.setHash(1);
 
-        //BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         log.info("user: {}, password: {} - encoded: {}", user.getUsername(), user.getPassword(), encodedPassword);
         user.setPassword(encodedPassword);
@@ -90,13 +87,14 @@ public class UserRepositoryTests {
         }
     }
 
+    @DisplayName("testPasswordEncoder02")
     @Test
     public void testPasswordEncoder02() {
 
         UserDAO user = new UserDAO();
-        user.setEmail("admin-12@gmail.com");
+        user.setEmail("user-12@gmail.com");
         user.setPassword("12345");
-        user.setUsername("user");
+        user.setUsername("user-12");
         user.setHash(1);
 
         //BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -114,16 +112,16 @@ public class UserRepositoryTests {
         }
     }
 
+    @DisplayName("testPasswordEncoder03")
     @Test
     public void testPasswordEncoder03() {
 
         UserDAO user = new UserDAO();
-        user.setEmail("admin-13@gmail.com");
+        user.setEmail("bvpelt-13@gmail.com");
         user.setPassword("12345");
-        user.setUsername("bvpelt");
+        user.setUsername("bvpelt-13");
         user.setHash(1);
 
-        //BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         log.info("user: {}, password: {} - encoded: {}", user.getUsername(), user.getPassword(), encodedPassword);
         user.setPassword(encodedPassword);
@@ -138,6 +136,7 @@ public class UserRepositoryTests {
         }
     }
 
+    @DisplayName("testUserRoles")
     @Test
     public void testUserRoles() {
 
@@ -185,13 +184,12 @@ public class UserRepositoryTests {
             roles.add(savedRole);
 
             UserDAO user = new UserDAO();
-            user.setEmail("admin-23@gmail.com");
+            user.setEmail("test-user-14@gmail.com");
             user.setPassword("12345");
-            user.setUsername("bvpelt");
+            user.setUsername("test-user-14");
             user.setHash(user.hashCode());
             user.setRoles(roles);
 
-            //BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
             log.info("user: {}, password: {} - encoded: {}", user.getUsername(), user.getPassword(), encodedPassword);
             user.setPassword(encodedPassword);
@@ -212,28 +210,9 @@ public class UserRepositoryTests {
             log.info("role: {}", savedRole);
             log.info("user: {}", savedUser);
 
-/*
-            List<GrantedAuthority> authorities = new ArrayList<>();
-
-            Collection<RoleDAO> knownRoles = savedUser.getRoles();
-            for(RoleDAO role1 : knownRoles) {
-                authorities.add(new SimpleGrantedAuthority(role1.getRolename()));
-                log.info("Add role: {}", role.getRolename());
-            }
-
-            savedUser.getRoles().forEach(role1 -> {
-                //authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
-                authorities.add(new SimpleGrantedAuthority(role1.getRolename()));
-                log.info("Add role: {}", role.getRolename());
-            });
-
-             */
-
             List<GrantedAuthority> authorities = new ArrayList<>();
 
             savedUser.getRoles().forEach(role1 -> {
-                //authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
-                //authorities.add(new SimpleGrantedAuthority(role.getRolename()));
                 log.info("get role: {}", role1.getRolename());
                 role1.getPrivileges().forEach(principle1 -> {
                     log.info("get principle: {}", principle1.getName());
@@ -256,6 +235,101 @@ public class UserRepositoryTests {
             if (existprivilege2 != null) {
                 entityManager.remove(existprivilege2);
             }
+        }
+    }
+
+    @DisplayName("secUserTest")
+    @Test
+    public void secUserTest() {
+        boolean existUser1 = false;
+        boolean existUser2 = false;
+        Optional<UserDAO> userByName1 = Optional.empty();
+        Optional<UserDAO> userByEmail1 = Optional.empty();
+        Optional<UserDAO> userByName2 = Optional.empty();
+        Optional<UserDAO> userByEmail2 = Optional.empty();
+        try {
+            Optional<RoleDAO> optionalRoleDAO = roleRepository.findByRolename("USER");
+            RoleDAO defRole = null;
+
+            if (optionalRoleDAO.isPresent()) {
+                defRole = optionalRoleDAO.get();
+            } else {
+                RoleDAO roleDAO = new RoleDAO();
+                roleDAO.setRolename("USER");
+                roleDAO.setDescription("JWT ROLE");
+                defRole = roleRepository.save(roleDAO);
+            }
+
+            String userName = "JWT-Test";
+            String email = "@gmail.com";
+            userByName1 = usersRepository.findByUsername(userName);
+            userByEmail1 = usersRepository.findByEmail(email);
+            existUser1 = userByName1.isPresent() || userByEmail1.isPresent();
+
+            if (existUser1) {
+                throw new UserExistsException("User already exists");
+            }
+            var user1 = new UserDAO();
+            user1.setUsername(userName + "01");
+            user1.setPassword(bCryptPasswordEncoder.encode("JWTPASSWORD"));
+            defRole.addUser(user1);
+            user1.getRoles().add(defRole);
+            user1.setEmail(userName + "01" + email);
+            user1.genHash();
+
+            try {
+                UserDAO newUser1 = usersRepository.save(user1);
+                userByName1 = Optional.of(newUser1);
+            } catch (Exception e) {
+                log.error("User: {} not saved, error: ", user1.getUsername(), e);
+                throw new UserExistsException("User already exists");
+            }
+
+            userByName2 = usersRepository.findByUsername(userName);
+            userByEmail2 = usersRepository.findByEmail(email);
+            existUser2 = userByName2.isPresent() || userByEmail2.isPresent();
+
+            if (existUser2) {
+                throw new UserExistsException("User already exists");
+            }
+            var user2 = new UserDAO();
+            user2.setUsername(userName + "02");
+            user2.setPassword(bCryptPasswordEncoder.encode("JWTPASSWORD"));
+            defRole.addUser(user2);
+            user2.getRoles().add(defRole);
+            user2.setEmail(userName + "02" + email);
+            user2.genHash();
+            try {
+                UserDAO newUser2 = usersRepository.save(user2);
+                userByName2 = Optional.of(newUser2);
+            } catch (Exception e) {
+                log.error("User: {} not saved, error: ", user2.getUsername(), e);
+                throw new UserExistsException("User already exists");
+            }
+        } catch (Exception e) {
+        } finally {
+            if (userByName1.isPresent()) {
+                if (userByEmail1.isPresent()) {
+                    if (!userByName1.get().getId().equals(userByEmail1.get().getId())) {
+                        entityManager.remove(userByEmail1.get());
+                    }
+                }
+                entityManager.remove(userByName1.get());
+            } else {
+                if (userByEmail1.isPresent()) entityManager.remove(userByEmail1.get());
+            }
+
+            if (userByName2.isPresent()) {
+                if (userByEmail2.isPresent()) {
+                    if (!userByName2.get().getId().equals(userByEmail2.get().getId())) {
+                        entityManager.remove(userByEmail2.get());
+                    }
+                }
+                entityManager.remove(userByName2.get());
+            } else {
+                if (userByEmail2.isPresent()) entityManager.remove(userByEmail2.get());
+            }
+
         }
     }
 }

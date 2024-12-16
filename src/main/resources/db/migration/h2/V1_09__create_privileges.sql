@@ -1,6 +1,6 @@
 create table privilege
 (
-    id   bigint not null auto_increment primary key,
+    id   bigint not null primary key,
     name varchar(24),
     hash int
 );

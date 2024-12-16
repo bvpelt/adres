@@ -50,6 +50,7 @@ public class AuthenticationService {
         var user = new UserDAO();
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        defRole.addUser(user);
         user.getRoles().add(defRole);
         user.setEmail(request.getEmail());
 

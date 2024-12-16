@@ -1,6 +1,7 @@
 package com.bsoft.adres;
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -24,8 +25,9 @@ public class PatternTests {
     /users
     /roles
      */
+    @DisplayName("patternTest")
     @Test
-    public void test01() {
+    public void patternTest() {
 
         ArrayList<String> testValues = new ArrayList<String>();
         testValues.add("/adresses");
@@ -81,7 +83,5 @@ public class PatternTests {
             log.info("Start testing value: {} -- result: {}\n", testvalue, found);
 
         });
-
-
     }
 }
