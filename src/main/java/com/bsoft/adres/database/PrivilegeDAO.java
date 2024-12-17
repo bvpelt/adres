@@ -35,6 +35,9 @@ public class PrivilegeDAO {
         roles.add(role);
     }
 
+    public void genHash() {
+        this.hash = hashCode();
+    }
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

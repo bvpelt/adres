@@ -12,3 +12,6 @@ insert into roles_privileges (id, privilegeid, roleid)
 values (3, 2, 1); -- write - admin
 insert into roles_privileges (id, privilegeid, roleid)
 values (4, 2, 3); -- write - operator
+
+ALTER TABLE privilege ALTER COLUMN id RESTART WITH 3;
+ALTER TABLE roles_privileges ALTER COLUMN id RESTART WITH 5;

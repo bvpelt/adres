@@ -71,11 +71,11 @@ public class UserRepositoryTests {
         user.setEmail("admin-11@gmail.com");
         user.setPassword("12345");
         user.setUsername("admin-11");
-        user.setHash(1);
 
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         log.info("user: {}, password: {} - encoded: {}", user.getUsername(), user.getPassword(), encodedPassword);
         user.setPassword(encodedPassword);
+        user.genHash();
         UserDAO savedUser = usersRepository.save(user);
 
         UserDAO existUser = entityManager.find(UserDAO.class, savedUser.getId());
@@ -95,12 +95,11 @@ public class UserRepositoryTests {
         user.setEmail("user-12@gmail.com");
         user.setPassword("12345");
         user.setUsername("user-12");
-        user.setHash(1);
 
-        //BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         log.info("user: {}, password: {} - encoded: {}", user.getUsername(), user.getPassword(), encodedPassword);
         user.setPassword(encodedPassword);
+        user.genHash();
         UserDAO savedUser = usersRepository.save(user);
 
         UserDAO existUser = entityManager.find(UserDAO.class, savedUser.getId());
@@ -120,11 +119,11 @@ public class UserRepositoryTests {
         user.setEmail("bvpelt-13@gmail.com");
         user.setPassword("12345");
         user.setUsername("bvpelt-13");
-        user.setHash(1);
 
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         log.info("user: {}, password: {} - encoded: {}", user.getUsername(), user.getPassword(), encodedPassword);
         user.setPassword(encodedPassword);
+        user.genHash();
         UserDAO savedUser = usersRepository.save(user);
 
         UserDAO existUser = entityManager.find(UserDAO.class, savedUser.getId());

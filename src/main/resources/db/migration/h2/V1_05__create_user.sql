@@ -1,6 +1,6 @@
-create table "user"
+create table users
 (
-    id                      bigint       not null primary key,
+    id                      bigint auto_increment primary key ,
     username                varchar(24)  not null,
     password                varchar(128) not null,
     email                   varchar(128) not null,
@@ -12,5 +12,5 @@ create table "user"
     enabled                 boolean
 );
 
-create unique index user_username_ix on "user" (username);
-create unique index user_email_ix on "user" (email);
+create unique index user_username_ix on users (username);
+create unique index user_email_ix on users (email);

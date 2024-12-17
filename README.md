@@ -17,6 +17,12 @@ sudo sh -c 'echo 0 > /proc/sys/kernel/kptr_restrict'
 On my windows laptop start with [setup](setup.cmd)
 Setup java 21 environment
 
+### Run test with specific profile
+
+```bash
+mvn clean test -P runtime -Dspring.profiles.active=runtime
+mvn clean test -P develop -Dspring.profiles.active=develop
+```
 ## Basic Authentication
 
 See https://docs.spring.io/spring-security/site/apidocs/org/springframework/security/web/authentication/www/BasicAuthenticationFilter.html

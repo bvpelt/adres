@@ -18,7 +18,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
-@Table(name = "user", schema = "public", catalog = "adres")
+@Table(name = "users", schema = "public", catalog = "adres")
 public class UserDAO {
     @Serial
     private static final long serialVersionUID = 1L;

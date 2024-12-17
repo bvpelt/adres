@@ -1,6 +1,6 @@
 create table adres
 (
-    id          bigint not null primary key,
+    id          bigint auto_increment primary key,
     street      text   not null,
     housenumber text   not null,
     zipcode     text,

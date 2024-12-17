@@ -17,23 +17,23 @@ public interface UsersRepository extends PagingAndSortingRepository<UserDAO, Lon
         CrudRepository<UserDAO, Long>,
         JpaSpecificationExecutor<UserDAO> {
 
-    @Query(value = "SELECT * FROM \"user\" where username = :username", nativeQuery = true)
+    @Query(value = "SELECT * FROM users where username = :username", nativeQuery = true)
     Optional<UserDAO> findByUsername(final String username);
 
-    @Query(value = "SELECT * FROM \"user\" where email = :email", nativeQuery = true)
+    @Query(value = "SELECT * FROM users where email = :email", nativeQuery = true)
     Optional<UserDAO> findByEmail(final String email);
 
-    @Query(value = "SELECT * FROM \"user\" where id = :Id", nativeQuery = true)
+    @Query(value = "SELECT * FROM users where id = :Id", nativeQuery = true)
     Optional<UserDAO> findByUserId(Long Id);
 
-    @Query(value = "SELECT * FROM \"user\" where username = :username", nativeQuery = true)
+    @Query(value = "SELECT * FROM users where username = :username", nativeQuery = true)
     Optional<UserDAO> findByUserName(String username);
 
-    @Query(value = "SELECT * FROM \"user\"",
-            countQuery = "SELECT * FROM \"user\"",
+    @Query(value = "SELECT * FROM users",
+            countQuery = "SELECT * FROM users",
             nativeQuery = true)
     List<UserDAO> findAllByPaged(final Pageable pageable);
 
-    @Query(value = "SELECT * FROM \"user\" WHERE hash = :hash", nativeQuery = true)
+    @Query(value = "SELECT * FROM users WHERE hash = :hash", nativeQuery = true)
     Optional<UserDAO> findByHash(@Param("hash") Integer hash);
 }

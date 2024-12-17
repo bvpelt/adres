@@ -55,6 +55,10 @@ public class AdresDAO implements Serializable {
         this.hash = this.hashCode();
     }
 
+    public void genHash() {
+        this.hash = hashCode();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

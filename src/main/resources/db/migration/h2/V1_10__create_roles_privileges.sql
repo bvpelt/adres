@@ -1,6 +1,6 @@
 create table roles_privileges
 (
-    id          bigint not null primary key,
+    id          bigint auto_increment primary key,
     privilegeid bigint,
     roleid      bigint
 );
