@@ -11,7 +11,7 @@
 
     <groupId>com.bsoft</groupId>
     <artifactId>adres</artifactId>
-    <version>0.0.7</version>
+    <version>0.0.8</version>
     <name>adres</name>
 
     <description>Adressen service</description>
@@ -168,12 +168,14 @@
             <version>24.0.1</version>
             <scope>compile</scope>
         </dependency>
+        <!--
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>2.2.220</version>
             <scope>test</scope>
         </dependency>
+        -->
     </dependencies>
 
     <build>
@@ -233,7 +235,7 @@
                         </goals>
                         <configuration>
 
-                            <inputSpec>${project.basedir}/src/main/resources/adres.0.0.7.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/adres.0.0.8.yaml</inputSpec>
 
                             <generatorName>spring</generatorName>
                             <library>spring-boot</library>

@@ -3,6 +3,7 @@ info:
     name: @project.name@
     version: @project.version@
     description: @project.description@
+  environment: '@activeProfile@'
 
 logging:
   level:

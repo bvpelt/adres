@@ -44,6 +44,7 @@ public class AuthenticationService {
             RoleDAO roleDAO = new RoleDAO();
             roleDAO.setRolename("USER");
             roleDAO.setDescription("JWT ROLE");
+            roleDAO.genHash();
             defRole = roleRepository.save(roleDAO);
         }
 
@@ -53,7 +54,7 @@ public class AuthenticationService {
         defRole.addUser(user);
         user.getRoles().add(defRole);
         user.setEmail(request.getEmail());
-
+        user.genHash();
         try {
             usersRepository.save(user);
         } catch (Exception e) {
