@@ -67,10 +67,6 @@ public class UserDAO {
     )
     private Collection<RoleDAO> roles = new ArrayList<>();
 
-    public void genHash() {
-        this.hash = hashCode();
-    }
-
     public UserDAO(final UserBody userbody) {
         this.setUsername(userbody.getUsername());
         this.setPassword(userbody.getPassword());
@@ -82,6 +78,10 @@ public class UserDAO {
         this.setCredentials_non_expired(userbody.getCredentialsNonExpired());
         this.setEnabled(userbody.getEnabled());
         this.setRoles(new HashSet<>());
+        this.hash = hashCode();
+    }
+
+    public void genHash() {
         this.hash = hashCode();
     }
 

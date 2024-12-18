@@ -31,9 +31,13 @@ public class AdresController implements AdressesApi {
     private String version;
 
     @Override
-    public ResponseEntity<Void> _deleteAdres(Long adresId, String xApiKey, String authorization) {
-        log.debug("_deleteAdres apikey: {} authorization: {}", xApiKey, authorization);
-        boolean deleted = adresService.deleteAdres(adresId);
+    public ResponseEntity<Void> _deleteAdres(Long id, String X_API_KEY) {
+//        return null;
+// }
+//    @Override
+//    public ResponseEntity<Void> _deleteAdres(Long adresId, String xApiKey, String authorization) {
+        log.debug("_deleteAdres apikey: {} authorization: {}", X_API_KEY);
+        boolean deleted = adresService.deleteAdres(id);
         if (!deleted) {
             throw new AdresNotDeletedException("Adres not deleted");
         }
@@ -41,9 +45,16 @@ public class AdresController implements AdressesApi {
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
+
+
     @Override
-    public ResponseEntity<Void> _deleteAllAdreses(String xApiKey, String authorization) {
-        log.debug("_deleteAllAdreses apikey: {} authorization: {}", xApiKey, authorization);
+    public ResponseEntity<Void> _deleteAllAdreses(String X_API_KEY) {
+//        return null;
+//    }
+
+//    @Override
+//    public ResponseEntity<Void> _deleteAllAdreses(String xApiKey, String authorization) {
+        log.debug("_deleteAllAdreses apikey: {} authorization: {}", X_API_KEY);
         adresService.deleteAll();
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
@@ -67,31 +78,31 @@ public class AdresController implements AdressesApi {
     }
 
     @Override
-    public ResponseEntity<List<Adres>> _getAdresses(String xApiKey, Integer pageNumber, Integer pageSize, String sortBy) {
-        log.debug("_getAdresses apikey: {}", xApiKey);
+    public ResponseEntity<List<Adres>> _getAdresses(Integer page, Integer size, String X_API_KEY, String sort ) {
+        log.debug("_getAdresses apikey: {}", X_API_KEY);
         List<Sort.Order> sortParameter;
         PageRequest pageRequest;
-        log.info("Get adresses for pagenumber: {} pagesize: {}, sort: {}, api-key: {}", pageNumber, pageSize, sortBy, xApiKey);
+        log.info("Get adresses for pagenumber: {} pagesize: {}, sort: {}, api-key: {}", page, size, sort, X_API_KEY);
         // Validate input parameters
-        if (pageNumber == null) {
-            pageNumber = 1;
+        if (page == null) {
+            page = 1;
         }
-        if (pageNumber < 1) {
+        if (page < 1) {
             throw new InvalidParameterException("Page number must be greater than 0");
         }
-        if (pageSize == null) { // set to default
-            pageSize = 25;
+        if (page == null) { // set to default
+            page = 25;
         }
-        if (pageSize < 1) {
+        if (page < 1) {
             throw new InvalidParameterException("Page size must be greater than 0");
         }
         //
-        if (sortBy != null && !sortBy.isEmpty()) {
+        if (sort != null && !sort.isEmpty()) {
             //sortParameter = ControllerSortUtil.getSortOrder(sortBy);
             //pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortParameter));
-            pageRequest = PageRequest.of(pageNumber - 1, pageSize, Sort.by(sortBy));
+            pageRequest = PageRequest.of(page - 1, size, Sort.by(sort));
         } else {
-            pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+            pageRequest = PageRequest.of(page - 1, size);
         }
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
@@ -99,9 +110,14 @@ public class AdresController implements AdressesApi {
     }
 
     @Override
-    public ResponseEntity<Adres> _patchAdres(Long adresId, String xApiKey, String authorization, AdresBody adresBody) {
-        log.debug("_patchAdres apikey: {} authorization: {}", xApiKey, authorization);
-        Adres adres = adresService.patch(adresId, adresBody);
+    public ResponseEntity<Adres> _patchAdres(Long id, String X_API_KEY, AdresBody adresBody) {
+//        return null;
+//    }
+
+//    @Override
+//    public ResponseEntity<Adres> _patchAdres(Long adresId, String xApiKey, String authorization, AdresBody adresBody) {
+        log.debug("_patchAdres apikey: {} authorization: {}", X_API_KEY);
+        Adres adres = adresService.patch(id, adresBody);
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
                 .body(adres); // Return 201 Created with the created entity
@@ -109,8 +125,13 @@ public class AdresController implements AdressesApi {
     }
 
     @Override
-    public ResponseEntity<Adres> _postAdres(String xApiKey, String authorization, Boolean override, AdresBody adresBody) {
-        log.debug("_postAdres apikey: {} authorization: {}", xApiKey, authorization);
+    public ResponseEntity<Adres> _postAdres(Boolean override, String X_API_KEY, AdresBody adresBody) {
+//        return null;
+//    }
+
+//    @Override
+//    public ResponseEntity<Adres> _postAdres(Boolean override, String X_API_KEY, String authorization, AdresBody adresBody) {
+        log.debug("_postAdres apikey: {} authorization: {}", X_API_KEY);
         if (override == null) {
             override = false;
         }

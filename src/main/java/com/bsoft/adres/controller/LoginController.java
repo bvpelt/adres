@@ -1,18 +1,17 @@
 package com.bsoft.adres.controller;
 
+import com.bsoft.adres.auth.AuthenticationService;
 import com.bsoft.adres.generated.api.LoginApi;
-import com.bsoft.adres.generated.model.LoginRequest;
-import com.bsoft.adres.generated.model.LoginResponse;
-import com.bsoft.adres.generated.model.User;
+import com.bsoft.adres.generated.model.*;
 import com.bsoft.adres.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
@@ -21,15 +20,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class LoginController implements LoginApi {
 
-    @Autowired
     private final UsersService usersService;
 
-    @Autowired
     private final PasswordEncoder passwordEncoder;
+
+    private final AuthenticationService authenticationService;
 
     @Value("${info.project.version}")
     private String version;
 
+    @PostMapping("/login/user")
     @Override
     public ResponseEntity<LoginResponse> _postLogin(String xApiKey, LoginRequest loginRequest) {
         log.debug("_getUser apikey: {}", xApiKey);
@@ -46,6 +46,18 @@ public class LoginController implements LoginApi {
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
                 .body(loginResponse);
+    }
+
+    @PostMapping("/login/jwt/authenticate")
+    @Override
+    public ResponseEntity<AuthenticateResponse> _postAuthenticate(String X_API_KEY, AuthenticateRequest authenticateRequest) {
+        return ResponseEntity.ok(authenticationService.authenticate(authenticateRequest));
+    }
+
+    @PostMapping("/login/jwt/register")
+    @Override
+    public ResponseEntity<AuthenticateResponse> _postRegister(String X_API_KEY, RegisterRequest registerRequest) {
+        return ResponseEntity.ok(authenticationService.register(registerRequest));
     }
 
 }

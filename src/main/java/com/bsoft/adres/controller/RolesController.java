@@ -25,12 +25,10 @@ import java.util.List;
 @Controller
 public class RolesController implements RolesApi {
 
-    @Autowired
     private final RolesService rolesService;
 
     @Value("${info.project.version}")
     private String version;
-
 
     @Override
     public ResponseEntity<Void> _deleteRole(Long roleId, String xApiKey, String authorization) {
@@ -60,8 +58,9 @@ public class RolesController implements RolesApi {
     }
 
     @Override
-    public ResponseEntity<List<Role>> _getRoles(String xApiKey, Integer page, Integer size, String sort) {
-        log.debug("_getRoles apikey: {}", xApiKey);
+    public ResponseEntity<List<Role>> _getRoles(Integer page, Integer size, String sort, String X_API_KEY) {
+
+        log.debug("_getRoles apikey: {}", X_API_KEY);
         List<Sort.Order> sortParameter;
         PageRequest pageRequest;
         log.info("Get adresses for pagenumber: {} pagesize: {}, sort: {}", page, size, sort);
@@ -104,12 +103,6 @@ public class RolesController implements RolesApi {
     @Override
     public ResponseEntity<Role> _postRole(String xApiKey, String authorization, RoleBody roleBody) {
         log.debug("_postRole apikey: {} authorization: {}", xApiKey, authorization);
-/*
-        if (override == null) {
-            override = false;
-        }
-
- */
 
         Role Role = rolesService.postRole(false, roleBody); // Call the service method
         return ResponseEntity.status(HttpStatus.CREATED)

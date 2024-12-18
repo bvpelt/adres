@@ -1,7 +1,6 @@
 package com.bsoft.adres.config;
 
 import com.bsoft.adres.auth.JwtAuthenticationFilter;
-import com.bsoft.adres.security.MyUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
-    private final MyUserDetailsService myUserDetailsService;
+    //private final MyUserDetailsService myUserDetailsService;
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -48,6 +47,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/favicon.ico").permitAll()
                         .requestMatchers("/auth/login").permitAll()
+                        .requestMatchers("/api/v1/auth/authenticate").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/error").permitAll()
                         .requestMatchers("/adres/api/v1/login/**").permitAll()

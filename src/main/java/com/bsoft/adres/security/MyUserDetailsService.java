@@ -29,6 +29,5 @@ public class MyUserDetailsService implements UserDetailsService {
         MyUserPrincipal myUserPrincipal = new MyUserPrincipal(userDAO.get());
 
         return myUserPrincipal;
-
     }
 }

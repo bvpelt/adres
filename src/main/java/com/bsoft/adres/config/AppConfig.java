@@ -10,7 +10,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Slf4j
 @Configuration
@@ -33,13 +32,6 @@ public class AppConfig {
         return new BCryptPasswordEncoder();
     }
 
-    /*
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        log.debug("Starting passwordEncoder returning bCryptPasswordEncoder");
-        return new BCryptPasswordEncoder();
-    }
-*/
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

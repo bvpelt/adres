@@ -25,12 +25,10 @@ import java.util.List;
 @Controller
 public class UsersController implements UsersApi {
 
-    @Autowired
     private final UsersService usersService;
 
     @Value("${info.project.version}")
     private String version;
-
 
     @Override
     public ResponseEntity<Void> _deleteUser(Long userId, String xApiKey, String authorization) {
@@ -49,7 +47,6 @@ public class UsersController implements UsersApi {
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
-
     @Override
     public ResponseEntity<User> _getUser(Long userId, String xApiKey) {
         log.debug("_getUser apikey: {}", xApiKey);
@@ -60,8 +57,9 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<List<User>> _getUsers(String xApiKey, Integer page, Integer size, String sort) {
-        log.debug("_getUsers apikey: {}", xApiKey);
+    public ResponseEntity<List<User>> _getUsers(Integer page, Integer size, String sort, String X_API_KEY) {
+
+        log.debug("_getUsers apikey: {}", X_API_KEY);
         List<Sort.Order> sortParameter;
         PageRequest pageRequest;
         log.info("Get adresses for pagenumber: {} pagesize: {}, sort: {}", page, size, sort);
@@ -104,12 +102,6 @@ public class UsersController implements UsersApi {
     @Override
     public ResponseEntity<User> _postUser(String xApiKey, String authorization, UserBody userBody) {
         log.debug("_postUser apikey: {} authorization: {}", xApiKey, authorization);
-/*
-        if (override == null) {
-            override = false;
-        }
-
- */
 
         User user = usersService.postUser(false, userBody); // Call the service method
         return ResponseEntity.status(HttpStatus.CREATED)

@@ -3,6 +3,9 @@ package com.bsoft.adres.auth;
 import com.bsoft.adres.database.RoleDAO;
 import com.bsoft.adres.database.UserDAO;
 import com.bsoft.adres.exceptions.UserExistsException;
+import com.bsoft.adres.generated.model.AuthenticateRequest;
+import com.bsoft.adres.generated.model.AuthenticateResponse;
+import com.bsoft.adres.generated.model.RegisterRequest;
 import com.bsoft.adres.repositories.RoleRepository;
 import com.bsoft.adres.repositories.UsersRepository;
 import com.bsoft.adres.security.MyUserPrincipal;
@@ -32,7 +35,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     @Transactional
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticateResponse register(RegisterRequest request) {
         log.debug("AuthenticationService register - authenticationresponse for request: {}", request.toString());
 
         Optional<RoleDAO> optionalRoleDAO = roleRepository.findByRolename("USER");
@@ -67,12 +70,10 @@ public class AuthenticationService {
 
         log.debug("AuthenticationService register - generated token: {}", jwtToken);
 
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
-    }
+        return new AuthenticateResponse(jwtToken);
+        }
 
-    public AuthenticationResponse authenticate(AuthenticationReqeust request) {
+    public AuthenticateResponse authenticate(AuthenticateRequest request) {
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
@@ -87,8 +88,6 @@ public class AuthenticationService {
 
         log.debug("AuthenticationService authenticate - generated token: {}", jwtToken);
 
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        return new AuthenticateResponse(jwtToken);
     }
 }
