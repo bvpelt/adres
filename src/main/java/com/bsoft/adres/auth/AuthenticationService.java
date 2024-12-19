@@ -71,7 +71,7 @@ public class AuthenticationService {
         log.debug("AuthenticationService register - generated token: {}", jwtToken);
 
         return new AuthenticateResponse(jwtToken);
-        }
+    }
 
     public AuthenticateResponse authenticate(AuthenticateRequest request) {
 

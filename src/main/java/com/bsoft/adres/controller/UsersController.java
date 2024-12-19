@@ -8,10 +8,10 @@ import com.bsoft.adres.generated.model.UserBody;
 import com.bsoft.adres.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,33 +31,46 @@ public class UsersController implements UsersApi {
     private String version;
 
     @Override
-    public ResponseEntity<Void> _deleteUser(Long userId, String xApiKey, String authorization) {
-        log.debug("_deleteUser apikey: {} authorization: {}", xApiKey, authorization);
-        boolean deleted = usersService.deleteUser(userId);
+    public ResponseEntity<Void> _deleteUser(Long id, String X_API_KEY) {
+        log.debug("_deleteUser apikey: {}", X_API_KEY);
+        boolean deleted = usersService.deleteUser(id);
         if (!deleted) {
             throw new UserNotDeletedException("User not deleted");
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Version", version);
+
+        ResponseEntity<Void> responseEntity = new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+
+        return responseEntity;
     }
 
     @Override
-    public ResponseEntity<Void> _deleteAllUsers(String xApiKey, String authorization) {
-        log.debug("_deleteAllUsers apikey: {} authorization: {}", xApiKey, authorization);
+    public ResponseEntity<Void> _deleteAllUsers(String X_API_KEY) {
+        log.debug("_deleteAllUsers apikey: {}", X_API_KEY);
         usersService.deleteAll();
-        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Version", version);
+
+        ResponseEntity<Void> responseEntity = new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+
+        return responseEntity;
     }
 
     @Override
-    public ResponseEntity<User> _getUser(Long userId, String xApiKey) {
-        log.debug("_getUser apikey: {}", xApiKey);
+    public ResponseEntity<User> _getUser(Long userId, String X_API_KEY) {
+        log.debug("_getUser apikey: {}", X_API_KEY);
         User user = usersService.getUser(userId);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
                 .body(user); // Return 201 Created with the created entity
     }
 
     @Override
-    public ResponseEntity<List<User>> _getUsers(Integer page, Integer size, String sort, String X_API_KEY) {
+    public ResponseEntity<List<User>> _getUsers(Integer page, Integer size, String X_API_KEY, String sort) {
 
         log.debug("_getUsers apikey: {}", X_API_KEY);
         List<Sort.Order> sortParameter;
@@ -84,26 +97,28 @@ public class UsersController implements UsersApi {
         } else {
             pageRequest = PageRequest.of(page - 1, size);
         }
+
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
                 .body(usersService.getUsers(pageRequest));
     }
 
     @Override
-    public ResponseEntity<User> _patchUser(Long userId, String xApiKey, String authorization, UserBody userBody) {
-        log.debug("_patchUser apikey: {} authorization: {}", xApiKey, authorization);
-        User user = usersService.patch(userId, userBody);
+    public ResponseEntity<User> _patchUser(Long id, String X_API_KEY, UserBody userBody) {
+        log.debug("_patchUser apikey: {}", X_API_KEY);
+        User user = usersService.patch(id, userBody);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
                 .body(user); // Return 201 Created with the created entity
     }
 
-
     @Override
-    public ResponseEntity<User> _postUser(String xApiKey, String authorization, UserBody userBody) {
-        log.debug("_postUser apikey: {} authorization: {}", xApiKey, authorization);
+    public ResponseEntity<User> _postUser(String X_API_KEY, UserBody userBody) {
+        log.debug("_postUser apikey: {}", X_API_KEY);
 
         User user = usersService.postUser(false, userBody); // Call the service method
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header("Version", version)
                 .body(user); // Return 201 Created with the created entity

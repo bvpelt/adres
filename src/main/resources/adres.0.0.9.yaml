@@ -28,7 +28,7 @@ paths:
         - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/x-api-key"
-#        - $ref: "#/components/parameters/basicauth"
+      #        - $ref: "#/components/parameters/basicauth"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -48,11 +48,13 @@ paths:
       description: |
         Retrieve all known adresses, using paging and sorting
       operationId: getAdresses
+      security: 
+        - apiKey: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/sort"
-        - $ref: "#/components/parameters/x-api-key"
+        #- $ref: "#/components/parameters/x-api-key"
       responses:
         "200":
           $ref: "#/components/responses/Adresses"
@@ -80,7 +82,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/override"
         - $ref: "#/components/parameters/x-api-key"
-#        - $ref: "#/components/parameters/basicauth"
+      #        - $ref: "#/components/parameters/basicauth"
       requestBody:
         description: Request parameters
         required: true
@@ -100,7 +102,6 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
-
 
   /adresses/{id}:
     get:
@@ -138,7 +139,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
-#        - $ref: "#/components/parameters/basicauth"
+      #        - $ref: "#/components/parameters/basicauth"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -164,7 +165,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
-#        - $ref: "#/components/parameters/basicauth"
+      #        - $ref: "#/components/parameters/basicauth"
       requestBody:
         description: Request parameters
         content:
@@ -185,7 +186,6 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
-
 
   /adresses/{id}/persons:
     get:
@@ -210,7 +210,6 @@ paths:
         "5XX":
           $ref: "#/components/responses/ServerError"
 
-
   /login/user:
     post:
       tags:
@@ -222,7 +221,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/x-api-key"
       requestBody:
-        description: Request parameters        
+        description: Request parameters
         required: true
         content:
           application/json:
@@ -240,7 +239,6 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
-
 
   /login/jwt/authenticate:
     post:
@@ -269,14 +267,13 @@ paths:
         "429":
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
-          $ref: "#/components/responses/ServerError"     
-
+          $ref: "#/components/responses/ServerError"
 
   /login/jwt/register:
     post:
       tags:
         - Login
-      summary: Register for the application 
+      summary: Register for the application
       description: |
         Register for the application by providing username password. A JWT token will be returned an must be used as token for other calls
       operationId: postRegister
@@ -299,8 +296,7 @@ paths:
         "429":
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
-          $ref: "#/components/responses/ServerError"               
-
+          $ref: "#/components/responses/ServerError"
 
   /persons:
     get:
@@ -337,7 +333,7 @@ paths:
         - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/x-api-key"
-#        - $ref: "#/components/parameters/basicauth"
+      #        - $ref: "#/components/parameters/basicauth"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -368,7 +364,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/override"
         - $ref: "#/components/parameters/x-api-key"
-#        - $ref: "#/components/parameters/basicauth"
+      #        - $ref: "#/components/parameters/basicauth"
       requestBody:
         description: Request parameters
         content:
@@ -387,7 +383,6 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
-
 
   /persons/{id}:
     get:
@@ -425,7 +420,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
-#        - $ref: "#/components/parameters/basicauth"
+      #        - $ref: "#/components/parameters/basicauth"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -451,7 +446,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
-#        - $ref: "#/components/parameters/basicauth"
+      #        - $ref: "#/components/parameters/basicauth"
       requestBody:
         description: Request parameters
         content:
@@ -472,7 +467,6 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
-
 
   /persons/{id}/adresses:
     get:
@@ -496,7 +490,6 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
-
 
   /roles:
     get:
@@ -536,7 +529,7 @@ paths:
         - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/x-api-key"
-        - $ref: "#/components/parameters/basicauth"
+      #        - $ref: "#/components/parameters/basicauth"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -565,7 +558,7 @@ paths:
         - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/x-api-key"
-        - $ref: "#/components/parameters/basicauth"
+      #        - $ref: "#/components/parameters/basicauth"
       requestBody:
         description: Request parameters
         content:
@@ -584,7 +577,6 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
-
 
   /roles/{id}:
     get:
@@ -625,7 +617,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
-        - $ref: "#/components/parameters/basicauth"
+      #        - $ref: "#/components/parameters/basicauth"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -651,7 +643,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
-        - $ref: "#/components/parameters/basicauth"
+      #        - $ref: "#/components/parameters/basicauth"
       requestBody:
         description: Request parameters
         content:
@@ -672,7 +664,6 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
-
 
   /users:
     get:
@@ -712,7 +703,7 @@ paths:
         - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/x-api-key"
-        - $ref: "#/components/parameters/basicauth"
+      #        - $ref: "#/components/parameters/basicauth"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -743,7 +734,7 @@ paths:
         - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/x-api-key"
-        - $ref: "#/components/parameters/basicauth"
+      #        - $ref: "#/components/parameters/basicauth"
       requestBody:
         description: Request parameters
         content:
@@ -762,7 +753,6 @@ paths:
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
           $ref: "#/components/responses/ServerError"
-
 
   /users/{id}:
     get:
@@ -803,7 +793,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
-        - $ref: "#/components/parameters/basicauth"
+      #        - $ref: "#/components/parameters/basicauth"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -829,7 +819,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
-        - $ref: "#/components/parameters/basicauth"
+      #        - $ref: "#/components/parameters/basicauth"
       requestBody:
         description: Request parameters
         content:
@@ -910,7 +900,7 @@ components:
     AuthenticationResponse:
       summary: Authentication response
       value:
-        token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJwYXNzd29yZCI6Imthc2pkZmtlaSIsImVtYWlsIjoidXNlckBnbWFpbC5jb20iLCJwaG9uZSI6IiszMTY0MDk0OTM0NDUifQ.eO4foDxLy8Rg5EtKLGRTFItLD1y-B0iHHo-tjRyVLn0'
+        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJwYXNzd29yZCI6Imthc2pkZmtlaSIsImVtYWlsIjoidXNlckBnbWFpbC5jb20iLCJwaG9uZSI6IiszMTY0MDk0OTM0NDUifQ.eO4foDxLy8Rg5EtKLGRTFItLD1y-B0iHHo-tjRyVLn0"
 
     Deleted:
       summary: An entry is deleted succesfull
@@ -921,7 +911,7 @@ components:
       value:
         authenticated: true
 
-    LoginRequest: 
+    LoginRequest:
       summary: Login request
       value:
         username: jandegroot
@@ -1059,7 +1049,6 @@ components:
         email: "user@gmail.com"
         phone: "+316409493445"
 
-
   headers:
     version:
       required: true
@@ -1082,7 +1071,7 @@ components:
       in: header
       required: true
       schema:
-        $ref: '#/components/schemas/BasicAuthorization'
+        $ref: "#/components/schemas/BasicAuthorization"
 
     override:
       name: Override
@@ -1123,10 +1112,10 @@ components:
     sort:
       name: sort
       in: query
-      description: field names to sort on      
+      description: field names to sort on
       schema:
         type: string
-        default: ''
+        default: ""
 
     x-api-key:
       name: "X-API-KEY"
@@ -1134,7 +1123,7 @@ components:
       description: An api key used to track usage of the api
       required: true
       schema:
-        $ref: '#/components/schemas/x-api-key'
+        $ref: "#/components/schemas/x-api-key"
 
   schemas:
     Adres:
@@ -1213,10 +1202,10 @@ components:
         - username
         - password
       properties:
-        username: 
-          $ref: '#/components/schemas/Username'
+        username:
+          $ref: "#/components/schemas/Username"
         password:
-          $ref: '#/components/schemas/Password'
+          $ref: "#/components/schemas/Password"
 
     BasicAuthorization:
       type: string
@@ -1321,21 +1310,21 @@ components:
       items:
         $ref: "#/components/schemas/Person"
 
-    RegisterRequest: 
+    RegisterRequest:
       type: object
       required:
-      - username
-      - password
-      - email
+        - username
+        - password
+        - email
       properties:
         username:
-          $ref: '#/components/schemas/Username'
+          $ref: "#/components/schemas/Username"
         password:
-          $ref: '#/components/schemas/Password'
+          $ref: "#/components/schemas/Password"
         email:
-          $ref: '#/components/schemas/Email'
+          $ref: "#/components/schemas/Email"
         phone:
-          $ref: '#/components/schemas/Phone'
+          $ref: "#/components/schemas/Phone"
 
     AuthenticateResponse:
       type: object
@@ -1392,13 +1381,13 @@ components:
         - email
       properties:
         username:
-          $ref: '#/components/schemas/Username'
+          $ref: "#/components/schemas/Username"
         password:
-          $ref: '#/components/schemas/Password'
+          $ref: "#/components/schemas/Password"
         email:
-          $ref: '#/components/schemas/Email'
+          $ref: "#/components/schemas/Email"
         phone:
-          $ref: '#/components/schemas/Phone'
+          $ref: "#/components/schemas/Phone"
         accountNonExpired:
           type: boolean
           default: true
@@ -1419,7 +1408,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Role"
-           
+
     Username:
       type: string
       maxLength: 24
@@ -1433,7 +1422,7 @@ components:
     Phone:
       type: string
       maxLength: 24
-      example: "+316409493445" 
+      example: "+316409493445"
 
     Problem:
       type: object
@@ -1481,7 +1470,8 @@ components:
           type: string
 
     x-api-key:
-      type: string        
+      type: string
+      pattern: '^([0-9a-f]{8})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{12})'
 
   responses:
     Adres:
@@ -1528,7 +1518,7 @@ components:
       headers:
         version:
           $ref: "#/components/headers/version"
-    
+
     AuthenticateResponse:
       description: The response on an authentication request
       content:
@@ -1544,6 +1534,10 @@ components:
 
     Deleted:
       description: Resource deleted
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
     AlreadyExists:
       description: Resource already exists
       content:
@@ -1553,6 +1547,9 @@ components:
           examples:
             badrequest:
               $ref: "#/components/examples/Problem-303"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
 
     IllegalInput:
       description: Ongeldige input
@@ -1563,6 +1560,9 @@ components:
           examples:
             badrequest:
               $ref: "#/components/examples/Problem-400"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
 
     LoginResponse:
       description: The response on a login request
@@ -1572,9 +1572,12 @@ components:
             $ref: "#/components/schemas/LoginResponse"
           examples:
             accessallowed:
-              $ref: '#/components/examples/LoginResponseAllowed'
+              $ref: "#/components/examples/LoginResponseAllowed"
             accessdenied:
-              $ref: '#/components/examples/LoginResponseDenied'
+              $ref: "#/components/examples/LoginResponseDenied"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
 
     NotFound:
       description: Geen resultaat gevonden
@@ -1585,6 +1588,9 @@ components:
           examples:
             notfound:
               $ref: "#/components/examples/Problem-404"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
 
     ServerError:
       description: Ongeldige input
@@ -1595,6 +1601,9 @@ components:
           examples:
             servererror:
               $ref: "#/components/examples/Problem-5XX"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
 
     ToManyRequests:
       description: Ongeldige input
@@ -1605,6 +1614,9 @@ components:
           examples:
             tomanyrequests:
               $ref: "#/components/examples/Problem-429"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
 
     Person:
       description: A specific person
@@ -1676,7 +1688,7 @@ components:
       #            emptylist:
       #              $ref: "#/components/examples/UserList-01"
       #            fulllist:
-      #              $ref: "#/components/examples/UserList-02"      
+      #              $ref: "#/components/examples/UserList-02"
       headers:
         version:
           $ref: "#/components/headers/version"
@@ -1712,6 +1724,10 @@ components:
           $ref: "#/components/headers/version"
 
   securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-KEY
     basicAuth:
       type: http
       scheme: basic

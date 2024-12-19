@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,44 +33,48 @@ public class PersonController implements PersonsApi {
 
     @Override
     public ResponseEntity<Void> _deleteAllPersons(String X_API_KEY) {
-//        return null;
-//    }
-//    @Override
-//    public ResponseEntity<Void> _deleteAllPersons(String xApiKey, String authorization) {
         log.debug("_deleteAllPersons apikey: {}", X_API_KEY);
         personService.deleteAll();
-        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-    }
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Version", version);
+
+        ResponseEntity<Void> responseEntity = new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+
+        return responseEntity;
+    }
 
     @Override
     public ResponseEntity<Void> _deletePerson(Long id, String X_API_KEY) {
-//        return null;
-//    }
-//    @Override
-//    public ResponseEntity<Void> _deletePerson(Long personId, String xApiKey, String authorization) {
         log.debug("_deletePerson apikey: {}", X_API_KEY);
         boolean deleted = personService.deletePerson(id);
         if (!deleted) {
             throw new PersonNotDeletedException("Person not deleted");
         }
 
-        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Version", version);
+
+        ResponseEntity<Void> responseEntity = new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+
+        return responseEntity;
     }
 
     @Override
-    public ResponseEntity<PersonAdres> _getPeronsAdresses(Long personId, String xApiKey) {
-        log.debug("_getPeronsAdresses apikey: {}", xApiKey);
+    public ResponseEntity<PersonAdres> _getPeronsAdresses(Long personId, String X_API_KEY) {
+        log.debug("_getPeronsAdresses apikey: {}", X_API_KEY);
         PersonAdres personAdres = personService.getPersonAdres(personId);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
                 .body(personAdres);
     }
 
     @Override
-    public ResponseEntity<Person> _getPerson(Long personId, String xApiKey) {
-        log.debug("_getPerson apikey: {}", xApiKey);
+    public ResponseEntity<Person> _getPerson(Long personId, String X_API_KEY) {
+        log.debug("_getPerson apikey: {}", X_API_KEY);
         Person person = personService.getPerson(personId);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
                 .body(person); // Return 201 Created with the created entity
@@ -77,7 +82,6 @@ public class PersonController implements PersonsApi {
 
     @Override
     public ResponseEntity<List<Person>> _getPersons(Integer page, Integer size, String X_API_KEY, String sort) {
-
         log.debug("_getPersons apikey: {}", X_API_KEY);
         List<Sort.Order> sortParameter;
         PageRequest pageRequest;
@@ -103,6 +107,7 @@ public class PersonController implements PersonsApi {
         } else {
             pageRequest = PageRequest.of(page - 1, size);
         }
+
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
                 .body(personService.getPersons(pageRequest));
@@ -110,12 +115,9 @@ public class PersonController implements PersonsApi {
 
     @Override
     public ResponseEntity<Person> _patchPerson(Long id, String X_API_KEY, PersonBody personBody) {
-//        return null;
-//    }
-//    @Override
-//    public ResponseEntity<Person> _patchPerson(Long adresId, String xApiKey, String authorization, PersonBody adresBody) {
         log.debug("_patchPerson apikey: {}", X_API_KEY);
         Person person = personService.patch(id, personBody);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
                 .body(person); // Return 201 Created with the created entity
@@ -124,15 +126,12 @@ public class PersonController implements PersonsApi {
 
     @Override
     public ResponseEntity<Person> _postPerson(Boolean override, String X_API_KEY, PersonBody personBody) {
-//        return null;
-//    }
-//    @Override
-//    public ResponseEntity<Person> _postPerson(Boolean override, String X_API_KEY, String authorization, PersonBody personBody) {
         log.debug("_postPerson apikey: {}", X_API_KEY);
         if (override == null) {
             override = false;
         }
         Person person = personService.postPerson(override, personBody); // Call the service method
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header("Version", version)
                 .body(person); // Return 201 Created with the created entity
