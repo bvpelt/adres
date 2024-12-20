@@ -1,19 +1,19 @@
 -- users
-insert into users (id, username, password, email, phone, account_non_expired, account_non_locked,
+insert into users (id, username, password, email, phone, hash, account_non_expired, account_non_locked,
                    credentials_non_expired,
                    enabled)
 values (1, 'admin', '$2a$10$qdMGbms2pgUKE3igwH.5pOmG7X7PS8g2G5UZDtMVho8MtrzChSBnq', 'admin-01@gmail.com',
-        '0645342321', true, true, true, true);
-insert into users (id, username, password, email, phone, account_non_expired, account_non_locked,
+        '0645342321', -1, true, true, true, true);
+insert into users (id, username, password, email, phone, hash, account_non_expired, account_non_locked,
                    credentials_non_expired,
                    enabled)
-values (2, 'user', '$2a$10$0aE7M3rERZG1FM8l5Nqc.O2Dz2IYq712cxu7QczZv6qIieSq/I2am', 'admin-02@gmail.com',
-        '0645342321', true, true, true, true);
-insert into users (id, username, password, email, phone, account_non_expired, account_non_locked,
+values (2, 'user', '$2a$10$1ToAmBgcT0lSu3BVYsy7Cu3aSc5mabxF9/l1MOR9ngfkR1SpWgbR6', 'admin-02@gmail.com',
+        '0612345678', -135942615, true, true, true, true);
+insert into users (id, username, password, email, phone, hash, account_non_expired, account_non_locked,
                    credentials_non_expired,
                    enabled)
 values (3, 'bvpelt', '$2a$10$4tsz2Vbz7T1TvVfjOrnxtu6vr058B.SjIhi5KS5uk9Q1mvl7hcora', 'admin-03@gmail.com',
-        '0645342321', true, true, true, true);
+        '0645342321', -135942615, true, true, true, true);
 
 -- roles
 insert into role (id, rolename, description)

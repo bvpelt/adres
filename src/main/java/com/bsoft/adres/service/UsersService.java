@@ -11,6 +11,7 @@ import com.bsoft.adres.repositories.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,12 +25,8 @@ public class UsersService {
 
     private final UsersRepository usersRepository;
 
-    /*
-        @Autowired
-        public UsersService(final UsersRepository usersRepository) {
-            this.usersRepository = usersRepository;
-        }
-    */
+    private final BCryptPasswordEncoder bCryptPasswordEncoder; // = new BCryptPasswordEncoder();
+
     public void deleteAll() {
         try {
             usersRepository.deleteAll();
@@ -112,6 +109,11 @@ public class UsersService {
                     throw new UserExistsException("User " + userDAO + " already exists cannot insert again");
                 }
             }
+
+            String pwd = userBody.getPassword();
+            String encodedPwd = bCryptPasswordEncoder.encode(pwd);
+            userDAO.setPassword(encodedPwd);
+            userDAO.genHash();
 
             usersRepository.save(userDAO);
 

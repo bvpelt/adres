@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,8 @@ public class AuthenticationService {
 
     private final RoleRepository roleRepository;
 
-    private final PasswordEncoder passwordEncoder;
+    //private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder; // = new BCryptPasswordEncoder();
 
     private final JwtService jwtService;
 
@@ -53,7 +55,7 @@ public class AuthenticationService {
 
         var user = new UserDAO();
         user.setUsername(request.getUsername());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
         defRole.addUser(user);
         user.getRoles().add(defRole);
         user.setEmail(request.getEmail());

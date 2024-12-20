@@ -20,6 +20,11 @@ The JWT token consists of:
   - claims
 - signature used to verify the claim.
 
+## Generate a signing key
+Use one of the [tools](#Tools) described below to generate a signing key.
+For JWT tokens the minimum keylength is 256 bits (32 bytes).
+
+
 ## IntelliJ testsetup with profiles
 
 See
@@ -53,7 +58,9 @@ See
 
 ## Tools
 
-- Key generator: https://allkeysgenerator.com/random ? 
+- Key generators: 
+  - https://allkeysgenerator.com/random (does not exist)
+  - https://jwtsecret.com/generate 
 - OAuth tools: https://oauth.tools/
 
 

@@ -15,7 +15,6 @@ import java.util.Optional;
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
-    //@Autowired
     private final UsersRepository usersRepository;
 
     @Override
