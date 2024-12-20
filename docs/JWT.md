@@ -53,6 +53,8 @@ See
 
 ## Tools
 
-- Key generator: https://allkeysgenerator.com/random ?
+- Key generator: https://allkeysgenerator.com/random ? 
+- OAuth tools: https://oauth.tools/
+
 
 1:25
