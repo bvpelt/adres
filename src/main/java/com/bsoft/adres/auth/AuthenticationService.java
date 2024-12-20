@@ -62,7 +62,7 @@ public class AuthenticationService {
             usersRepository.save(user);
         } catch (Exception e) {
             log.error("User: {} not saved", user.getUsername());
-            throw new UserExistsException("User already exists");
+            throw new UserExistsException("User already exists based on username or email");
         }
 
         MyUserPrincipal myUserPrincipal = new MyUserPrincipal(user);

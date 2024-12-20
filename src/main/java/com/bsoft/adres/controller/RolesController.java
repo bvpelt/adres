@@ -70,7 +70,7 @@ public class RolesController implements RolesApi {
     }
 
     @Override
-    public ResponseEntity<List<Role>> _getRoles(Integer page, Integer size, String X_API_KEY, String sort) {
+    public ResponseEntity<List<Role>> _getRoles(Integer page, Integer size, String sort, String X_API_KEY) {
 
         log.debug("_getRoles apikey: {}", X_API_KEY);
         List<Sort.Order> sortParameter;

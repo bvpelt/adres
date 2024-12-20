@@ -70,7 +70,7 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<List<User>> _getUsers(Integer page, Integer size, String X_API_KEY, String sort) {
+    public ResponseEntity<List<User>> _getUsers(Integer page, Integer size, String sort, String X_API_KEY) {
 
         log.debug("_getUsers apikey: {}", X_API_KEY);
         List<Sort.Order> sortParameter;

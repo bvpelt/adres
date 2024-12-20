@@ -81,7 +81,7 @@ public class PersonController implements PersonsApi {
     }
 
     @Override
-    public ResponseEntity<List<Person>> _getPersons(Integer page, Integer size, String X_API_KEY, String sort) {
+    public ResponseEntity<List<Person>> _getPersons(Integer page, Integer size, String sort, String X_API_KEY) {
         log.debug("_getPersons apikey: {}", X_API_KEY);
         List<Sort.Order> sortParameter;
         PageRequest pageRequest;
