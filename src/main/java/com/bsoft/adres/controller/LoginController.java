@@ -31,8 +31,8 @@ public class LoginController implements LoginApi {
 
     @PostMapping("/login/user")
     @Override
-    public ResponseEntity<LoginResponse> _postLogin(String xApiKey, LoginRequest loginRequest) {
-        log.debug("_getUser apikey: {}", xApiKey);
+    public ResponseEntity<LoginResponse> _postLogin(LoginRequest loginRequest, String X_API_KEY) {
+        log.debug("_getUser apikey: {}", X_API_KEY);
         User user = usersService.getUserByName(loginRequest.getUsername());
         String encodedPassword = passwordEncoder.encode(loginRequest.getPassword());
 
@@ -51,12 +51,14 @@ public class LoginController implements LoginApi {
     @PostMapping("/login/jwt/authenticate")
     @Override
     public ResponseEntity<AuthenticateResponse> _postAuthenticate(String X_API_KEY, AuthenticateRequest authenticateRequest) {
+        log.debug("_postAuthenticate apikey: {}", X_API_KEY);
         return ResponseEntity.ok(authenticationService.authenticate(authenticateRequest));
     }
 
     @PostMapping("/login/jwt/register")
     @Override
     public ResponseEntity<AuthenticateResponse> _postRegister(String X_API_KEY, RegisterRequest registerRequest) {
+        log.debug("_postRegister apikey: {}", X_API_KEY);
         return ResponseEntity.ok(authenticationService.register(registerRequest));
     }
 

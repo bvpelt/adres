@@ -1133,7 +1133,7 @@ components:
     Roles:
       type: array
       items:
-        $ref: "#/components/schemas/Role"          
+        $ref: "#/components/schemas/Role"
 
     User:
       allOf:

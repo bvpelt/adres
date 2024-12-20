@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SpringDocConfiguration {
+
     @Value("${info.project.version}")
     private String version;
 

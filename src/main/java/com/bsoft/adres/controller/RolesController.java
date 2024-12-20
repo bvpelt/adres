@@ -75,7 +75,7 @@ public class RolesController implements RolesApi {
         log.debug("_getRoles apikey: {}", X_API_KEY);
         List<Sort.Order> sortParameter;
         PageRequest pageRequest;
-        log.info("Get adresses for pagenumber: {} pagesize: {}, sort: {}", page, size, sort);
+        log.trace("Get adresses for pagenumber: {} pagesize: {}, sort: {}", page, size, sort);
         // Validate input parameters
         if (page == null) {
             page = 1;

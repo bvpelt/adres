@@ -85,7 +85,7 @@ public class PersonController implements PersonsApi {
         log.debug("_getPersons apikey: {}", X_API_KEY);
         List<Sort.Order> sortParameter;
         PageRequest pageRequest;
-        log.info("Get persons for pagenumber: {} pagesize: {}, sort: {}", page, size, sort);
+        log.trace("Get persons for pagenumber: {} pagesize: {}, sort: {}", page, size, sort);
         // Validate input parameters
         if (page == null) {
             page = 1;

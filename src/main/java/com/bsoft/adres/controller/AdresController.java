@@ -7,7 +7,6 @@ import com.bsoft.adres.generated.model.Adres;
 import com.bsoft.adres.generated.model.AdresBody;
 import com.bsoft.adres.generated.model.AdresPerson;
 import com.bsoft.adres.service.AdresService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,8 +32,8 @@ public class AdresController implements AdressesApi {
     private String version;
 
     @Override
-    public ResponseEntity<Void> _deleteAdres(Long id, @Valid String X_API_KEY) {
-        log.debug("_deleteAdres apikey: {} authorization: {}", X_API_KEY);
+    public ResponseEntity<Void> _deleteAdres(Long id, String X_API_KEY) {
+        log.debug("_deleteAdres apikey: {}", X_API_KEY);
         boolean deleted = adresService.deleteAdres(id);
         if (!deleted) {
             throw new AdresNotDeletedException("Adres not deleted");
@@ -48,10 +47,9 @@ public class AdresController implements AdressesApi {
         return responseEntity;
     }
 
-
     @Override
     public ResponseEntity<Void> _deleteAllAdreses(String X_API_KEY) {
-        log.debug("_deleteAllAdreses apikey: {} authorization: {}", X_API_KEY);
+        log.debug("_deleteAllAdreses apikey: {}", X_API_KEY);
         adresService.deleteAll();
 
         HttpHeaders headers = new HttpHeaders();
@@ -83,16 +81,11 @@ public class AdresController implements AdressesApi {
     }
 
     @Override
-    public ResponseEntity<List<Adres>> _getAdresses(Integer page, Integer size, String sort) {
-//        return null;
-//    }
-
-//    @Override
-//    public ResponseEntity<List<Adres>> _getAdresses(Integer page, Integer size, String X_API_KEY, String sort) {
-//        log.debug("_getAdresses apikey: {}", X_API_KEY);
+    public ResponseEntity<List<Adres>> _getAdresses(Integer page, Integer size, String sort, String X_API_KEY) {
+        log.debug("_getAdresses apikey: {}", X_API_KEY);
         List<Sort.Order> sortParameter;
         PageRequest pageRequest;
-        log.info("Get adresses for pagenumber: {} pagesize: {}, sort: {}, api-key: {}", page, size, sort, X_API_KEY);
+        log.trace("_getAdresses pagenumber: {} pagesize: {}, sort: {}, api-key: {}", page, size, sort, "");
         // Validate input parameters
         if (page == null) {
             page = 1;
@@ -122,7 +115,7 @@ public class AdresController implements AdressesApi {
 
     @Override
     public ResponseEntity<Adres> _patchAdres(Long id, String X_API_KEY, AdresBody adresBody) {
-        log.debug("_patchAdres apikey: {} authorization: {}", X_API_KEY);
+        log.debug("_patchAdres apikey: {}", X_API_KEY);
         Adres adres = adresService.patch(id, adresBody);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -131,8 +124,8 @@ public class AdresController implements AdressesApi {
     }
 
     @Override
-    public ResponseEntity<Adres> _postAdres(Boolean override, String X_API_KEY, AdresBody adresBody) {
-        log.debug("_postAdres apikey: {} authorization: {}", X_API_KEY);
+    public ResponseEntity<Adres> _postAdres(Boolean override, AdresBody adresBody, String X_API_KEY) {
+        log.debug("_postAdres apikey: {}", X_API_KEY);
         if (override == null) {
             override = false;
         }

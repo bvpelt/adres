@@ -1,6 +1,6 @@
 create table users
 (
-    id                      bigint auto_increment primary key ,
+    id                      bigint auto_increment primary key,
     username                varchar(24)  not null,
     password                varchar(128) not null,
     email                   varchar(128) not null,

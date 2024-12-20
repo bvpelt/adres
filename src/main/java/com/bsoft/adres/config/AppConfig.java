@@ -28,7 +28,7 @@ public class AppConfig {
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        log.debug("Starting bCryptPasswordEncoder");
+        log.trace("Starting bCryptPasswordEncoder");
         return new BCryptPasswordEncoder();
     }
 

@@ -6,12 +6,12 @@ servers:
   - url: http://localhost:8080/{basePath}
     description: development
     variables:
-      basePath: 
+      basePath:
         default: "adres/api/v1"
   - url: http://localhost/{basePath}
     description: production
     variables:
-      basePath: 
+      basePath:
         default: "adres/api/v1"
 
 paths:
@@ -24,7 +24,7 @@ paths:
         Delete all adres
       operationId: deleteAllAdreses
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/x-api-key"
         - $ref: "#/components/parameters/basicauth"
@@ -50,7 +50,7 @@ paths:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/sort"
-        - $ref: "#/components/parameters/x-api-key"      
+        - $ref: "#/components/parameters/x-api-key"
       responses:
         "200":
           $ref: "#/components/responses/Adresses"
@@ -72,7 +72,7 @@ paths:
         If the hash value already exists in the backend, the adres is considered to exist
       operationId: postAdres
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/override"
         - $ref: "#/components/parameters/x-api-key"
@@ -106,7 +106,7 @@ paths:
       operationId: getAdres
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/x-api-key"    
+        - $ref: "#/components/parameters/x-api-key"
       responses:
         "200":
           $ref: "#/components/responses/Adres"
@@ -126,7 +126,7 @@ paths:
         Delete only the specified adres
       operationId: deleteAdres
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
@@ -150,7 +150,7 @@ paths:
         Update only the adres specified with adresId
       operationId: patchAdres
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
@@ -186,7 +186,7 @@ paths:
       operationId: getAdresPerons
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/x-api-key"      
+        - $ref: "#/components/parameters/x-api-key"
       responses:
         "200":
           $ref: "#/components/responses/AdresPerson"
@@ -258,7 +258,7 @@ paths:
         Delete all persons
       operationId: deleteAllPersons
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/x-api-key"
         - $ref: "#/components/parameters/basicauth"
@@ -286,7 +286,7 @@ paths:
         If the hash value already exists in the backend, the person is considered to exist
       operationId: postPerson
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/override"
         - $ref: "#/components/parameters/x-api-key"
@@ -340,7 +340,7 @@ paths:
         Delete only the specified person
       operationId: deletePerson
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
@@ -364,7 +364,7 @@ paths:
         Update only the person specified with personId
       operationId: patchPerson
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
@@ -377,7 +377,7 @@ paths:
               $ref: "#/components/schemas/PersonBody"
             examples:
               person:
-                $ref: "#/components/examples/PersonBody"      
+                $ref: "#/components/examples/PersonBody"
       responses:
         "200":
           $ref: "#/components/responses/Person"
@@ -422,7 +422,7 @@ paths:
         Retrieve all known roles, using paging and sorting
       operationId: getRoles
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
@@ -445,7 +445,7 @@ paths:
         Delete all roles
       operationId: deleteAllRoles
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/x-api-key"
         - $ref: "#/components/parameters/basicauth"
@@ -472,7 +472,7 @@ paths:
         If the hash value already exists in the backend, the role is considered to exist
       operationId: postRole
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/x-api-key"
         - $ref: "#/components/parameters/basicauth"
@@ -484,7 +484,7 @@ paths:
               $ref: "#/components/schemas/RoleBody"
       #            examples:
       #              adres:
-      #                $ref: "#/components/examples/UserBody"    
+      #                $ref: "#/components/examples/UserBody"
       responses:
         "201":
           $ref: "#/components/responses/Role"
@@ -504,10 +504,10 @@ paths:
         Retrieve only one role with id roleId
       operationId: getRole
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/x-api-key"      
+        - $ref: "#/components/parameters/x-api-key"
       responses:
         "200":
           $ref: "#/components/responses/Role"
@@ -527,7 +527,7 @@ paths:
         Delete only the specified role
       operationId: deleteRole
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
@@ -551,7 +551,7 @@ paths:
         Update only the role specified with roleId
       operationId: patchRole
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
@@ -586,7 +586,7 @@ paths:
         Retrieve all known users, using paging and sorting
       operationId: getUsers
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
@@ -609,7 +609,7 @@ paths:
         Delete all users
       operationId: deleteAllUsers
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/x-api-key"
         - $ref: "#/components/parameters/basicauth"
@@ -638,7 +638,7 @@ paths:
         If the hash value already exists in the backend, the user is considered to exist
       operationId: postUser
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/x-api-key"
         - $ref: "#/components/parameters/basicauth"
@@ -669,7 +669,7 @@ paths:
         Retrieve only one user with id userId
       operationId: getUser
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
@@ -692,7 +692,7 @@ paths:
         Delete only the specified user
       operationId: deleteUser
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
@@ -716,7 +716,7 @@ paths:
         Update only the user specified with userId
       operationId: patchUser
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
@@ -771,7 +771,7 @@ components:
 
     AdresList-01:
       summary: An empty list of adresses
-      value: []
+      value: [ ]
 
     AdresList-02:
       summary: An empty list of adresses
@@ -796,18 +796,18 @@ components:
       summary: An entry is deleted succesfull
       value:
 
-    LoginRequest: 
+    LoginRequest:
       summary: A login request
       value:
         username: "user01"
         password: "pwd01"
 
-    LoginResponseAllowed: 
+    LoginResponseAllowed:
       summary: A login response with access allowed
       value:
         authenticated: true
 
-    LoginResponseDenied: 
+    LoginResponseDenied:
       summary: A login response with access denied
       value:
         authenticated: false
@@ -837,7 +837,7 @@ components:
         infix: "van Der"
         lastName: "Vlist"
         dateOfBirth: "2022-01-04"
-        adresses: []
+        adresses: [ ]
 
     PersonAdres-02:
       summary: A person with all fields and no adresses
@@ -861,7 +861,7 @@ components:
 
     PersonList-01:
       summary: An empty list of persons
-      value: []
+      value: [ ]
 
     PersonList-02:
       summary: An empty list of persons
@@ -1072,7 +1072,7 @@ components:
 
     BasicAuthorization:
       type: string
-      default: "Basic YWRtaW46MTIzNDU="      
+      default: "Basic YWRtaW46MTIzNDU="
 
     Deleted:
       type: object
@@ -1260,7 +1260,7 @@ components:
 
     x-api-key:
       type: string
-      default: "f0583805-03f6-4c7f-8e40-f83f55b7c077"      
+      default: "f0583805-03f6-4c7f-8e40-f83f55b7c077"
 
     Problem:
       type: object

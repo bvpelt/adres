@@ -68,7 +68,7 @@ public class AuthenticationService {
         MyUserPrincipal myUserPrincipal = new MyUserPrincipal(user);
         var jwtToken = jwtService.generateToken(myUserPrincipal);
 
-        log.debug("AuthenticationService register - generated token: {}", jwtToken);
+        log.trace("AuthenticationService register - generated token: {}", jwtToken);
 
         return new AuthenticateResponse(jwtToken);
     }
@@ -86,7 +86,7 @@ public class AuthenticationService {
         MyUserPrincipal myUserPrincipal = new MyUserPrincipal(user);
         var jwtToken = jwtService.generateToken(myUserPrincipal);
 
-        log.debug("AuthenticationService authenticate - generated token: {}", jwtToken);
+        log.trace("AuthenticationService authenticate - generated token: {}", jwtToken);
 
         return new AuthenticateResponse(jwtToken);
     }

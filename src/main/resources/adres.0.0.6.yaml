@@ -9,7 +9,7 @@ servers:
     description: production
 
 security:
-  - basicAuth: []
+  - basicAuth: [ ]
 
 paths:
   /adresses:
@@ -50,7 +50,7 @@ paths:
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/sort"
         - $ref: "#/components/parameters/x-api-key"
-      security: []
+      security: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Adresses"
@@ -85,7 +85,7 @@ paths:
               adres:
                 $ref: "#/components/examples/AdresBody"
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       responses:
         "201":
           $ref: "#/components/responses/Adres"
@@ -107,7 +107,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
-      security: []
+      security: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Adres"
@@ -131,7 +131,7 @@ paths:
         - $ref: "#/components/parameters/x-api-key"
         - $ref: "#/components/parameters/basicauth"
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -164,7 +164,7 @@ paths:
               person:
                 $ref: "#/components/examples/AdresBody"
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Adres"
@@ -188,7 +188,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
-      security: []
+      security: [ ]
       responses:
         "200":
           $ref: "#/components/responses/AdresPerson"
@@ -243,7 +243,7 @@ paths:
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/sort"
         - $ref: "#/components/parameters/x-api-key"
-      security: []
+      security: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Persons"
@@ -264,7 +264,7 @@ paths:
         - $ref: "#/components/parameters/x-api-key"
         - $ref: "#/components/parameters/basicauth"
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -302,7 +302,7 @@ paths:
               person:
                 $ref: "#/components/examples/PersonBody"
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       responses:
         "201":
           $ref: "#/components/responses/Person"
@@ -324,7 +324,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
-      security: []
+      security: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Person"
@@ -348,7 +348,7 @@ paths:
         - $ref: "#/components/parameters/x-api-key"
         - $ref: "#/components/parameters/basicauth"
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -381,7 +381,7 @@ paths:
               person:
                 $ref: "#/components/examples/PersonBody"
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Person"
@@ -405,7 +405,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
-      security: []
+      security: [ ]
       responses:
         "200":
           $ref: "#/components/responses/PersonAdres"
@@ -432,7 +432,7 @@ paths:
         - $ref: "#/components/parameters/sort"
         - $ref: "#/components/parameters/x-api-key"
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Roles"
@@ -453,7 +453,7 @@ paths:
         - $ref: "#/components/parameters/x-api-key"
         - $ref: "#/components/parameters/basicauth"
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -489,7 +489,7 @@ paths:
       #              adres:
       #                $ref: "#/components/examples/UserBody"
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       responses:
         "201":
           $ref: "#/components/responses/Role"
@@ -512,7 +512,7 @@ paths:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Role"
@@ -536,7 +536,7 @@ paths:
         - $ref: "#/components/parameters/x-api-key"
         - $ref: "#/components/parameters/basicauth"
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -569,7 +569,7 @@ paths:
       #              user:
       #                $ref: "#/components/examples/UserBody"
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Role"
@@ -596,7 +596,7 @@ paths:
         - $ref: "#/components/parameters/sort"
         - $ref: "#/components/parameters/x-api-key"
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       responses:
         "200":
           $ref: "#/components/responses/Users"
@@ -617,7 +617,7 @@ paths:
         - $ref: "#/components/parameters/x-api-key"
         - $ref: "#/components/parameters/basicauth"
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -655,7 +655,7 @@ paths:
       #              adres:
       #                $ref: "#/components/examples/UserBody"
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       responses:
         "201":
           $ref: "#/components/responses/User"
@@ -677,7 +677,7 @@ paths:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/x-api-key"
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       responses:
         "200":
           $ref: "#/components/responses/User"
@@ -701,7 +701,7 @@ paths:
         - $ref: "#/components/parameters/x-api-key"
         - $ref: "#/components/parameters/basicauth"
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -734,7 +734,7 @@ paths:
       #              user:
       #                $ref: "#/components/examples/UserBody"
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       responses:
         "200":
           $ref: "#/components/responses/User"
@@ -776,7 +776,7 @@ components:
 
     AdresList-01:
       summary: An empty list of adresses
-      value: []
+      value: [ ]
 
     AdresList-02:
       summary: An empty list of adresses
@@ -801,18 +801,18 @@ components:
       summary: An entry is deleted succesfull
       value:
 
-    LoginRequest: 
+    LoginRequest:
       summary: A login request
       value:
         username: "user01"
         password: "pwd01"
 
-    LoginResponseAllowed: 
+    LoginResponseAllowed:
       summary: A login response with access allowed
       value:
         authenticated: true
 
-    LoginResponseDenied: 
+    LoginResponseDenied:
       summary: A login response with access denied
       value:
         authenticated: false
@@ -842,7 +842,7 @@ components:
         infix: "van Der"
         lastName: "Vlist"
         dateOfBirth: "2022-01-04"
-        adresses: []
+        adresses: [ ]
 
     PersonAdres-02:
       summary: A person with all fields and no adresses
@@ -866,7 +866,7 @@ components:
 
     PersonList-01:
       summary: An empty list of persons
-      value: []
+      value: [ ]
 
     PersonList-02:
       summary: An empty list of persons

@@ -24,10 +24,10 @@ paths:
         Delete all adres
       operationId: deleteAllAdreses
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       #        - $ref: "#/components/parameters/basicauth"
       responses:
         "204":
@@ -48,13 +48,11 @@ paths:
       description: |
         Retrieve all known adresses, using paging and sorting
       operationId: getAdresses
-      security: 
-        - apiKey: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/sort"
-        #- $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "200":
           $ref: "#/components/responses/Adresses"
@@ -77,11 +75,11 @@ paths:
         If the hash value already exists in the backend, the adres is considered to exist
       operationId: postAdres
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/override"
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       #        - $ref: "#/components/parameters/basicauth"
       requestBody:
         description: Request parameters
@@ -113,7 +111,7 @@ paths:
       operationId: getAdres
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "200":
           $ref: "#/components/responses/Adres"
@@ -134,11 +132,11 @@ paths:
         Delete only the specified adres
       operationId: deleteAdres
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       #        - $ref: "#/components/parameters/basicauth"
       responses:
         "204":
@@ -160,11 +158,11 @@ paths:
         Update only the adres specified with adresId
       operationId: patchAdres
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       #        - $ref: "#/components/parameters/basicauth"
       requestBody:
         description: Request parameters
@@ -197,7 +195,7 @@ paths:
       operationId: getAdresPerons
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "200":
           $ref: "#/components/responses/AdresPerson"
@@ -219,7 +217,7 @@ paths:
         Login into the application by providing username password.
       operationId: postLogin
       parameters:
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
         description: Request parameters
         required: true
@@ -249,7 +247,7 @@ paths:
         Authenticate a user and get a token which must be uses to access the resources
       operationId: postAuthenticate
       parameters:
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
         description: Request parameters
         content:
@@ -278,7 +276,7 @@ paths:
         Register for the application by providing username password. A JWT token will be returned an must be used as token for other calls
       operationId: postRegister
       parameters:
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
         description: Request parameters
         content:
@@ -310,7 +308,7 @@ paths:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/sort"
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "200":
           $ref: "#/components/responses/Persons"
@@ -329,10 +327,10 @@ paths:
         Delete all persons
       operationId: deleteAllPersons
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       #        - $ref: "#/components/parameters/basicauth"
       responses:
         "204":
@@ -359,11 +357,11 @@ paths:
         If the hash value already exists in the backend, the person is considered to exist
       operationId: postPerson
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/override"
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       #        - $ref: "#/components/parameters/basicauth"
       requestBody:
         description: Request parameters
@@ -394,7 +392,7 @@ paths:
       operationId: getPerson
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "200":
           $ref: "#/components/responses/Person"
@@ -415,11 +413,11 @@ paths:
         Delete only the specified person
       operationId: deletePerson
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       #        - $ref: "#/components/parameters/basicauth"
       responses:
         "204":
@@ -441,11 +439,11 @@ paths:
         Update only the person specified with personId
       operationId: patchPerson
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       #        - $ref: "#/components/parameters/basicauth"
       requestBody:
         description: Request parameters
@@ -478,7 +476,7 @@ paths:
       operationId: getPeronsAdresses
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "200":
           $ref: "#/components/responses/PersonAdres"
@@ -500,13 +498,13 @@ paths:
         Retrieve all known roles, using paging and sorting
       operationId: getRoles
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/sort"
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "200":
           $ref: "#/components/responses/Roles"
@@ -525,10 +523,10 @@ paths:
         Delete all roles
       operationId: deleteAllRoles
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       #        - $ref: "#/components/parameters/basicauth"
       responses:
         "204":
@@ -554,10 +552,10 @@ paths:
         If the hash value already exists in the backend, the role is considered to exist
       operationId: postRole
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       #        - $ref: "#/components/parameters/basicauth"
       requestBody:
         description: Request parameters
@@ -587,11 +585,11 @@ paths:
         Retrieve only one role with id roleId
       operationId: getRole
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "200":
           $ref: "#/components/responses/Role"
@@ -612,11 +610,11 @@ paths:
         Delete only the specified role
       operationId: deleteRole
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       #        - $ref: "#/components/parameters/basicauth"
       responses:
         "204":
@@ -638,11 +636,11 @@ paths:
         Update only the role specified with roleId
       operationId: patchRole
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       #        - $ref: "#/components/parameters/basicauth"
       requestBody:
         description: Request parameters
@@ -674,13 +672,13 @@ paths:
         Retrieve all known users, using paging and sorting
       operationId: getUsers
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/sort"
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "200":
           $ref: "#/components/responses/Users"
@@ -699,10 +697,10 @@ paths:
         Delete all users
       operationId: deleteAllUsers
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       #        - $ref: "#/components/parameters/basicauth"
       responses:
         "204":
@@ -730,10 +728,10 @@ paths:
         If the hash value already exists in the backend, the user is considered to exist
       operationId: postUser
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       #        - $ref: "#/components/parameters/basicauth"
       requestBody:
         description: Request parameters
@@ -763,11 +761,11 @@ paths:
         Retrieve only one user with id userId
       operationId: getUser
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "200":
           $ref: "#/components/responses/User"
@@ -788,11 +786,11 @@ paths:
         Delete only the specified user
       operationId: deleteUser
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       #        - $ref: "#/components/parameters/basicauth"
       responses:
         "204":
@@ -814,11 +812,11 @@ paths:
         Update only the user specified with userId
       operationId: patchUser
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/x-api-key"
+        - $ref: "#/components/parameters/X-API-KEY"
       #        - $ref: "#/components/parameters/basicauth"
       requestBody:
         description: Request parameters
@@ -870,7 +868,7 @@ components:
 
     AdresList-01:
       summary: An empty list of adresses
-      value: []
+      value: [ ]
 
     AdresList-02:
       summary: An empty list of adresses
@@ -947,7 +945,7 @@ components:
         infix: "van Der"
         lastName: "Vlist"
         dateOfBirth: "2022-01-04"
-        adresses: []
+        adresses: [ ]
 
     PersonAdres-02:
       summary: A person with all fields and no adresses
@@ -971,7 +969,7 @@ components:
 
     PersonList-01:
       summary: An empty list of persons
-      value: []
+      value: [ ]
 
     PersonList-02:
       summary: An empty list of persons
@@ -1117,13 +1115,12 @@ components:
         type: string
         default: ""
 
-    x-api-key:
+    X-API-KEY:
       name: "X-API-KEY"
       in: header
       description: An api key used to track usage of the api
-      required: true
       schema:
-        $ref: "#/components/schemas/x-api-key"
+        $ref: "#/components/schemas/X-API-KEY"
 
   schemas:
     Adres:
@@ -1469,7 +1466,7 @@ components:
         instance:
           type: string
 
-    x-api-key:
+    X-API-KEY:
       type: string
       pattern: '^([0-9a-f]{8})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{12})'
 

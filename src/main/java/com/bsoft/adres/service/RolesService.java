@@ -6,8 +6,8 @@ import com.bsoft.adres.exceptions.RoleNotExistsException;
 import com.bsoft.adres.generated.model.Role;
 import com.bsoft.adres.generated.model.RoleBody;
 import com.bsoft.adres.repositories.RoleRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +16,18 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class RolesService {
 
     private final RoleRepository roleRepository;
 
-
-    @Autowired
-    public RolesService(final RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
-
+    /*
+        @Autowired
+        public RolesService(final RoleRepository roleRepository) {
+            this.roleRepository = roleRepository;
+        }
+    */
     public void deleteAll() {
         try {
             roleRepository.deleteAll();

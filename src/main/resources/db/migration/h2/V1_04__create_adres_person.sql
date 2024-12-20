@@ -1,6 +1,6 @@
 create table adres_person
 (
-    id       bigint auto_increment primary key ,
+    id       bigint auto_increment primary key,
     adresid  bigint not null,
     personid bigint not null
 );
