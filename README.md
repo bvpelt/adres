@@ -23,6 +23,17 @@ Setup java 21 environment
 mvn clean test -P runtime -Dspring.profiles.active=runtime
 mvn clean test -P develop -Dspring.profiles.active=develop
 ```
+# Security
+
+| User    | Role      | Privilege             |
+|---------|-----------|-----------------------|
+| admin   | ADMIN     | ALL                   |
+| bvpelt  | OPERATOR  | APP_FULL_ACCESS       |
+| bvpelt  | OPERATOR  | APP_SECURITY_ACCESS   |
+| user    | USER      | APP_READ_ACCESS_BASIC |
+| any     | JWT-TOKEN | APP_READ_ACCESS_JWT   |
+
+
 ## Basic Authentication
 
 See https://docs.spring.io/spring-security/site/apidocs/org/springframework/security/web/authentication/www/BasicAuthenticationFilter.html
@@ -66,6 +77,43 @@ a1         a2          a3        a4                  a5                   a6    
 cat ~/Downloads/contacts.csv | awk '{split($0, a, ","); printf("%s\t--%s\t--%s\t--%s\t--%s\t--%s\t--%s\t--%s\t--%s\t--%s====\n", a[1], a[3], a[33], a[34], a[35], a[36], a[37], a[38], a[39], a[40])}'
 ```
 
+# 
+# Usefull info
+
+## Roles
+Determine which roles are granted to a specific user
+```sql
+-- simple query
+select username, rolename from users, role, users_roles where users.id = users_roles.userid and users_roles.roleid = role.id;
+
+-- alternative with left join
+SELECT
+    u.username,
+    r.rolename
+FROM
+    users u
+        LEFT JOIN
+    users_roles ur ON u.id = ur.userid
+        LEFT JOIN
+    role r ON ur.roleid = r.id;
+
+-- All users, with roles and privileges
+SELECT
+    u.username,
+    r.rolename,
+    p.name
+FROM
+    users u
+        LEFT JOIN
+    users_roles ur ON u.id = ur.userid
+        LEFT JOIN
+    role r ON ur.roleid = r.id
+        LEFT JOIN
+    roles_privileges rp ON r.id = rp.roleid
+        LEFT JOIN
+    privilege p ON rp.privilegeid=p.id;
+
+```
 ## References
 
 - [Spring security](https://www.baeldung.com/security-spring)

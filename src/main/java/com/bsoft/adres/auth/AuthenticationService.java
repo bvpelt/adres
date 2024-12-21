@@ -47,8 +47,8 @@ public class AuthenticationService {
             defRole = optionalRoleDAO.get();
         } else {
             RoleDAO roleDAO = new RoleDAO();
-            roleDAO.setRolename("USER");
-            roleDAO.setDescription("JWT ROLE");
+            roleDAO.setRolename("JWT-TOKEN");
+            roleDAO.setDescription("Using JWT token authentication");
             roleDAO.genHash();
             defRole = roleRepository.save(roleDAO);
         }
@@ -82,7 +82,7 @@ public class AuthenticationService {
         );
 
         var user = usersRepository
-                .findByUsername(request.getUsername())
+                .findByUserName(request.getUsername())
                 .orElseThrow();
 
         MyUserPrincipal myUserPrincipal = new MyUserPrincipal(user);

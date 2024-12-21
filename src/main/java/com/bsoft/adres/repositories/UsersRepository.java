@@ -17,23 +17,41 @@ public interface UsersRepository extends PagingAndSortingRepository<UserDAO, Lon
         CrudRepository<UserDAO, Long>,
         JpaSpecificationExecutor<UserDAO> {
 
-    @Query(value = "SELECT * FROM users where username = :username", nativeQuery = true)
-    Optional<UserDAO> findByUsername(final String username);
+    /*
+    Find active user based on username
+     */
 
-    @Query(value = "SELECT * FROM users where email = :email", nativeQuery = true)
+    @Query(value = "SELECT * FROM users where username = :username and account_non_expired = true and account_non_locked = true and credentials_non_expired = true and enabled = true", nativeQuery = true)
+    Optional<UserDAO> findByUserName(final String username);
+
+    /*
+    Find active user based on email
+     */
+    @Query(value = "SELECT * FROM users where email = :email and account_non_expired = true and account_non_locked = true and credentials_non_expired = true and enabled = true", nativeQuery = true)
     Optional<UserDAO> findByEmail(final String email);
 
+    /*
+    Find user based on id regardless of locking or any status
+     */
     @Query(value = "SELECT * FROM users where id = :Id", nativeQuery = true)
     Optional<UserDAO> findByUserId(Long Id);
 
+    /*
     @Query(value = "SELECT * FROM users where username = :username", nativeQuery = true)
     Optional<UserDAO> findByUserName(String username);
+     */
 
+    /*
+    List of all users regardless of locking or any status
+     */
     @Query(value = "SELECT * FROM users",
             countQuery = "SELECT * FROM users",
             nativeQuery = true)
     List<UserDAO> findAllByPaged(final Pageable pageable);
 
+    /*
+    Lookup for duplicates based on content
+     */
     @Query(value = "SELECT * FROM users WHERE hash = :hash", nativeQuery = true)
     Optional<UserDAO> findByHash(@Param("hash") Integer hash);
 }

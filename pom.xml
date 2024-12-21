@@ -11,8 +11,8 @@
 
     <groupId>com.bsoft</groupId>
     <artifactId>adres</artifactId>
-    <version>0.0.9</version>
-    <name>adres</name>
+    <version>0.0.10</version>
+    <name>Adres</name>
 
     <description>Adressen service</description>
 
@@ -29,7 +29,6 @@
         <tag/>
         <url/>
     </scm>
-
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -127,7 +126,6 @@
             <version>0.12.6</version>
         </dependency>
 
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -178,22 +176,8 @@
                 <version>3.13.0</version>
                 <configuration>
                     <verbose>false</verbose>
-                    <!--
-                    <source>21</source>
-                    <target>21</target>
-                    <release>21</release>
-                    -->
                 </configuration>
             </plugin>
-<!--
-            <plugin>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-maven-plugin</artifactId>
-
-                <version>10.17.0</version>
-
-            </plugin>
--->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -228,7 +212,7 @@
                         </goals>
                         <configuration>
 
-                            <inputSpec>${project.basedir}/src/main/resources/adres.0.0.9.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/adres.0.0.10.yaml</inputSpec>
 
                             <generatorName>spring</generatorName>
                             <library>spring-boot</library>

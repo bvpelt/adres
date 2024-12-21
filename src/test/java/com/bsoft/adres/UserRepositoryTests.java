@@ -7,17 +7,19 @@ import com.bsoft.adres.exceptions.UserExistsException;
 import com.bsoft.adres.repositories.PrivilegeRepository;
 import com.bsoft.adres.repositories.RoleRepository;
 import com.bsoft.adres.repositories.UsersRepository;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -25,15 +27,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@ActiveProfiles("${activeProfile}")
 @Rollback(false)
 public class UserRepositoryTests {
 
-
-    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(); // = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     @Autowired
-    private TestEntityManager entityManager;
+    private EntityManager entityManager;
     @Autowired
     private UsersRepository usersRepository;
     @Autowired
@@ -87,6 +88,7 @@ public class UserRepositoryTests {
         }
     }
 
+
     @DisplayName("testPasswordEncoder02")
     @Test
     public void testPasswordEncoder02() {
@@ -111,6 +113,7 @@ public class UserRepositoryTests {
         }
     }
 
+
     @DisplayName("testPasswordEncoder03")
     @Test
     public void testPasswordEncoder03() {
@@ -134,6 +137,7 @@ public class UserRepositoryTests {
             entityManager.remove(existUser);
         }
     }
+
 
     @DisplayName("testUserRoles")
     @Test
@@ -237,6 +241,7 @@ public class UserRepositoryTests {
         }
     }
 
+
     @DisplayName("secUserTest")
     @Test
     public void secUserTest() {
@@ -261,7 +266,7 @@ public class UserRepositoryTests {
 
             String userName = "JWT-Test";
             String email = "@gmail.com";
-            userByName1 = usersRepository.findByUsername(userName);
+            userByName1 = usersRepository.findByUserName(userName);
             userByEmail1 = usersRepository.findByEmail(email);
             existUser1 = userByName1.isPresent() || userByEmail1.isPresent();
 
@@ -284,7 +289,7 @@ public class UserRepositoryTests {
                 throw new UserExistsException("User already exists");
             }
 
-            userByName2 = usersRepository.findByUsername(userName);
+            userByName2 = usersRepository.findByUserName(userName);
             userByEmail2 = usersRepository.findByEmail(email);
             existUser2 = userByName2.isPresent() || userByEmail2.isPresent();
 
@@ -330,5 +335,65 @@ public class UserRepositoryTests {
             }
 
         }
+    }
+
+    @DisplayName("Generate privileges")
+    @Test
+    public void generatePrivileges() {
+        PrivilegeDAO privilegeDAO = new PrivilegeDAO();
+        ArrayList<String> privileges = new ArrayList<>();
+        privileges.add("ALL");
+        privileges.add("APP_FULL_ACCESS");
+        privileges.add("APP_SECURITY_ACCESS");
+        privileges.add("APP_READ_ACCESS_BASIC");
+        privileges.add("APP_READ_ACCESS_JWT");
+
+        privileges.forEach(privilege -> {
+            privilegeDAO.setName(privilege);
+            privilegeDAO.genHash();
+            log.info("generatePrivileges {}: {}", privilege, privilegeDAO);
+        });
+    }
+
+
+    @DisplayName("Generate roles")
+    @Test
+    public void generateRoles() {
+        RoleDAO roleDAO = new RoleDAO();
+
+        ArrayList<Pair> roles = new ArrayList<>();
+        roles.add(new Pair("ADMIN", "Administrator"));
+        roles.add(new Pair("OPERATOR", "Operator"));
+        roles.add(new Pair("USER", "Application user with basic authentication"));
+        roles.add(new Pair("JWT-TOKEN", "Application user with JWT token"));
+
+
+        roles.forEach(pair -> {
+            roleDAO.setRolename(pair.getName());
+            roleDAO.setDescription(pair.getDescription());
+            roleDAO.genHash();
+            log.info("generateRoles {}: {}", roleDAO.getRolename(), roleDAO);
+        });
+
+    }
+
+    @DisplayName("Generate users")
+    @Test
+    public void generateUsers() {
+        UserDAO userDAO = new UserDAO();
+
+        ArrayList<Quart> users = new ArrayList<>();
+        users.add(new Quart("admin","12345", "admin@gmail.com", "0612345678"));
+        users.add(new Quart("bvpelt","12345", "bvpelt@gmail.com", "0656789012"));
+        users.add(new Quart("user","12345", "user@gmail.com", "0678901234"));
+
+        users.forEach(quart -> {
+            userDAO.setUsername(quart.getUsername());
+            userDAO.setPassword(quart.getPassword());
+            userDAO.setEmail(quart.getEmail());
+            userDAO.setPhone(quart.getPhone());
+            userDAO.genHash();
+            log.info("generateUsers {}: {}", userDAO.getUsername(), userDAO.toString());
+        });
     }
 }

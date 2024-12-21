@@ -34,7 +34,7 @@ public class WebSecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:8080"));
+                    config.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:8080", "https://editor.swagger.io/", "https://editor-next.swagger.io/"));
                     config.setAllowedMethods(List.of("*")); // Allow all HTTP methods
                     config.setAllowedHeaders(List.of("*")); // Allow all headers
                     return config;
@@ -49,12 +49,12 @@ public class WebSecurityConfig {
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/error").permitAll()
                         .requestMatchers("/adres/api/v1/login/**").permitAll()
-                        .requestMatchers("/actuator/**").hasAuthority("WRITE")
+                        .requestMatchers("/actuator/**").hasAnyAuthority("ALL", "APP_SECURITY_ACCESS")
                         .requestMatchers(HttpMethod.GET, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("WRITE")
-                        .requestMatchers(HttpMethod.POST, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("WRITE")
-                        .requestMatchers(HttpMethod.PATCH, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("WRITE")
-                        .requestMatchers("/adres/api/v1/user/**", "/adres/api/v1/roles/**").hasAnyAuthority("WRITE", "OPERATOR")
+                        .requestMatchers(HttpMethod.DELETE, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_FULL_ACCESS")
+                        .requestMatchers(HttpMethod.POST, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_FULL_ACCESS")
+                        .requestMatchers(HttpMethod.PATCH, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_FULL_ACCESS")
+                        .requestMatchers("/adres/api/v1/user/**", "/adres/api/v1/roles/**").hasAnyAuthority("ALL", "APP_SECURITY_ACCESS")
                         .anyRequest().authenticated()
                 )
                 .headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.frameOptions(frameOptionsConfig -> frameOptionsConfig.disable()))

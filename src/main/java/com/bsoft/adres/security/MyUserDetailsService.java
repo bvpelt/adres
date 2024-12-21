@@ -21,7 +21,7 @@ public class MyUserDetailsService implements UserDetailsService {
     public MyUserPrincipal
     loadUserByUsername(String username) throws UsernameNotFoundException {
         log.debug("loadUserByUsername check user: {}", username);
-        Optional<UserDAO> userDAO = usersRepository.findByUsername(username);
+        Optional<UserDAO> userDAO = usersRepository.findByUserName(username);
         if (userDAO.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
