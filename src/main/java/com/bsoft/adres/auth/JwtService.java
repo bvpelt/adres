@@ -26,7 +26,7 @@ public class JwtService {
     @Value("${application.key}")
     private String SECRET_KEY;
 
-    @Value("${application.keylifetime}")
+    @Value("${application.key-lifetime}")
     private long tokenValidityInMinutes;
 
     public String extractUsername(String token) {
