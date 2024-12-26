@@ -1,7 +1,6 @@
 package com.bsoft.adres.repositories;
 
 import com.bsoft.adres.database.ApiKeyDao;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;

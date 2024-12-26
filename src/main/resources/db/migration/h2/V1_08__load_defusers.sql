@@ -16,21 +16,14 @@ values (3, 'bvpelt', '$2a$10$Z6pq4.8lVz8Tr4.fmZXXAOYPoyxvYA4mzu0sXiTWgoN9VVQriWf
         '0656789012', -1604980512, true, true, true, true);
 
 -- roles
-insert into role (id, rolename, description, hash)
-values (1, 'ADMIN', 'Administrator', 2072793375);
-insert into role (id, rolename, description, hash)
-values (2, 'OPERATOR', 'Operator', -281572255);
-insert into role (id, rolename, description, hash)
-values (3, 'USER', 'Application user with basic authentication', 439955957);
-insert into role (id, rolename, description, hash)
-values (4, 'JWT-TOKEN', 'Application user with JWT token', -1051810471);
+insert into role (id, rolename, description, hash) values (1, 'ADMIN',     'Administrator',                              2072793375);
+insert into role (id, rolename, description, hash) values (2, 'OPERATOR',  'Operator',                                   -281572255);
+insert into role (id, rolename, description, hash) values (3, 'USER',      'Application user with basic authentication', 439955957);
+insert into role (id, rolename, description, hash) values (4, 'JWT-TOKEN', 'Application user with JWT token',            -1051810471);
 
-insert into users_roles (id, userid, roleid)
-values (1, 1, 1);  -- admin ADMIN
-insert into users_roles (id, userid, roleid)
-values (2, 3, 2); -- bvpelt OPERATOR
-insert into users_roles (id, userid, roleid)
-values (3, 2, 3); -- user USER
+insert into users_roles (id, userid, roleid) values (1, 1, 1);  -- admin ADMIN
+insert into users_roles (id, userid, roleid) values (2, 3, 2); -- bvpelt OPERATOR
+insert into users_roles (id, userid, roleid) values (3, 2, 3); -- user USER
 
 ALTER TABLE users
     ALTER COLUMN id RESTART WITH 4;

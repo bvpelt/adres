@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,8 +26,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @ActiveProfiles("${activeProfile}")
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Rollback(false)
 public class UserRepositoryTests {
 
@@ -251,15 +251,16 @@ public class UserRepositoryTests {
         Optional<UserDAO> userByEmail1 = Optional.empty();
         Optional<UserDAO> userByName2 = Optional.empty();
         Optional<UserDAO> userByEmail2 = Optional.empty();
+
         try {
-            Optional<RoleDAO> optionalRoleDAO = roleRepository.findByRolename("USER");
+            Optional<RoleDAO> optionalRoleDAO = roleRepository.findByRolename("USER1");
             RoleDAO defRole = null;
 
             if (optionalRoleDAO.isPresent()) {
                 defRole = optionalRoleDAO.get();
             } else {
                 RoleDAO roleDAO = new RoleDAO();
-                roleDAO.setRolename("USER");
+                roleDAO.setRolename("USER1");
                 roleDAO.setDescription("JWT ROLE");
                 defRole = roleRepository.save(roleDAO);
             }

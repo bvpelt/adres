@@ -4,16 +4,13 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +23,7 @@ public class JwtService {
     @Value("${application.key}")
     private String SECRET_KEY;
 
-    @Value("${application.keylifetime}")
+    @Value("${application.key-lifetime}")
     private long tokenValidityInMinutes;
 
     public String extractUsername(String token) {
@@ -54,23 +51,23 @@ public class JwtService {
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         String token2 = null;
         Date startDate = new Date(System.currentTimeMillis());
-        Date endDate = new Date(System.currentTimeMillis()+ 1000 * tokenValidityInMinutes * 60 );
+        Date endDate = new Date(System.currentTimeMillis() + 1000 * tokenValidityInMinutes * 60);
 
         token2 = Jwts
                 .builder()
                 .header()
-                    .add("typ", "JWT")
-                    .add("alg", "HS256")
-                    .and()
+                .add("typ", "JWT")
+                .add("alg", "HS256")
+                .and()
                 .claims(extraClaims)
                 .issuer("adres application")
                 .subject(userDetails.getUsername())
                 .issuedAt(startDate)
                 .expiration(endDate)
-                .signWith(getSigninKey(), SignatureAlgorithm.HS256 )
+                .signWith(getSigninKey(), SignatureAlgorithm.HS256)
                 .compact();
 
-        log.debug("generateToken token2: {}", token2 );
+        log.debug("generateToken token2: {}", token2);
 
         return token2;
     }

@@ -1,6 +1,7 @@
 package com.bsoft.adres.auth;
 
 import com.bsoft.adres.security.MyUserDetailsService;
+import com.bsoft.adres.service.ApiKeyService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +26,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
 
     private final MyUserDetailsService userDetailsService;
+
+    private final ApiKeyService apiKeyService;
 
     @Override
     protected void doFilterInternal(
@@ -70,11 +73,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.trace("requestUri: {}", requestUri);
             if (requestUri.startsWith("/adres/api/v1")) {
                 log.trace("requestUri match /adres/api/v1: {}", requestUri);
+                String refererHeader = request.getHeader("Referer");
+                String ipAdres = getClientIpAddr(request);
                 if (xapiHeader == null) {
-                    String refererHeader = request.getHeader("Referer");
-                    String ipAdres = getClientIpAddr(request);
                     log.error("doFilterInternal - No X-API-KEY, referer: {}, ipadres: {}", (refererHeader != null ? refererHeader : ""), ipAdres);
                     throw new ServletException("X-API-KEY required");
+                } else {
+                    if (!apiKeyService.isValidApiKey(xapiHeader)) {
+                        log.error("doFilterInternal - No X-API-KEY, referer: {}, ipadres: {}", (refererHeader != null ? refererHeader : ""), ipAdres);
+                        throw new ServletException("X-API-KEY has invalid format or is not known!");
+                    }
                 }
             }
         }

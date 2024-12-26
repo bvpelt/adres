@@ -58,7 +58,8 @@ spring:
     validateMigrationNaming: true
     locations: classpath:db/migration/h2
   h2:
-    console.enabled: true
+    console:
+      enabled: true
   jpa:
     database: h2
     database-platform: org.hibernate.dialect.H2Dialect
@@ -69,10 +70,3 @@ spring:
     properties:
       hibernate:
         fomat_sql: true
-
-#  security:
-#    user:
-#      name: testuser
-#      password: 12345
-#      roles: admin, user
-

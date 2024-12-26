@@ -1,13 +1,6 @@
 application:
   key: "9dd059be604f3e0b8742724eae817a49d4561fe22bf3519d10d7431dd4b188e4" # using jwtsecret.com/generate 32 bytes 256 bits
-  keylifetime: 120 # minutes
-
-info:
-  project:
-    name: @project.name@
-    version: @project.version@
-    description: @project.description@
-  environment: '@activeProfile@'
+  key-lifetime: 120 # minutes
 
 logging:
   level:
@@ -25,8 +18,10 @@ spring:
   main:
     banner-mode: 'off'
   mvc:
-    problemdetails:
+    problem-details:
       enabled: true
+  profiles:
+    active: '@activeProfile@'
 
 springdoc:
   enable-spring-security: false
@@ -35,3 +30,11 @@ springdoc:
     show-common-extensions: true
     with-credentials: false
     url: http://localhost:8080/swagger-ui/index.html
+    tagsSorter: alpha
+
+info:
+  project:
+    name: ${project.name}
+    version: @project.version@
+    description: @project.description@
+  environment: '@activeProfile@'

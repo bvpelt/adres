@@ -67,6 +67,18 @@ public class UserDAO {
     )
     private Collection<RoleDAO> roles = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name= "apikey_id")
+    ApiKeyDao apiKey;
+
+    public UserDAO(String username, String password, String email, String phone) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.hash = hashCode();
+    }
+
     public UserDAO(final UserBody userbody) {
         this.setUsername(userbody.getUsername());
         this.setPassword(userbody.getPassword());

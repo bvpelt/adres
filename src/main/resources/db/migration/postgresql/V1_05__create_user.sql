@@ -9,7 +9,8 @@ create table users
     account_non_expired     boolean,
     account_non_locked      boolean,
     credentials_non_expired boolean,
-    enabled                 boolean
+    enabled                 boolean,
+    apikey_id               bigint
 );
 
 create unique index user_username_ix on users (username, account_non_expired, account_non_locked, credentials_non_expired, enabled);
