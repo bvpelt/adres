@@ -34,7 +34,7 @@ springdoc:
 
 info:
   project:
-    name: ${project.name}
+    name: ${spring.application.name}
     version: @project.version@
     description: @project.description@
-  environment: '@activeProfile@'
+  environment: ${spring.profiles.active}
