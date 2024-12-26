@@ -45,33 +45,12 @@
             <properties>
                 <spring.profiles.active>develop</spring.profiles.active>
             </properties>
-            <dependencies>
-                <!--
-                <dependency>
-                    <groupId>com.h2database</groupId>
-                    <artifactId>h2</artifactId>
-                    <version>2.2.220</version>
-                </dependency>
-                -->
-            </dependencies>
         </profile>
         <profile>
             <id>runtime</id>
             <properties>
                 <spring.profiles.active>runtime</spring.profiles.active>
             </properties>
-            <dependencies>
-                <!--
-                <dependency>
-                    <groupId>org.postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.flywaydb</groupId>
-                    <artifactId>flyway-database-postgresql</artifactId>
-                </dependency>
-                -->
-            </dependencies>
         </profile>
     </profiles>
 
@@ -110,8 +89,6 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>
-
-
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

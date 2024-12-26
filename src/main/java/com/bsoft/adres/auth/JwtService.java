@@ -1,11 +1,12 @@
 package com.bsoft.adres.auth;
 
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import java.util.function.Function;
 @Slf4j
 @Service
 public class JwtService {
+
     @Value("${application.key}")
     private String SECRET_KEY;
 
@@ -49,27 +51,27 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        String token2 = null;
+
         Date startDate = new Date(System.currentTimeMillis());
         Date endDate = new Date(System.currentTimeMillis() + 1000 * tokenValidityInMinutes * 60);
 
-        token2 = Jwts
+        String token3 = Jwts
                 .builder()
                 .header()
                 .add("typ", "JWT")
                 .add("alg", "HS256")
                 .and()
                 .claims(extraClaims)
-                .issuer("adres application")
+                .issuer("Adres application")
                 .subject(userDetails.getUsername())
                 .issuedAt(startDate)
                 .expiration(endDate)
-                .signWith(getSigninKey(), SignatureAlgorithm.HS256)
+                .signWith(getSigninKey()) // Use Keys.hmacSha256(keyBytes)
                 .compact();
 
-        log.debug("generateToken token2: {}", token2);
+        log.debug("generateToken token: {}", token3);
 
-        return token2;
+        return token3;
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -77,14 +79,32 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
+
     private Claims extractAllClaims(String token) {
 
-        return Jwts
+        Claims claims = null;
+        Claims claims1 = null;
+
+
+        claims = Jwts
                 .parser()
                 .setSigningKey(getSigninKey())
                 .build()
                 .parseSignedClaims(token)
-                .getBody();
+                .getPayload();
+
+        claims1 = Jwts
+                .parser()
+                .setSigningKey(getSigninKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+
+        log.debug("extractAllClaims claim: {}", claims.toString());
+        log.debug("extractAllClaims claim1: {}", claims1.toString());
+        log.debug("extractAllClaims claim is {} equal to claim1: {}", claims1.toString().equals(claims.toString()), claims.toString().equals(claims1.toString()) ? "" : "not ");
+
+        return claims;
     }
 
     /*
@@ -94,4 +114,5 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return new SecretKeySpec(keyBytes, "HmacSHA256");
     }
+
 }
