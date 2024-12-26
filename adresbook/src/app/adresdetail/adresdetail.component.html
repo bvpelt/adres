@@ -1,10 +1,66 @@
-<h2>Adres</h2>
+<h2>Show / Update Adres</h2>
 
 <div *ngIf="adres!=undefined">
-{{adres.id}} {{adres.street}} {{adres.housenumber}} {{adres.zipcode}} {{adres.city}}
+
+    <div *ngIf="!(isLoggedIn$ | async)">
+        <div *ngIf="adres.id != undefined && adres.id != 0" class="form-group">
+            <label for="id">id: </label>
+            <p id="id"> {{adres.id}}</p>
+        </div>
+
+        <div class="form-group">
+            <label for="street">Street: </label>
+            <p id="street">{{adres.street}}</p>
+        </div>
+
+        <div class="form-group">
+            <label for="housenumber">housenumber: </label>
+            <p id="housenumber"> {{adres.housenumber}}</p>
+        </div>
+        <div class="form-group">
+            <label for="zipcode">zipcode: </label>
+            <p id="zipcode"> {{adres.zipcode}}</p>
+        </div>
+        <div class="form-group">
+            <label for="city">city: </label>
+            <p id="city"> {{adres.city}}</p>
+        </div>
+
+        <div class="button-container">           
+            <button type="button" (click)="cancel()">Continue</button>
+        </div>
+    </div>
+
+    <div *ngIf="isLoggedIn$ | async">
+        <div *ngIf="adres.id != undefined && adres.id != 0" class="form-group">
+            <label for="id">id: </label>
+            <p id="street"> {{adres.id}}</p>
+        </div>
+
+        <div class="form-group">
+            <label for="street">Street: </label>
+            <input id="street" [(ngModel)]="adres.street" placeholder="street">
+        </div>
+        <div class="form-group">
+            <label for="housenumber">housenumber: </label>
+            <input id="housenumber" [(ngModel)]="adres.housenumber" placeholder="housenumber">
+        </div>
+        <div class="form-group">
+            <label for="zipcode">zipcode: </label>
+            <input id="zipcode" [(ngModel)]="adres.zipcode" placeholder="zipcode">
+        </div>
+        <div class="form-group">
+            <label for="city">city: </label>
+            <input id="city" [(ngModel)]="adres.city" placeholder="city">
+        </div>
+
+        <div class="button-container">
+            <button type="button" (click)="onUpdate(adres)">Update</button>
+            <button type="button" (click)="cancel()">Cancel</button>
+        </div>
+    </div>
 </div>
 
 <div *ngIf="errormessage!=undefined && errormessage.length>0">
     {{errormessage}}
 </div>
-

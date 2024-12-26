@@ -1,8 +1,6 @@
-info:
-  project:
-    name: @project.name@
-    version: @project.version@
-    description: @project.description@
+application:
+  key: "9dd059be604f3e0b8742724eae817a49d4561fe22bf3519d10d7431dd4b188e4" # using jwtsecret.com/generate 32 bytes 256 bits
+  key-lifetime: 120 # minutes
 
 logging:
   level:
@@ -14,38 +12,16 @@ logging:
     com:
       bsoft: debug
 
-management:
-  endpoint:
-    health:
-      show-details: always
-    metrics:
-      enabled: true
-    prometheus:
-      enabled: true
-  info:
-    build:
-      enabled: false
-    env:
-      enabled: true
-  endpoints:
-    web:
-      path-mapping:
-        info: app-info
-        health: app-health
-      exposure:
-        include: 'health,info'
-        exclude:
-  server:
-    port: 8081
-
 spring:
   application:
     name: '@project.name@'
   main:
     banner-mode: 'off'
   mvc:
-    problemdetails:
+    problem-details:
       enabled: true
+  profiles:
+    active: '@activeProfile@'
 
 springdoc:
   enable-spring-security: false
@@ -54,3 +30,11 @@ springdoc:
     show-common-extensions: true
     with-credentials: false
     url: http://localhost:8080/swagger-ui/index.html
+    tagsSorter: alpha
+
+info:
+  project:
+    name: ${spring.application.name}
+    version: @project.version@
+    description: @project.description@
+  environment: ${spring.profiles.active}

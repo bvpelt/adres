@@ -1,6 +1,6 @@
 create table users_roles
 (
-    id     bigint not null auto_increment primary key,
+    id     bigint auto_increment primary key,
     userid bigint,
     roleid bigint
 );

@@ -1,18 +1,16 @@
 <h2>Adres</h2>
-<a routerLink="/addadres">Add adres</a>
+<a routerLink="/addadres" *ngIf="isLoggedIn$ | async" >Add adres</a>
 
-<div *ngIf="selectedAdres">
-    <h3>selected: {{selectedAdres.id}} {{selectedAdres.street}} {{selectedAdres.housenumber}} {{selectedAdres.zipcode}} {{selectedAdres.city}}</h3>
-</div>
+
 <div *ngIf="adres.length > 0">
     <ul class="adresses">
         <li *ngFor="let adres of adres">
             <button [class.selected]="adres === selectedAdres" type="button" (click)="onSelect(adres)">
                 <span class="badge">{{adres.id}}</span>
-                <span class="adres">{{adres.street}} {{adres.housenumber}} {{adres.zipcode}} {{adres.city}} </span>
-                <a routerLink="/adresdetail/{{adres.id}}">view</a>
-            </button> 
-            
+                <span class="adres">{{adres.street}} {{adres.housenumber}} {{adres.zipcode}} {{adres.city}} </span>                                
+            </button>             
+            <fa-icon *ngIf="isLoggedIn$ | async" [icon]="faPencilIcon" (click)="onSelect(adres)" ></fa-icon> 
+            <fa-icon *ngIf="isLoggedIn$ | async" [icon]="faTrashCanIcon" (click)="onDelete(adres)"></fa-icon>
         </li>
     </ul>
 </div>

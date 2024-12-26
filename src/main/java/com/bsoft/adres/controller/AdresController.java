@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,90 +32,105 @@ public class AdresController implements AdressesApi {
     private String version;
 
     @Override
-    public ResponseEntity<Void> _deleteAdres(Long adresId, String xApiKey, String authorization) {
-        log.debug("_deleteAdres apikey: {} authorization: {}", xApiKey, authorization);
-        boolean deleted = adresService.deleteAdres(adresId);
+    public ResponseEntity<Void> _deleteAdres(Long id, String X_API_KEY) {
+        log.debug("_deleteAdres apikey: {}", X_API_KEY);
+        boolean deleted = adresService.deleteAdres(id);
         if (!deleted) {
             throw new AdresNotDeletedException("Adres not deleted");
         }
 
-        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Version", version);
+
+        ResponseEntity<Void> responseEntity = new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+
+        return responseEntity;
     }
 
     @Override
-    public ResponseEntity<Void> _deleteAllAdreses(String xApiKey, String authorization) {
-        log.debug("_deleteAllAdreses apikey: {} authorization: {}", xApiKey, authorization);
+    public ResponseEntity<Void> _deleteAllAdreses(String X_API_KEY) {
+        log.debug("_deleteAllAdreses apikey: {}", X_API_KEY);
         adresService.deleteAll();
-        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Version", version);
+
+        ResponseEntity<Void> responseEntity = new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+
+        return responseEntity;
     }
 
     @Override
-    public ResponseEntity<Adres> _getAdres(Long adresId, String xApiKey) {
-        log.debug("_getAdres apikey: {}", xApiKey);
+    public ResponseEntity<Adres> _getAdres(Long adresId, String X_API_KEY) {
+        log.debug("_getAdres apikey: {}", X_API_KEY);
         Adres adres = adresService.getAdres(adresId);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
                 .body(adres); // Return 201 Created with the created entity
     }
 
     @Override
-    public ResponseEntity<AdresPerson> _getAdresPerons(Long adresId, String xApiKey) {
-        log.debug("_getAdresPerons apikey: {}", xApiKey);
+    public ResponseEntity<AdresPerson> _getAdresPerons(Long adresId, String X_API_KEY) {
+        log.debug("_getAdresPerons apikey: {}", X_API_KEY);
         AdresPerson adresPerson = adresService.getAdresPerson(adresId);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
                 .body(adresPerson); // Return 201 Created with the created entity
     }
 
     @Override
-    public ResponseEntity<List<Adres>> _getAdresses(String xApiKey, Integer pageNumber, Integer pageSize, String sortBy) {
-        log.debug("_getAdresses apikey: {}", xApiKey);
+    public ResponseEntity<List<Adres>> _getAdresses(Integer page, Integer size, String sort, String X_API_KEY) {
+        log.debug("_getAdresses apikey: {}", X_API_KEY);
         List<Sort.Order> sortParameter;
         PageRequest pageRequest;
-        log.info("Get adresses for pagenumber: {} pagesize: {}, sort: {}, api-key: {}", pageNumber, pageSize, sortBy, xApiKey);
+        log.trace("_getAdresses pagenumber: {} pagesize: {}, sort: {}, api-key: {}", page, size, sort, "");
         // Validate input parameters
-        if (pageNumber == null) {
-            pageNumber = 1;
+        if (page == null) {
+            page = 1;
         }
-        if (pageNumber < 1) {
+        if (page < 1) {
             throw new InvalidParameterException("Page number must be greater than 0");
         }
-        if (pageSize == null) { // set to default
-            pageSize = 25;
+        if (page == null) { // set to default
+            page = 25;
         }
-        if (pageSize < 1) {
+        if (page < 1) {
             throw new InvalidParameterException("Page size must be greater than 0");
         }
         //
-        if (sortBy != null && !sortBy.isEmpty()) {
+        if (sort != null && !sort.isEmpty()) {
             //sortParameter = ControllerSortUtil.getSortOrder(sortBy);
             //pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortParameter));
-            pageRequest = PageRequest.of(pageNumber - 1, pageSize, Sort.by(sortBy));
+            pageRequest = PageRequest.of(page - 1, size, Sort.by(sort));
         } else {
-            pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+            pageRequest = PageRequest.of(page - 1, size);
         }
+
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
                 .body(adresService.getAdresses(pageRequest));
     }
 
     @Override
-    public ResponseEntity<Adres> _patchAdres(Long adresId, String xApiKey, String authorization, AdresBody adresBody) {
-        log.debug("_patchAdres apikey: {} authorization: {}", xApiKey, authorization);
-        Adres adres = adresService.patch(adresId, adresBody);
+    public ResponseEntity<Adres> _patchAdres(Long id, String X_API_KEY, AdresBody adresBody) {
+        log.debug("_patchAdres apikey: {}", X_API_KEY);
+        Adres adres = adresService.patch(id, adresBody);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
                 .body(adres); // Return 201 Created with the created entity
-
     }
 
     @Override
-    public ResponseEntity<Adres> _postAdres(String xApiKey, String authorization, Boolean override, AdresBody adresBody) {
-        log.debug("_postAdres apikey: {} authorization: {}", xApiKey, authorization);
+    public ResponseEntity<Adres> _postAdres(Boolean override, AdresBody adresBody, String X_API_KEY) {
+        log.debug("_postAdres apikey: {}", X_API_KEY);
         if (override == null) {
             override = false;
         }
         Adres adres = adresService.postAdres(override, adresBody); // Call the service method
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header("Version", version)
                 .body(adres); // Return 201 Created with the created entity

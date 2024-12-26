@@ -2,10 +2,37 @@
 
 Adres data
 
+## Spring boot
+- Documentation https://docs.spring.io/spring-boot/index.html
+- Springdoc https://springdoc.org/
+
+## Intellij
+Change settings to use performance indicators without being root
+```bash
+sudo sh -c 'echo 1 > /proc/sys/kernel/perf_event_paranoid'
+sudo sh -c 'echo 0 > /proc/sys/kernel/kptr_restrict'
+```
 ## Environment
 
 On my windows laptop start with [setup](setup.cmd)
 Setup java 21 environment
+
+### Run test with specific profile
+
+```bash
+mvn clean test -P runtime -Dspring.profiles.active=runtime
+mvn clean test -P develop -Dspring.profiles.active=develop
+```
+# Security
+
+| User    | Role      | Privilege             |
+|---------|-----------|-----------------------|
+| admin   | ADMIN     | ALL                   |
+| bvpelt  | OPERATOR  | APP_FULL_ACCESS       |
+| bvpelt  | OPERATOR  | APP_SECURITY_ACCESS   |
+| user    | USER      | APP_READ_ACCESS_BASIC |
+| any     | JWT-TOKEN | APP_READ_ACCESS_JWT   |
+
 
 ## Basic Authentication
 
@@ -49,16 +76,43 @@ a1         a2          a3        a4                  a5                   a6    
 ```bash
 cat ~/Downloads/contacts.csv | awk '{split($0, a, ","); printf("%s\t--%s\t--%s\t--%s\t--%s\t--%s\t--%s\t--%s\t--%s\t--%s====\n", a[1], a[3], a[33], a[34], a[35], a[36], a[37], a[38], a[39], a[40])}'
 ```
-## Converting google contacts
-- export google contacts to a csv file
 
-Fields:
-First Name,Middle Name,Last Name,Phonetic First Name,Phonetic Middle Name,Phonetic Last Name,Name Prefix,Name Suffix,Nickname,File As,Organization Name,Organization Title,Organization Department,Birthday,Notes,Photo,Labels,E-mail 1 - Label,E-mail 1 - Value,E-mail 2 - Label,E-mail 2 - Value,E-mail 3 - Label,E-mail 3 - Value,E-mail 4 - Label,E-mail 4 - Value,Phone 1 - Label,Phone 1 - Value,Phone 2 - Label,Phone 2 - Value,Phone 3 - Label,Phone 3 - Value,Address 1 - Label,Address 1 - Formatted,Address 1 - Street,Address 1 - City,Address 1 - PO Box,Address 1 - Region,Address 1 - Postal Code,Address 1 - Country,Address 1 - Extended Address,Website 1 - Label,Website 1 - Value,Event 1 - Label,Event 1 - Value,Event 2 - Label,Event 2 - Value,Custom Field 1 - Label,Custom Field 1 - Value
-a1         a2          a3        a4                  a5                   a6                 a7          a8           a9      a10     a11               a12                a13                     a14      a15   a16   a17    a18              a19              a20              a21              a22              a23              a24              a25              a26             a27             a28             a29             a30             a31             a32               a33                   a34                a35              a36                a37                a38                     a39                 a40
+# 
+# Usefull info
 
+## Roles
+Determine which roles are granted to a specific user
+```sql
+-- simple query
+select username, rolename from users, role, users_roles where users.id = users_roles.userid and users_roles.roleid = role.id;
 
-```bash
-cat ~/Downloads/contacts.csv | awk '{split($0, a, ","); printf("%s\t--%s\t--%s\t--%s\t--%s\t--%s\t--%s\t--%s\t--%s\t--%s====\n", a[1], a[3], a[33], a[34], a[35], a[36], a[37], a[38], a[39], a[40])}'
+-- alternative with left join
+SELECT
+    u.username,
+    r.rolename
+FROM
+    users u
+        LEFT JOIN
+    users_roles ur ON u.id = ur.userid
+        LEFT JOIN
+    role r ON ur.roleid = r.id;
+
+-- All users, with roles and privileges
+SELECT
+    u.username,
+    r.rolename,
+    p.name
+FROM
+    users u
+        LEFT JOIN
+    users_roles ur ON u.id = ur.userid
+        LEFT JOIN
+    role r ON ur.roleid = r.id
+        LEFT JOIN
+    roles_privileges rp ON r.id = rp.roleid
+        LEFT JOIN
+    privilege p ON rp.privilegeid=p.id;
+
 ```
 ## References
 
@@ -72,6 +126,7 @@ cat ~/Downloads/contacts.csv | awk '{split($0, a, ","); printf("%s\t--%s\t--%s\t
 - [Spring Security user authentication](https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/dao-authentication-provider.html)
 - [Password encoders](https://www.baeldung.com/spring-security-5-default-password-encoder)
 - [Spring security tutorial](https://www.javainuse.com/boot3/sec)
+- [JWT Token](https://www.youtube.com/watch?v=KxqlJblhzfI)
 
 
 

@@ -35,11 +35,14 @@ public class PrivilegeDAO {
         roles.add(role);
     }
 
+    public void genHash() {
+        this.hash = hashCode();
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        PrivilegeDAO privilegeDAO = (PrivilegeDAO) o;
-        return Objects.equals(name, privilegeDAO.name);
+        if (!(o instanceof PrivilegeDAO that)) return false;
+        return Objects.equals(name, that.name);
     }
 
     @Override
@@ -49,12 +52,11 @@ public class PrivilegeDAO {
 
     @Override
     public String toString() {
-        return "Privilege{" +
+        return "PrivilegeDAO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", hash=" + hash +
 //                ", roles=" + roles +
                 '}';
     }
-
 }

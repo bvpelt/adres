@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { Adres } from '../core/modules/openapi/model/adres';
 import { AdresBody } from '../core/modules/openapi';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { AdresService } from '../services/adres.service';
+import { Observable } from 'rxjs';
+import { LogonService } from '../services/logon.service';
 
 @Component({
   selector: 'app-adres',
@@ -12,29 +14,38 @@ import { AdresService } from '../services/adres.service';
 })
 export class AdresComponent {
 
-  adres: Adres = {} as Adres; //{ city: 'Veenendaal', housenumber: '12a', id: 0, street: 'Kerkewijk', zipcode: '3903 GA'};
-  xApiKey: string = 'f0583805-03f6-4c7f-8e40-f83f55b7c077';
+  adres: Adres = {} as Adres;
   errormessage?: string = undefined;
-  user: string = 'bvpelt';
-  password: string = '12345';
 
+  isLoggedIn$: Observable<boolean>;
 
-  constructor(private route: ActivatedRoute, private adresService: AdresService, private location: Location) {
-    // this.getAdres(this.xApiKey);
+  constructor(private router: Router,
+    private adresService: AdresService,
+    private location: Location,
+    private logonService: LogonService) {
+
+    this.isLoggedIn$ = this.logonService.isLoggedIn$;
   }
 
   onSave(adres: Adres) {
-    const adresbody: AdresBody = { street: adres.street, housenumber: adres.housenumber, zipcode: adres.zipcode, city: adres.city };
-    this.adresService.postAdres(this.user, this.password, this.xApiKey, false, adresbody)
-      .subscribe({
-        next:
-          response => {
-            this.adres = response.body as Adres;
-          },
-        error: error => {
-          this.errormessage = 'Status: ' + error.status + ' details: ' + error.error.detail;
-        }
-      })
+    console.log('Add adres: ', adres);
+    if (adres != {} as Adres) {
+      console.log('Adding not empty adres');
+      const adresbody: AdresBody = { street: adres.street, housenumber: adres.housenumber, zipcode: adres.zipcode, city: adres.city };
+      this.adresService.postAdres(this.logonService.authenticatedUser!, this.logonService.authenticatedPassword!, this.logonService.xApiKey, false, adresbody)
+        .subscribe({
+          next:
+            response => {
+              this.adres = response.body as Adres;
+            },
+          error: error => {
+            this.errormessage = 'AdresComponent Status: ' + error.status + ' details: ' + error.error.detail;
+          }
+        });
+    } else {
+      console.log('Skip empty adres');
+    }
+    this.router.navigate(['/adresses']);
   }
 
 }

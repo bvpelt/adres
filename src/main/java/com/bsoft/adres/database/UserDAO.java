@@ -18,7 +18,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
-@Table(name = "user", schema = "public", catalog = "adres")
+@Table(name = "users", schema = "public", catalog = "adres")
 public class UserDAO {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -67,6 +67,18 @@ public class UserDAO {
     )
     private Collection<RoleDAO> roles = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name= "apikey_id")
+    ApiKeyDao apiKey;
+
+    public UserDAO(String username, String password, String email, String phone) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.hash = hashCode();
+    }
+
     public UserDAO(final UserBody userbody) {
         this.setUsername(userbody.getUsername());
         this.setPassword(userbody.getPassword());
@@ -79,6 +91,14 @@ public class UserDAO {
         this.setEnabled(userbody.getEnabled());
         this.setRoles(new HashSet<>());
         this.hash = hashCode();
+    }
+
+    public void genHash() {
+        this.hash = hashCode();
+    }
+
+    public void addRole(RoleDAO role) {
+        roles.add(role);
     }
 
     public void setRoles(Collection<RoleDAO> roles) {

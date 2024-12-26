@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { LogonService } from './services/logon.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'adresbook';
+
+  isLoggedIn$: Observable<boolean>;
+
+  constructor(private logonService: LogonService) {
+    this.isLoggedIn$ = this.logonService.isLoggedIn$;
+  }
+
 }

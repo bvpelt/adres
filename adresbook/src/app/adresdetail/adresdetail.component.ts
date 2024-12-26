@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
 import { Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Adres } from '../core/modules/openapi/model/adres';
 import { AdresService } from '../services/adres.service';
+import { LogonService } from '../services/logon.service';
+import { AdresBody } from '../core/modules/openapi';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-adresdetail',
@@ -10,12 +13,18 @@ import { AdresService } from '../services/adres.service';
   styleUrl: './adresdetail.component.css'
 })
 export class AdresdetailComponent {
-  xApiKey: string = 'f0583805-03f6-4c7f-8e40-f83f55b7c077';
   adres?: Adres = undefined;
   errormessage?: string = undefined;
 
-  constructor(private route: ActivatedRoute, private adresService: AdresService, private location: Location) {
-    this.getAdres(this.xApiKey);
+  isLoggedIn$: Observable<boolean>;
+
+  constructor(private route: ActivatedRoute,
+    private adresService: AdresService,
+    private router: Router,
+    private logonService: LogonService) {
+    this.getAdres(this.logonService.xApiKey);
+
+    this.isLoggedIn$ = this.logonService.isLoggedIn$;
   }
 
 
@@ -31,8 +40,31 @@ export class AdresdetailComponent {
             }
           },
         error: error => {
-          this.errormessage = 'Status: ' + error.status + ' details: ' + error.error.detail;
+          this.errormessage = 'AdresdetailComponent Status: ' + error.status + ' details: ' + error.error.detail;
         }
       });
+  }
+
+  onUpdate(adres: Adres) {
+    console.log("udpate adres");
+
+    const adresbody: AdresBody = { street: adres.street, housenumber: adres.housenumber, zipcode: adres.zipcode, city: adres.city };
+    this.adresService.patchAdres(this.logonService.authenticatedUser!, this.logonService.authenticatedPassword!, adres.id, this.logonService.xApiKey, adresbody)
+      .subscribe({
+        next:
+          response => {
+            this.adres = response.body as Adres;
+          },
+        error: error => {
+          this.errormessage = 'AdresdetailComponent Status: ' + error.status + ' details: ' + error.error.detail;
+        }
+      });
+
+    this.router.navigate(['/adresses']);
+  }
+
+  cancel() {
+    console.log("cancel adres");
+    this.router.navigate(['/adresses']);
   }
 }

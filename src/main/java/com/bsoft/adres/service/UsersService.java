@@ -8,9 +8,10 @@ import com.bsoft.adres.generated.model.Role;
 import com.bsoft.adres.generated.model.User;
 import com.bsoft.adres.generated.model.UserBody;
 import com.bsoft.adres.repositories.UsersRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,16 +19,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class UsersService {
 
     private final UsersRepository usersRepository;
 
-
-    @Autowired
-    public UsersService(final UsersRepository usersRepository) {
-        this.usersRepository = usersRepository;
-    }
+    private final BCryptPasswordEncoder bCryptPasswordEncoder; // = new BCryptPasswordEncoder();
 
     public void deleteAll() {
         try {
@@ -111,6 +109,11 @@ public class UsersService {
                     throw new UserExistsException("User " + userDAO + " already exists cannot insert again");
                 }
             }
+
+            String pwd = userBody.getPassword();
+            String encodedPwd = bCryptPasswordEncoder.encode(pwd);
+            userDAO.setPassword(encodedPwd);
+            userDAO.genHash();
 
             usersRepository.save(userDAO);
 

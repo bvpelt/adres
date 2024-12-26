@@ -9,8 +9,8 @@ import com.bsoft.adres.generated.model.PersonAdres;
 import com.bsoft.adres.generated.model.PersonBody;
 import com.bsoft.adres.repositories.AdresRepository;
 import com.bsoft.adres.repositories.PersonRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -19,17 +19,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class PersonService {
 
     private final PersonRepository personRepository;
     private final AdresRepository adresRepository;
 
+    /*
     @Autowired
     public PersonService(final PersonRepository personRepository, final AdresRepository adresRepository) {
         this.personRepository = personRepository;
         this.adresRepository = adresRepository;
     }
+     */
 
     public void deleteAll() {
         try {
@@ -175,6 +178,5 @@ public class PersonService {
         person.setDateOfBirth(personDAO.getDateofbirth());
         return person;
     }
-
 
 }

@@ -37,6 +37,14 @@ public class AdresDAO implements Serializable {
     @Column(name = "hash")
     private Integer hash;
 
+    public AdresDAO(String street, String housenumber, String zipcode, String city) {
+        this.street = street;
+        this.housenumber = housenumber;
+        this.zipcode = zipcode;
+        this.city = city;
+        this.hash = hashCode();
+    }
+
     public AdresDAO(final Adres adres) {
         this.id = adres.getId();
         this.city = adres.getCity();
@@ -53,6 +61,10 @@ public class AdresDAO implements Serializable {
         this.street = adres.getStreet();
         this.zipcode = adres.getZipcode();
         this.hash = this.hashCode();
+    }
+
+    public void genHash() {
+        this.hash = hashCode();
     }
 
     @Override

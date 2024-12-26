@@ -8,7 +8,8 @@ create table adres
     hash        int
 );
 
-create unique index zipcodehousenr_ix on adres(zipcode, housenumber);
+create index zipcodehousenr_ix on adres (zipcode, housenumber);
+create index city_ix on adres (city);
 
 ALTER TABLE adres
 ALTER

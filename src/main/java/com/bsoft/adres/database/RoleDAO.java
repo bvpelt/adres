@@ -37,7 +37,7 @@ public class RoleDAO {
     @Column(name = "hash")
     private Integer hash = -1;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "roles") //, fetch = FetchType.LAZY)
     private Collection<UserDAO> users = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -50,6 +50,10 @@ public class RoleDAO {
         this.description = roleBody.getDescription();
         this.rolename = roleBody.getRolename();
         this.hash = this.hashCode();
+    }
+
+    public void genHash() {
+        this.hash = hashCode();
     }
 
     public void addUser(UserDAO user) {

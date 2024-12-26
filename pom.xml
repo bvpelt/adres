@@ -11,8 +11,8 @@
 
     <groupId>com.bsoft</groupId>
     <artifactId>adres</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>adres</name>
+    <version>0.0.10</version>
+    <name>Adres</name>
 
     <description>Adressen service</description>
 
@@ -30,7 +30,6 @@
         <url/>
     </scm>
 
-
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -44,36 +43,53 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <spring-boot.run.profiles>develop</spring-boot.run.profiles>
+                <spring.profiles.active>develop</spring.profiles.active>
             </properties>
             <dependencies>
+                <!--
                 <dependency>
                     <groupId>com.h2database</groupId>
                     <artifactId>h2</artifactId>
                     <version>2.2.220</version>
                 </dependency>
+                -->
             </dependencies>
         </profile>
         <profile>
             <id>runtime</id>
             <properties>
-                <spring-boot.run.profiles>runtime</spring-boot.run.profiles>
+                <spring.profiles.active>runtime</spring.profiles.active>
             </properties>
             <dependencies>
-
-                <dependency>
-                    <groupId>org.flywaydb</groupId>
-                    <artifactId>flyway-database-postgresql</artifactId>
-                </dependency>
+                <!--
                 <dependency>
                     <groupId>org.postgresql</groupId>
                     <artifactId>postgresql</artifactId>
                 </dependency>
+                <dependency>
+                    <groupId>org.flywaydb</groupId>
+                    <artifactId>flyway-database-postgresql</artifactId>
+                </dependency>
+                -->
             </dependencies>
         </profile>
     </profiles>
 
     <dependencies>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.2.224</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -95,6 +111,8 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
 
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -107,6 +125,23 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.12.6</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.12.6</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.12.6</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -157,22 +192,8 @@
                 <version>3.13.0</version>
                 <configuration>
                     <verbose>false</verbose>
-                    <!--
-                    <source>21</source>
-                    <target>21</target>
-                    <release>21</release>
-                    -->
                 </configuration>
             </plugin>
-<!--
-            <plugin>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-maven-plugin</artifactId>
-
-                <version>10.17.0</version>
-
-            </plugin>
--->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -207,7 +228,7 @@
                         </goals>
                         <configuration>
 
-                            <inputSpec>${project.basedir}/src/main/resources/adres.0.0.6.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/adres.0.0.10.yaml</inputSpec>
 
                             <generatorName>spring</generatorName>
                             <library>spring-boot</library>

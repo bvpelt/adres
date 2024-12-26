@@ -15,7 +15,7 @@ export class AdresService {
   }
   
   // public deleteAdres(id: number, xApiKey: string, authorization: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-  deleteAdres(user: string, password: string, id: number, xApiKey: string, page?: number, size?: number ):  Observable<HttpResponse<any>> {
+  deleteAdres(user: string, password: string, id: number, xApiKey: string):  Observable<HttpResponse<any>> {
     const credentials: string = user + ':' + password;
     const headers: HttpHeaders = new HttpHeaders({
       'x-api-key' : xApiKey
@@ -24,7 +24,7 @@ export class AdresService {
     const authorisation: string = 'Basic ' + btoa(credentials);
     const options:any = {
       headers: headers,
-      httpHeaderAccept: 'application/json'
+    //  httpHeaderAccept: 'application/json'
     }
 
     return this.api.deleteAdres(id, xApiKey, authorisation, 'response', false, options);

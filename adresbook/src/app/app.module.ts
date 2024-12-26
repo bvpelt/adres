@@ -10,11 +10,17 @@ import { environment } from '../environments/environment';
 import { HttpClientModule } from '@angular/common/http';
 
 import { BASE_PATH } from './core/modules/openapi';
+
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+
 import { AdresesComponent } from './adreses/adreses.component';
 import { AdresComponent } from './adres/adres.component';
 import { AdresdetailComponent } from './adresdetail/adresdetail.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
-
+import { LoginComponent } from './login/login.component';
+import { LogoutComponent } from './logout/logout.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -29,10 +35,13 @@ export function apiConfigFactory (): Configuration {
     AppComponent,
     AdresesComponent,
     AdresComponent,
-    AdresdetailComponent
+    AdresdetailComponent,    
+    LoginComponent,
+    LogoutComponent,
   ],
   imports: [
     BrowserModule,
+    FontAwesomeModule,
     FormsModule,
     AppRoutingModule,
     ApiModule.forRoot(apiConfigFactory),
@@ -45,9 +54,7 @@ export function apiConfigFactory (): Configuration {
       // Add a unique identifier to the service worker configuration   
     }) : []
   ],
-  providers: [
-//    { provide: BASE_PATH, useValue: "http:/localhost:8080/adres/api/v1" }     
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

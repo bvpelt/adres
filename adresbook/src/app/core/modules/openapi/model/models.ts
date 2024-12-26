@@ -5,6 +5,8 @@ export * from './adres-person';
 export * from './adres-person1';
 export * from './adresses';
 export * from './deleted';
+export * from './login-request';
+export * from './login-response';
 export * from './person';
 export * from './person-adres';
 export * from './person-adres1';

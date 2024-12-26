@@ -9,8 +9,8 @@ import com.bsoft.adres.generated.model.AdresBody;
 import com.bsoft.adres.generated.model.AdresPerson;
 import com.bsoft.adres.repositories.AdresRepository;
 import com.bsoft.adres.repositories.PersonRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -19,18 +19,19 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class AdresService {
-
     private final AdresRepository adresRepository;
     private final PersonRepository personRepository;
 
-    @Autowired
-    public AdresService(final AdresRepository adresRepository, final PersonRepository personRepository) {
-        this.adresRepository = adresRepository;
-        this.personRepository = personRepository;
-    }
-
+    /*
+        @Autowired
+        public AdresService(final AdresRepository adresRepository, final PersonRepository personRepository) {
+            this.adresRepository = adresRepository;
+            this.personRepository = personRepository;
+        }
+    */
     public void deleteAll() {
         try {
             adresRepository.deleteAll();

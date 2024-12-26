@@ -1,3 +1,8 @@
+GET http://localhost:8081/actuator
+Accept: application/vnd.spring-boot.actuator.v3+json
+Authorization: Basic YWRtaW46MTIzNDU=
+
+###
 POST http://localhost:8080/adres/api/v1/adresses
 Accept: application/json
 Content-Type: application/json
@@ -158,3 +163,6 @@ Accept: application/json
 Content-Type: application/json
 x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
 
+###
+DELETE http://localhost:8080/adres/api/v1/adresses/4
+x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
