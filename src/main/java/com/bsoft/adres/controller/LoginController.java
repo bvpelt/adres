@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
@@ -29,7 +28,6 @@ public class LoginController implements LoginApi {
     @Value("${info.project.version}")
     private String version;
 
-    @PostMapping("/login/user")
     @Override
     public ResponseEntity<LoginResponse> _postLogin(LoginRequest loginRequest, String X_API_KEY) {
         log.debug("_getUser apikey: {}", X_API_KEY);
@@ -44,7 +42,6 @@ public class LoginController implements LoginApi {
                 .body(loginResponse);
     }
 
-    @PostMapping("/login/jwt/authenticate")
     @Override
     public ResponseEntity<AuthenticateResponse> _postAuthenticate(String X_API_KEY, AuthenticateRequest authenticateRequest) {
         log.debug("_postAuthenticate apikey: {}", X_API_KEY);
@@ -53,7 +50,6 @@ public class LoginController implements LoginApi {
                 .body(authenticationService.authenticate(authenticateRequest));
     }
 
-    @PostMapping("/login/jwt/register")
     @Override
     public ResponseEntity<AuthenticateResponse> _postRegister(String X_API_KEY, RegisterRequest registerRequest) {
         log.debug("_postRegister apikey: {}", X_API_KEY);

@@ -2,6 +2,7 @@ openapi: "3.0.3"
 info:
   title: Adres API
   version: 0.0.11
+  
 servers:
   - url: http://localhost:8080/{basePath}
     description: development
@@ -22,7 +23,9 @@ tags:
   - name: Persons
     description: "Persons"
   - name: Roles
+    description: "The roles a user can have"
   - name: Users
+    description: "The users who have special access"
 
 paths:
   /adresses:

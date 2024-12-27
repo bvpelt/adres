@@ -1,6 +1,5 @@
 package com.bsoft.adres.auth;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.LocatorAdapter;
 import io.jsonwebtoken.ProtectedHeader;
 import io.jsonwebtoken.io.Decoders;

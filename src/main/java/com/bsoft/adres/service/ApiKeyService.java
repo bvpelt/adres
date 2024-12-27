@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import java.util.Optional;
 import java.util.UUID;
 
@@ -31,7 +30,7 @@ public class ApiKeyService {
 
         // 2. Check if API Key exists in the database
         Optional<ApiKeyDao> apiKeyOptional = apiKeyRepository.findByKey(apiKey);
-        result =  apiKeyOptional.isPresent();
+        result = apiKeyOptional.isPresent();
 
         log.trace("isValidApiKey checking key: {} value: {}", apiKey, result);
         return result;

@@ -23,39 +23,31 @@ import java.util.Objects;
 public class UserDAO {
     @Serial
     private static final long serialVersionUID = 1L;
-
+    @ManyToOne
+    @JoinColumn(name = "apikey_id")
+    ApiKeyDao apiKey;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
     @Column(name = "username")
     private String username;
-
     @Column(name = "password")
     private String password;
-
     @Column(name = "email")
     private String email;
-
     @Column(name = "phone")
     private String phone;
-
     @Column(name = "account_non_expired")
     private Boolean account_non_expired = true;
-
     @Column(name = "account_non_locked")
     private Boolean account_non_locked = true;
-
     @Column(name = "credentials_non_expired")
     private Boolean credentials_non_expired = true;
-
     @Column(name = "enabled")
     private Boolean enabled = true;
-
     @Column(name = "hash")
     private Integer hash = -1;
-
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL) // owning site
     @JoinTable(
             name = "users_roles",
@@ -67,10 +59,6 @@ public class UserDAO {
             }
     )
     private Collection<RoleDAO> roles = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name= "apikey_id")
-    ApiKeyDao apiKey;
 
     public UserDAO(String username, String password, String email, String phone) {
         this.username = username;
