@@ -36,7 +36,7 @@ public class LoginController implements LoginApi {
         User user = usersService.getUserByName(loginRequest.getUsername());
         String encodedPassword = passwordEncoder.encode(loginRequest.getPassword());
 
-        Boolean authenticated = passwordEncoder.matches(loginRequest.getPassword(), encodedPassword);
+        Boolean authenticated = passwordEncoder.matches(loginRequest.getPassword(), user.getPassword());
         if (encodedPassword.equals(user.getPassword())) {
             authenticated = true;
         }

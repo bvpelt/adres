@@ -2,6 +2,7 @@ package com.bsoft.adres.auth;
 
 import com.bsoft.adres.database.RoleDAO;
 import com.bsoft.adres.database.UserDAO;
+import com.bsoft.adres.exceptions.InvalidUserException;
 import com.bsoft.adres.exceptions.UserExistsException;
 import com.bsoft.adres.generated.model.AuthenticateRequest;
 import com.bsoft.adres.generated.model.AuthenticateResponse;
@@ -14,9 +15,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ServerErrorException;
 
+import java.rmi.ServerException;
 import java.util.Optional;
 
 @Slf4j
@@ -58,6 +62,7 @@ public class AuthenticationService {
         defRole.addUser(user);
         user.getRoles().add(defRole);
         user.setEmail(request.getEmail());
+        user.setPhone(request.getPhone());
         user.genHash();
         try {
             usersRepository.save(user);
@@ -76,9 +81,14 @@ public class AuthenticationService {
 
     public AuthenticateResponse authenticate(AuthenticateRequest request) {
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+            );
+        } catch (AuthenticationException e) {
+            log.error("Authentication failed for user: {}", request.getUsername());
+            throw new InvalidUserException("Authentication failed for user: " + request.getUsername());
+        }
 
         var user = usersRepository
                 .findByUserName(request.getUsername())
