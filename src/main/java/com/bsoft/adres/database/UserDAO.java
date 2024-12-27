@@ -1,5 +1,6 @@
 package com.bsoft.adres.database;
 
+import com.bsoft.adres.generated.model.User;
 import com.bsoft.adres.generated.model.UserBody;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -85,12 +86,23 @@ public class UserDAO {
         this.setEmail(userbody.getEmail());
         this.setPhone(userbody.getPhone());
         this.setAccount_non_expired(userbody.getAccountNonExpired());
-        this.setAccount_non_expired(userbody.getAccountNonExpired());
         this.setAccount_non_locked(userbody.getAccountNonLocked());
         this.setCredentials_non_expired(userbody.getCredentialsNonExpired());
         this.setEnabled(userbody.getEnabled());
         this.setRoles(new HashSet<>());
         this.hash = hashCode();
+    }
+
+    public UserDAO(final User user) {
+        this.setUsername(user.getUsername());
+        this.setPassword(user.getPassword());
+        this.setEmail(user.getEmail());
+        this.setPassword(user.getPhone());
+        this.setAccount_non_expired(user.getAccountNonExpired());
+        this.setAccount_non_locked(user.getAccountNonLocked());
+        this.setCredentials_non_expired(user.getCredentialsNonExpired());
+        this.setEnabled(user.getEnabled());
+        this.setRoles(new HashSet<>());
     }
 
     public void genHash() {

@@ -9,6 +9,7 @@ export * from './authenticate-response';
 export * from './deleted';
 export * from './login-request';
 export * from './login-response';
+export * from './login-test-response';
 export * from './person';
 export * from './person-adres';
 export * from './person-adres1';

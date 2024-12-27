@@ -27,6 +27,7 @@ model/authenticate-response.ts
 model/deleted.ts
 model/login-request.ts
 model/login-response.ts
+model/login-test-response.ts
 model/models.ts
 model/person-adres.ts
 model/person-adres1.ts

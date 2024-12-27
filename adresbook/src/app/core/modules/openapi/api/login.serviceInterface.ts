@@ -15,6 +15,7 @@ import { AuthenticateRequest } from '../model/models';
 import { AuthenticateResponse } from '../model/models';
 import { LoginRequest } from '../model/models';
 import { LoginResponse } from '../model/models';
+import { LoginTestResponse } from '../model/models';
 import { ProblemDetail } from '../model/models';
 import { RegisterRequest } from '../model/models';
 
@@ -50,5 +51,13 @@ export interface LoginServiceInterface {
      * @param registerRequest Request parameters
      */
     postRegister(xAPIKEY?: string, registerRequest?: RegisterRequest, extraHttpRequestParams?: any): Observable<AuthenticateResponse>;
+
+    /**
+     * Login to the application
+     * This login mechanism makes it possible to login with credentials (username,password) en depending on the capabilities get back  that authentication succeeded (only for basic authentication) and when appropriate a jwt token for repeated calls 
+     * @param loginRequest Request parameters
+     * @param xAPIKEY An api key used to track usage of the api
+     */
+    postTestLogin(loginRequest: LoginRequest, xAPIKEY?: string, extraHttpRequestParams?: any): Observable<LoginTestResponse>;
 
 }
