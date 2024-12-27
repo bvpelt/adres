@@ -217,7 +217,7 @@ paths:
         "5XX":
           $ref: "#/components/responses/ServerError"
 
-  /login/test: 
+  /login/special: 
     post: 
       tags: 
         - Login

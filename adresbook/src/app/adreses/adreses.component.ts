@@ -17,7 +17,7 @@ export class AdresesComponent implements OnInit, OnChanges {
   @Input() isFirstActivation: boolean = true;
   
   page: number = 1;
-  size: number = 10;
+  size: number = 20;
   faPencilIcon = faPencil;
   faTrashCanIcon = faTrashCan;
 
@@ -48,6 +48,7 @@ export class AdresesComponent implements OnInit, OnChanges {
       console.log('Component activated again');
     }
   }
+
   getAdresses(xApiKey: string, page: number, size: number): void {
     this.adresService.getAdresses(xApiKey, page, size)
       .subscribe({

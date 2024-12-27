@@ -26,6 +26,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.SEE_OTHER).body(problemDetail);
     }
 
+    @ExceptionHandler(AdresNotDeletedException.class)
+    public ResponseEntity<ProblemDetail> handleExcehandleAdresNotDeletedException(AdresNotDeletedException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        problemDetail.setTitle("Adres not deleted");
+        problemDetail.setInstance(URI.create(adresses));
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
+    }
     @ExceptionHandler(AdresNotExistsException.class)
     public ResponseEntity<ProblemDetail> handleExcehandleAdresNotExistsExceptionption(AdresNotExistsException ex) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
@@ -33,6 +41,15 @@ public class GlobalExceptionHandler {
         problemDetail.setInstance(URI.create(adresses));
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
+    }
+
+    @ExceptionHandler(InvalidParameterException.class)
+    public ResponseEntity<ProblemDetail> handleExcehandleInvalidParameterException(InvalidParameterException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+        problemDetail.setTitle("Invalid parameter");
+        problemDetail.setInstance(URI.create(adresses));
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
     }
 
     @ExceptionHandler(PersonExistsException.class)
@@ -53,12 +70,4 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
     }
 
-    @ExceptionHandler(InvalidParameterException.class)
-    public ResponseEntity<ProblemDetail> handleExcehandleInvalidParameterException(InvalidParameterException ex) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
-        problemDetail.setTitle("Invalid parameter");
-        problemDetail.setInstance(URI.create(adresses));
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
-    }
 }
