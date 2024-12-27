@@ -92,3 +92,4 @@ adres.trace.db
 # System files
 /adresbook/.DS_Store
 /adresbook/Thumbs.db
+adresbook/src/app/core
