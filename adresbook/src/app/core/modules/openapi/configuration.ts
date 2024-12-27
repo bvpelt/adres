@@ -87,12 +87,32 @@ export class Configuration {
             this.credentials = {};
         }
 
+        // init default apiKey credential
+        if (!this.credentials['apiKey']) {
+            this.credentials['apiKey'] = () => {
+                if (this.apiKeys === null || this.apiKeys === undefined) {
+                    return undefined;
+                } else {
+                    return this.apiKeys['apiKey'] || this.apiKeys['X-API-KEY'];
+                }
+            };
+        }
+
         // init default basicAuth credential
         if (!this.credentials['basicAuth']) {
             this.credentials['basicAuth'] = () => {
                 return (this.username || this.password)
                     ? btoa(this.username + ':' + this.password)
                     : undefined;
+            };
+        }
+
+        // init default bearerAuth credential
+        if (!this.credentials['bearerAuth']) {
+            this.credentials['bearerAuth'] = () => {
+                return typeof this.accessToken === 'function'
+                    ? this.accessToken()
+                    : this.accessToken;
             };
         }
     }

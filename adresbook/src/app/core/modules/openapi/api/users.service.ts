@@ -102,35 +102,25 @@ export class UsersService implements UsersServiceInterface {
     /**
      * Delete all
      * Delete all users 
-     * @param xApiKey An api key used to track usage of the api
-     * @param authorization 
+     * @param xAPIKEY An api key used to track usage of the api
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteAllUsers(xApiKey: string, authorization: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteAllUsers(xApiKey: string, authorization: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteAllUsers(xApiKey: string, authorization: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteAllUsers(xApiKey: string, authorization: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (xApiKey === null || xApiKey === undefined) {
-            throw new Error('Required parameter xApiKey was null or undefined when calling deleteAllUsers.');
-        }
-        if (authorization === null || authorization === undefined) {
-            throw new Error('Required parameter authorization was null or undefined when calling deleteAllUsers.');
-        }
+    public deleteAllUsers(xAPIKEY?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteAllUsers(xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteAllUsers(xAPIKEY?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteAllUsers(xAPIKEY?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
-        if (xApiKey !== undefined && xApiKey !== null) {
-            localVarHeaders = localVarHeaders.set('x-api-key', String(xApiKey));
-        }
-        if (authorization !== undefined && authorization !== null) {
-            localVarHeaders = localVarHeaders.set('Authorization', String(authorization));
+        if (xAPIKEY !== undefined && xAPIKEY !== null) {
+            localVarHeaders = localVarHeaders.set('X-API-KEY', String(xAPIKEY));
         }
 
         let localVarCredential: string | undefined;
-        // authentication (basicAuth) required
-        localVarCredential = this.configuration.lookupCredential('basicAuth');
+        // authentication (bearerAuth) required
+        localVarCredential = this.configuration.lookupCredential('bearerAuth');
         if (localVarCredential) {
-            localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -185,38 +175,28 @@ export class UsersService implements UsersServiceInterface {
      * Delete the specified user
      * Delete only the specified user 
      * @param id The identification of the resource to return
-     * @param xApiKey An api key used to track usage of the api
-     * @param authorization 
+     * @param xAPIKEY An api key used to track usage of the api
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteUser(id: number, xApiKey: string, authorization: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteUser(id: number, xApiKey: string, authorization: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteUser(id: number, xApiKey: string, authorization: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteUser(id: number, xApiKey: string, authorization: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteUser(id: number, xAPIKEY?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteUser(id: number, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteUser(id: number, xAPIKEY?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteUser(id: number, xAPIKEY?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling deleteUser.');
         }
-        if (xApiKey === null || xApiKey === undefined) {
-            throw new Error('Required parameter xApiKey was null or undefined when calling deleteUser.');
-        }
-        if (authorization === null || authorization === undefined) {
-            throw new Error('Required parameter authorization was null or undefined when calling deleteUser.');
-        }
 
         let localVarHeaders = this.defaultHeaders;
-        if (xApiKey !== undefined && xApiKey !== null) {
-            localVarHeaders = localVarHeaders.set('x-api-key', String(xApiKey));
-        }
-        if (authorization !== undefined && authorization !== null) {
-            localVarHeaders = localVarHeaders.set('Authorization', String(authorization));
+        if (xAPIKEY !== undefined && xAPIKEY !== null) {
+            localVarHeaders = localVarHeaders.set('X-API-KEY', String(xAPIKEY));
         }
 
         let localVarCredential: string | undefined;
-        // authentication (basicAuth) required
-        localVarCredential = this.configuration.lookupCredential('basicAuth');
+        // authentication (bearerAuth) required
+        localVarCredential = this.configuration.lookupCredential('bearerAuth');
         if (localVarCredential) {
-            localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -271,31 +251,28 @@ export class UsersService implements UsersServiceInterface {
      * Retrieve the specified user
      * Retrieve only one user with id userId 
      * @param id The identification of the resource to return
-     * @param xApiKey An api key used to track usage of the api
+     * @param xAPIKEY An api key used to track usage of the api
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUser(id: number, xApiKey: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<User>;
-    public getUser(id: number, xApiKey: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<User>>;
-    public getUser(id: number, xApiKey: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<User>>;
-    public getUser(id: number, xApiKey: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getUser(id: number, xAPIKEY?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<User>;
+    public getUser(id: number, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<User>>;
+    public getUser(id: number, xAPIKEY?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<User>>;
+    public getUser(id: number, xAPIKEY?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getUser.');
         }
-        if (xApiKey === null || xApiKey === undefined) {
-            throw new Error('Required parameter xApiKey was null or undefined when calling getUser.');
-        }
 
         let localVarHeaders = this.defaultHeaders;
-        if (xApiKey !== undefined && xApiKey !== null) {
-            localVarHeaders = localVarHeaders.set('x-api-key', String(xApiKey));
+        if (xAPIKEY !== undefined && xAPIKEY !== null) {
+            localVarHeaders = localVarHeaders.set('X-API-KEY', String(xAPIKEY));
         }
 
         let localVarCredential: string | undefined;
-        // authentication (basicAuth) required
-        localVarCredential = this.configuration.lookupCredential('basicAuth');
+        // authentication (bearerAuth) required
+        localVarCredential = this.configuration.lookupCredential('bearerAuth');
         if (localVarCredential) {
-            localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -350,19 +327,22 @@ export class UsersService implements UsersServiceInterface {
     /**
      * Retrieve all known users
      * Retrieve all known users, using paging and sorting 
-     * @param xApiKey An api key used to track usage of the api
      * @param page pagenumber starts on 1
      * @param size number of elements on each page - minimum    1 - default   25 - maximum: 100 
      * @param sort field names to sort on
+     * @param xAPIKEY An api key used to track usage of the api
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUsers(xApiKey: string, page?: number, size?: number, sort?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<Users>;
-    public getUsers(xApiKey: string, page?: number, size?: number, sort?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Users>>;
-    public getUsers(xApiKey: string, page?: number, size?: number, sort?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Users>>;
-    public getUsers(xApiKey: string, page?: number, size?: number, sort?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (xApiKey === null || xApiKey === undefined) {
-            throw new Error('Required parameter xApiKey was null or undefined when calling getUsers.');
+    public getUsers(page: number, size: number, sort?: string, xAPIKEY?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<Users>;
+    public getUsers(page: number, size: number, sort?: string, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Users>>;
+    public getUsers(page: number, size: number, sort?: string, xAPIKEY?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Users>>;
+    public getUsers(page: number, size: number, sort?: string, xAPIKEY?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getUsers.');
+        }
+        if (size === null || size === undefined) {
+            throw new Error('Required parameter size was null or undefined when calling getUsers.');
         }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -380,15 +360,15 @@ export class UsersService implements UsersServiceInterface {
         }
 
         let localVarHeaders = this.defaultHeaders;
-        if (xApiKey !== undefined && xApiKey !== null) {
-            localVarHeaders = localVarHeaders.set('x-api-key', String(xApiKey));
+        if (xAPIKEY !== undefined && xAPIKEY !== null) {
+            localVarHeaders = localVarHeaders.set('X-API-KEY', String(xAPIKEY));
         }
 
         let localVarCredential: string | undefined;
-        // authentication (basicAuth) required
-        localVarCredential = this.configuration.lookupCredential('basicAuth');
+        // authentication (bearerAuth) required
+        localVarCredential = this.configuration.lookupCredential('bearerAuth');
         if (localVarCredential) {
-            localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -445,39 +425,29 @@ export class UsersService implements UsersServiceInterface {
      * Update the specified user
      * Update only the user specified with userId 
      * @param id The identification of the resource to return
-     * @param xApiKey An api key used to track usage of the api
-     * @param authorization 
+     * @param xAPIKEY An api key used to track usage of the api
      * @param userBody Request parameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public patchUser(id: number, xApiKey: string, authorization: string, userBody?: UserBody, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<User>;
-    public patchUser(id: number, xApiKey: string, authorization: string, userBody?: UserBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<User>>;
-    public patchUser(id: number, xApiKey: string, authorization: string, userBody?: UserBody, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<User>>;
-    public patchUser(id: number, xApiKey: string, authorization: string, userBody?: UserBody, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public patchUser(id: number, xAPIKEY?: string, userBody?: UserBody, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<User>;
+    public patchUser(id: number, xAPIKEY?: string, userBody?: UserBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<User>>;
+    public patchUser(id: number, xAPIKEY?: string, userBody?: UserBody, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<User>>;
+    public patchUser(id: number, xAPIKEY?: string, userBody?: UserBody, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling patchUser.');
         }
-        if (xApiKey === null || xApiKey === undefined) {
-            throw new Error('Required parameter xApiKey was null or undefined when calling patchUser.');
-        }
-        if (authorization === null || authorization === undefined) {
-            throw new Error('Required parameter authorization was null or undefined when calling patchUser.');
-        }
 
         let localVarHeaders = this.defaultHeaders;
-        if (xApiKey !== undefined && xApiKey !== null) {
-            localVarHeaders = localVarHeaders.set('x-api-key', String(xApiKey));
-        }
-        if (authorization !== undefined && authorization !== null) {
-            localVarHeaders = localVarHeaders.set('Authorization', String(authorization));
+        if (xAPIKEY !== undefined && xAPIKEY !== null) {
+            localVarHeaders = localVarHeaders.set('X-API-KEY', String(xAPIKEY));
         }
 
         let localVarCredential: string | undefined;
-        // authentication (basicAuth) required
-        localVarCredential = this.configuration.lookupCredential('basicAuth');
+        // authentication (bearerAuth) required
+        localVarCredential = this.configuration.lookupCredential('bearerAuth');
         if (localVarCredential) {
-            localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -542,36 +512,26 @@ export class UsersService implements UsersServiceInterface {
     /**
      * Create a new user
      * Create a new user To determine if an user is new the input is compared on the hash value of: - username - password - email - phone If the hash value already exists in the backend, the user is considered to exist 
-     * @param xApiKey An api key used to track usage of the api
-     * @param authorization 
+     * @param xAPIKEY An api key used to track usage of the api
      * @param userBody Request parameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postUser(xApiKey: string, authorization: string, userBody?: UserBody, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<User>;
-    public postUser(xApiKey: string, authorization: string, userBody?: UserBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<User>>;
-    public postUser(xApiKey: string, authorization: string, userBody?: UserBody, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<User>>;
-    public postUser(xApiKey: string, authorization: string, userBody?: UserBody, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (xApiKey === null || xApiKey === undefined) {
-            throw new Error('Required parameter xApiKey was null or undefined when calling postUser.');
-        }
-        if (authorization === null || authorization === undefined) {
-            throw new Error('Required parameter authorization was null or undefined when calling postUser.');
-        }
+    public postUser(xAPIKEY?: string, userBody?: UserBody, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<User>;
+    public postUser(xAPIKEY?: string, userBody?: UserBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<User>>;
+    public postUser(xAPIKEY?: string, userBody?: UserBody, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<User>>;
+    public postUser(xAPIKEY?: string, userBody?: UserBody, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
-        if (xApiKey !== undefined && xApiKey !== null) {
-            localVarHeaders = localVarHeaders.set('x-api-key', String(xApiKey));
-        }
-        if (authorization !== undefined && authorization !== null) {
-            localVarHeaders = localVarHeaders.set('Authorization', String(authorization));
+        if (xAPIKEY !== undefined && xAPIKEY !== null) {
+            localVarHeaders = localVarHeaders.set('X-API-KEY', String(xAPIKEY));
         }
 
         let localVarCredential: string | undefined;
-        // authentication (basicAuth) required
-        localVarCredential = this.configuration.lookupCredential('basicAuth');
+        // authentication (bearerAuth) required
+        localVarCredential = this.configuration.lookupCredential('bearerAuth');
         if (localVarCredential) {
-            localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;

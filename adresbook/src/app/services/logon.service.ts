@@ -39,10 +39,12 @@ export class LogonService {
                 this.isLoggedIn.next(true);
                 this.authenticatedUser = username;
                 this.authenticatedPassword = password;
+                console.log('LogonService: authenticated');
               } else {
                 this.isLoggedIn.next(false);
                 this.authenticatedUser = undefined;
                 this.authenticatedPassword = undefined;
+                console.log('LogonService: not authenticated');
               }
             }
           },
@@ -62,7 +64,7 @@ export class LogonService {
      * @param loginRequest Request parameters
      */
   //
-  //public postLogin(xApiKey: string, loginRequest?: LoginRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LoginResponse>>;
+  //public postLogin(loginRequest: LoginRequest, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LoginResponse>>;
   private postLogin(xApiKey: string, username: string, password: string): Observable<HttpResponse<LoginResponse>> {
     const loginRequest: LoginRequest = { username: username, password: password };
     const headers: HttpHeaders = new HttpHeaders({
@@ -74,6 +76,6 @@ export class LogonService {
       httpHeaderAccept: 'application/json'
     };
 
-    return this.api.postLogin(xApiKey, loginRequest, 'response', false, options);
+    return this.api.postLogin(loginRequest, xApiKey, 'response', false, options);
   }
 }

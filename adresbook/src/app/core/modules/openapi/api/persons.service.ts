@@ -104,28 +104,18 @@ export class PersonsService implements PersonsServiceInterface {
     /**
      * Delete all persons
      * Delete all persons 
-     * @param xApiKey An api key used to track usage of the api
-     * @param authorization 
+     * @param xAPIKEY An api key used to track usage of the api
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteAllPersons(xApiKey: string, authorization: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteAllPersons(xApiKey: string, authorization: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteAllPersons(xApiKey: string, authorization: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteAllPersons(xApiKey: string, authorization: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (xApiKey === null || xApiKey === undefined) {
-            throw new Error('Required parameter xApiKey was null or undefined when calling deleteAllPersons.');
-        }
-        if (authorization === null || authorization === undefined) {
-            throw new Error('Required parameter authorization was null or undefined when calling deleteAllPersons.');
-        }
+    public deleteAllPersons(xAPIKEY?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteAllPersons(xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteAllPersons(xAPIKEY?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteAllPersons(xAPIKEY?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
-        if (xApiKey !== undefined && xApiKey !== null) {
-            localVarHeaders = localVarHeaders.set('x-api-key', String(xApiKey));
-        }
-        if (authorization !== undefined && authorization !== null) {
-            localVarHeaders = localVarHeaders.set('Authorization', String(authorization));
+        if (xAPIKEY !== undefined && xAPIKEY !== null) {
+            localVarHeaders = localVarHeaders.set('X-API-KEY', String(xAPIKEY));
         }
 
         let localVarCredential: string | undefined;
@@ -133,6 +123,12 @@ export class PersonsService implements PersonsServiceInterface {
         localVarCredential = this.configuration.lookupCredential('basicAuth');
         if (localVarCredential) {
             localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
+        }
+
+        // authentication (bearerAuth) required
+        localVarCredential = this.configuration.lookupCredential('bearerAuth');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -187,31 +183,21 @@ export class PersonsService implements PersonsServiceInterface {
      * Delete the specified person
      * Delete only the specified person 
      * @param id The identification of the resource to return
-     * @param xApiKey An api key used to track usage of the api
-     * @param authorization 
+     * @param xAPIKEY An api key used to track usage of the api
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deletePerson(id: number, xApiKey: string, authorization: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deletePerson(id: number, xApiKey: string, authorization: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deletePerson(id: number, xApiKey: string, authorization: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deletePerson(id: number, xApiKey: string, authorization: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deletePerson(id: number, xAPIKEY?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deletePerson(id: number, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deletePerson(id: number, xAPIKEY?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deletePerson(id: number, xAPIKEY?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling deletePerson.');
         }
-        if (xApiKey === null || xApiKey === undefined) {
-            throw new Error('Required parameter xApiKey was null or undefined when calling deletePerson.');
-        }
-        if (authorization === null || authorization === undefined) {
-            throw new Error('Required parameter authorization was null or undefined when calling deletePerson.');
-        }
 
         let localVarHeaders = this.defaultHeaders;
-        if (xApiKey !== undefined && xApiKey !== null) {
-            localVarHeaders = localVarHeaders.set('x-api-key', String(xApiKey));
-        }
-        if (authorization !== undefined && authorization !== null) {
-            localVarHeaders = localVarHeaders.set('Authorization', String(authorization));
+        if (xAPIKEY !== undefined && xAPIKEY !== null) {
+            localVarHeaders = localVarHeaders.set('X-API-KEY', String(xAPIKEY));
         }
 
         let localVarCredential: string | undefined;
@@ -219,6 +205,12 @@ export class PersonsService implements PersonsServiceInterface {
         localVarCredential = this.configuration.lookupCredential('basicAuth');
         if (localVarCredential) {
             localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
+        }
+
+        // authentication (bearerAuth) required
+        localVarCredential = this.configuration.lookupCredential('bearerAuth');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -273,24 +265,21 @@ export class PersonsService implements PersonsServiceInterface {
      * Retrieve the specified person with references to all adresses
      * Retrieve only one person with id personId and references to all adreses for that person 
      * @param id The identification of the resource to return
-     * @param xApiKey An api key used to track usage of the api
+     * @param xAPIKEY An api key used to track usage of the api
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPeronsAdresses(id: number, xApiKey: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<PersonAdres>;
-    public getPeronsAdresses(id: number, xApiKey: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PersonAdres>>;
-    public getPeronsAdresses(id: number, xApiKey: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PersonAdres>>;
-    public getPeronsAdresses(id: number, xApiKey: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getPeronsAdresses(id: number, xAPIKEY?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<PersonAdres>;
+    public getPeronsAdresses(id: number, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PersonAdres>>;
+    public getPeronsAdresses(id: number, xAPIKEY?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PersonAdres>>;
+    public getPeronsAdresses(id: number, xAPIKEY?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getPeronsAdresses.');
         }
-        if (xApiKey === null || xApiKey === undefined) {
-            throw new Error('Required parameter xApiKey was null or undefined when calling getPeronsAdresses.');
-        }
 
         let localVarHeaders = this.defaultHeaders;
-        if (xApiKey !== undefined && xApiKey !== null) {
-            localVarHeaders = localVarHeaders.set('x-api-key', String(xApiKey));
+        if (xAPIKEY !== undefined && xAPIKEY !== null) {
+            localVarHeaders = localVarHeaders.set('X-API-KEY', String(xAPIKEY));
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -346,24 +335,21 @@ export class PersonsService implements PersonsServiceInterface {
      * Retrieve the specified person
      * Retrieve only one person with id personId 
      * @param id The identification of the resource to return
-     * @param xApiKey An api key used to track usage of the api
+     * @param xAPIKEY An api key used to track usage of the api
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPerson(id: number, xApiKey: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<Person>;
-    public getPerson(id: number, xApiKey: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Person>>;
-    public getPerson(id: number, xApiKey: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Person>>;
-    public getPerson(id: number, xApiKey: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getPerson(id: number, xAPIKEY?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<Person>;
+    public getPerson(id: number, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Person>>;
+    public getPerson(id: number, xAPIKEY?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Person>>;
+    public getPerson(id: number, xAPIKEY?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getPerson.');
         }
-        if (xApiKey === null || xApiKey === undefined) {
-            throw new Error('Required parameter xApiKey was null or undefined when calling getPerson.');
-        }
 
         let localVarHeaders = this.defaultHeaders;
-        if (xApiKey !== undefined && xApiKey !== null) {
-            localVarHeaders = localVarHeaders.set('x-api-key', String(xApiKey));
+        if (xAPIKEY !== undefined && xAPIKEY !== null) {
+            localVarHeaders = localVarHeaders.set('X-API-KEY', String(xAPIKEY));
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -418,19 +404,22 @@ export class PersonsService implements PersonsServiceInterface {
     /**
      * Retrieve all known persons
      * Retrieve all known persons, using paging and sorting 
-     * @param xApiKey An api key used to track usage of the api
      * @param page pagenumber starts on 1
      * @param size number of elements on each page - minimum    1 - default   25 - maximum: 100 
      * @param sort field names to sort on
+     * @param xAPIKEY An api key used to track usage of the api
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPersons(xApiKey: string, page?: number, size?: number, sort?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<Persons>;
-    public getPersons(xApiKey: string, page?: number, size?: number, sort?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Persons>>;
-    public getPersons(xApiKey: string, page?: number, size?: number, sort?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Persons>>;
-    public getPersons(xApiKey: string, page?: number, size?: number, sort?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (xApiKey === null || xApiKey === undefined) {
-            throw new Error('Required parameter xApiKey was null or undefined when calling getPersons.');
+    public getPersons(page: number, size: number, sort?: string, xAPIKEY?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<Persons>;
+    public getPersons(page: number, size: number, sort?: string, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Persons>>;
+    public getPersons(page: number, size: number, sort?: string, xAPIKEY?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Persons>>;
+    public getPersons(page: number, size: number, sort?: string, xAPIKEY?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getPersons.');
+        }
+        if (size === null || size === undefined) {
+            throw new Error('Required parameter size was null or undefined when calling getPersons.');
         }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -448,8 +437,8 @@ export class PersonsService implements PersonsServiceInterface {
         }
 
         let localVarHeaders = this.defaultHeaders;
-        if (xApiKey !== undefined && xApiKey !== null) {
-            localVarHeaders = localVarHeaders.set('x-api-key', String(xApiKey));
+        if (xAPIKEY !== undefined && xAPIKEY !== null) {
+            localVarHeaders = localVarHeaders.set('X-API-KEY', String(xAPIKEY));
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -506,32 +495,22 @@ export class PersonsService implements PersonsServiceInterface {
      * Update the specified person
      * Update only the person specified with personId 
      * @param id The identification of the resource to return
-     * @param xApiKey An api key used to track usage of the api
-     * @param authorization 
+     * @param xAPIKEY An api key used to track usage of the api
      * @param personBody Request parameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public patchPerson(id: number, xApiKey: string, authorization: string, personBody?: PersonBody, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<Person>;
-    public patchPerson(id: number, xApiKey: string, authorization: string, personBody?: PersonBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Person>>;
-    public patchPerson(id: number, xApiKey: string, authorization: string, personBody?: PersonBody, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Person>>;
-    public patchPerson(id: number, xApiKey: string, authorization: string, personBody?: PersonBody, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public patchPerson(id: number, xAPIKEY?: string, personBody?: PersonBody, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<Person>;
+    public patchPerson(id: number, xAPIKEY?: string, personBody?: PersonBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Person>>;
+    public patchPerson(id: number, xAPIKEY?: string, personBody?: PersonBody, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Person>>;
+    public patchPerson(id: number, xAPIKEY?: string, personBody?: PersonBody, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling patchPerson.');
         }
-        if (xApiKey === null || xApiKey === undefined) {
-            throw new Error('Required parameter xApiKey was null or undefined when calling patchPerson.');
-        }
-        if (authorization === null || authorization === undefined) {
-            throw new Error('Required parameter authorization was null or undefined when calling patchPerson.');
-        }
 
         let localVarHeaders = this.defaultHeaders;
-        if (xApiKey !== undefined && xApiKey !== null) {
-            localVarHeaders = localVarHeaders.set('x-api-key', String(xApiKey));
-        }
-        if (authorization !== undefined && authorization !== null) {
-            localVarHeaders = localVarHeaders.set('Authorization', String(authorization));
+        if (xAPIKEY !== undefined && xAPIKEY !== null) {
+            localVarHeaders = localVarHeaders.set('X-API-KEY', String(xAPIKEY));
         }
 
         let localVarCredential: string | undefined;
@@ -539,6 +518,12 @@ export class PersonsService implements PersonsServiceInterface {
         localVarCredential = this.configuration.lookupCredential('basicAuth');
         if (localVarCredential) {
             localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
+        }
+
+        // authentication (bearerAuth) required
+        localVarCredential = this.configuration.lookupCredential('bearerAuth');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -603,36 +588,29 @@ export class PersonsService implements PersonsServiceInterface {
     /**
      * Create a new person
      * Create a new person To determine if an person is new the input is compared on the hash value of: - firstName - infix - lastName If the hash value already exists in the backend, the person is considered to exist 
-     * @param xApiKey An api key used to track usage of the api
-     * @param authorization 
      * @param override parameter to override check on existence
+     * @param xAPIKEY An api key used to track usage of the api
      * @param personBody Request parameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postPerson(xApiKey: string, authorization: string, override?: boolean, personBody?: PersonBody, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<Person>;
-    public postPerson(xApiKey: string, authorization: string, override?: boolean, personBody?: PersonBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Person>>;
-    public postPerson(xApiKey: string, authorization: string, override?: boolean, personBody?: PersonBody, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Person>>;
-    public postPerson(xApiKey: string, authorization: string, override?: boolean, personBody?: PersonBody, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (xApiKey === null || xApiKey === undefined) {
-            throw new Error('Required parameter xApiKey was null or undefined when calling postPerson.');
-        }
-        if (authorization === null || authorization === undefined) {
-            throw new Error('Required parameter authorization was null or undefined when calling postPerson.');
+    public postPerson(override: boolean, xAPIKEY?: string, personBody?: PersonBody, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<Person>;
+    public postPerson(override: boolean, xAPIKEY?: string, personBody?: PersonBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Person>>;
+    public postPerson(override: boolean, xAPIKEY?: string, personBody?: PersonBody, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Person>>;
+    public postPerson(override: boolean, xAPIKEY?: string, personBody?: PersonBody, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (override === null || override === undefined) {
+            throw new Error('Required parameter override was null or undefined when calling postPerson.');
         }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (override !== undefined && override !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>override, 'override');
+            <any>override, 'Override');
         }
 
         let localVarHeaders = this.defaultHeaders;
-        if (xApiKey !== undefined && xApiKey !== null) {
-            localVarHeaders = localVarHeaders.set('x-api-key', String(xApiKey));
-        }
-        if (authorization !== undefined && authorization !== null) {
-            localVarHeaders = localVarHeaders.set('Authorization', String(authorization));
+        if (xAPIKEY !== undefined && xAPIKEY !== null) {
+            localVarHeaders = localVarHeaders.set('X-API-KEY', String(xAPIKEY));
         }
 
         let localVarCredential: string | undefined;
@@ -640,6 +618,12 @@ export class PersonsService implements PersonsServiceInterface {
         localVarCredential = this.configuration.lookupCredential('basicAuth');
         if (localVarCredential) {
             localVarHeaders = localVarHeaders.set('Authorization', 'Basic ' + localVarCredential);
+        }
+
+        // authentication (bearerAuth) required
+        localVarCredential = this.configuration.lookupCredential('bearerAuth');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;

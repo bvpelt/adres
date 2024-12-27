@@ -22,6 +22,8 @@ model/adres-person.ts
 model/adres-person1.ts
 model/adres.ts
 model/adresses.ts
+model/authenticate-request.ts
+model/authenticate-response.ts
 model/deleted.ts
 model/login-request.ts
 model/login-response.ts
@@ -34,6 +36,7 @@ model/person.ts
 model/persons.ts
 model/problem-detail.ts
 model/problem.ts
+model/register-request.ts
 model/role-body.ts
 model/role.ts
 model/roles.ts

@@ -28,55 +28,51 @@ export interface UsersServiceInterface {
     /**
      * Delete all
      * Delete all users 
-     * @param xApiKey An api key used to track usage of the api
-     * @param authorization 
+     * @param xAPIKEY An api key used to track usage of the api
      */
-    deleteAllUsers(xApiKey: string, authorization: string, extraHttpRequestParams?: any): Observable<{}>;
+    deleteAllUsers(xAPIKEY?: string, extraHttpRequestParams?: any): Observable<{}>;
 
     /**
      * Delete the specified user
      * Delete only the specified user 
      * @param id The identification of the resource to return
-     * @param xApiKey An api key used to track usage of the api
-     * @param authorization 
+     * @param xAPIKEY An api key used to track usage of the api
      */
-    deleteUser(id: number, xApiKey: string, authorization: string, extraHttpRequestParams?: any): Observable<{}>;
+    deleteUser(id: number, xAPIKEY?: string, extraHttpRequestParams?: any): Observable<{}>;
 
     /**
      * Retrieve the specified user
      * Retrieve only one user with id userId 
      * @param id The identification of the resource to return
-     * @param xApiKey An api key used to track usage of the api
+     * @param xAPIKEY An api key used to track usage of the api
      */
-    getUser(id: number, xApiKey: string, extraHttpRequestParams?: any): Observable<User>;
+    getUser(id: number, xAPIKEY?: string, extraHttpRequestParams?: any): Observable<User>;
 
     /**
      * Retrieve all known users
      * Retrieve all known users, using paging and sorting 
-     * @param xApiKey An api key used to track usage of the api
      * @param page pagenumber starts on 1
      * @param size number of elements on each page - minimum    1 - default   25 - maximum: 100 
      * @param sort field names to sort on
+     * @param xAPIKEY An api key used to track usage of the api
      */
-    getUsers(xApiKey: string, page?: number, size?: number, sort?: string, extraHttpRequestParams?: any): Observable<Users>;
+    getUsers(page: number, size: number, sort?: string, xAPIKEY?: string, extraHttpRequestParams?: any): Observable<Users>;
 
     /**
      * Update the specified user
      * Update only the user specified with userId 
      * @param id The identification of the resource to return
-     * @param xApiKey An api key used to track usage of the api
-     * @param authorization 
+     * @param xAPIKEY An api key used to track usage of the api
      * @param userBody Request parameters
      */
-    patchUser(id: number, xApiKey: string, authorization: string, userBody?: UserBody, extraHttpRequestParams?: any): Observable<User>;
+    patchUser(id: number, xAPIKEY?: string, userBody?: UserBody, extraHttpRequestParams?: any): Observable<User>;
 
     /**
      * Create a new user
      * Create a new user To determine if an user is new the input is compared on the hash value of: - username - password - email - phone If the hash value already exists in the backend, the user is considered to exist 
-     * @param xApiKey An api key used to track usage of the api
-     * @param authorization 
+     * @param xAPIKEY An api key used to track usage of the api
      * @param userBody Request parameters
      */
-    postUser(xApiKey: string, authorization: string, userBody?: UserBody, extraHttpRequestParams?: any): Observable<User>;
+    postUser(xAPIKEY?: string, userBody?: UserBody, extraHttpRequestParams?: any): Observable<User>;
 
 }

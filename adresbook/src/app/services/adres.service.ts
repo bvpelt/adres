@@ -14,7 +14,7 @@ export class AdresService {
   constructor(private api: AdressesService) {  
   }
   
-  // public deleteAdres(id: number, xApiKey: string, authorization: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+  // public deleteAdres(id: number, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
   deleteAdres(user: string, password: string, id: number, xApiKey: string):  Observable<HttpResponse<any>> {
     const credentials: string = user + ':' + password;
     const headers: HttpHeaders = new HttpHeaders({
@@ -27,10 +27,10 @@ export class AdresService {
     //  httpHeaderAccept: 'application/json'
     }
 
-    return this.api.deleteAdres(id, xApiKey, authorisation, 'response', false, options);
+    return this.api.deleteAdres(id, xApiKey, 'response', false, options);
   }
   
-  // public deleteAllAdreses(xApiKey: string, authorization: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+  // public deleteAllAdreses(xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
   deleteAllAdreses(user: string, password: string, xApiKey: string, page?: number, size?: number ):  Observable<HttpResponse<any>> {
     const credentials: string = user + ':' + password;
     const headers: HttpHeaders = new HttpHeaders({
@@ -43,7 +43,7 @@ export class AdresService {
       httpHeaderAccept: 'application/json'
     }
 
-    return this.api.deleteAllAdreses(xApiKey, authorisation, 'response', false, options);
+    return this.api.deleteAllAdreses(xApiKey, 'response', false, options);
   }
 
   //public getAdres(id: number, xApiKey: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Adres>>;
@@ -71,10 +71,10 @@ export class AdresService {
       httpHeaderAccept: 'application/json'
     }
 
-    return this.api.getAdresses(xApiKey, page, size, undefined, 'response', false, options);
+    return this.api.getAdresses(page!, size!, undefined, xApiKey, 'response', false, options);
   }
   
-  //  public patchAdres(id: number, xApiKey: string, authorization: string, adresBody?: AdresBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Adres>>;
+  // public patchAdres(id: number, xAPIKEY?: string, adresBody?: AdresBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Adres>>;
   patchAdres(user: string, password: string, id: number, xApiKey: string, adresBody?: AdresBody ):  Observable<HttpResponse<Adres>> {
     const credentials: string = user + ':' + password;
     const headers: HttpHeaders = new HttpHeaders({
@@ -86,10 +86,10 @@ export class AdresService {
       httpHeaderAccept: 'application/json'
     }
 
-    return this.api.patchAdres(id, xApiKey, authorisation, adresBody, 'response', false, options);
+    return this.api.patchAdres(id, xApiKey, adresBody, 'response', false, options);
   }
 
-  //   public postAdres(xApiKey: string, authorization: string, override?: boolean, adresBody?: AdresBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Adres>>;
+  //  public postAdres(override: boolean, adresBody: AdresBody, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Adres>>;
   postAdres(user: string, password: string, xApiKey: string, override: boolean, adresBody?: AdresBody ):  Observable<HttpResponse<Adres>> {
     const credentials: string = user + ':' + password;
     const headers: HttpHeaders = new HttpHeaders({
@@ -101,7 +101,7 @@ export class AdresService {
       httpHeaderAccept: 'application/json'
     }
 
-    return this.api.postAdres(xApiKey, authorisation, override, adresBody, 'response', false, options);
+    return this.api.postAdres(override, adresBody!, xApiKey, 'response', false, options);
   }
 
 }

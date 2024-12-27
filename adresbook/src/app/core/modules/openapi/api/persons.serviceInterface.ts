@@ -29,64 +29,60 @@ export interface PersonsServiceInterface {
     /**
      * Delete all persons
      * Delete all persons 
-     * @param xApiKey An api key used to track usage of the api
-     * @param authorization 
+     * @param xAPIKEY An api key used to track usage of the api
      */
-    deleteAllPersons(xApiKey: string, authorization: string, extraHttpRequestParams?: any): Observable<{}>;
+    deleteAllPersons(xAPIKEY?: string, extraHttpRequestParams?: any): Observable<{}>;
 
     /**
      * Delete the specified person
      * Delete only the specified person 
      * @param id The identification of the resource to return
-     * @param xApiKey An api key used to track usage of the api
-     * @param authorization 
+     * @param xAPIKEY An api key used to track usage of the api
      */
-    deletePerson(id: number, xApiKey: string, authorization: string, extraHttpRequestParams?: any): Observable<{}>;
+    deletePerson(id: number, xAPIKEY?: string, extraHttpRequestParams?: any): Observable<{}>;
 
     /**
      * Retrieve the specified person with references to all adresses
      * Retrieve only one person with id personId and references to all adreses for that person 
      * @param id The identification of the resource to return
-     * @param xApiKey An api key used to track usage of the api
+     * @param xAPIKEY An api key used to track usage of the api
      */
-    getPeronsAdresses(id: number, xApiKey: string, extraHttpRequestParams?: any): Observable<PersonAdres>;
+    getPeronsAdresses(id: number, xAPIKEY?: string, extraHttpRequestParams?: any): Observable<PersonAdres>;
 
     /**
      * Retrieve the specified person
      * Retrieve only one person with id personId 
      * @param id The identification of the resource to return
-     * @param xApiKey An api key used to track usage of the api
+     * @param xAPIKEY An api key used to track usage of the api
      */
-    getPerson(id: number, xApiKey: string, extraHttpRequestParams?: any): Observable<Person>;
+    getPerson(id: number, xAPIKEY?: string, extraHttpRequestParams?: any): Observable<Person>;
 
     /**
      * Retrieve all known persons
      * Retrieve all known persons, using paging and sorting 
-     * @param xApiKey An api key used to track usage of the api
      * @param page pagenumber starts on 1
      * @param size number of elements on each page - minimum    1 - default   25 - maximum: 100 
      * @param sort field names to sort on
+     * @param xAPIKEY An api key used to track usage of the api
      */
-    getPersons(xApiKey: string, page?: number, size?: number, sort?: string, extraHttpRequestParams?: any): Observable<Persons>;
+    getPersons(page: number, size: number, sort?: string, xAPIKEY?: string, extraHttpRequestParams?: any): Observable<Persons>;
 
     /**
      * Update the specified person
      * Update only the person specified with personId 
      * @param id The identification of the resource to return
-     * @param xApiKey An api key used to track usage of the api
-     * @param authorization 
+     * @param xAPIKEY An api key used to track usage of the api
      * @param personBody Request parameters
      */
-    patchPerson(id: number, xApiKey: string, authorization: string, personBody?: PersonBody, extraHttpRequestParams?: any): Observable<Person>;
+    patchPerson(id: number, xAPIKEY?: string, personBody?: PersonBody, extraHttpRequestParams?: any): Observable<Person>;
 
     /**
      * Create a new person
      * Create a new person To determine if an person is new the input is compared on the hash value of: - firstName - infix - lastName If the hash value already exists in the backend, the person is considered to exist 
-     * @param xApiKey An api key used to track usage of the api
-     * @param authorization 
      * @param override parameter to override check on existence
+     * @param xAPIKEY An api key used to track usage of the api
      * @param personBody Request parameters
      */
-    postPerson(xApiKey: string, authorization: string, override?: boolean, personBody?: PersonBody, extraHttpRequestParams?: any): Observable<Person>;
+    postPerson(override: boolean, xAPIKEY?: string, personBody?: PersonBody, extraHttpRequestParams?: any): Observable<Person>;
 
 }

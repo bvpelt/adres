@@ -28,55 +28,51 @@ export interface RolesServiceInterface {
     /**
      * Delete all
      * Delete all roles 
-     * @param xApiKey An api key used to track usage of the api
-     * @param authorization 
+     * @param xAPIKEY An api key used to track usage of the api
      */
-    deleteAllRoles(xApiKey: string, authorization: string, extraHttpRequestParams?: any): Observable<{}>;
+    deleteAllRoles(xAPIKEY?: string, extraHttpRequestParams?: any): Observable<{}>;
 
     /**
      * Delete the specified role
      * Delete only the specified role 
      * @param id The identification of the resource to return
-     * @param xApiKey An api key used to track usage of the api
-     * @param authorization 
+     * @param xAPIKEY An api key used to track usage of the api
      */
-    deleteRole(id: number, xApiKey: string, authorization: string, extraHttpRequestParams?: any): Observable<{}>;
+    deleteRole(id: number, xAPIKEY?: string, extraHttpRequestParams?: any): Observable<{}>;
 
     /**
      * Retrieve the specified role
      * Retrieve only one role with id roleId 
      * @param id The identification of the resource to return
-     * @param xApiKey An api key used to track usage of the api
+     * @param xAPIKEY An api key used to track usage of the api
      */
-    getRole(id: number, xApiKey: string, extraHttpRequestParams?: any): Observable<Role>;
+    getRole(id: number, xAPIKEY?: string, extraHttpRequestParams?: any): Observable<Role>;
 
     /**
      * Retrieve all known roles
      * Retrieve all known roles, using paging and sorting 
-     * @param xApiKey An api key used to track usage of the api
      * @param page pagenumber starts on 1
      * @param size number of elements on each page - minimum    1 - default   25 - maximum: 100 
      * @param sort field names to sort on
+     * @param xAPIKEY An api key used to track usage of the api
      */
-    getRoles(xApiKey: string, page?: number, size?: number, sort?: string, extraHttpRequestParams?: any): Observable<Roles>;
+    getRoles(page: number, size: number, sort?: string, xAPIKEY?: string, extraHttpRequestParams?: any): Observable<Roles>;
 
     /**
      * Update the specified role
      * Update only the role specified with roleId 
      * @param id The identification of the resource to return
-     * @param xApiKey An api key used to track usage of the api
-     * @param authorization 
+     * @param xAPIKEY An api key used to track usage of the api
      * @param roleBody Request parameters
      */
-    patchRole(id: number, xApiKey: string, authorization: string, roleBody?: RoleBody, extraHttpRequestParams?: any): Observable<Role>;
+    patchRole(id: number, xAPIKEY?: string, roleBody?: RoleBody, extraHttpRequestParams?: any): Observable<Role>;
 
     /**
      * Create a new role
      * Create a new role To determine if an role is new the input is compared on the hash value of: - rolename - description If the hash value already exists in the backend, the role is considered to exist 
-     * @param xApiKey An api key used to track usage of the api
-     * @param authorization 
+     * @param xAPIKEY An api key used to track usage of the api
      * @param roleBody Request parameters
      */
-    postRole(xApiKey: string, authorization: string, roleBody?: RoleBody, extraHttpRequestParams?: any): Observable<Role>;
+    postRole(xAPIKEY?: string, roleBody?: RoleBody, extraHttpRequestParams?: any): Observable<Role>;
 
 }
