@@ -26,12 +26,14 @@ export class AdresesComponent implements OnInit, OnChanges {
 
   errormessage?: string = undefined;
 
-  isLoggedIn$: Observable<boolean>;
+  //isLoggedIn$: Observable<boolean>;
+  isLoggedIn: boolean;
 
   constructor(private adresService: AdresService,
     private router: Router,
     private logonService: LogonService) {
-    this.isLoggedIn$ = this.logonService.isLoggedIn$;
+    //this.isLoggedIn$ = this.logonService.isLoggedIn$;
+    this.isLoggedIn = this.logonService.isLoggedIn;
   }
 
   ngOnInit(): void {

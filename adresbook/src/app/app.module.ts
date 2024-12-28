@@ -21,6 +21,7 @@ import { AdresdetailComponent } from './adresdetail/adresdetail.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
+import { DbgmessagesComponent } from './dbgmessages/dbgmessages.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -39,6 +40,7 @@ export function apiConfigFactory (): Configuration {
     AdresdetailComponent,    
     LoginComponent,
     LogoutComponent,
+    DbgmessagesComponent,
   ],
   imports: [
     BrowserModule,

@@ -16,7 +16,8 @@ export class AdresdetailComponent {
   adres?: Adres = undefined;
   errormessage?: string = undefined;
 
-  isLoggedIn$: Observable<boolean>;
+  //isLoggedIn$: Observable<boolean>;
+  isLoggedIn: boolean;
 
   constructor(private route: ActivatedRoute,
     private adresService: AdresService,
@@ -24,7 +25,8 @@ export class AdresdetailComponent {
     private logonService: LogonService) {
     this.getAdres(this.logonService.xApiKey);
 
-    this.isLoggedIn$ = this.logonService.isLoggedIn$;
+    //this.isLoggedIn$ = this.logonService.isLoggedIn$;
+    this.isLoggedIn = this.logonService.isLoggedIn;
   }
 
 

@@ -1,5 +1,5 @@
 <h2>Adres</h2>
-<a routerLink="/addadres" *ngIf="isLoggedIn$ | async" >Add adres</a>
+<a routerLink="/addadres" *ngIf="isLoggedIn" >Add adres</a>
 
 
 <div *ngIf="adres.length > 0">
@@ -9,8 +9,8 @@
                 <span class="badge">{{adres.id}}</span>
                 <span class="adres">{{adres.street}} {{adres.housenumber}} {{adres.zipcode}} {{adres.city}} </span>                                
             </button>             
-            <fa-icon *ngIf="isLoggedIn$ | async" [icon]="faPencilIcon" (click)="onSelect(adres)" ></fa-icon> 
-            <fa-icon *ngIf="isLoggedIn$ | async" [icon]="faTrashCanIcon" (click)="onDelete(adres)"></fa-icon>
+            <fa-icon *ngIf="isLoggedIn" [icon]="faPencilIcon" (click)="onSelect(adres)" ></fa-icon> 
+            <fa-icon *ngIf="isLoggedIn" [icon]="faTrashCanIcon" (click)="onDelete(adres)"></fa-icon>
         </li>
     </ul>
 </div>
@@ -19,3 +19,4 @@
     {{errormessage}}
 </div>
 
+<app-dbgmessages></app-dbgmessages>

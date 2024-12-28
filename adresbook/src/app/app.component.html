@@ -1,8 +1,8 @@
 <h1>Adresbook</h1>
 <nav>
   <a routerLink="/adresses">Adresses</a>
-  <a routerLink="/login" *ngIf="!(isLoggedIn$ | async)">Login</a>
-  <a routerLink="/logout" *ngIf="(isLoggedIn$ | async)">LogOut</a>
+  <a routerLink="/login" *ngIf="!isLoggedIn">Login</a>
+  <a routerLink="/logout" *ngIf="isLoggedIn">LogOut</a>
 </nav>
 <!--
 <app-adreses></app-adreses>

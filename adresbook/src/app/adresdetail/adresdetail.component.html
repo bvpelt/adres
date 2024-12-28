@@ -2,7 +2,7 @@
 
 <div *ngIf="adres!=undefined">
 
-    <div *ngIf="!(isLoggedIn$ | async)">
+    <div *ngIf="!isLoggedIn">
         <div *ngIf="adres.id != undefined && adres.id != 0" class="form-group">
             <label for="id">id: </label>
             <p id="id"> {{adres.id}}</p>
@@ -31,7 +31,7 @@
         </div>
     </div>
 
-    <div *ngIf="isLoggedIn$ | async">
+    <div *ngIf="isLoggedIn">
         <div *ngIf="adres.id != undefined && adres.id != 0" class="form-group">
             <label for="id">id: </label>
             <p id="id"> {{adres.id}}</p>

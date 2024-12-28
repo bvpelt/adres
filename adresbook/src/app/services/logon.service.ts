@@ -15,20 +15,23 @@ export class LogonService {
   authenticatedUser?: string = undefined;
   authenticatedPassword?: string = undefined;
 
-  private isLoggedIn = new BehaviorSubject<boolean>(false);
+  //private isLoggedIn = new BehaviorSubject<boolean>(false);
 
-  isLoggedIn$ = this.isLoggedIn.asObservable();
+  //isLoggedIn$ = this.isLoggedIn.asObservable();
+  isLoggedIn: boolean = false;
 
   constructor(private api: LoginService) {
   }
 
   doLogOut() {
-    this.isLoggedIn.next(false);
+    //this.isLoggedIn.next(false);
+    this.isLoggedIn = false;
     this.authenticatedUser = undefined;
     this.authenticatedPassword = undefined;
   }
 
   doLogin(username: string, password: string) {
+    /*
     this.postLogin(this.xApiKey, username, password)
       .subscribe({
         next:
@@ -55,6 +58,7 @@ export class LogonService {
           console.log('LogonService: ' + this.errormessage);
         }
       });
+      */
   }
 
   /**
@@ -64,8 +68,8 @@ export class LogonService {
      * @param loginRequest Request parameters
      */
   //
-  //public postLogin(loginRequest: LoginRequest, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LoginResponse>>;
-  private postLogin(xApiKey: string, username: string, password: string): Observable<HttpResponse<LoginResponse>> {
+  // public postLogin(loginRequest: LoginRequest, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LoginResponse>>;
+  public postLogin(xApiKey: string, username: string, password: string): Observable<HttpResponse<LoginResponse>> {
     const loginRequest: LoginRequest = { username: username, password: password };
     const headers: HttpHeaders = new HttpHeaders({
       'x-api-key': xApiKey

@@ -10,10 +10,10 @@ import { LogonService } from './services/logon.service';
 export class AppComponent {
   title = 'adresbook';
 
-  isLoggedIn$: Observable<boolean>;
+  isLoggedIn: boolean;
 
   constructor(private logonService: LogonService) {
-    this.isLoggedIn$ = this.logonService.isLoggedIn$;
+    this.isLoggedIn = this.logonService.isLoggedIn;
   }
 
 }
