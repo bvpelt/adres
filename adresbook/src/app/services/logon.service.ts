@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { LoginRequest, LoginResponse, LoginService } from '../core/modules/openapi';
+import { LoginRequest, LoginResponse, LoginService, LoginTestResponse } from '../core/modules/openapi';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { DynamicconfigService } from './dynamicconfig.service';
+import { DbgmessageService } from './dbgmessage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +21,9 @@ export class LogonService {
 
   isLoggedIn$ = this.isLoggedIn.asObservable();
 
-  constructor(private api: LoginService) {
+  constructor(private api: LoginService, 
+    private dynamicconfigService: DynamicconfigService,
+  private dbgmessageService: DbgmessageService) {
   }
 
   doLogOut() {
@@ -39,12 +43,13 @@ export class LogonService {
                 this.isLoggedIn.next(true);
                 this.authenticatedUser = username;
                 this.authenticatedPassword = password;
-                console.log('LogonService: authenticated');
+                this.dynamicconfigService.updateConfiguration(username, password, undefined);
+                this.dbgmessageService.add('LogonService: authenticated');
               } else {
                 this.isLoggedIn.next(false);
                 this.authenticatedUser = undefined;
                 this.authenticatedPassword = undefined;
-                console.log('LogonService: not authenticated');
+                this.dbgmessageService.add('LogonService: not authenticated');
               }
             }
           },
@@ -52,7 +57,41 @@ export class LogonService {
           this.errormessage = 'Status: ' + error.status + ' details: ' + error.error.detail;
           this.authenticatedUser = undefined;
           this.authenticatedPassword = undefined;
-          console.log('LogonService: ' + this.errormessage);
+          this.dbgmessageService.add('LogonService: ' + this.errormessage);
+        }
+      });
+  }
+
+  doTestLogin(username: string, password: string) {
+    this.postTestLogin(this.xApiKey, username, password)
+      .subscribe({
+        next:
+          response => {
+            if (response.body) {
+              this.loginResponse = response.body;
+              if (this.loginResponse.authenticated) {
+                this.isLoggedIn.next(true);
+                this.authenticatedUser = username;
+                this.authenticatedPassword = password;
+                if ((response.body.token != undefined) && (response.body.token.length > 0)) {
+                  this.dynamicconfigService.updateConfiguration(username, password, response.body.token);
+                } else {
+                  this.dynamicconfigService.updateConfiguration(username, password, undefined);
+                }
+                this.dbgmessageService.add('LogonService: authenticated');
+              } else {
+                this.isLoggedIn.next(false);
+                this.authenticatedUser = undefined;
+                this.authenticatedPassword = undefined;
+                this.dbgmessageService.add('LogonService: not authenticated');
+              }
+            }
+          },
+        error: error => {
+          this.errormessage = 'Status: ' + error.status + ' details: ' + error.error.detail;
+          this.authenticatedUser = undefined;
+          this.authenticatedPassword = undefined;
+          this.dbgmessageService.add('LogonService: ' + this.errormessage);
         }
       });
   }
@@ -78,4 +117,20 @@ export class LogonService {
 
     return this.api.postLogin(loginRequest, xApiKey, 'response', false, options);
   }
+
+  //public postTestLogin(loginRequest: LoginRequest, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LoginTestResponse>>;
+  private postTestLogin(xApiKey: string, username: string, password: string): Observable<HttpResponse<LoginTestResponse>> {
+    const loginRequest: LoginRequest = { username: username, password: password };
+    const headers: HttpHeaders = new HttpHeaders({
+      'x-api-key': xApiKey
+    });
+
+    const options: any = {
+      headers: headers,
+      httpHeaderAccept: 'application/json'
+    };
+
+    return this.api.postTestLogin(loginRequest, xApiKey, 'response', false, options);
+  }
+
 }
