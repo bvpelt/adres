@@ -17,13 +17,13 @@ export class LogonService {
   authenticatedUser?: string = undefined;
   authenticatedPassword?: string = undefined;
 
-  private isLoggedIn = new BehaviorSubject<boolean>(false);
+  isLoggedIn = new BehaviorSubject<boolean>(false);
 
   isLoggedIn$ = this.isLoggedIn.asObservable();
 
-  constructor(private api: LoginService, 
+  constructor(private api: LoginService,
     private dynamicconfigService: DynamicconfigService,
-  private dbgmessageService: DbgmessageService) {
+    private dbgmessageService: DbgmessageService) {
   }
 
   doLogOut() {
@@ -62,8 +62,9 @@ export class LogonService {
       });
   }
 
-  doTestLogin(username: string, password: string) {
-    this.postTestLogin(this.xApiKey, username, password)
+  doTestLogin(username: string, password: string): Observable<HttpResponse<LoginTestResponse>> {
+    return this.postTestLogin(this.xApiKey, username, password);
+    /*
       .subscribe({
         next:
           response => {
@@ -94,6 +95,7 @@ export class LogonService {
           this.dbgmessageService.add('LogonService: ' + this.errormessage);
         }
       });
+      */
   }
 
   /**

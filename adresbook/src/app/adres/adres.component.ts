@@ -9,6 +9,7 @@ import { LogonService } from '../services/logon.service';
 import { OpenadresService } from '../services/openadres.service';
 import { DbgmessageService } from '../services/dbgmessage.service';
 import { AdresseschangedService } from '../services/adresseschanged.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-adres',
@@ -68,16 +69,22 @@ export class AdresComponent {
               this.adres = response.body as Adres;
               this.adresseschangedService.emitNewAdres(adres);
               this.dbgmessageService.add('AdresComponent - Emitted new adres');
+              this.router.navigate(['/adresses']);
+              this.dbgmessageService.add('AdresComponent - Router navigate toe /adresses');
             },
-          error: error => {
-            this.errormessage = 'AdresComponent - Status: ' + error.status + ' details: ' + error.error.detail;
+
+            /*
+            AdresComponent - Status: 403 details: Forbidden message: Http failure response for http://localhost:8080/adres/api/v1/adresses?Override=false: 403 OK url: /adres/api/v1/adresses {"headers":{"normalizedNames":{},"lazyUpdate":null},"status":403,"statusText":"OK","url":"http://localhost:8080/adres/api/v1/adresses?Override=false","ok":false,"name":"HttpErrorResponse","message":"Http failure response for http://localhost:8080/adres/api/v1/adresses?Override=false: 403 OK","error":{"timestamp":"2025-01-04T17:38:48.450+00:00","status":403,"error":"Forbidden","message":"Forbidden","path":"/adres/api/v1/adresses"}}
+            */
+          error: (error: HttpErrorResponse) => {
+            this.errormessage = 'AdresComponent - Status: ' + error.status + ' details: ' + error.error.error + ' url: ' + error.url;
+            console.log(error);
           }
         });
     } else {
       this.dbgmessageService.add('AdresComponent - Skip empty adres');
     }
-    this.router.navigate(['/adresses']);
-    this.dbgmessageService.add('AdresComponent - Router navigate toe /adresses');
+   
   }
 
   cancel() {

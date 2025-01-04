@@ -16,13 +16,14 @@ import java.util.Optional;
 public interface AdresRepository extends PagingAndSortingRepository<AdresDAO, Long>,
         CrudRepository<AdresDAO, Long>,
         JpaSpecificationExecutor<AdresDAO> {
+
     @Query(value = "SELECT * FROM adres WHERE id = :id", nativeQuery = true)
     Optional<AdresDAO> findByAdresId(@Param("id") Long id);
 
     @Query(value = "SELECT * FROM adres WHERE hash = :hash", nativeQuery = true)
     Optional<AdresDAO> findByHash(@Param("hash") Integer hash);
 
-    @Query(value = "SELECT * FROM adres",
+    @Query(value = "SELECT * FROM adres order by id",
             countQuery = "SELECT * FROM adres",
             nativeQuery = true)
     List<AdresDAO> findAllByPaged(Pageable pageable);

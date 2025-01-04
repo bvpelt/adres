@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { DbgmessageService } from '../services/dbgmessage.service';
 import { AdresseschangedService } from '../services/adresseschanged.service';
+import { OpenadresService } from '../services/openadres.service';
 
 
 @Component({
@@ -31,7 +32,8 @@ export class AdresesComponent implements OnInit /*, OnChanges */ {
 
   isLoggedIn$: Observable<boolean>;
 
-  constructor(private adresService: AdresService,
+  constructor(
+    private openAdresService: OpenadresService,
     private router: Router,
     private logonService: LogonService,
     private dbgmessageService: DbgmessageService,
@@ -51,19 +53,9 @@ export class AdresesComponent implements OnInit /*, OnChanges */ {
     this.getAdresses(this.logonService.xApiKey, this.page, this.size);
     this.isFirstActivation = false;
   }
-  /*
-    ngOnChanges(changes: SimpleChanges) {
-      if (changes['isFirstActivation'] && !changes['isFirstActivation'].firstChange) {
-        // Code to execute on subsequent activations
-        this.getAdresses(this.logonService.xApiKey, this.page, this.size);
-        this.dbgmessageService.add('Component activated again');
-      } else {
-        this.dbgmessageService.add('Component activated first time');
-      }
-    }
-  */
+  
   getAdresses(xApiKey: string, page: number, size: number): void {
-    this.adresService.getAdresses(xApiKey, page, size)
+    this.openAdresService.getAdresses(xApiKey, page, size)
       .subscribe({
         next:
           response => {
@@ -95,10 +87,9 @@ export class AdresesComponent implements OnInit /*, OnChanges */ {
     console.log("Delete adres")
     this.selectedAdres = adres;
 
-    this.adresService.deleteAdres(this.logonService.authenticatedUser!, this.logonService.authenticatedPassword!, adres.id, this.logonService.xApiKey)
+    this.openAdresService.deleteAdres(adres.id, this.logonService.xApiKey)
       .subscribe({
         next:
-
           response => {
             // if (response != undefined) {
             //   console.log('AdresesComponent ' + JSON.stringify(response));
