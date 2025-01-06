@@ -65,7 +65,12 @@ class AdresApplicationTests {
         ArrayList<AdresDAO> adresses = new ArrayList<>();
 
         for (int i = 0; i < maxAdresses; i++) {
-            adresses.add(new AdresDAO("Kerkewijk", Integer.toString(i), "3904 KL", "Veenendaal"));
+            AdresDAO adressDao = new AdresDAO();
+            adressDao.setStreet("Kerkewijk");
+            adressDao.setHousenumber(Integer.toString(i));
+            adressDao.setZipcode("3904 KL");
+            adressDao.setCity("Veenendaal");
+            adresses.add(adressDao);
             log.info("Generated adres: {}", adresses.get(i));
         }
     }

@@ -49,6 +49,12 @@ Accept: application/json
 Content-Type: application/json
 x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
 
+###
+GET http://localhost:8080/adres/api/v1/adresses?size=5&page=4
+Accept: application/json
+Content-Type: application/json
+x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
+
 
 ###
 GET http://localhost:8080/adres/api/v1/adresses?page=1

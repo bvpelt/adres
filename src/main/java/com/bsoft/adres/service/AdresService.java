@@ -1,6 +1,7 @@
 package com.bsoft.adres.service;
 
 import com.bsoft.adres.database.AdresDAO;
+import com.bsoft.adres.database.AdresMapper;
 import com.bsoft.adres.database.PersonDAO;
 import com.bsoft.adres.exceptions.AdresExistsException;
 import com.bsoft.adres.exceptions.AdresNotExistsException;
@@ -11,6 +12,8 @@ import com.bsoft.adres.repositories.AdresRepository;
 import com.bsoft.adres.repositories.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +27,8 @@ import java.util.Optional;
 public class AdresService {
     private final AdresRepository adresRepository;
     private final PersonRepository personRepository;
+    private final AdresMapper adresMapper;
 
-    /*
-        @Autowired
-        public AdresService(final AdresRepository adresRepository, final PersonRepository personRepository) {
-            this.adresRepository = adresRepository;
-            this.personRepository = personRepository;
-        }
-    */
     public void deleteAll() {
         try {
             adresRepository.deleteAll();
@@ -75,6 +72,19 @@ public class AdresService {
         });
 
         return result;
+    }
+
+
+    public Page<Adres> getAdressesPage(final PageRequest pageRequest) {
+
+        Page<AdresDAO> foundAdresPage = adresRepository.findAllByPage(pageRequest);
+
+        List<Adres> adresList = new ArrayList<>();
+        adresList = foundAdresPage.getContent().stream()
+                .map(adresMapper::map) // Apply mapper to each AdresDAO
+                .toList();
+
+        return new PageImpl<>(adresList, foundAdresPage.getPageable(), foundAdresPage.getTotalElements());
     }
 
     public List<Adres> getAdresses(final PageRequest pageRequest) {
