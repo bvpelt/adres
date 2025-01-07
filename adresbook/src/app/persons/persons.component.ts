@@ -1,73 +1,70 @@
-import { Component, Input, OnInit} from '@angular/core';
-import { Adres } from '../core/modules/openapi/model/adres';
-import { LogonService } from '../services/logon.service';
+import { Component, Input } from '@angular/core';
+import { faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { PagedPersons, Person, PersonsService } from '../core/modules/openapi';
 import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
-import { faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { LogonService } from '../services/logon.service';
 import { DbgmessageService } from '../services/dbgmessage.service';
-import { AdresseschangedService } from '../services/adresseschanged.service';
-import { OpenadresService } from '../services/openadres.service';
-import { PagedAdresses } from '../core/modules/openapi';
-import { AdresService } from '../services/adres.service';
-
+import { PersonschangedService } from '../services/personschanged.service';
+import { PersonService } from '../services/person.service';
 
 @Component({
-  selector: 'app-adreses',
-  templateUrl: './adreses.component.html',
-  styleUrl: './adreses.component.css'
+  selector: 'app-persons',
+  templateUrl: './persons.component.html',
+  styleUrl: './persons.component.css'
 })
-export class AdresesComponent implements OnInit {
-  @Input() isFirstActivation: boolean = true;
+export class PersonsComponent {
+ @Input() isFirstActivation: boolean = true;
 
   page: number = 1;
   size: number = 4;
   faPencilIcon = faPencil;
   faTrashCanIcon = faTrashCan;
 
-  adreses: Adres[] = [];
+  persons: Person[] = [];
   nextpage: number = 0;
   prevpage: number = 0;
-  selectedAdres?: Adres = undefined;
-  adresChangesubscription: Subscription | undefined;
+  selectedPerson?: Person = undefined;
+  personChangesubscription: Subscription | undefined;
 
   errormessage?: string = undefined;
 
   isLoggedIn$: Observable<boolean>;
 
   constructor(
-    private openAdresService: AdresService,
+    private personService: PersonService,
     private router: Router,
     private logonService: LogonService,
     private dbgmessageService: DbgmessageService,
-    private adresseschangedService: AdresseschangedService) {
+    private personschangedService: PersonschangedService) {
     this.dbgmessageService.add('AdresesComponent - constructed subscription defined');
     this.isLoggedIn$ = this.logonService.isLoggedIn$;
-    this.adresChangesubscription = this.adresseschangedService.newAdres$
+    this.personChangesubscription = this.personschangedService.newAdres$
       .subscribe(adres => {
         this.dbgmessageService.add('AdresesComponent - retrieve adresses go add: ' + JSON.stringify(adres));
-        this.getAdresses(this.logonService.xApiKey, this.page, this.size);
+        this.getPersons(this.logonService.xApiKey, this.page, this.size);
       });
   }
 
   ngOnInit(): void {
     this.dbgmessageService.add('AdresesComponent - activated initial');
     this.errormessage = "";
-    this.getAdresses(this.logonService.xApiKey, this.page, this.size);
+    this.getPersons(this.logonService.xApiKey, this.page, this.size);
     this.isFirstActivation = false;
   }
   
-  getAdresses(xApiKey: string, page: number, size: number): void {
-    this.openAdresService.getAdresses(xApiKey, page, size)
+  getPersons(xApiKey: string, page: number, size: number): void {
+    this.personService.getPersons(xApiKey, page, size)
       .subscribe({
         next:
           response => {
             if (response.body) {
-              const adresPage: PagedAdresses = response.body;
-              const adresses: Adres[] = response.body as Adres[];
-              this.adreses = adresPage.content!;
-              this.dbgmessageService.add('AdresesComponent - before prevpage: ' + this.prevpage + ' page: ' + this.page + ' nextpage: ' + this.nextpage + ' total: ' + adresPage.totalPages);
-              if (adresPage.totalElements != undefined) {
-                if (this.page + 1 <= adresPage.totalPages!) {
+              const personPage: PagedPersons = response.body;
+              const adresses: Person[] = response.body as Person[];
+              this.persons = personPage.content!;
+              this.dbgmessageService.add('AdresesComponent - before prevpage: ' + this.prevpage + ' page: ' + this.page + ' nextpage: ' + this.nextpage + ' total: ' + personPage.totalPages);
+              if (personPage.totalElements != undefined) {
+                if (this.page + 1 <= personPage.totalPages!) {
                   this.nextpage = this.page + 1;
                 } else {
                   this.nextpage = 0;
@@ -78,7 +75,7 @@ export class AdresesComponent implements OnInit {
                   this.prevpage = 0;
                 }
               }             
-              this.dbgmessageService.add('AdresesComponent - after prevpage: ' + this.prevpage + ' page: ' + this.page + ' nextpage: ' + this.nextpage + ' total: ' + adresPage.totalPages);
+              this.dbgmessageService.add('AdresesComponent - after prevpage: ' + this.prevpage + ' page: ' + this.page + ' nextpage: ' + this.nextpage + ' total: ' + personPage.totalPages);
             }
           },
 
@@ -95,31 +92,31 @@ export class AdresesComponent implements OnInit {
       });
   }
 
-  onSelect(adres: Adres): void {
-    this.selectedAdres = adres;
-    this.router.navigate(['/adresdetail', adres.id]);
+  onSelect(person: Person): void {
+    this.selectedPerson = person;
+    //this.router.navigate(['/persondetail', person.id]);
   }
 
   onNextPage(): void {
     this.page = this.nextpage;
-    this.getAdresses(this.logonService.xApiKey, this.page, this.size);
+    this.getPersons(this.logonService.xApiKey, this.page, this.size);
   }
 
   onPrevPage(): void {
     this.page = this.prevpage;
-      this.getAdresses(this.logonService.xApiKey, this.page, this.size);
+      this.getPersons(this.logonService.xApiKey, this.page, this.size);
   }
 
-  onDelete(adres: Adres): void {
-    console.log("Delete adres")
-    this.selectedAdres = adres;
+  onDelete(person: Person): void {
+    console.log("Delete person")
+    this.selectedPerson = person;
 
-    this.openAdresService.deleteAdres(adres.id, this.logonService.xApiKey)
+    this.personService.deletePerson(person.id, this.logonService.xApiKey)
       .subscribe({
         next:
           response => {
             this.dbgmessageService.add('AdresesComponent - deleted status: ' + response.status);
-            this.adresseschangedService.emitNewAdres(adres);
+            this.personschangedService.emitNewPerson(person);
           },
 
         error: error => {
@@ -133,8 +130,8 @@ export class AdresesComponent implements OnInit {
 
   ngOnDestroy() {
 
-    if (this.adresChangesubscription) {
-      this.adresChangesubscription.unsubscribe();
+    if (this.personChangesubscription) {
+      this.personChangesubscription.unsubscribe();
       this.dbgmessageService.add('AdresesComponent - Subscription destroyed');
     }
 

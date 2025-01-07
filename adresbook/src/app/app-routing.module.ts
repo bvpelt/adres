@@ -6,10 +6,12 @@ import { AdresComponent } from './adres/adres.component';
 import { AdresdetailComponent } from './adresdetail/adresdetail.component';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
+import { PersonsComponent } from './persons/persons.component';
 
 
 const routes: Routes = [  
   { path: 'adresses', component: AdresesComponent },
+  { path: 'persons', component: PersonsComponent },
   { path: 'adresdetail/:id', component: AdresdetailComponent },
   { path: 'login', component: LoginComponent }, 
   { path: 'logout', component: LogoutComponent }, 

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { DynamicconfigService } from './dynamicconfig.service';
-import { Adres, AdresBody, Adresses, AdressesService, BASE_PATH, Configuration } from '../core/modules/openapi';
+import { Adres, AdresBody, Adresses, AdressesService, BASE_PATH, Configuration, PagedAdresses } from '../core/modules/openapi';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -21,7 +21,6 @@ export class OpenadresService {
       }
     });
   }
-
 
   // public deleteAdres(id: number, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
   deleteAdres(id: number, xApiKey: string): Observable<HttpResponse<any>> {
@@ -75,8 +74,8 @@ export class OpenadresService {
     }
   }
 
-  // public getAdresses(xApiKey: string, page?: number, size?: number, sort?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Adresses>>;    
-  getAdresses(xApiKey: string, page?: number, size?: number): Observable<HttpResponse<Adresses>> {
+  // public getAdresses(page: number, size: number, sort?: Array<string>, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedAdresses>>;
+  getAdresses(xApiKey: string, page?: number, size?: number): Observable<HttpResponse<PagedAdresses>> {
     const headers: HttpHeaders = new HttpHeaders({
       'x-api-key': xApiKey
     });
@@ -94,11 +93,11 @@ export class OpenadresService {
   }
 
   // public patchAdres(id: number, xAPIKEY?: string, adresBody?: AdresBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Adres>>;
-  patchAdres(id: number, xApiKey: string, adresBody?: AdresBody): Observable<HttpResponse<Adres>> {    
+  patchAdres(id: number, xApiKey: string, adresBody?: AdresBody): Observable<HttpResponse<Adres>> {
     const headers: HttpHeaders = new HttpHeaders({
       'x-api-key': xApiKey
     });
-    
+
     const options: any = {
       headers: headers,
       httpHeaderAccept: 'application/json'

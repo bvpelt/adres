@@ -2,11 +2,9 @@
     list-style-type: none; /* Remove bullets */
 }
 
-
 .adresses li {
     display: flex;
   }
-
 
 .adresses button {
     flex: 1;
@@ -21,7 +19,6 @@
     align-items: stretch;
     height: 1.8em;
   }
-
 
 .adresses button:hover {
     color: #2c3a41;
