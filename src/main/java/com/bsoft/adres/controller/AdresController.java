@@ -84,7 +84,7 @@ public class AdresController implements AdressesApi {
     }
 
     @Override
-    public ResponseEntity<PagedAdresses> _getAdresses(Integer page, Integer size, String sort, String X_API_KEY) {
+    public ResponseEntity<PagedAdresses> _getAdresses(Integer page, Integer size, List<String> sort, String X_API_KEY) {
         log.debug("_getAdresses apikey: {}", X_API_KEY);
         List<Sort.Order> sortParameter;
         PageRequest pageRequest;
@@ -102,11 +102,9 @@ public class AdresController implements AdressesApi {
         if (page < 1) {
             throw new InvalidParameterException("Page size must be greater than 0");
         }
-        //
         if (sort != null && !sort.isEmpty()) {
-            //sortParameter = ControllerSortUtil.getSortOrder(sortBy);
-            //pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortParameter));
-            pageRequest = PageRequest.of(page - 1, size, Sort.by(sort));
+            List<Sort.Order> orders = ControllerSortUtil.getSortOrder(sort);
+            pageRequest = PageRequest.of(page - 1, size, Sort.by(orders));
         } else {
             pageRequest = PageRequest.of(page - 1, size);
         }

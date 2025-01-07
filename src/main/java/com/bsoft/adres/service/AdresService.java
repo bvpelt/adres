@@ -1,13 +1,13 @@
 package com.bsoft.adres.service;
 
 import com.bsoft.adres.database.AdresDAO;
-import com.bsoft.adres.database.AdresMapper;
 import com.bsoft.adres.database.PersonDAO;
 import com.bsoft.adres.exceptions.AdresExistsException;
 import com.bsoft.adres.exceptions.AdresNotExistsException;
 import com.bsoft.adres.generated.model.Adres;
 import com.bsoft.adres.generated.model.AdresBody;
 import com.bsoft.adres.generated.model.AdresPerson;
+import com.bsoft.adres.mappers.AdresMapper;
 import com.bsoft.adres.repositories.AdresRepository;
 import com.bsoft.adres.repositories.PersonRepository;
 import lombok.RequiredArgsConstructor;
@@ -67,7 +67,7 @@ public class AdresService {
         Iterable<AdresDAO> iadres = adresRepository.findAll();
 
         iadres.forEach(adresDAO -> {
-            Adres newAdres = AdresDAO2Adres(adresDAO);
+            Adres newAdres = adresMapper.map(adresDAO);
             result.add(newAdres);
         });
 

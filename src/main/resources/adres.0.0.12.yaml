@@ -351,7 +351,7 @@ paths:
         - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "200":
-          $ref: "#/components/responses/Persons"
+          $ref: "#/components/responses/PagedPersons"
         "404":
           $ref: "#/components/responses/NotFound"
         "429":
@@ -542,7 +542,7 @@ paths:
         - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "200":
-          $ref: "#/components/responses/Roles"
+          $ref: "#/components/responses/PagedRoles"
         "404":
           $ref: "#/components/responses/NotFound"
         "429":
@@ -706,7 +706,7 @@ paths:
         - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "200":
-          $ref: "#/components/responses/Users"
+          $ref: "#/components/responses/PagedUsers"
         "404":
           $ref: "#/components/responses/NotFound"
         "429":
@@ -1244,8 +1244,10 @@ components:
       in: query
       description: field names to sort on
       schema:
-        type: string
-        default: ""
+        type: array
+        items:
+          type: string
+        default: []
 
     X-API-KEY:
       name: "X-API-KEY"
@@ -1400,6 +1402,57 @@ components:
         totalPages:
           type: integer
 
+    PagedPersons:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/Person"
+        pageNumber: 
+          type: integer
+        pageSize:
+          type: integer
+        totalElements:
+          type: number
+          format: int64
+        totalPages:
+          type: integer
+
+    PagedRoles:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/Role"
+        pageNumber: 
+          type: integer
+        pageSize:
+          type: integer
+        totalElements:
+          type: number
+          format: int64
+        totalPages:
+          type: integer
+
+    PagedUsers:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+        pageNumber: 
+          type: integer
+        pageSize:
+          type: integer
+        totalElements:
+          type: number
+          format: int64
+        totalPages:
+          type: integer
+                
     Password:
       type: string
       description: base64 encode password
@@ -1809,6 +1862,51 @@ components:
         version:
           $ref: "#/components/headers/version"
 
+    PagedPersons:
+      description: A collection of person pages
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/PagedPersons"
+#          examples:
+#            emptylist:
+#              $ref: "#/components/examples/PagedAdresList-01"
+#            fulllist:
+#              $ref: "#/components/examples/PagedAdresList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"          
+
+    PagedRoles:
+      description: A collection of person pages
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/PagedRoles"
+#          examples:
+#            emptylist:
+#              $ref: "#/components/examples/PagedAdresList-01"
+#            fulllist:
+#              $ref: "#/components/examples/PagedAdresList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"          
+
+    PagedUsers:
+      description: A collection of person pages
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/PagedUsers"
+#          examples:
+#            emptylist:
+#              $ref: "#/components/examples/PagedAdresList-01"
+#            fulllist:
+#              $ref: "#/components/examples/PagedAdresList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"          
+        
     Person:
       description: A specific person
       content:

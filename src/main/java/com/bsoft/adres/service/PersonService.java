@@ -7,10 +7,13 @@ import com.bsoft.adres.exceptions.PersonNotExistsException;
 import com.bsoft.adres.generated.model.Person;
 import com.bsoft.adres.generated.model.PersonAdres;
 import com.bsoft.adres.generated.model.PersonBody;
+import com.bsoft.adres.mappers.PersonMapper;
 import com.bsoft.adres.repositories.AdresRepository;
 import com.bsoft.adres.repositories.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,7 @@ public class PersonService {
 
     private final PersonRepository personRepository;
     private final AdresRepository adresRepository;
+    private final PersonMapper personMapper;
 
     /*
     @Autowired
@@ -179,4 +183,14 @@ public class PersonService {
         return person;
     }
 
+    public Page<Person> getPersonsPage(PageRequest pageRequest) {
+        Page<PersonDAO> foundPersonPage = personRepository.findAllByPage(pageRequest);
+
+        List<Person> personList = new ArrayList<>();
+        personList = foundPersonPage.getContent().stream()
+                .map(personMapper::map) // Apply mapper to each PersonDAO
+                .toList();
+
+        return new PageImpl<>(personList, foundPersonPage.getPageable(), foundPersonPage.getTotalElements());
+    }
 }

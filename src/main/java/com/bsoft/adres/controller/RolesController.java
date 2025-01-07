@@ -3,12 +3,14 @@ package com.bsoft.adres.controller;
 import com.bsoft.adres.exceptions.InvalidParameterException;
 import com.bsoft.adres.exceptions.RoleNotDeletedException;
 import com.bsoft.adres.generated.api.RolesApi;
+import com.bsoft.adres.generated.model.PagedRoles;
 import com.bsoft.adres.generated.model.Role;
 import com.bsoft.adres.generated.model.RoleBody;
 import com.bsoft.adres.service.RolesService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Slf4j
@@ -70,7 +73,7 @@ public class RolesController implements RolesApi {
     }
 
     @Override
-    public ResponseEntity<List<Role>> _getRoles(Integer page, Integer size, String sort, String X_API_KEY) {
+    public ResponseEntity<PagedRoles> _getRoles(Integer page, Integer size, List<String> sort, String X_API_KEY) {
 
         log.debug("_getRoles apikey: {}", X_API_KEY);
         List<Sort.Order> sortParameter;
@@ -90,17 +93,24 @@ public class RolesController implements RolesApi {
             throw new InvalidParameterException("Page size must be greater than 0");
         }
         //
-        if (sort != null && !sort.isEmpty()) {
-            //sortParameter = ControllerSortUtil.getSortOrder(sortBy);
-            //pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortParameter));
-            pageRequest = PageRequest.of(page - 1, size, Sort.by(sort));
+        if (sort != null && sort.size() > 0) {
+            List<Sort.Order> orders = ControllerSortUtil.getSortOrder(sort);
+            pageRequest = PageRequest.of(page - 1, size, Sort.by(orders));
         } else {
             pageRequest = PageRequest.of(page - 1, size);
         }
 
+        PagedRoles pageResponse = new PagedRoles();
+        Page<Role> rolePage = rolesService.getRolesPage(pageRequest);
+        pageResponse.setContent(rolePage.getContent());
+        pageResponse.setPageNumber(rolePage.getNumber() + 1);
+        pageResponse.setPageSize(rolePage.getSize());
+        pageResponse.setTotalElements(BigDecimal.valueOf(rolePage.getTotalElements()));
+        pageResponse.setTotalPages(rolePage.getTotalPages());
+
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
-                .body(rolesService.getRoles(pageRequest));
+                .body(pageResponse);
     }
 
     @Override

@@ -7,9 +7,12 @@ import com.bsoft.adres.exceptions.UserNotExistsException;
 import com.bsoft.adres.generated.model.Role;
 import com.bsoft.adres.generated.model.User;
 import com.bsoft.adres.generated.model.UserBody;
+import com.bsoft.adres.mappers.UserMapper;
 import com.bsoft.adres.repositories.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,7 @@ import java.util.Optional;
 public class UsersService {
 
     private final UsersRepository usersRepository;
+    private final UserMapper userMapper;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder; // = new BCryptPasswordEncoder();
 
@@ -181,5 +185,16 @@ public class UsersService {
         role.setRolename(roleDAO.getRolename());
         role.setDescription(roleDAO.getDescription());
         return role;
+    }
+
+    public Page<User> getUsersPage(PageRequest pageRequest) {
+        Page<UserDAO> foundUsersPage = usersRepository.findAllByPage(pageRequest);
+
+        List<User> usersList = new ArrayList<>();
+        usersList = foundUsersPage.getContent().stream()
+                .map(userMapper::map) // Apply mapper to each UserDAO
+                .toList();
+
+        return new PageImpl<>(usersList, foundUsersPage.getPageable(), foundUsersPage.getTotalElements());
     }
 }

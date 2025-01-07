@@ -4,7 +4,7 @@ import { AdressesService } from '../core/modules/openapi/api/api';
 import { Adresses } from '../core/modules/openapi/model/adresses';
 import { Adres } from '../core/modules/openapi/model/adres';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { AdresBody } from '../core/modules/openapi';
+import { AdresBody, PagedAdresses } from '../core/modules/openapi';
 
 @Injectable({
   providedIn: 'root'
@@ -60,8 +60,8 @@ export class AdresService {
     return this.api.getAdres(id, xApiKey, 'response', false, options);
   }
 
-  // public getAdresses(xApiKey: string, page?: number, size?: number, sort?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Adresses>>;    
-  getAdresses(xApiKey: string, page?: number, size?: number ):  Observable<HttpResponse<Adresses>> {    
+  // public getAdresses(page: number, size: number, sort?: Array<string>, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedAdresses>>;
+  getAdresses(xApiKey: string, page?: number, size?: number ):  Observable<HttpResponse<PagedAdresses>> {    
     const headers: HttpHeaders = new HttpHeaders({
       'x-api-key' : xApiKey
     });

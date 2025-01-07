@@ -1,6 +1,8 @@
-package com.bsoft.adres.database;
+package com.bsoft.adres.mappers;
 
-import com.bsoft.adres.generated.model.Adres;
+import com.bsoft.adres.database.JsonNullableMapper;
+import com.bsoft.adres.database.UserDAO;
+import com.bsoft.adres.generated.model.User;
 import lombok.Setter;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -15,20 +17,10 @@ import org.mapstruct.ReportingPolicy;
                 JsonNullableMapper.class
         },
         nullValueIterableMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
-public abstract class AdresMapper implements JsonNullableMapper {
+public abstract class UserMapper implements JsonNullableMapper {
 
+    public abstract User map(UserDAO source);
 
-    //@Mapping(ignore=true, target="hash")
-    public abstract Adres map(AdresDAO target);
+    public abstract UserDAO map(User source);
 
-
-    //@Mapping(ignore=true, target="hash")
-    public abstract AdresDAO map(Adres target);
-
-    /*
-    // Optional: Map collections
-    List<Adres> mapListFromDAO(List<AdresDAO> source);
-    List<AdresDAO> mapListToDAO(List<Adres> target);
-
-     */
 }

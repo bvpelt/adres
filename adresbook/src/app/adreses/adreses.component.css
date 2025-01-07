@@ -75,3 +75,12 @@
     margin-left: 5px;
     text-align: right;
   }
+
+  .pagination-buttons {
+    display: flex; /* Use flexbox for horizontal layout */
+    justify-content: space-between; /* Space buttons evenly */
+  }
+
+  .next-page-button {
+    margin-left: auto; /* Push the next page button to the right */
+  }

@@ -3,6 +3,7 @@ package com.bsoft.adres.controller;
 import com.bsoft.adres.exceptions.InvalidParameterException;
 import com.bsoft.adres.exceptions.PersonNotDeletedException;
 import com.bsoft.adres.generated.api.PersonsApi;
+import com.bsoft.adres.generated.model.PagedPersons;
 import com.bsoft.adres.generated.model.Person;
 import com.bsoft.adres.generated.model.PersonAdres;
 import com.bsoft.adres.generated.model.PersonBody;
@@ -10,6 +11,7 @@ import com.bsoft.adres.service.PersonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Slf4j
@@ -81,7 +84,7 @@ public class PersonController implements PersonsApi {
     }
 
     @Override
-    public ResponseEntity<List<Person>> _getPersons(Integer page, Integer size, String sort, String X_API_KEY) {
+    public ResponseEntity<PagedPersons> _getPersons(Integer page, Integer size, List<String> sort, String X_API_KEY) {
         log.debug("_getPersons apikey: {}", X_API_KEY);
         List<Sort.Order> sortParameter;
         PageRequest pageRequest;
@@ -100,17 +103,24 @@ public class PersonController implements PersonsApi {
             throw new InvalidParameterException("Page size must be greater than 0");
         }
         //
-        if (sort != null && !sort.isEmpty()) {
-            //sortParameter = ControllerSortUtil.getSortOrder(sortBy);
-            //pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortParameter));
-            pageRequest = PageRequest.of(page - 1, size, Sort.by(sort));
+        if (sort != null && sort.size() > 0) {
+            List<Sort.Order> orders = ControllerSortUtil.getSortOrder(sort);
+            pageRequest = PageRequest.of(page - 1, size, Sort.by(orders));
         } else {
             pageRequest = PageRequest.of(page - 1, size);
         }
 
+        PagedPersons pageResponse = new PagedPersons();
+        Page<Person> personPage = personService.getPersonsPage(pageRequest);
+        pageResponse.setContent(personPage.getContent());
+        pageResponse.setPageNumber(personPage.getNumber() + 1);
+        pageResponse.setPageSize(personPage.getSize());
+        pageResponse.setTotalElements(BigDecimal.valueOf(personPage.getTotalElements()));
+        pageResponse.setTotalPages(personPage.getTotalPages());
+
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
-                .body(personService.getPersons(pageRequest));
+                .body(pageResponse);
     }
 
     @Override

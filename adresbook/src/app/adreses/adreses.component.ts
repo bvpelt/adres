@@ -9,6 +9,7 @@ import { faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { DbgmessageService } from '../services/dbgmessage.service';
 import { AdresseschangedService } from '../services/adresseschanged.service';
 import { OpenadresService } from '../services/openadres.service';
+import { PagedAdresses } from '../core/modules/openapi';
 
 
 @Component({
@@ -20,11 +21,13 @@ export class AdresesComponent implements OnInit /*, OnChanges */ {
   @Input() isFirstActivation: boolean = true;
 
   page: number = 1;
-  size: number = 20;
+  size: number = 4;
   faPencilIcon = faPencil;
   faTrashCanIcon = faTrashCan;
 
-  adres: Adres[] = [];
+  adreses: Adres[] = [];
+  nextpage: number = 0;
+  prevpage: number = 0;
   selectedAdres?: Adres = undefined;
   adreChangesubscription: Subscription | undefined;
 
@@ -60,8 +63,23 @@ export class AdresesComponent implements OnInit /*, OnChanges */ {
         next:
           response => {
             if (response.body) {
+              const adresPage: PagedAdresses = response.body;
               const adresses: Adres[] = response.body as Adres[];
-              this.adres = adresses;
+              this.adreses = adresPage.content!;
+              this.dbgmessageService.add('AdresesComponent - before prevpage: ' + this.prevpage + ' page: ' + this.page + ' nextpage: ' + this.nextpage + ' total: ' + adresPage.totalPages);
+              if (adresPage.totalElements != undefined) {
+                if (this.page + 1 <= adresPage.totalPages!) {
+                  this.nextpage = this.page + 1;
+                } else {
+                  this.nextpage = 0;
+                }
+                if (this.page - 1 > 0) {
+                  this.prevpage = this.page - 1;
+                } else {
+                  this.prevpage = 0;
+                }
+              }             
+              this.dbgmessageService.add('AdresesComponent - after prevpage: ' + this.prevpage + ' page: ' + this.page + ' nextpage: ' + this.nextpage + ' total: ' + adresPage.totalPages);
             }
           },
 
@@ -81,6 +99,16 @@ export class AdresesComponent implements OnInit /*, OnChanges */ {
   onSelect(adres: Adres): void {
     this.selectedAdres = adres;
     this.router.navigate(['/adresdetail', adres.id]);
+  }
+
+  onNextPage(): void {
+    this.page = this.nextpage;
+    this.getAdresses(this.logonService.xApiKey, this.page, this.size);
+  }
+
+  onPrevPage(): void {
+    this.page = this.prevpage;
+      this.getAdresses(this.logonService.xApiKey, this.page, this.size);
   }
 
   onDelete(adres: Adres): void {
