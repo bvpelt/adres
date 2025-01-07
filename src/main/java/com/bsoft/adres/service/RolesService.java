@@ -5,9 +5,12 @@ import com.bsoft.adres.exceptions.RoleExistsException;
 import com.bsoft.adres.exceptions.RoleNotExistsException;
 import com.bsoft.adres.generated.model.Role;
 import com.bsoft.adres.generated.model.RoleBody;
+import com.bsoft.adres.mappers.RoleMapper;
 import com.bsoft.adres.repositories.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,7 @@ import java.util.Optional;
 public class RolesService {
 
     private final RoleRepository roleRepository;
+    private final RoleMapper roleMapper;
 
     /*
         @Autowired
@@ -149,5 +153,16 @@ public class RolesService {
         role.setRolename(roleDAO.getRolename());
         role.setDescription(roleDAO.getDescription());
         return role;
+    }
+
+    public Page<Role> getRolesPage(PageRequest pageRequest) {
+        Page<RoleDAO> foundRolesPage = roleRepository.findAllByPage(pageRequest);
+
+        List<Role> rolesList = new ArrayList<>();
+        rolesList = foundRolesPage.getContent().stream()
+                .map(roleMapper::map) // Apply mapper to each AdresDAO
+                .toList();
+
+        return new PageImpl<>(rolesList, foundRolesPage.getPageable(), foundRolesPage.getTotalElements());
     }
 }

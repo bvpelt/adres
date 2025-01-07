@@ -1,6 +1,8 @@
 package com.bsoft.adres.repositories;
 
 import com.bsoft.adres.database.PersonDAO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -29,4 +31,9 @@ public interface PersonRepository extends PagingAndSortingRepository<PersonDAO, 
 
     @Query(value = "SELECT person.* FROM person, adres_person WHERE person.id = adres_person.personid and adres_person.adresid = :adresId", nativeQuery = true)
     List<PersonDAO> findPersonsByAdresId(Long adresId);
+
+    @Query(value = "SELECT * FROM person",
+            countQuery = "SELECT * FROM person",
+            nativeQuery = true)
+    Page<PersonDAO> findAllByPage(PageRequest pageRequest);
 }

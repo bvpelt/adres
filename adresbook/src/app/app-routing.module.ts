@@ -6,14 +6,20 @@ import { AdresComponent } from './adres/adres.component';
 import { AdresdetailComponent } from './adresdetail/adresdetail.component';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
+import { PersonsComponent } from './persons/persons.component';
+import { PersonComponent } from './person/person.component';
+import { PersondetailComponent } from './persondetail/persondetail.component';
 
 
-const routes: Routes = [  
+const routes: Routes = [
   { path: 'adresses', component: AdresesComponent },
+  { path: 'addadres', component: AdresComponent },
   { path: 'adresdetail/:id', component: AdresdetailComponent },
-  { path: 'login', component: LoginComponent }, 
-  { path: 'logout', component: LogoutComponent }, 
-  { path: 'addadres' , component: AdresComponent},
+  { path: 'login', component: LoginComponent },
+  { path: 'logout', component: LogoutComponent },
+  { path: 'persons', component: PersonsComponent },
+  { path: 'addperson', component: PersonComponent },
+  { path: 'persondetail/:id', component: PersondetailComponent },
 ];
 
 @NgModule({

@@ -1,0 +1,31 @@
+<h2>Persons</h2>
+<a routerLink="/addperson" *ngIf="isLoggedIn$ | async">Add person</a>
+
+<div *ngIf="persons.length > 0">
+    <ul class="persons">
+        <li *ngFor="let person of persons">
+            <button [class.selected]="person === selectedPerson" type="button" (click)="onSelect(person)">
+                <span class="badge">{{person.id}}</span>
+                <span class="adres">{{person.firstName}} {{person.infix}} {{person.lastName}} {{person.dateOfBirth}}
+                </span>
+            </button>
+            <fa-icon *ngIf="isLoggedIn$ | async" [icon]="faPencilIcon" (click)="onSelect(person)"></fa-icon>
+            <fa-icon *ngIf="isLoggedIn$ | async" [icon]="faTrashCanIcon" (click)="onDelete(person)"></fa-icon>
+        </li>
+    </ul>
+</div>
+
+<div class="pagination-buttons">
+    <div *ngIf="prevpage > 0">
+        <button type="button" (click)="onPrevPage()">prev page {{page}}/{{totalpages}}</button>
+    </div>
+    <div *ngIf="nextpage > 0" class="next-page-button">
+        <button type="button" (click)="onNextPage()">next page {{page}}/{{totalpages}}</button>
+    </div>
+</div>
+
+<div *ngIf="errormessage!=undefined && errormessage.length>0">
+    {{errormessage}}
+</div>
+
+<app-dbgmessages></app-dbgmessages>

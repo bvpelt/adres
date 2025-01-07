@@ -6,6 +6,9 @@ import { AdresService } from '../services/adres.service';
 import { LogonService } from '../services/logon.service';
 import { AdresBody } from '../core/modules/openapi';
 import { Observable } from 'rxjs';
+import { OpenadresService } from '../services/openadres.service';
+import { AdresseschangedService } from '../services/adresseschanged.service';
+import { DbgmessageService } from '../services/dbgmessage.service';
 
 @Component({
   selector: 'app-adresdetail',
@@ -21,7 +24,9 @@ export class AdresdetailComponent {
   constructor(private route: ActivatedRoute,
     private adresService: AdresService,
     private router: Router,
-    private logonService: LogonService) {
+    private logonService: LogonService,
+    private dbgmessageService: DbgmessageService,
+    private adresseschangedService: AdresseschangedService) {
     this.getAdres(this.logonService.xApiKey);
 
     this.isLoggedIn$ = this.logonService.isLoggedIn$;
@@ -46,14 +51,16 @@ export class AdresdetailComponent {
   }
 
   onUpdate(adres: Adres) {
-    console.log("udpate adres");
-
     const adresbody: AdresBody = { street: adres.street, housenumber: adres.housenumber, zipcode: adres.zipcode, city: adres.city };
-    this.adresService.patchAdres(this.logonService.authenticatedUser!, this.logonService.authenticatedPassword!, adres.id, this.logonService.xApiKey, adresbody)
+    this.adresService.patchAdres(adres.id, this.logonService.xApiKey, adresbody)
       .subscribe({
         next:
           response => {
             this.adres = response.body as Adres;
+            this.adresseschangedService.emitNewAdres(adres);
+            this.dbgmessageService.debug('AdresdetailComponent - Emitted new adres');
+            this.router.navigate(['/adresses']);
+            this.dbgmessageService.debug('AdresdetailComponent - Router navigate toe /adresses');
           },
         error: error => {
           this.errormessage = 'AdresdetailComponent Status: ' + error.status + ' details: ' + error.error.detail;
@@ -64,7 +71,6 @@ export class AdresdetailComponent {
   }
 
   cancel() {
-    console.log("cancel adres");
     this.router.navigate(['/adresses']);
   }
 }

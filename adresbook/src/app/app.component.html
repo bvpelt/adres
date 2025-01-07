@@ -1,6 +1,7 @@
 <h1>Adresbook</h1>
 <nav>
   <a routerLink="/adresses">Adresses</a>
+  <a routerLink="/persons">Persons</a>
   <a routerLink="/login" *ngIf="!(isLoggedIn$ | async)">Login</a>
   <a routerLink="/logout" *ngIf="(isLoggedIn$ | async)">LogOut</a>
 </nav>

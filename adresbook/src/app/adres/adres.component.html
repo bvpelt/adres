@@ -22,8 +22,13 @@
     <input id="city" [(ngModel)]="adres.city" placeholder="city">
 </div>
 
-<button type="button" (click)="onSave(adres)">Save</button>
+<div class="button-container">
+    <button type="button" (click)="onSave(adres)">Save</button>
+    <button type="button" (click)="cancel()">Cancel</button>
+</div>
 
 <div *ngIf="errormessage!=undefined && errormessage.length>0">
     {{errormessage}}
 </div>
+
+<app-dbgmessages></app-dbgmessages>

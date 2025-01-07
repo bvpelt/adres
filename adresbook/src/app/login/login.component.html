@@ -1,15 +1,22 @@
 <div class="login">
     <div class="form-group">
         <label for="username">Username: </label>
-        <input id="username" [(ngModel)]="username" placeholder="username">
+        <input autocomplete="on" id="username" [(ngModel)]="username" placeholder="username">
     </div>
 
     <div class="form-group">
-        <label for="password">Password: </label>        
-        <input id="password" type="{{ showPassword ? 'text' : 'password' }}" [(ngModel)]="password" placeholder="password">
+        <label for="password">Password: </label>
+        <input autocomplete="off" id="password" type="{{ showPassword ? 'text' : 'password' }}" [(ngModel)]="password"
+            placeholder="password">
         <fa-icon *ngIf="showPassword" (click)="togglePasswordVisibility()" [icon]="faEyeIcon"></fa-icon>
-        <fa-icon *ngIf="!showPassword" (click)="togglePasswordVisibility()" [icon]="faEyeSlashIcon"></fa-icon>               
+        <fa-icon *ngIf="!showPassword" (click)="togglePasswordVisibility()" [icon]="faEyeSlashIcon"></fa-icon>
     </div>
 
     <button type="button" (click)="onLogon()">Logon</button>
 </div>
+
+<div *ngIf="errormessage">
+    {{errormessage}}
+</div>
+
+<app-dbgmessages></app-dbgmessages>

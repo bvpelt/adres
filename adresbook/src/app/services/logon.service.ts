@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
-import { LoginRequest, LoginResponse, LoginService } from '../core/modules/openapi';
+import { Inject, Injectable, Optional } from '@angular/core';
+import { BASE_PATH, Configuration, LoginRequest, LoginResponse, LoginService } from '../core/modules/openapi';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { DynamicconfigService } from './dynamicconfig.service';
+import { DbgmessageService } from './dbgmessage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,50 +11,45 @@ import { HttpHeaders, HttpResponse } from '@angular/common/http';
 export class LogonService {
 
   xApiKey: string = 'f0583805-03f6-4c7f-8e40-f83f55b7c077';
+  private api: LoginService | undefined;
   loginResponse?: LoginResponse = undefined;
   errormessage?: string = undefined;
 
   authenticatedUser?: string = undefined;
   authenticatedPassword?: string = undefined;
 
-  private isLoggedIn = new BehaviorSubject<boolean>(false);
+  isLoggedIn = new BehaviorSubject<boolean>(false);
 
   isLoggedIn$ = this.isLoggedIn.asObservable();
 
-  constructor(private api: LoginService) {
-  }
+  basePathToUse = Array.isArray(BASE_PATH) ? BASE_PATH[0] : BASE_PATH;
 
+  constructor(
+    private http: HttpClient,
+    private dynamicconfigService: DynamicconfigService,
+    private dbgmessageService: DbgmessageService,
+    @Optional() @Inject(BASE_PATH) basePath: string | string[]
+  ) {
+    this.basePathToUse = Array.isArray(BASE_PATH) ? BASE_PATH[0] : BASE_PATH;
+    var config: Configuration = new Configuration({
+      basePath: this.basePathToUse
+    });
+    this.api = new LoginService(http, basePath, config);
+  }
+  /*
+    constructor(private api: LoginService,
+      private dynamicconfigService: DynamicconfigService,
+      private dbgmessageService: DbgmessageService) {
+    }
+  */
   doLogOut() {
     this.isLoggedIn.next(false);
     this.authenticatedUser = undefined;
     this.authenticatedPassword = undefined;
   }
 
-  doLogin(username: string, password: string) {
-    this.postLogin(this.xApiKey, username, password)
-      .subscribe({
-        next:
-          response => {
-            if (response.body) {
-              this.loginResponse = response.body;
-              if (this.loginResponse.authenticated) {
-                this.isLoggedIn.next(true);
-                this.authenticatedUser = username;
-                this.authenticatedPassword = password;
-              } else {
-                this.isLoggedIn.next(false);
-                this.authenticatedUser = undefined;
-                this.authenticatedPassword = undefined;
-              }
-            }
-          },
-        error: error => {
-          this.errormessage = 'Status: ' + error.status + ' details: ' + error.error.detail;
-          this.authenticatedUser = undefined;
-          this.authenticatedPassword = undefined;
-          console.log('LogonService: ' + this.errormessage);
-        }
-      });
+  doLogin(username: string, password: string): Observable<HttpResponse<LoginResponse>> {
+    return this.postLogin(this.xApiKey, username, password);
   }
 
   /**
@@ -62,7 +59,7 @@ export class LogonService {
      * @param loginRequest Request parameters
      */
   //
-  //public postLogin(xApiKey: string, loginRequest?: LoginRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LoginResponse>>;
+  //public postLogin(loginRequest: LoginRequest, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LoginResponse>>;
   private postLogin(xApiKey: string, username: string, password: string): Observable<HttpResponse<LoginResponse>> {
     const loginRequest: LoginRequest = { username: username, password: password };
     const headers: HttpHeaders = new HttpHeaders({
@@ -74,6 +71,12 @@ export class LogonService {
       httpHeaderAccept: 'application/json'
     };
 
-    return this.api.postLogin(xApiKey, loginRequest, 'response', false, options);
+    if (this.api != undefined) {
+      return this.api.postLogin(loginRequest, xApiKey, 'response', false, options);
+    } else {
+      console.log("LogonService no api available")
+      throw Error("No api");
+    }
   }
+
 }

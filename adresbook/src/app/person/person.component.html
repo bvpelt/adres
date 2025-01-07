@@ -1,0 +1,34 @@
+<h2>Add Person</h2>
+
+<div *ngIf="person.id != undefined && person.id != 0" class="form-group">
+    <label for="id">id: </label>
+    <p id="street"> {{person.id}}</p>
+</div>
+
+<div class="form-group">
+    <label for="firstname">Firstname: </label>
+    <input id="firstname" [(ngModel)]="person.firstName" placeholder="firstname">
+</div>
+<div class="form-group">
+    <label for="infix">infix: </label>
+    <input id="infix" [(ngModel)]="person.infix" placeholder="infix">
+</div>
+<div class="form-group">
+    <label for="lastname">lastname: </label>
+    <input id="lastname" [(ngModel)]="person.lastName" placeholder="lastname">
+</div>
+<div class="form-group">
+    <label for="dateOfBirth">Date of birth: </label>
+    <input id="dateOfBirth" [(ngModel)]="person.dateOfBirth" placeholder="dateOfBirth">
+</div>
+
+<div class="button-container">
+    <button type="button" (click)="onSave(person)">Save</button>
+    <button type="button" (click)="cancel()">Cancel</button>
+</div>
+
+<div *ngIf="errormessage!=undefined && errormessage.length>0">
+    {{errormessage}}
+</div>
+
+<app-dbgmessages></app-dbgmessages>

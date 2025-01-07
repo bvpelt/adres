@@ -127,6 +127,7 @@ FROM
 - [Password encoders](https://www.baeldung.com/spring-security-5-default-password-encoder)
 - [Spring security tutorial](https://www.javainuse.com/boot3/sec)
 - [JWT Token](https://www.youtube.com/watch?v=KxqlJblhzfI)
+- [JWT Documentation](https://github.com/jwtk/jjwt )
 
 
 

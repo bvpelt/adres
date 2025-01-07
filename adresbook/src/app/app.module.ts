@@ -21,8 +21,12 @@ import { AdresdetailComponent } from './adresdetail/adresdetail.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
+import { DbgmessagesComponent } from './dbgmessages/dbgmessages.component';
+import { PersonsComponent } from './persons/persons.component';
+import { PersonComponent } from './person/person.component';
+import { PersondetailComponent } from './persondetail/persondetail.component';
 
-export function apiConfigFactory (): Configuration {
+export function apiConfigFactory(): Configuration {
   const params: ConfigurationParameters = {
     // set configuration parameters here.
     basePath: environment.apiUrl,
@@ -35,9 +39,13 @@ export function apiConfigFactory (): Configuration {
     AppComponent,
     AdresesComponent,
     AdresComponent,
-    AdresdetailComponent,    
+    AdresdetailComponent,
     LoginComponent,
     LogoutComponent,
+    DbgmessagesComponent,
+    PersonsComponent,
+    PersonComponent,
+    PersondetailComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,7 +58,7 @@ export function apiConfigFactory (): Configuration {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000',  
+      registrationStrategy: 'registerWhenStable:30000',
       // Add a unique identifier to the service worker configuration   
     }) : []
   ],
@@ -58,4 +66,3 @@ export function apiConfigFactory (): Configuration {
   bootstrap: [AppComponent]
 })
 export class AppModule { }
-

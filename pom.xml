@@ -11,7 +11,7 @@
 
     <groupId>com.bsoft</groupId>
     <artifactId>adres</artifactId>
-    <version>0.0.10</version>
+    <version>0.0.12</version>
     <name>Adres</name>
 
     <description>Adressen service</description>
@@ -45,33 +45,12 @@
             <properties>
                 <spring.profiles.active>develop</spring.profiles.active>
             </properties>
-            <dependencies>
-                <!--
-                <dependency>
-                    <groupId>com.h2database</groupId>
-                    <artifactId>h2</artifactId>
-                    <version>2.2.220</version>
-                </dependency>
-                -->
-            </dependencies>
         </profile>
         <profile>
             <id>runtime</id>
             <properties>
                 <spring.profiles.active>runtime</spring.profiles.active>
             </properties>
-            <dependencies>
-                <!--
-                <dependency>
-                    <groupId>org.postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.flywaydb</groupId>
-                    <artifactId>flyway-database-postgresql</artifactId>
-                </dependency>
-                -->
-            </dependencies>
         </profile>
     </profiles>
 
@@ -111,8 +90,6 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
 
-
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -123,8 +100,12 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <!--
             <optional>true</optional>
+            -->
+            <version>1.18.36</version>
         </dependency>
+
 
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -172,6 +153,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.5.5.Final</version>
+        </dependency>
+        <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.6.0</version>
@@ -192,6 +178,23 @@
                 <version>3.13.0</version>
                 <configuration>
                     <verbose>false</verbose>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>1.5.5.Final</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>0.2.0</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
             <plugin>
@@ -228,7 +231,7 @@
                         </goals>
                         <configuration>
 
-                            <inputSpec>${project.basedir}/src/main/resources/adres.0.0.10.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/adres.0.0.12.yaml</inputSpec>
 
                             <generatorName>spring</generatorName>
                             <library>spring-boot</library>

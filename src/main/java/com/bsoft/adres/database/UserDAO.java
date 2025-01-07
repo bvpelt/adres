@@ -1,5 +1,6 @@
 package com.bsoft.adres.database;
 
+import com.bsoft.adres.generated.model.User;
 import com.bsoft.adres.generated.model.UserBody;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,39 +23,31 @@ import java.util.Objects;
 public class UserDAO {
     @Serial
     private static final long serialVersionUID = 1L;
-
+    @ManyToOne
+    @JoinColumn(name = "apikey_id")
+    ApiKeyDao apiKey;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
     @Column(name = "username")
     private String username;
-
     @Column(name = "password")
     private String password;
-
     @Column(name = "email")
     private String email;
-
     @Column(name = "phone")
     private String phone;
-
     @Column(name = "account_non_expired")
     private Boolean account_non_expired = true;
-
     @Column(name = "account_non_locked")
     private Boolean account_non_locked = true;
-
     @Column(name = "credentials_non_expired")
     private Boolean credentials_non_expired = true;
-
     @Column(name = "enabled")
     private Boolean enabled = true;
-
     @Column(name = "hash")
     private Integer hash = -1;
-
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL) // owning site
     @JoinTable(
             name = "users_roles",
@@ -66,10 +59,6 @@ public class UserDAO {
             }
     )
     private Collection<RoleDAO> roles = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name= "apikey_id")
-    ApiKeyDao apiKey;
 
     public UserDAO(String username, String password, String email, String phone) {
         this.username = username;
@@ -85,12 +74,23 @@ public class UserDAO {
         this.setEmail(userbody.getEmail());
         this.setPhone(userbody.getPhone());
         this.setAccount_non_expired(userbody.getAccountNonExpired());
-        this.setAccount_non_expired(userbody.getAccountNonExpired());
         this.setAccount_non_locked(userbody.getAccountNonLocked());
         this.setCredentials_non_expired(userbody.getCredentialsNonExpired());
         this.setEnabled(userbody.getEnabled());
         this.setRoles(new HashSet<>());
         this.hash = hashCode();
+    }
+
+    public UserDAO(final User user) {
+        this.setUsername(user.getUsername());
+        this.setPassword(user.getPassword());
+        this.setEmail(user.getEmail());
+        this.setPassword(user.getPhone());
+        this.setAccount_non_expired(user.getAccountNonExpired());
+        this.setAccount_non_locked(user.getAccountNonLocked());
+        this.setCredentials_non_expired(user.getCredentialsNonExpired());
+        this.setEnabled(user.getEnabled());
+        this.setRoles(new HashSet<>());
     }
 
     public void genHash() {

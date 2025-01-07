@@ -1,6 +1,7 @@
 package com.bsoft.adres.repositories;
 
 import com.bsoft.adres.database.UserDAO;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -54,4 +55,9 @@ public interface UsersRepository extends PagingAndSortingRepository<UserDAO, Lon
      */
     @Query(value = "SELECT * FROM users WHERE hash = :hash", nativeQuery = true)
     Optional<UserDAO> findByHash(@Param("hash") Integer hash);
+
+    @Query(value = "SELECT * FROM users",
+            countQuery = "SELECT * FROM users",
+            nativeQuery = true)
+    Page<UserDAO> findAllByPage(Pageable pageable);
 }

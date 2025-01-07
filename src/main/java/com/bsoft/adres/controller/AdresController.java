@@ -6,10 +6,12 @@ import com.bsoft.adres.generated.api.AdressesApi;
 import com.bsoft.adres.generated.model.Adres;
 import com.bsoft.adres.generated.model.AdresBody;
 import com.bsoft.adres.generated.model.AdresPerson;
+import com.bsoft.adres.generated.model.PagedAdresses;
 import com.bsoft.adres.service.AdresService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
@@ -18,11 +20,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/adres/api/v1")
+@RequestMapping("${application.basePath}")
 @Controller
 public class AdresController implements AdressesApi {
 
@@ -30,7 +33,10 @@ public class AdresController implements AdressesApi {
 
     @Value("${info.project.version}")
     private String version;
-
+/*
+    @Value("${application.basePath}")
+    private String basePath;
+*/
     @Override
     public ResponseEntity<Void> _deleteAdres(Long id, String X_API_KEY) {
         log.debug("_deleteAdres apikey: {}", X_API_KEY);
@@ -81,7 +87,7 @@ public class AdresController implements AdressesApi {
     }
 
     @Override
-    public ResponseEntity<List<Adres>> _getAdresses(Integer page, Integer size, String sort, String X_API_KEY) {
+    public ResponseEntity<PagedAdresses> _getAdresses(Integer page, Integer size, List<String> sort, String X_API_KEY) {
         log.debug("_getAdresses apikey: {}", X_API_KEY);
         List<Sort.Order> sortParameter;
         PageRequest pageRequest;
@@ -99,18 +105,25 @@ public class AdresController implements AdressesApi {
         if (page < 1) {
             throw new InvalidParameterException("Page size must be greater than 0");
         }
-        //
         if (sort != null && !sort.isEmpty()) {
-            //sortParameter = ControllerSortUtil.getSortOrder(sortBy);
-            //pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(sortParameter));
-            pageRequest = PageRequest.of(page - 1, size, Sort.by(sort));
+            List<Sort.Order> orders = ControllerSortUtil.getSortOrder(sort);
+            pageRequest = PageRequest.of(page - 1, size, Sort.by(orders));
         } else {
             pageRequest = PageRequest.of(page - 1, size);
         }
 
+        PagedAdresses pageResponse = new PagedAdresses();
+        Page<Adres> adresPage = adresService.getAdressesPage(pageRequest);
+        pageResponse.setContent(adresPage.getContent());
+        pageResponse.setPageNumber(adresPage.getNumber() + 1);
+        pageResponse.setPageSize(adresPage.getSize());
+        pageResponse.setTotalElements(BigDecimal.valueOf(adresPage.getTotalElements()));
+        pageResponse.setTotalPages(adresPage.getTotalPages());
+
+
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
-                .body(adresService.getAdresses(pageRequest));
+                .body(pageResponse);
     }
 
     @Override

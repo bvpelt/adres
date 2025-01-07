@@ -2,18 +2,19 @@ package com.bsoft.adres.auth;
 
 import com.bsoft.adres.database.RoleDAO;
 import com.bsoft.adres.database.UserDAO;
+import com.bsoft.adres.exceptions.InvalidUserException;
 import com.bsoft.adres.exceptions.UserExistsException;
-import com.bsoft.adres.generated.model.AuthenticateRequest;
-import com.bsoft.adres.generated.model.AuthenticateResponse;
-import com.bsoft.adres.generated.model.RegisterRequest;
+import com.bsoft.adres.generated.model.*;
 import com.bsoft.adres.repositories.RoleRepository;
 import com.bsoft.adres.repositories.UsersRepository;
 import com.bsoft.adres.security.MyUserPrincipal;
+import com.bsoft.adres.service.UsersService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +29,9 @@ public class AuthenticationService {
 
     private final RoleRepository roleRepository;
 
-    //private final PasswordEncoder passwordEncoder;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder; // = new BCryptPasswordEncoder();
+    private final UsersService usersService;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final JwtService jwtService;
 
@@ -58,6 +60,7 @@ public class AuthenticationService {
         defRole.addUser(user);
         user.getRoles().add(defRole);
         user.setEmail(request.getEmail());
+        user.setPhone(request.getPhone());
         user.genHash();
         try {
             usersRepository.save(user);
@@ -76,9 +79,14 @@ public class AuthenticationService {
 
     public AuthenticateResponse authenticate(AuthenticateRequest request) {
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+            );
+        } catch (AuthenticationException e) {
+            log.error("Authentication failed for user: {}", request.getUsername());
+            throw new InvalidUserException("Authentication failed for user: " + request.getUsername());
+        }
 
         var user = usersRepository
                 .findByUserName(request.getUsername())
@@ -90,5 +98,25 @@ public class AuthenticationService {
         log.trace("AuthenticationService authenticate - generated token: {}", jwtToken);
 
         return new AuthenticateResponse(jwtToken);
+    }
+
+    public LoginResponse basicjwt(LoginRequest loginRequest) {
+        log.debug("basicjwt loginRequest: {}", loginRequest.toString());
+
+        LoginResponse loginResponse = new LoginResponse();
+
+        User user = usersService.getUserByName(loginRequest.getUsername());
+
+        Boolean authenticated = bCryptPasswordEncoder.matches(loginRequest.getPassword(), user.getPassword());
+        if (authenticated) {
+            MyUserPrincipal myUserPrincipal = new MyUserPrincipal(new UserDAO(user));
+            var jwtToken = jwtService.generateToken(myUserPrincipal);
+
+            loginResponse.setToken(jwtToken);
+        }
+
+        loginResponse.setAuthenticated(authenticated);
+
+        return loginResponse;
     }
 }

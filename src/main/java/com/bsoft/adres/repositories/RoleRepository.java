@@ -1,6 +1,8 @@
 package com.bsoft.adres.repositories;
 
 import com.bsoft.adres.database.RoleDAO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -30,4 +32,9 @@ public interface RoleRepository extends PagingAndSortingRepository<RoleDAO, Long
 
     @Query(value = "SELECT * FROM role WHERE hash = :hash", nativeQuery = true)
     Optional<RoleDAO> findByHash(@Param("hash") Integer hash);
+
+    @Query(value = "SELECT * FROM role",
+            countQuery = "SELECT * FROM role",
+            nativeQuery = true)
+    Page<RoleDAO> findAllByPage(PageRequest pageRequest);
 }
