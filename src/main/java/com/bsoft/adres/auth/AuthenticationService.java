@@ -100,10 +100,10 @@ public class AuthenticationService {
         return new AuthenticateResponse(jwtToken);
     }
 
-    public LoginTestResponse basicjwt(LoginRequest loginRequest) {
+    public LoginResponse basicjwt(LoginRequest loginRequest) {
         log.debug("basicjwt loginRequest: {}", loginRequest.toString());
 
-        LoginTestResponse loginTestResponse = new LoginTestResponse();
+        LoginResponse loginResponse = new LoginResponse();
 
         User user = usersService.getUserByName(loginRequest.getUsername());
 
@@ -112,11 +112,11 @@ public class AuthenticationService {
             MyUserPrincipal myUserPrincipal = new MyUserPrincipal(new UserDAO(user));
             var jwtToken = jwtService.generateToken(myUserPrincipal);
 
-            loginTestResponse.setToken(jwtToken);
+            loginResponse.setToken(jwtToken);
         }
 
-        loginTestResponse.setAuthenticated(authenticated);
+        loginResponse.setAuthenticated(authenticated);
 
-        return loginTestResponse;
+        return loginResponse;
     }
 }

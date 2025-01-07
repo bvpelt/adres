@@ -8,7 +8,7 @@ import { DbgmessageService } from '../services/dbgmessage.service';
 })
 export class DbgmessagesComponent {
 
-  constructor(public dbgMessageService: DbgmessageService ) {
+  constructor(public dbgMessageService: DbgmessageService) {
 
   }
 

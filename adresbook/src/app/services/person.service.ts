@@ -8,22 +8,22 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class PersonService {
-private api: PersonsService | undefined;
+  private api: PersonsService | undefined;
 
-   constructor(
-      private http: HttpClient,
-      @Optional() @Inject(BASE_PATH) basePath: string | string[],
-      private dynamicConfigService: DynamicconfigService
-    ) {
-      this.dynamicConfigService.config$.subscribe((config: any) => {
-        if (config) {
-          this.api = new PersonsService(http, basePath, config);
-        }
-      });
-    }
+  constructor(
+    private http: HttpClient,
+    @Optional() @Inject(BASE_PATH) basePath: string | string[],
+    private dynamicConfigService: DynamicconfigService
+  ) {
+    this.dynamicConfigService.config$.subscribe((config: any) => {
+      if (config) {
+        this.api = new PersonsService(http, basePath, config);
+      }
+    });
+  }
 
-// public deleteAllPersons(xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-deleteAllPersons(xApiKey: string, page?: number, size?: number): Observable<HttpResponse<any>> {
+  // public deleteAllPersons(xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+  deleteAllPersons(xApiKey: string, page?: number, size?: number): Observable<HttpResponse<any>> {
     const headers: HttpHeaders = new HttpHeaders({
       'x-api-key': xApiKey
     });
@@ -39,8 +39,8 @@ deleteAllPersons(xApiKey: string, page?: number, size?: number): Observable<Http
     }
   }
 
-// public deletePerson(id: number, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-deletePerson(id: number, xApiKey: string): Observable<HttpResponse<any>> {
+  // public deletePerson(id: number, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+  deletePerson(id: number, xApiKey: string): Observable<HttpResponse<any>> {
     const headers: HttpHeaders = new HttpHeaders({
       'x-api-key': xApiKey
     });
@@ -56,10 +56,10 @@ deletePerson(id: number, xApiKey: string): Observable<HttpResponse<any>> {
     }
   }
 
-// public getPeronsAdresses(id: number, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PersonAdres>>;
+  // public getPeronsAdresses(id: number, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PersonAdres>>;
 
-// public getPerson(id: number, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Person>>;
-getPerson(id: number, xApiKey: string): Observable<HttpResponse<Person>> {
+  // public getPerson(id: number, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Person>>;
+  getPerson(id: number, xApiKey: string): Observable<HttpResponse<Person>> {
     const headers: HttpHeaders = new HttpHeaders({
       'x-api-key': xApiKey
     });
@@ -76,8 +76,8 @@ getPerson(id: number, xApiKey: string): Observable<HttpResponse<Person>> {
     }
   }
 
-// public getPersons(page: number, size: number, sort?: Array<string>, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedPersons>>;
-getPersons(xApiKey: string, page?: number, size?: number): Observable<HttpResponse<PagedPersons>> {
+  // public getPersons(page: number, size: number, sort?: Array<string>, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedPersons>>;
+  getPersons(xApiKey: string, page?: number, size?: number): Observable<HttpResponse<PagedPersons>> {
     const headers: HttpHeaders = new HttpHeaders({
       'x-api-key': xApiKey
     });
@@ -94,8 +94,8 @@ getPersons(xApiKey: string, page?: number, size?: number): Observable<HttpRespon
     }
   }
 
-// public patchPerson(id: number, xAPIKEY?: string, personBody?: PersonBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Person>>;
-patchPerson(id: number, xApiKey: string, personBody?: PersonBody): Observable<HttpResponse<Person>> {
+  // public patchPerson(id: number, xAPIKEY?: string, personBody?: PersonBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Person>>;
+  patchPerson(id: number, xApiKey: string, personBody?: PersonBody): Observable<HttpResponse<Person>> {
     const headers: HttpHeaders = new HttpHeaders({
       'x-api-key': xApiKey
     });
@@ -112,8 +112,8 @@ patchPerson(id: number, xApiKey: string, personBody?: PersonBody): Observable<Ht
     }
   }
 
-// public postPerson(override: boolean, xAPIKEY?: string, personBody?: PersonBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Person>>;
-postPerson(xApiKey: string, override: boolean, personBody?: PersonBody): Observable<HttpResponse<Person>> {
+  // public postPerson(override: boolean, xAPIKEY?: string, personBody?: PersonBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Person>>;
+  postPerson(xApiKey: string, override: boolean, personBody?: PersonBody): Observable<HttpResponse<Person>> {
     const headers: HttpHeaders = new HttpHeaders({
       'x-api-key': xApiKey
     });

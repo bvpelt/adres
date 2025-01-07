@@ -8,10 +8,10 @@ import { Person } from '../core/modules/openapi';
 export class PersonschangedService {
 
   constructor() { }
-   private newPersonSubject = new Subject<Person>();
-    newAdres$ = this.newPersonSubject.asObservable();
-  
-    emitNewPerson(person: Person) {
-      this.newPersonSubject.next(person);
-    }
+  private newPersonSubject = new Subject<Person>();
+  newAdres$ = this.newPersonSubject.asObservable();
+
+  emitNewPerson(person: Person) {
+    this.newPersonSubject.next(person);
+  }
 }

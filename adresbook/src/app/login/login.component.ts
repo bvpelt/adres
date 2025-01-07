@@ -25,16 +25,17 @@ export class LoginComponent {
     private router: Router,
     private dynamicconfigService: DynamicconfigService,
     private dbgmessageService: DbgmessageService) {
-
   }
 
   onLogon() {
-    this.logonService.doTestLogin(this.username, this.password)
+    this.logonService.doLogin(this.username, this.password)
       .subscribe({
         next:
           response => {
+            console.log('LoginComponent - response')
             if (response.body) {
               this.loginResponse = response.body;
+              console.log(LoginComponent, this.loginResponse);
               if (this.loginResponse!.authenticated) {
                 this.logonService.isLoggedIn.next(true);
                 this.logonService.authenticatedUser = this.username;
@@ -44,24 +45,28 @@ export class LoginComponent {
                 } else {
                   this.dynamicconfigService.updateConfiguration(this.username, this.password, undefined);
                 }
-                this.dbgmessageService.add('LogonService: authenticated');
+                this.dbgmessageService.debug('LogonService: authenticated');
+                this.router.navigate(['/adresses']);
               } else {
                 this.logonService.isLoggedIn.next(false);
                 this.logonService.authenticatedUser = undefined;
                 this.logonService.authenticatedPassword = undefined;
-                this.dbgmessageService.add('LogonService: not authenticated');
+                this.dbgmessageService.info('LogonService: not authenticated');
+                this.errormessage = 'Invalid login attempt';
               }
             }
-            this.router.navigate(['/adresses']);
           },
         error: error => {
-          this.errormessage = 'Status: ' + error.status + ' details: ' + error.error.detail;
+          //this.errormessage = 'Status: ' + error.status + ' details: ' + error.error.message;
+          this.errormessage = 'Invalid login attempt';
           this.logonService.authenticatedUser = undefined;
           this.logonService.authenticatedPassword = undefined;
-          this.dbgmessageService.add('LogonService: ' + this.errormessage);
+          //this.dbgmessageService.info('LogonService: ' + JSON.stringify(error));
+          this.dbgmessageService.error('LogonService: status: ' + error.status + ' details: ' + error.error.message);
+          this.router.navigate(['/login']);
         }
       });
-   
+
   }
 
   togglePasswordVisibility() {

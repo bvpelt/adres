@@ -1,34 +1,39 @@
-
 .form-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px; /* Adjust margin as needed */
-  }
-  
-  .form-group label {
-    flex: 0 0 100px; /* Fixed width for the label */
-    text-align: right; /* Align label text to the right */
-    margin-right: 10px; /* Add spacing between label and input */
-  }
-  
-  .form-group input {
-    flex: 1; /* Make the input field take up the remaining space */
-  }  
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  /* Adjust margin as needed */
+}
 
-  .login {
-    margin-top: 20px;
-    width: 150px;
-  }
+.form-group label {
+  flex: 0 0 100px;
+  /* Fixed width for the label */
+  text-align: right;
+  /* Align label text to the right */
+  margin-right: 10px;
+  /* Add spacing between label and input */
+}
 
-  .pwd {
-    margin-left: 4px;
-  }
+.form-group input {
+  flex: 1;
+  /* Make the input field take up the remaining space */
+}
 
-  input {
-    /* ... your existing styles ... */
-    position: relative; /* Necessary for absolute positioning of the icon */
-  }
+.login {
+  margin-top: 20px;
+  width: 150px;
+}
 
- fa-icon {
+.pwd {
+  margin-left: 4px;
+}
+
+input {
+  /* ... your existing styles ... */
+  position: relative;
+  /* Necessary for absolute positioning of the icon */
+}
+
+fa-icon {
   margin-left: 5px;
- }
+}

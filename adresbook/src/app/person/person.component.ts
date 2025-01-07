@@ -20,7 +20,7 @@ export class PersonComponent {
   isLoggedIn$: Observable<boolean>;
 
   constructor(private router: Router,
-    private personService: PersonService,    
+    private personService: PersonService,
     private logonService: LogonService,
     private dbgmessageService: DbgmessageService,
     private personschangedService: PersonschangedService) {
@@ -39,22 +39,21 @@ export class PersonComponent {
             response => {
               this.person = response.body as Person;
               this.personschangedService.emitNewPerson(person);
-              this.dbgmessageService.add('PersonComponent - Emitted new person');
+              this.dbgmessageService.debug('PersonComponent - Emitted new person');
               this.router.navigate(['/persons']);
-              this.dbgmessageService.add('PersonComponent - Router navigate toe /persons');
+              this.dbgmessageService.debug('PersonComponent - Router navigate toe /persons');
             },
           error: (error: HttpErrorResponse) => {
             this.errormessage = 'PersonComponent - Status: ' + error.status + ' details: ' + error.error.error + ' url: ' + error.url;
-            console.log(error);
           }
         });
     } else {
-      this.dbgmessageService.add('PersonComponent - Skip empty person');
+      this.dbgmessageService.debug('PersonComponent - Skip empty person');
     }
   }
 
   cancel() {
-    this.dbgmessageService.add("AdresComponent - Cancel person");
+    this.dbgmessageService.debug("AdresComponent - Cancel person");
     this.router.navigate(['/persons']);
   }
 }

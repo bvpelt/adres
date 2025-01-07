@@ -24,7 +24,7 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/adres/api/v1")
+@RequestMapping("${application.basePath}")
 @Controller
 public class UsersController implements UsersApi {
 

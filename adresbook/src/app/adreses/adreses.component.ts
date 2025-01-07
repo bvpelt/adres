@@ -1,4 +1,4 @@
-import { Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Adres } from '../core/modules/openapi/model/adres';
 import { LogonService } from '../services/logon.service';
 import { Observable, Subscription } from 'rxjs';
@@ -27,6 +27,7 @@ export class AdresesComponent implements OnInit {
   adreses: Adres[] = [];
   nextpage: number = 0;
   prevpage: number = 0;
+  totalpages: number = 0;
   selectedAdres?: Adres = undefined;
   adresChangesubscription: Subscription | undefined;
 
@@ -40,22 +41,22 @@ export class AdresesComponent implements OnInit {
     private logonService: LogonService,
     private dbgmessageService: DbgmessageService,
     private adresseschangedService: AdresseschangedService) {
-    this.dbgmessageService.add('AdresesComponent - constructed subscription defined');
+    this.dbgmessageService.debug('AdresesComponent - constructed subscription defined');
     this.isLoggedIn$ = this.logonService.isLoggedIn$;
     this.adresChangesubscription = this.adresseschangedService.newAdres$
       .subscribe(adres => {
-        this.dbgmessageService.add('AdresesComponent - retrieve adresses go add: ' + JSON.stringify(adres));
+        this.dbgmessageService.debug('AdresesComponent - retrieve adresses go add: ' + JSON.stringify(adres));
         this.getAdresses(this.logonService.xApiKey, this.page, this.size);
       });
   }
 
   ngOnInit(): void {
-    this.dbgmessageService.add('AdresesComponent - activated initial');
+    this.dbgmessageService.debug('AdresesComponent - activated initial');
     this.errormessage = "";
     this.getAdresses(this.logonService.xApiKey, this.page, this.size);
     this.isFirstActivation = false;
   }
-  
+
   getAdresses(xApiKey: string, page: number, size: number): void {
     this.adresService.getAdresses(xApiKey, page, size)
       .subscribe({
@@ -65,8 +66,9 @@ export class AdresesComponent implements OnInit {
               const adresPage: PagedAdresses = response.body;
               const adresses: Adres[] = response.body as Adres[];
               this.adreses = adresPage.content!;
-              this.dbgmessageService.add('AdresesComponent - before prevpage: ' + this.prevpage + ' page: ' + this.page + ' nextpage: ' + this.nextpage + ' total: ' + adresPage.totalPages);
+              this.dbgmessageService.trace('AdresesComponent - before prevpage: ' + this.prevpage + ' page: ' + this.page + ' nextpage: ' + this.nextpage + ' total: ' + adresPage.totalPages);
               if (adresPage.totalElements != undefined) {
+                this.totalpages = adresPage.totalPages!;
                 if (this.page + 1 <= adresPage.totalPages!) {
                   this.nextpage = this.page + 1;
                 } else {
@@ -77,8 +79,8 @@ export class AdresesComponent implements OnInit {
                 } else {
                   this.prevpage = 0;
                 }
-              }             
-              this.dbgmessageService.add('AdresesComponent - after prevpage: ' + this.prevpage + ' page: ' + this.page + ' nextpage: ' + this.nextpage + ' total: ' + adresPage.totalPages);
+              }
+              this.dbgmessageService.trace('AdresesComponent - after prevpage: ' + this.prevpage + ' page: ' + this.page + ' nextpage: ' + this.nextpage + ' total: ' + adresPage.totalPages);
             }
           },
 
@@ -107,7 +109,7 @@ export class AdresesComponent implements OnInit {
 
   onPrevPage(): void {
     this.page = this.prevpage;
-      this.getAdresses(this.logonService.xApiKey, this.page, this.size);
+    this.getAdresses(this.logonService.xApiKey, this.page, this.size);
   }
 
   onDelete(adres: Adres): void {
@@ -118,15 +120,13 @@ export class AdresesComponent implements OnInit {
       .subscribe({
         next:
           response => {
-            this.dbgmessageService.add('AdresesComponent - deleted status: ' + response.status);
+            this.dbgmessageService.debug('AdresesComponent - deleted status: ' + response.status);
             this.adresseschangedService.emitNewAdres(adres);
           },
-
         error: error => {
           this.errormessage = 'AdresesComponent - Status: ' + error.status + ' details: ' + error.error.detail;
         }
-      }
-      )
+      });
 
     this.router.navigate(['/adresses']);
   }
@@ -135,10 +135,10 @@ export class AdresesComponent implements OnInit {
 
     if (this.adresChangesubscription) {
       this.adresChangesubscription.unsubscribe();
-      this.dbgmessageService.add('AdresesComponent - Subscription destroyed');
+      this.dbgmessageService.trace('AdresesComponent - Subscription destroyed');
     }
 
-    this.dbgmessageService.add('AdresesComponent - Destroyed');
+    this.dbgmessageService.trace('AdresesComponent - Destroyed');
   }
 
 }

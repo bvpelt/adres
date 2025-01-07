@@ -17,10 +17,10 @@
 
 <div class="pagination-buttons">
     <div *ngIf="prevpage > 0">
-        <button type="button" (click)="onPrevPage()">prev page {{page}}/{{prevpage}}</button>
+        <button type="button" (click)="onPrevPage()">prev page {{page}}/{{totalpages}}</button>
     </div>
     <div *ngIf="nextpage > 0" class="next-page-button">
-        <button type="button" (click)="onNextPage()">next page {{page}}/{{nextpage}}</button>
+        <button type="button" (click)="onNextPage()">next page {{page}}/{{totalpages}}</button>
     </div>
 </div>
 

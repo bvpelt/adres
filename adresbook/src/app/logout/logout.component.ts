@@ -9,9 +9,9 @@ import { Router } from '@angular/router';
 })
 export class LogoutComponent {
 
-  
+
   constructor(private logonService: LogonService, private router: Router) {
-    
+
   }
 
   ngOnInit(): void {

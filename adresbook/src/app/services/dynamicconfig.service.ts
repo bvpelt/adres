@@ -25,7 +25,7 @@ export class DynamicconfigService {
   config$ = this.configSubject.asObservable();
 
   updateConfiguration(username: string, password: string, token: string | undefined) {
-    this.dbgmessageService.add('DynamicconfigService username: ' + username + ' password: ' + password + ' token: ' + token);
+    this.dbgmessageService.debug('DynamicconfigService username: ' + username + ' password: ' + password + ' token: ' + token);
     const newConfig = (token != undefined) ?
       new Configuration({
         basePath: this.basePathToUse,
@@ -36,7 +36,7 @@ export class DynamicconfigService {
         username,
         password
       });
-    this.dbgmessageService.add('DynamicconfigService generated config: ' + JSON.stringify(newConfig));
+    this.dbgmessageService.debug('DynamicconfigService generated config: ' + JSON.stringify(newConfig));
     this.configSubject.next(newConfig);
   }
 

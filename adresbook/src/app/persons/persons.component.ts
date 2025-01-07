@@ -14,7 +14,7 @@ import { PersonService } from '../services/person.service';
   styleUrl: './persons.component.css'
 })
 export class PersonsComponent {
- @Input() isFirstActivation: boolean = true;
+  @Input() isFirstActivation: boolean = true;
 
   page: number = 1;
   size: number = 4;
@@ -24,6 +24,7 @@ export class PersonsComponent {
   persons: Person[] = [];
   nextpage: number = 0;
   prevpage: number = 0;
+  totalpages: number = 0;
   selectedPerson?: Person = undefined;
   personChangesubscription: Subscription | undefined;
 
@@ -37,22 +38,22 @@ export class PersonsComponent {
     private logonService: LogonService,
     private dbgmessageService: DbgmessageService,
     private personschangedService: PersonschangedService) {
-    this.dbgmessageService.add('PersonsComponent - constructed subscription defined');
+    this.dbgmessageService.debug('PersonsComponent - constructed subscription defined');
     this.isLoggedIn$ = this.logonService.isLoggedIn$;
     this.personChangesubscription = this.personschangedService.newAdres$
       .subscribe(adres => {
-        this.dbgmessageService.add('PersonsComponent - retrieve adresses go add: ' + JSON.stringify(adres));
+        this.dbgmessageService.debug('PersonsComponent - retrieve adresses go add: ' + JSON.stringify(adres));
         this.getPersons(this.logonService.xApiKey, this.page, this.size);
       });
   }
 
   ngOnInit(): void {
-    this.dbgmessageService.add('PersonsComponent - activated initial');
+    this.dbgmessageService.debug('PersonsComponent - activated initial');
     this.errormessage = "";
     this.getPersons(this.logonService.xApiKey, this.page, this.size);
     this.isFirstActivation = false;
   }
-  
+
   getPersons(xApiKey: string, page: number, size: number): void {
     this.personService.getPersons(xApiKey, page, size)
       .subscribe({
@@ -62,8 +63,9 @@ export class PersonsComponent {
               const personPage: PagedPersons = response.body;
               const adresses: Person[] = response.body as Person[];
               this.persons = personPage.content!;
-              this.dbgmessageService.add('PersonsComponent - before prevpage: ' + this.prevpage + ' page: ' + this.page + ' nextpage: ' + this.nextpage + ' total: ' + personPage.totalPages);
+              this.dbgmessageService.trace('PersonsComponent - before prevpage: ' + this.prevpage + ' page: ' + this.page + ' nextpage: ' + this.nextpage + ' total: ' + personPage.totalPages);
               if (personPage.totalElements != undefined) {
+                this.totalpages = personPage.totalPages!;
                 if (this.page + 1 <= personPage.totalPages!) {
                   this.nextpage = this.page + 1;
                 } else {
@@ -74,8 +76,8 @@ export class PersonsComponent {
                 } else {
                   this.prevpage = 0;
                 }
-              }             
-              this.dbgmessageService.add('PersonsComponent - after prevpage: ' + this.prevpage + ' page: ' + this.page + ' nextpage: ' + this.nextpage + ' total: ' + personPage.totalPages);
+              }
+              this.dbgmessageService.trace('PersonsComponent - after prevpage: ' + this.prevpage + ' page: ' + this.page + ' nextpage: ' + this.nextpage + ' total: ' + personPage.totalPages);
             }
           },
 
@@ -104,7 +106,7 @@ export class PersonsComponent {
 
   onPrevPage(): void {
     this.page = this.prevpage;
-      this.getPersons(this.logonService.xApiKey, this.page, this.size);
+    this.getPersons(this.logonService.xApiKey, this.page, this.size);
   }
 
   onDelete(person: Person): void {
@@ -115,7 +117,7 @@ export class PersonsComponent {
       .subscribe({
         next:
           response => {
-            this.dbgmessageService.add('PersonsComponent - deleted status: ' + response.status);
+            this.dbgmessageService.debug('PersonsComponent - deleted status: ' + response.status);
             this.personschangedService.emitNewPerson(person);
           },
 
@@ -132,10 +134,10 @@ export class PersonsComponent {
 
     if (this.personChangesubscription) {
       this.personChangesubscription.unsubscribe();
-      this.dbgmessageService.add('PersonsComponent - Subscription destroyed');
+      this.dbgmessageService.debug('PersonsComponent - Subscription destroyed');
     }
 
-    this.dbgmessageService.add('PersonsComponent - Destroyed');
+    this.dbgmessageService.debug('PersonsComponent - Destroyed');
   }
 
 }

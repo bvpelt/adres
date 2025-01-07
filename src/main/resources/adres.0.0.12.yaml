@@ -217,37 +217,6 @@ paths:
         "5XX":
           $ref: "#/components/responses/ServerError"
 
-  /login/special: 
-    post: 
-      tags: 
-        - Login
-      summary: Login to the application
-      description: |
-        This login mechanism makes it possible to login with credentials (username,password) en depending on the capabilities get back 
-        that authentication succeeded (only for basic authentication) and when appropriate a jwt token for repeated calls
-      operationId: postTestLogin
-      parameters:
-        - $ref: "#/components/parameters/X-API-KEY"
-      requestBody:
-        description: Request parameters
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/LoginRequest"
-            examples:
-              login:
-                $ref: "#/components/examples/LoginRequest"
-      responses:
-        "201":
-          $ref: "#/components/responses/LoginTestResponse"
-        "400":
-          $ref: "#/components/responses/IllegalInput"
-        "429":
-          $ref: "#/components/responses/ToManyRequests"
-        "5XX":
-          $ref: "#/components/responses/ServerError"
-
   /login/user:
     post:
       tags:
@@ -1365,15 +1334,13 @@ components:
           example: password
 
     LoginResponse:
-      type: object
-      required:
-        - authenticated
-      properties:
-        authenticated:
-          type: boolean
-          example: true
-
-    LoginTestResponse:
+#      type: object
+#      required:
+#        - authenticated
+#     properties:
+#        authenticated:
+#          type: boolean
+#          example: true
       type: object
       required:
         - authenticated
@@ -1384,7 +1351,7 @@ components:
         token:
           type: string
           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJwYXNzd29yZCI6Imthc2pkZmtlaSIsImVtYWlsIjoidXNlckBnbWFpbC5jb20iLCJwaG9uZSI6IiszMTY0MDk0OTM0NDUifQ.eO4foDxLy8Rg5EtKLGRTFItLD1y-B0iHHo-tjRyVLn0"
-
+   
     PagedAdresses:
       type: object
       properties:
@@ -1784,29 +1751,13 @@ components:
           examples:
             accessallowed:
               $ref: "#/components/examples/LoginResponseAllowed"
-            accessdenied:
-              $ref: "#/components/examples/LoginResponseDenied"
-      headers:
-        version:
-          $ref: "#/components/headers/version"
-
-    LoginTestResponse:
-      description: The response on a login request
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/LoginTestResponse"
-          examples:
-            basicaccess:
-              $ref: "#/components/examples/LoginResponseAllowed"
-            basicaccess and jwt:
+            accessjwtallowed:
               $ref: "#/components/examples/LoginJWTResponseAllowed"
             accessdenied:
               $ref: "#/components/examples/LoginResponseDenied"
       headers:
         version:
           $ref: "#/components/headers/version"
-
 
     NotFound:
       description: Geen resultaat gevonden

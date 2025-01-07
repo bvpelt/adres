@@ -25,7 +25,7 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/adres/api/v1")
+@RequestMapping("${application.basePath}")
 @Controller
 public class AdresController implements AdressesApi {
 
@@ -33,7 +33,10 @@ public class AdresController implements AdressesApi {
 
     @Value("${info.project.version}")
     private String version;
-
+/*
+    @Value("${application.basePath}")
+    private String basePath;
+*/
     @Override
     public ResponseEntity<Void> _deleteAdres(Long id, String X_API_KEY) {
         log.debug("_deleteAdres apikey: {}", X_API_KEY);

@@ -11,14 +11,14 @@ import { PersonComponent } from './person/person.component';
 import { PersondetailComponent } from './persondetail/persondetail.component';
 
 
-const routes: Routes = [  
+const routes: Routes = [
   { path: 'adresses', component: AdresesComponent },
-  { path: 'addadres' , component: AdresComponent},
+  { path: 'addadres', component: AdresComponent },
   { path: 'adresdetail/:id', component: AdresdetailComponent },
-  { path: 'login', component: LoginComponent }, 
-  { path: 'logout', component: LogoutComponent }, 
+  { path: 'login', component: LoginComponent },
+  { path: 'logout', component: LogoutComponent },
   { path: 'persons', component: PersonsComponent },
-  { path: 'addperson' , component: PersonComponent},
+  { path: 'addperson', component: PersonComponent },
   { path: 'persondetail/:id', component: PersondetailComponent },
 ];
 

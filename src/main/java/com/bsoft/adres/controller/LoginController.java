@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/adres/api/v1")
+@RequestMapping("${application.basePath}")
 @Controller
 public class LoginController implements LoginApi {
 
@@ -30,16 +30,10 @@ public class LoginController implements LoginApi {
 
     @Override
     public ResponseEntity<LoginResponse> _postLogin(LoginRequest loginRequest, String X_API_KEY) {
-        log.debug("_getUser apikey: {}", X_API_KEY);
-        User user = usersService.getUserByName(loginRequest.getUsername());
-
-        Boolean authenticated = passwordEncoder.matches(loginRequest.getPassword(), user.getPassword());
-
-        LoginResponse loginResponse = new LoginResponse(authenticated);
-
+        log.debug("_postTestLogin apikey: {}", X_API_KEY);
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
-                .body(loginResponse);
+                .body(authenticationService.basicjwt(loginRequest));
     }
 
     @Override
@@ -56,14 +50,6 @@ public class LoginController implements LoginApi {
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
                 .body(authenticationService.register(registerRequest));
-    }
-
-    @Override
-    public ResponseEntity<LoginTestResponse> _postTestLogin(LoginRequest loginRequest, String X_API_KEY) {
-        log.debug("_postTestLogin apikey: {}", X_API_KEY);
-        return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
-                .body(authenticationService.basicjwt(loginRequest));
     }
 
 }

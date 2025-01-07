@@ -24,7 +24,7 @@ export class AdresComponent {
   isLoggedIn$: Observable<boolean>;
 
   constructor(private router: Router,
-    private adresService: AdresService,    
+    private adresService: AdresService,
     private logonService: LogonService,
     private dbgmessageService: DbgmessageService,
     private adresseschangedService: AdresseschangedService) {
@@ -35,7 +35,7 @@ export class AdresComponent {
   onSave(adres: Adres) {
     console.log('Add adres: ', adres);
     if (adres != {} as Adres) {
-      this.dbgmessageService.add('AdresComponent - Adding not empty adres');
+      this.dbgmessageService.debug('AdresComponent - Adding not empty adres');
       const adresbody: AdresBody = { street: adres.street, housenumber: adres.housenumber, zipcode: adres.zipcode, city: adres.city };
       this.adresService.postAdres(this.logonService.xApiKey, false, adres)
         .subscribe({
@@ -43,23 +43,22 @@ export class AdresComponent {
             response => {
               this.adres = response.body as Adres;
               this.adresseschangedService.emitNewAdres(adres);
-              this.dbgmessageService.add('AdresComponent - Emitted new adres');
+              this.dbgmessageService.debug('AdresComponent - Emitted new adres');
               this.router.navigate(['/adresses']);
-              this.dbgmessageService.add('AdresComponent - Router navigate toe /adresses');
-            },         
+              this.dbgmessageService.debug('AdresComponent - Router navigate toe /adresses');
+            },
           error: (error: HttpErrorResponse) => {
             this.errormessage = 'AdresComponent - Status: ' + error.status + ' details: ' + error.error.error + ' url: ' + error.url;
-            console.log(error);
           }
         });
     } else {
-      this.dbgmessageService.add('AdresComponent - Skip empty adres');
+      this.dbgmessageService.info('AdresComponent - Skip empty adres');
     }
-   
+
   }
 
   cancel() {
-    this.dbgmessageService.add("AdresComponent - Cancel adres");
+    this.dbgmessageService.debug("AdresComponent - Cancel adres");
     this.router.navigate(['/adresses']);
   }
 }
