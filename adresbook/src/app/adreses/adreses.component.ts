@@ -35,7 +35,7 @@ export class AdresesComponent implements OnInit {
   isLoggedIn$: Observable<boolean>;
 
   constructor(
-    private openAdresService: AdresService,
+    private adresService: AdresService,
     private router: Router,
     private logonService: LogonService,
     private dbgmessageService: DbgmessageService,
@@ -57,7 +57,7 @@ export class AdresesComponent implements OnInit {
   }
   
   getAdresses(xApiKey: string, page: number, size: number): void {
-    this.openAdresService.getAdresses(xApiKey, page, size)
+    this.adresService.getAdresses(xApiKey, page, size)
       .subscribe({
         next:
           response => {
@@ -114,7 +114,7 @@ export class AdresesComponent implements OnInit {
     console.log("Delete adres")
     this.selectedAdres = adres;
 
-    this.openAdresService.deleteAdres(adres.id, this.logonService.xApiKey)
+    this.adresService.deleteAdres(adres.id, this.logonService.xApiKey)
       .subscribe({
         next:
           response => {

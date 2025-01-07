@@ -37,17 +37,17 @@ export class PersonsComponent {
     private logonService: LogonService,
     private dbgmessageService: DbgmessageService,
     private personschangedService: PersonschangedService) {
-    this.dbgmessageService.add('AdresesComponent - constructed subscription defined');
+    this.dbgmessageService.add('PersonsComponent - constructed subscription defined');
     this.isLoggedIn$ = this.logonService.isLoggedIn$;
     this.personChangesubscription = this.personschangedService.newAdres$
       .subscribe(adres => {
-        this.dbgmessageService.add('AdresesComponent - retrieve adresses go add: ' + JSON.stringify(adres));
+        this.dbgmessageService.add('PersonsComponent - retrieve adresses go add: ' + JSON.stringify(adres));
         this.getPersons(this.logonService.xApiKey, this.page, this.size);
       });
   }
 
   ngOnInit(): void {
-    this.dbgmessageService.add('AdresesComponent - activated initial');
+    this.dbgmessageService.add('PersonsComponent - activated initial');
     this.errormessage = "";
     this.getPersons(this.logonService.xApiKey, this.page, this.size);
     this.isFirstActivation = false;
@@ -62,7 +62,7 @@ export class PersonsComponent {
               const personPage: PagedPersons = response.body;
               const adresses: Person[] = response.body as Person[];
               this.persons = personPage.content!;
-              this.dbgmessageService.add('AdresesComponent - before prevpage: ' + this.prevpage + ' page: ' + this.page + ' nextpage: ' + this.nextpage + ' total: ' + personPage.totalPages);
+              this.dbgmessageService.add('PersonsComponent - before prevpage: ' + this.prevpage + ' page: ' + this.page + ' nextpage: ' + this.nextpage + ' total: ' + personPage.totalPages);
               if (personPage.totalElements != undefined) {
                 if (this.page + 1 <= personPage.totalPages!) {
                   this.nextpage = this.page + 1;
@@ -75,7 +75,7 @@ export class PersonsComponent {
                   this.prevpage = 0;
                 }
               }             
-              this.dbgmessageService.add('AdresesComponent - after prevpage: ' + this.prevpage + ' page: ' + this.page + ' nextpage: ' + this.nextpage + ' total: ' + personPage.totalPages);
+              this.dbgmessageService.add('PersonsComponent - after prevpage: ' + this.prevpage + ' page: ' + this.page + ' nextpage: ' + this.nextpage + ' total: ' + personPage.totalPages);
             }
           },
 
@@ -94,7 +94,7 @@ export class PersonsComponent {
 
   onSelect(person: Person): void {
     this.selectedPerson = person;
-    //this.router.navigate(['/persondetail', person.id]);
+    this.router.navigate(['/persondetail', person.id]);
   }
 
   onNextPage(): void {
@@ -115,27 +115,27 @@ export class PersonsComponent {
       .subscribe({
         next:
           response => {
-            this.dbgmessageService.add('AdresesComponent - deleted status: ' + response.status);
+            this.dbgmessageService.add('PersonsComponent - deleted status: ' + response.status);
             this.personschangedService.emitNewPerson(person);
           },
 
         error: error => {
-          this.errormessage = 'AdresesComponent - Status: ' + error.status + ' details: ' + error.error.detail;
+          this.errormessage = 'PersonsComponent - Status: ' + error.status + ' details: ' + error.error.detail;
         }
       }
       )
 
-    this.router.navigate(['/adresses']);
+    this.router.navigate(['/persons']);
   }
 
   ngOnDestroy() {
 
     if (this.personChangesubscription) {
       this.personChangesubscription.unsubscribe();
-      this.dbgmessageService.add('AdresesComponent - Subscription destroyed');
+      this.dbgmessageService.add('PersonsComponent - Subscription destroyed');
     }
 
-    this.dbgmessageService.add('AdresesComponent - Destroyed');
+    this.dbgmessageService.add('PersonsComponent - Destroyed');
   }
 
 }

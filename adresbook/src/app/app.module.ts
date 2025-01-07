@@ -23,6 +23,8 @@ import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { DbgmessagesComponent } from './dbgmessages/dbgmessages.component';
 import { PersonsComponent } from './persons/persons.component';
+import { PersonComponent } from './person/person.component';
+import { PersondetailComponent } from './persondetail/persondetail.component';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -43,6 +45,8 @@ export function apiConfigFactory (): Configuration {
     LogoutComponent,
     DbgmessagesComponent,
     PersonsComponent,
+    PersonComponent,
+    PersondetailComponent,
   ],
   imports: [
     BrowserModule,

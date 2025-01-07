@@ -1,9 +1,8 @@
 <h2>Persons</h2>
-<a routerLink="/persons" *ngIf="isLoggedIn$ | async">Add adres</a>
-
+<a routerLink="/addperson" *ngIf="isLoggedIn$ | async">Add person</a>
 
 <div *ngIf="persons.length > 0">
-    <ul class="adresses">
+    <ul class="persons">
         <li *ngFor="let person of persons">
             <button [class.selected]="person === selectedPerson" type="button" (click)="onSelect(person)">
                 <span class="badge">{{person.id}}</span>
