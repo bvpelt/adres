@@ -12,6 +12,19 @@ Change settings to use performance indicators without being root
 sudo sh -c 'echo 1 > /proc/sys/kernel/perf_event_paranoid'
 sudo sh -c 'echo 0 > /proc/sys/kernel/kptr_restrict'
 ```
+
+## Git
+
+Remove banches
+
+```bash
+# local remove
+git branch -d <branch-name>
+
+# remote remove
+git push origin --delete <branch-name>
+```
+
 ## Environment
 
 On my windows laptop start with [setup](setup.cmd)
