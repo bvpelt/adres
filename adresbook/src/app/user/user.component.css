@@ -19,12 +19,6 @@
     /* Make the input field take up the remaining space */
   }
   
-  .form-group p {
-    margin: 0;
-    flex: 1;
-    /* Make the input field take up the remaining space */
-  }
-  
   .button-container {
     display: block;
     /* Use flexbox for horizontal layout */

@@ -9,6 +9,9 @@ import { LogoutComponent } from './logout/logout.component';
 import { PersonsComponent } from './persons/persons.component';
 import { PersonComponent } from './person/person.component';
 import { PersondetailComponent } from './persondetail/persondetail.component';
+import { UsersComponent } from './users/users.component';
+import { UserComponent } from './user/user.component';
+import { UserdetailComponent } from './userdetail/userdetail.component';
 
 
 const routes: Routes = [
@@ -20,6 +23,9 @@ const routes: Routes = [
   { path: 'persons', component: PersonsComponent },
   { path: 'addperson', component: PersonComponent },
   { path: 'persondetail/:id', component: PersondetailComponent },
+  { path: 'users', component: UsersComponent },
+  { path: 'adduser', component: UserComponent },
+  { path: 'userdetail/:id', component: UserdetailComponent },
 ];
 
 @NgModule({

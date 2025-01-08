@@ -1,7 +1,6 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AdressesService } from '../core/modules/openapi/api/api';
-import { Adresses } from '../core/modules/openapi/model/adresses';
 import { Adres } from '../core/modules/openapi/model/adres';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { AdresBody, BASE_PATH, PagedAdresses } from '../core/modules/openapi';
@@ -90,7 +89,7 @@ export class AdresService {
     }
 
     if (this.api != undefined) {
-      return this.api.getAdresses(page!, size!, undefined, xApiKey, 'response', false, options);
+      return this.api.getAdresses(page!, size!, ["id"], xApiKey, 'response', false, options);
     } else {
       throw new Error("OpenadresService api not yet defined");
     }

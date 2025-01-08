@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { DbgmessageService } from '../services/dbgmessage.service';
 import { AdresseschangedService } from '../services/adresseschanged.service';
-import { OpenadresService } from '../services/openadres.service';
 import { PagedAdresses } from '../core/modules/openapi';
 import { AdresService } from '../services/adres.service';
 
@@ -17,8 +16,6 @@ import { AdresService } from '../services/adres.service';
   styleUrl: './adreses.component.css'
 })
 export class AdresesComponent implements OnInit {
-  @Input() isFirstActivation: boolean = true;
-
   page: number = 1;
   size: number = 4;
   faPencilIcon = faPencil;
@@ -54,7 +51,6 @@ export class AdresesComponent implements OnInit {
     this.dbgmessageService.debug('AdresesComponent - activated initial');
     this.errormessage = "";
     this.getAdresses(this.logonService.xApiKey, this.page, this.size);
-    this.isFirstActivation = false;
   }
 
   getAdresses(xApiKey: string, page: number, size: number): void {

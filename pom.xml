@@ -11,7 +11,7 @@
 
     <groupId>com.bsoft</groupId>
     <artifactId>adres</artifactId>
-    <version>0.0.12</version>
+    <version>0.0.13</version>
     <name>Adres</name>
 
     <description>Adressen service</description>
@@ -231,7 +231,7 @@
                         </goals>
                         <configuration>
 
-                            <inputSpec>${project.basedir}/src/main/resources/adres.0.0.12.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/adres.0.0.13.yaml</inputSpec>
 
                             <generatorName>spring</generatorName>
                             <library>spring-boot</library>

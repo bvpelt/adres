@@ -2,6 +2,29 @@
 
 Adres data
 
+## Building the application
+### Building server side
+You can build the server side using a h2 or a postgresql database. 
+
+#### Building for h2
+From the project directory
+```bash
+mvn -P develop -DactiveProfile=develop clean compile
+```
+#### Building for postgresql
+From the project directory
+```bash
+mvn -P runtime -DactiveProfile=runtime clean compile
+```
+
+### Building client side
+From the project directory
+```bash
+cd adresbook # The directory with client side implementation
+npm install
+npm run genapi
+num run start
+```
 ## Spring boot
 - Documentation https://docs.spring.io/spring-boot/index.html
 - Springdoc https://springdoc.org/
@@ -15,7 +38,7 @@ sudo sh -c 'echo 0 > /proc/sys/kernel/kptr_restrict'
 
 ## Git
 
-Remove banches
+### Remove banches
 
 ```bash
 # local remove
@@ -24,6 +47,17 @@ git branch -d <branch-name>
 # remote remove
 git push origin --delete <branch-name>
 ```
+### Releases
+
+Workflow
+- create a branch from the develop branch ```git checkout -b <workbranch>```
+- make changes and test
+- update branch ```git add .; git commit -m <message>; git push```
+- merge branch to develop ```git checkout develop; git merge <workbranch>; git push```
+- test and resolve merge conflicts
+- merge develop branch to main ```git checkout main; git merge develop; git push```
+- add tags to main branch ```git tag -m <tag message> <releasenumber>; git push origin --tags```
+- checkout develop to keepon working ```git checkout develop```
 
 ## Environment
 

@@ -25,6 +25,9 @@ import { DbgmessagesComponent } from './dbgmessages/dbgmessages.component';
 import { PersonsComponent } from './persons/persons.component';
 import { PersonComponent } from './person/person.component';
 import { PersondetailComponent } from './persondetail/persondetail.component';
+import { UsersComponent } from './users/users.component';
+import { UserComponent } from './user/user.component';
+import { UserdetailComponent } from './userdetail/userdetail.component';
 
 export function apiConfigFactory(): Configuration {
   const params: ConfigurationParameters = {
@@ -46,6 +49,9 @@ export function apiConfigFactory(): Configuration {
     PersonsComponent,
     PersonComponent,
     PersondetailComponent,
+    UsersComponent,
+    UserComponent,
+    UserdetailComponent,
   ],
   imports: [
     BrowserModule,

@@ -14,7 +14,6 @@ import { PersonService } from '../services/person.service';
   styleUrl: './persons.component.css'
 })
 export class PersonsComponent {
-  @Input() isFirstActivation: boolean = true;
 
   page: number = 1;
   size: number = 4;
@@ -50,8 +49,7 @@ export class PersonsComponent {
   ngOnInit(): void {
     this.dbgmessageService.debug('PersonsComponent - activated initial');
     this.errormessage = "";
-    this.getPersons(this.logonService.xApiKey, this.page, this.size);
-    this.isFirstActivation = false;
+    this.getPersons(this.logonService.xApiKey, this.page, this.size);    
   }
 
   getPersons(xApiKey: string, page: number, size: number): void {

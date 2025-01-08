@@ -7,24 +7,24 @@
 
 <div class="form-group">
     <label for="firstname">Firstname: </label>
-    <input id="firstname" [(ngModel)]="person.firstName" placeholder="firstname">
+    <input id="firstname" [(ngModel)]="person.firstName" autofocus placeholder="firstname" tabindex="1">
 </div>
 <div class="form-group">
     <label for="infix">infix: </label>
-    <input id="infix" [(ngModel)]="person.infix" placeholder="infix">
+    <input id="infix" [(ngModel)]="person.infix" placeholder="infix" tabindex="2">
 </div>
 <div class="form-group">
     <label for="lastname">lastname: </label>
-    <input id="lastname" [(ngModel)]="person.lastName" placeholder="lastname">
+    <input id="lastname" [(ngModel)]="person.lastName" placeholder="lastname" tabindex="3">
 </div>
 <div class="form-group">
     <label for="dateOfBirth">Date of birth: </label>
-    <input id="dateOfBirth" [(ngModel)]="person.dateOfBirth" placeholder="dateOfBirth">
+    <input id="dateOfBirth" [(ngModel)]="person.dateOfBirth" placeholder="dateOfBirth" tabindex="4">
 </div>
 
 <div class="button-container">
-    <button type="button" (click)="onSave(person)">Save</button>
-    <button type="button" (click)="cancel()">Cancel</button>
+    <button type="button" (click)="onSave(person)" tabIndex="5">Save</button>
+  <button type="button" (click)="cancel()" tabIndex="6">Cancel</button>
 </div>
 
 <div *ngIf="errormessage!=undefined && errormessage.length>0">

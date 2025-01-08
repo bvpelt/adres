@@ -2,6 +2,7 @@
 <nav>
   <a routerLink="/adresses">Adresses</a>
   <a routerLink="/persons">Persons</a>
+  <a routerLink="/users">Users</a>
   <a routerLink="/login" *ngIf="!(isLoggedIn$ | async)">Login</a>
   <a routerLink="/logout" *ngIf="(isLoggedIn$ | async)">LogOut</a>
 </nav>

@@ -144,10 +144,23 @@ public class UsersService {
                 foundUser.setUsername(userBody.getUsername());
             }
             if (userBody.getPassword() != null) {
-                foundUser.setPassword(userBody.getPassword());
+                String encodedPwd = bCryptPasswordEncoder.encode(userBody.getPassword());
+                foundUser.setPassword(encodedPwd);
             }
             if (userBody.getPhone() != null) {
                 foundUser.setPhone(userBody.getPhone());
+            }
+            if (userBody.getAccountNonExpired() != null) {
+                foundUser.setAccount_non_expired(userBody.getAccountNonExpired());
+            }
+            if (userBody.getAccountNonLocked() != null) {
+                foundUser.setAccount_non_locked(userBody.getAccountNonLocked());
+            }
+            if (userBody.getCredentialsNonExpired() != null) {
+                foundUser.setCredentials_non_expired(userBody.getCredentialsNonExpired());
+            }
+            if (userBody.getEnabled() != null) {
+                foundUser.setEnabled(userBody.getEnabled());
             }
             foundUser.setHash(foundUser.getHash());
 

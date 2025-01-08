@@ -1,13 +1,14 @@
 <div class="login">
+    <p>Existing user</p>
     <div class="form-group">
         <label for="username">Username: </label>
-        <input autocomplete="on" id="username" [(ngModel)]="username" placeholder="username">
+        <input autocomplete="on" id="username" [(ngModel)]="username" autofocus placeholder="username" tabindex="1">
     </div>
 
     <div class="form-group">
         <label for="password">Password: </label>
         <input autocomplete="off" id="password" type="{{ showPassword ? 'text' : 'password' }}" [(ngModel)]="password"
-            placeholder="password">
+            placeholder="password" tabindex="2">
         <fa-icon *ngIf="showPassword" (click)="togglePasswordVisibility()" [icon]="faEyeIcon"></fa-icon>
         <fa-icon *ngIf="!showPassword" (click)="togglePasswordVisibility()" [icon]="faEyeSlashIcon"></fa-icon>
     </div>
