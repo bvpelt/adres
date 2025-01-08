@@ -32,10 +32,8 @@ export class LoginComponent {
       .subscribe({
         next:
           response => {
-            console.log('LoginComponent - response')
             if (response.body) {
               this.loginResponse = response.body;
-              console.log(LoginComponent, this.loginResponse);
               if (this.loginResponse!.authenticated) {
                 this.logonService.isLoggedIn.next(true);
                 this.logonService.authenticatedUser = this.username;
