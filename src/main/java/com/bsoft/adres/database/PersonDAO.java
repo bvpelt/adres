@@ -56,8 +56,9 @@ public class PersonDAO implements Serializable {
         this.hash = this.hashCode();
     }
 
-    public void genHash() {
+    public Integer genHash() {
         this.hash = hashCode();
+        return this.hash;
     }
 
     @Override

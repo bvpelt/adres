@@ -33,10 +33,7 @@ public class AdresController implements AdressesApi {
 
     @Value("${info.project.version}")
     private String version;
-/*
-    @Value("${application.basePath}")
-    private String basePath;
-*/
+
     @Override
     public ResponseEntity<Void> _deleteAdres(Long id, String X_API_KEY) {
         log.debug("_deleteAdres apikey: {}", X_API_KEY);
@@ -48,9 +45,7 @@ public class AdresController implements AdressesApi {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Version", version);
 
-        ResponseEntity<Void> responseEntity = new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
-
-        return responseEntity;
+        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
 
     @Override
@@ -61,9 +56,7 @@ public class AdresController implements AdressesApi {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Version", version);
 
-        ResponseEntity<Void> responseEntity = new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
-
-        return responseEntity;
+        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
 
     @Override

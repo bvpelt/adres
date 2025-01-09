@@ -1,10 +1,8 @@
 package com.bsoft.adres.service;
 
-import com.bsoft.adres.database.RoleDAO;
 import com.bsoft.adres.database.UserDAO;
 import com.bsoft.adres.exceptions.UserExistsException;
 import com.bsoft.adres.exceptions.UserNotExistsException;
-import com.bsoft.adres.generated.model.Role;
 import com.bsoft.adres.generated.model.User;
 import com.bsoft.adres.generated.model.UserBody;
 import com.bsoft.adres.mappers.UserMapper;
@@ -62,9 +60,8 @@ public class UsersService {
         }
 
         UserDAO userDAO = optionalUserDAO.get();
-        User user = UserDAO2User(userDAO);
 
-        return user;
+        return userMapper.map(userDAO);
     }
 
     public User getUserByName(String username) {
@@ -74,9 +71,8 @@ public class UsersService {
         }
 
         UserDAO userDAO = optionalUserDAO.get();
-        User user = UserDAO2User(userDAO);
 
-        return user;
+        return userMapper.map(userDAO);
     }
 
     public List<User> getUsers() {
@@ -84,23 +80,22 @@ public class UsersService {
         Iterable<UserDAO> userDAOIterable = usersRepository.findAll();
 
         userDAOIterable.forEach(userDAO -> {
-            User user = UserDAO2User(userDAO);
+            User user = userMapper.map(userDAO);
             userList.add(user);
         });
 
         return userList;
     }
 
-    public List<User> getUsers(final PageRequest pageRequest) {
-        List<User> userList = new ArrayList<User>();
-        Iterable<UserDAO> userDAOIterable = usersRepository.findAllByPaged(pageRequest);
+    public Page<User> getUsersPage(PageRequest pageRequest) {
+        Page<UserDAO> foundUsersPage = usersRepository.findAllByPage(pageRequest);
 
-        userDAOIterable.forEach(userDAO -> {
-            User user = UserDAO2User(userDAO);
-            userList.add(user);
-        });
+        List<User> usersList = new ArrayList<>();
+        usersList = foundUsersPage.getContent().stream()
+                .map(userMapper::map) // Apply mapper to each UserDAO
+                .toList();
 
-        return userList;
+        return new PageImpl<>(usersList, foundUsersPage.getPageable(), foundUsersPage.getTotalElements());
     }
 
     public User postUser(Boolean override, final UserBody userBody) {
@@ -121,7 +116,7 @@ public class UsersService {
 
             usersRepository.save(userDAO);
 
-            return UserDAO2User(userDAO); // Return 201 Created with the created entity
+            return userMapper.map(userDAO); // Return 201 Created with the created entity
         } catch (Error e) {
             log.error("Error inserting adres: {}", e);
             throw e;
@@ -129,7 +124,6 @@ public class UsersService {
     }
 
     public User patch(Long userId, final UserBody userBody) {
-        User user = new User();
 
         try {
             Optional<UserDAO> optionalUserDAO = usersRepository.findByUserId(userId);
@@ -162,18 +156,20 @@ public class UsersService {
             if (userBody.getEnabled() != null) {
                 foundUser.setEnabled(userBody.getEnabled());
             }
-            foundUser.setHash(foundUser.getHash());
+
+            // set new hash -- assumption is at least one field is changed, no need to check!
+            foundUser.setHash(foundUser.genHash());
 
             usersRepository.save(foundUser);
 
-            return UserDAO2User(foundUser);
+            return userMapper.map(foundUser);
         } catch (Error e) {
             log.error("Error patching adres: {}", e);
             throw e;
         }
 
     }
-
+/*
     private User UserDAO2User(final UserDAO userDAO) {
         User user = new User();
         user.setId(userDAO.getId());
@@ -199,15 +195,5 @@ public class UsersService {
         role.setDescription(roleDAO.getDescription());
         return role;
     }
-
-    public Page<User> getUsersPage(PageRequest pageRequest) {
-        Page<UserDAO> foundUsersPage = usersRepository.findAllByPage(pageRequest);
-
-        List<User> usersList = new ArrayList<>();
-        usersList = foundUsersPage.getContent().stream()
-                .map(userMapper::map) // Apply mapper to each UserDAO
-                .toList();
-
-        return new PageImpl<>(usersList, foundUsersPage.getPageable(), foundUsersPage.getTotalElements());
-    }
+*/
 }

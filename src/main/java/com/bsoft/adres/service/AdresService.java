@@ -58,8 +58,8 @@ public class AdresService {
         if (!optionalAdresDAO.isPresent()) {
             throw new AdresNotExistsException("Adres with id " + adresId + " not found");
         }
-        Adres adres = AdresDAO2Adres(optionalAdresDAO.get());
-        return adres;
+
+        return adresMapper.map(optionalAdresDAO.get());
     }
 
     public List<Adres> getAdresses() {
@@ -92,7 +92,7 @@ public class AdresService {
         Iterable<AdresDAO> adresDAOIterable = adresRepository.findAllByPaged(pageRequest);
 
         adresDAOIterable.forEach(adresDAO -> {
-            adresList.add(AdresDAO2Adres(adresDAO));
+            adresList.add(adresMapper.map(adresDAO));
         });
 
         return adresList;
@@ -110,9 +110,8 @@ public class AdresService {
             }
 
             adresRepository.save(adresDAO);
-            Adres adres = AdresDAO2Adres(adresDAO);
 
-            return adres; // Return 201 Created with the created entity
+            return adresMapper.map(adresDAO); // Return 201 Created with the created entity
         } catch (Error e) {
             log.error("Error inserting adres: {}", e);
             throw e;
@@ -120,7 +119,6 @@ public class AdresService {
     }
 
     public Adres patch(Long adresId, final AdresBody adresBody) {
-        Adres adres = new Adres();
 
         try {
             Optional<AdresDAO> optionalAdresDAO = adresRepository.findByAdresId(adresId);
@@ -141,18 +139,17 @@ public class AdresService {
                 foundAdres.setCity(adresBody.getCity());
             }
 
-            foundAdres.setHash(foundAdres.getHash());
+            foundAdres.setHash(foundAdres.genHash());
 
             adresRepository.save(foundAdres);
 
-            adres = AdresDAO2Adres(foundAdres);
-            return adres;
+            return adresMapper.map(foundAdres);
         } catch (Error e) {
             throw e;
         }
 
     }
-
+/*
     private Adres AdresDAO2Adres(final AdresDAO adresDAO) {
         Adres adres = new Adres();
         adres.setId(adresDAO.getId());
@@ -163,7 +160,7 @@ public class AdresService {
 
         return adres;
     }
-
+*/
 
     public AdresPerson getAdresPerson(Long adresId) {
         Optional<AdresDAO> adresDAO = adresRepository.findByAdresId(adresId);
@@ -186,6 +183,5 @@ public class AdresService {
         adresPerson.setPersons(personIds);
 
         return adresPerson;
-
     }
 }

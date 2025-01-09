@@ -107,8 +107,9 @@ public class AdresDAO implements Serializable {
         this.hash = hash;
     }
 
-    public void genHash() {
+    public Integer genHash() {
         this.hash = hashCode();
+        return this.hash;
     }
 
     @Override

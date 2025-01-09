@@ -68,8 +68,7 @@ public class PersonService {
         if (!optionalPersonDAO.isPresent()) {
             throw new PersonNotExistsException("Person with id " + personId + " not found");
         }
-        Person person = PersonDAO2Person(optionalPersonDAO.get());
-        return person;
+        return personMapper.map(optionalPersonDAO.get());
     }
 
 
@@ -101,7 +100,7 @@ public class PersonService {
         Iterable<PersonDAO> iPerson = personRepository.findAll();
 
         iPerson.forEach(PersonDAO -> {
-            Person newPerson = PersonDAO2Person(PersonDAO);
+            Person newPerson = personMapper.map(PersonDAO);
             result.add(newPerson);
         });
 
@@ -113,7 +112,7 @@ public class PersonService {
         Iterable<PersonDAO> PersonDAOIterable = personRepository.findAllByPaged(pageRequest);
 
         PersonDAOIterable.forEach(PersonDAO -> {
-            PersonList.add(PersonDAO2Person(PersonDAO));
+            PersonList.add(personMapper.map(PersonDAO));
         });
 
         return PersonList;
@@ -131,9 +130,8 @@ public class PersonService {
             }
 
             personRepository.save(PersonDAO);
-            Person Person = PersonDAO2Person(PersonDAO);
 
-            return Person; // Return 201 Created with the created entity
+            return personMapper.map(PersonDAO); // Return 201 Created with the created entity
         } catch (Error e) {
             log.error("Error inserting Person: {}", e);
             throw e;
@@ -141,7 +139,6 @@ public class PersonService {
     }
 
     public Person patch(Long PersonId, final PersonBody PersonBody) {
-        Person Person = new Person();
 
         try {
             Optional<PersonDAO> optionalPersonDAO = personRepository.findByPersonId(PersonId);
@@ -161,18 +158,18 @@ public class PersonService {
             if (PersonBody.getDateOfBirth() != null) {
                 foundPerson.setDateofbirth(PersonBody.getDateOfBirth());
             }
-            foundPerson.setHash(foundPerson.getHash());
+            foundPerson.setHash(foundPerson.genHash());
 
             personRepository.save(foundPerson);
 
-            Person = PersonDAO2Person(foundPerson);
-            return Person;
+            return personMapper.map(foundPerson);
         } catch (Error e) {
             throw e;
         }
 
     }
 
+    /*
     private Person PersonDAO2Person(final PersonDAO personDAO) {
         Person person = new Person();
         person.setFirstName(personDAO.getFirstname());
@@ -182,6 +179,8 @@ public class PersonService {
         person.setDateOfBirth(personDAO.getDateofbirth());
         return person;
     }
+
+     */
 
     public Page<Person> getPersonsPage(PageRequest pageRequest) {
         Page<PersonDAO> foundPersonPage = personRepository.findAllByPage(pageRequest);

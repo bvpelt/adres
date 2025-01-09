@@ -47,7 +47,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/h2-console/**").hasAnyAuthority("ALL", "APP_SECURITY_ACCESS", "APP_FULL_ACCESS")
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/error").permitAll()
                         .requestMatchers("/adres/api/v1/login/**").permitAll()
-                        .requestMatchers("/actuator/**").hasAnyAuthority("ALL", "APP_SECURITY_ACCESS")
+                        .requestMatchers("/actuator/**").permitAll() // .hasAnyAuthority("ALL", "APP_SECURITY_ACCESS")
                         .requestMatchers(HttpMethod.DELETE, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_FULL_ACCESS")
                         .requestMatchers(HttpMethod.POST, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_FULL_ACCESS")
                         .requestMatchers(HttpMethod.PATCH, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_FULL_ACCESS")

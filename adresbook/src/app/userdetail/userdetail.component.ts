@@ -50,9 +50,9 @@ export class UserdetailComponent {
   onUpdate(user: User) {
     var userbody: UserBody;
     if (this.password.length > 0) {
-      userbody = { username: user.username, password: this.password, email: user.email, phone: user.phone };
+      userbody = { username: user.username, password: this.password, email: user.email, phone: user.phone, accountNonExpired: user.accountNonExpired, accountNonLocked: user.accountNonLocked, credentialsNonExpired: user.credentialsNonExpired, enabled: user.enabled };
     } else {
-      userbody = { username: user.username, email: user.email, phone: user.phone };
+      userbody = { username: user.username, email: user.email, phone: user.phone, accountNonExpired: user.accountNonExpired, accountNonLocked: user.accountNonLocked, credentialsNonExpired: user.credentialsNonExpired, enabled: user.enabled };
     }
     this.userService.patchUser(user.id, this.logonService.xApiKey, userbody)
       .subscribe({

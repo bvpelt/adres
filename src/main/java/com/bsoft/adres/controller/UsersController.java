@@ -44,9 +44,7 @@ public class UsersController implements UsersApi {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Version", version);
 
-        ResponseEntity<Void> responseEntity = new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
-
-        return responseEntity;
+        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
 
     @Override
@@ -57,9 +55,7 @@ public class UsersController implements UsersApi {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Version", version);
 
-        ResponseEntity<Void> responseEntity = new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
-
-        return responseEntity;
+        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
 
     @Override

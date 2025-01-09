@@ -93,8 +93,9 @@ public class UserDAO {
         this.setRoles(new HashSet<>());
     }
 
-    public void genHash() {
+    public Integer genHash() {
         this.hash = hashCode();
+        return this.hash;
     }
 
     public void addRole(RoleDAO role) {

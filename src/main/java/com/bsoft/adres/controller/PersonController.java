@@ -42,9 +42,7 @@ public class PersonController implements PersonsApi {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Version", version);
 
-        ResponseEntity<Void> responseEntity = new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
-
-        return responseEntity;
+        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
 
     @Override
@@ -58,9 +56,7 @@ public class PersonController implements PersonsApi {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Version", version);
 
-        ResponseEntity<Void> responseEntity = new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
-
-        return responseEntity;
+        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
 
     @Override
@@ -102,7 +98,7 @@ public class PersonController implements PersonsApi {
         if (size < 1) {
             throw new InvalidParameterException("Page size must be greater than 0");
         }
-        //
+
         if (sort != null && sort.size() > 0) {
             List<Sort.Order> orders = ControllerSortUtil.getSortOrder(sort);
             pageRequest = PageRequest.of(page - 1, size, Sort.by(orders));

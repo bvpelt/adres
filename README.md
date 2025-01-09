@@ -202,6 +202,9 @@ management:
         exclude:
 ```
 
+Metrics data are available at http://localhost:8081/actuator/prometheus
+
+
 Prometheus config file
 ```yaml
 # my global config
@@ -234,6 +237,18 @@ scrape_configs:
     static_configs:
       - targets: ["localhost:9090"]
 ```
+
+Copy the config file to /tmp/prometheus.yml 
+
+```bash
+docker run -d --name prometheus -p 9090:9090 -v /tmp/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
+```
+The result is visable at http://localhost:9090/query
+
+```bash
+docker run -d --name grafana -p 3000:3000 grafana/grafana
+```
+The result is visable at http://localhost:3000
 
 - [docker image](https://hub.docker.com/r/prom/prometheus)
 - [prometheus docs](https://prometheus.io/docs/introduction/overview/)
