@@ -44,6 +44,7 @@ management:
   server:
     port: 8081
 
+
 spring:
   datasource:
     driver-class-name: org.h2.Driver

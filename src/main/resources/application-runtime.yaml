@@ -17,7 +17,7 @@ management:
         info: app-info
         health: app-health
       exposure:
-        include: 'health,info'
+        include: 'health,info,prometheus'
         exclude:
   server:
     port: 8081

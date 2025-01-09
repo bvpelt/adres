@@ -159,8 +159,86 @@ FROM
     roles_privileges rp ON r.id = rp.roleid
         LEFT JOIN
     privilege p ON rp.privilegeid=p.id;
-
 ```
+
+## Metrics
+To enable metrics for prometheus
+
+add to pom.xml
+```xml
+    <dependency>
+        <groupId>io.micrometer</groupId>
+        <artifactId>micrometer-core</artifactId>
+        <version>1.13.2</version>
+    </dependency>
+    <dependency>
+        <groupId>io.micrometer</groupId>
+        <artifactId>micrometer-registry-prometheus</artifactId>
+        <version>1.12.3</version>
+    </dependency>
+```
+
+Enable prometheus in application.yaml
+```yaml
+management:
+  endpoint:
+    env:
+      show-values: always
+    configprops:
+      show-values: always
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      path-mapping:
+        info: app-info
+        health: app-health
+      exposure:
+        include: 'prometheus'
+        exclude:
+```
+
+Prometheus config file
+```yaml
+# my global config
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: "prometheus"
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ["localhost:9090"]
+```
+
+- [docker image](https://hub.docker.com/r/prom/prometheus)
+- [prometheus docs](https://prometheus.io/docs/introduction/overview/)
+- [prometheus config](https://github.com/prometheus/prometheus/blob/main/documentation/examples/prometheus.yml)
+
 ## References
 
 - [Spring security](https://www.baeldung.com/security-spring)
@@ -175,6 +253,7 @@ FROM
 - [Spring security tutorial](https://www.javainuse.com/boot3/sec)
 - [JWT Token](https://www.youtube.com/watch?v=KxqlJblhzfI)
 - [JWT Documentation](https://github.com/jwtk/jjwt )
+- [Metrics](https://piotrminkowski.wordpress.com/2018/05/11/exporting-metrics-to-influxdb-and-prometheus-using-spring-boot-actuator/)
 
 
 
