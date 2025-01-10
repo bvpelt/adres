@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
-import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Adres } from '../core/modules/openapi/model/adres';
 import { AdresService } from '../services/adres.service';
 import { LogonService } from '../services/logon.service';
 import { AdresBody } from '../core/modules/openapi';
 import { Observable } from 'rxjs';
-import { OpenadresService } from '../services/openadres.service';
 import { AdresseschangedService } from '../services/adresseschanged.service';
 import { DbgmessageService } from '../services/dbgmessage.service';
 

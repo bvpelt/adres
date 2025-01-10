@@ -29,7 +29,6 @@ export class PersondetailComponent {
     this.isLoggedIn$ = this.logonService.isLoggedIn$;
   }
 
-
   getAdres(xApiKey: string): void {
     const id: number = Number(this.route.snapshot.paramMap.get('id'));
 

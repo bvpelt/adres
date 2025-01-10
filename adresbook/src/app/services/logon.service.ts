@@ -36,12 +36,7 @@ export class LogonService {
     });
     this.api = new LoginService(http, basePath, config);
   }
-  /*
-    constructor(private api: LoginService,
-      private dynamicconfigService: DynamicconfigService,
-      private dbgmessageService: DbgmessageService) {
-    }
-  */
+ 
   doLogOut() {
     this.isLoggedIn.next(false);
     this.authenticatedUser = undefined;
@@ -52,13 +47,6 @@ export class LogonService {
     return this.postLogin(this.xApiKey, username, password);
   }
 
-  /**
-     * Login into the application
-     * Login into the application by providing username password. 
-     * @param xApiKey An api key used to track usage of the api
-     * @param loginRequest Request parameters
-     */
-  //
   //public postLogin(loginRequest: LoginRequest, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LoginResponse>>;
   private postLogin(xApiKey: string, username: string, password: string): Observable<HttpResponse<LoginResponse>> {
     const loginRequest: LoginRequest = { username: username, password: password };

@@ -1,7 +1,7 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { UserBody, BASE_PATH, PagedAdresses, UsersService, User, PagedUsers } from '../core/modules/openapi';
+import { UserBody, BASE_PATH, UsersService, User, PagedUsers } from '../core/modules/openapi';
 import { DynamicconfigService } from './dynamicconfig.service';
 
 @Injectable({

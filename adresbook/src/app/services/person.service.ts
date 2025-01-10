@@ -1,5 +1,5 @@
 import { Inject, Injectable, Optional } from '@angular/core';
-import { BASE_PATH, PagedPersons, Person, PersonBody, Persons, PersonsService } from '../core/modules/openapi';
+import { BASE_PATH, PagedPersons, Person, PersonBody, PersonsService } from '../core/modules/openapi';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { DynamicconfigService } from './dynamicconfig.service';
 import { Observable } from 'rxjs';
@@ -55,8 +55,6 @@ export class PersonService {
       throw new Error("PersonsService api not yet defined");
     }
   }
-
-  // public getPeronsAdresses(id: number, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PersonAdres>>;
 
   // public getPerson(id: number, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Person>>;
   getPerson(id: number, xApiKey: string): Observable<HttpResponse<Person>> {

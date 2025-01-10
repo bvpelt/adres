@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { DynamicconfigService } from './dynamicconfig.service';
-import { Adres, AdresBody, Adresses, AdressesService, BASE_PATH, Configuration, PagedAdresses } from '../core/modules/openapi';
+import { Adres, AdresBody, AdressesService, BASE_PATH, PagedAdresses } from '../core/modules/openapi';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -109,7 +109,6 @@ export class OpenadresService {
       throw new Error("OpenadresService api not yet defined");
     }
   }
-
 
   //  public postAdres(override: boolean, adresBody: AdresBody, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Adres>>;
   postAdres(xApiKey: string, override: boolean, adresBody?: AdresBody): Observable<HttpResponse<Adres>> {

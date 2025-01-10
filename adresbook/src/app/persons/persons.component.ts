@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import { PagedPersons, Person, PersonsService } from '../core/modules/openapi';
+import { PagedPersons, Person } from '../core/modules/openapi';
 import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { LogonService } from '../services/logon.service';

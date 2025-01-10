@@ -93,3 +93,4 @@ adres.trace.db
 /adresbook/.DS_Store
 /adresbook/Thumbs.db
 adresbook/src/app/core
+data
