@@ -12,6 +12,9 @@ import { PersondetailComponent } from './persondetail/persondetail.component';
 import { UsersComponent } from './users/users.component';
 import { UserComponent } from './user/user.component';
 import { UserdetailComponent } from './userdetail/userdetail.component';
+import { RolesComponent } from './roles/roles.component';
+import { RoleComponent } from './role/role.component';
+import { RoledetailComponent } from './roledetail/roledetail.component';
 
 
 const routes: Routes = [
@@ -26,6 +29,9 @@ const routes: Routes = [
   { path: 'users', component: UsersComponent },
   { path: 'adduser', component: UserComponent },
   { path: 'userdetail/:id', component: UserdetailComponent },
+  { path: 'roles', component: RolesComponent },
+  { path: 'addrole', component: RoleComponent },
+  { path: 'roledetail/:id', component: RoledetailComponent },
 ];
 
 @NgModule({

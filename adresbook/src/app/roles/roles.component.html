@@ -1,0 +1,31 @@
+<h2>Roles</h2>
+<a routerLink="/addrole" *ngIf="isLoggedIn$ | async">Add role</a>
+
+
+<div *ngIf="roles.length > 0">
+    <ul class="roles">
+        <li *ngFor="let role of roles">
+            <button [class.selected]="role === selectedRole" type="button" (click)="onSelect(role)">
+                <span class="badge">{{role.id}}</span>
+                <span class="user">{{role.rolename}} {{role.description}}</span>
+            </button>
+            <fa-icon *ngIf="isLoggedIn$ | async" [icon]="faPencilIcon" (click)="onSelect(role)"></fa-icon>
+            <fa-icon *ngIf="isLoggedIn$ | async" [icon]="faTrashCanIcon" (click)="onDelete(role)"></fa-icon>
+        </li>
+    </ul>
+</div>
+
+<div class="pagination-buttons">
+    <div *ngIf="prevpage > 0">
+        <button type="button" (click)="onPrevPage()">prev page {{page}}/{{totalpages}}</button>
+    </div>
+    <div *ngIf="nextpage > 0" class="next-page-button">
+        <button type="button" (click)="onNextPage()">next page {{page}}/{{totalpages}}</button>
+    </div>
+</div>
+
+<div *ngIf="errormessage!=undefined && errormessage.length>0">
+    {{errormessage}}
+</div>
+
+<app-dbgmessages></app-dbgmessages>

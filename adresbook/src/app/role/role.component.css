@@ -1,0 +1,33 @@
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    /* Adjust margin as needed */
+  }
+  
+  .form-group label {
+    flex: 0 0 100px;
+    /* Fixed width for the label */
+    text-align: right;
+    /* Align label text to the right */
+    margin-right: 10px;
+    /* Add spacing between label and input */
+  }
+  
+  .form-group input {
+    flex: 1;
+    /* Make the input field take up the remaining space */
+  }
+  
+  .button-container {
+    display: block;
+    /* Use flexbox for horizontal layout */
+    justify-content: space-between;
+    /* Space buttons evenly */
+  }
+  
+  .button-container button {
+    /* Style your buttons here */
+    margin: 0 10px;
+    /* Add 10px margin on each side */
+  }

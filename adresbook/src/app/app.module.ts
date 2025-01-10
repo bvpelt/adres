@@ -28,6 +28,9 @@ import { PersondetailComponent } from './persondetail/persondetail.component';
 import { UsersComponent } from './users/users.component';
 import { UserComponent } from './user/user.component';
 import { UserdetailComponent } from './userdetail/userdetail.component';
+import { RolesComponent } from './roles/roles.component';
+import { RoleComponent } from './role/role.component';
+import { RoledetailComponent } from './roledetail/roledetail.component';
 
 export function apiConfigFactory(): Configuration {
   const params: ConfigurationParameters = {
@@ -52,6 +55,9 @@ export function apiConfigFactory(): Configuration {
     UsersComponent,
     UserComponent,
     UserdetailComponent,
+    RolesComponent,
+    RoleComponent,
+    RoledetailComponent,
   ],
   imports: [
     BrowserModule,

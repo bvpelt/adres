@@ -1,0 +1,49 @@
+<h2>Show / Update role</h2>
+
+<div *ngIf="role!=undefined">
+
+    <div *ngIf="!(isLoggedIn$ | async)">
+        <div *ngIf="role.id != undefined && role.id != 0" class="form-group">
+            <label for="id">id: </label>
+            <p id="id"> {{role.id}}</p>
+        </div>
+
+        <div class="form-group">
+            <label for="rolename">Rolename: </label>
+            <p id="rolename">{{role.rolename}}</p>
+        </div>
+        <div class="form-group">
+            <label for="description">Description: </label>
+            <p id="description">{{role.description}}</p>
+        </div>
+
+        <div class="button-container">
+            <button type="button" (click)="cancel()">Continue</button>
+        </div>
+    </div>
+
+    <div *ngIf="isLoggedIn$ | async">
+        <div *ngIf="role.id != undefined && role.id != 0" class="form-group">
+            <label for="id">id: </label>
+            <p id="id"> {{role.id}}</p>
+        </div>
+
+        <div class="form-group">
+            <label for="rolename">rolename: </label>
+            <input #rolename [(ngModel)]="role.rolename" autofocus placeholder="rolename" tabIndex="1">
+        </div>
+        <div class="form-group">
+            <label for="password">Password: </label>
+            <input id="password" [(ngModel)]="role.description" placeholder="description" tabIndex="2">            
+        </div>
+
+        <div class="button-container">
+            <button type="button" (click)="onUpdate(role)">Update</button>
+            <button type="button" (click)="cancel()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="errormessage!=undefined && errormessage.length>0">
+    {{errormessage}}
+</div>

@@ -29,7 +29,6 @@ export class UserComponent {
   }
 
   onSave(user: User) {
-    console.log('Add user: ', user);
     if (user != {} as User) {
       this.dbgmessageService.add('UserComponent - Adding not empty user');
       const userbody: UserBody = { username: user.username, password: user.password, email: user.email, phone: user.phone} ;

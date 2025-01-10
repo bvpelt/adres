@@ -122,7 +122,7 @@ export class UsersComponent implements OnInit {
         }
       });
 
-    this.router.navigate(['/adresses']);
+    this.router.navigate(['/users']);
   }
 
   ngOnDestroy() {
