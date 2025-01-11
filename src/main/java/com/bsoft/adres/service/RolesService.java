@@ -26,12 +26,6 @@ public class RolesService {
     private final RoleRepository roleRepository;
     private final RoleMapper roleMapper;
 
-    /*
-        @Autowired
-        public RolesService(final RoleRepository roleRepository) {
-            this.roleRepository = roleRepository;
-        }
-    */
     public void deleteAll() {
         try {
             roleRepository.deleteAll();
@@ -63,21 +57,20 @@ public class RolesService {
         }
 
         RoleDAO RoleDAO = optionalRoleDAO.get();
-        Role Role = RoleDAO2Role(RoleDAO);
 
-        return Role;
+        return roleMapper.map(RoleDAO);
     }
 
     public List<Role> getRoles() {
-        List<Role> RoleList = new ArrayList<Role>();
+        List<Role> roleList = new ArrayList<Role>();
         Iterable<RoleDAO> RoleDAOIterable = roleRepository.findAll();
 
         RoleDAOIterable.forEach(RoleDAO -> {
-            Role Role = RoleDAO2Role(RoleDAO);
-            RoleList.add(Role);
+            Role Role = roleMapper.map(RoleDAO);
+            roleList.add(Role);
         });
 
-        return RoleList;
+        return roleList;
     }
 
     public List<Role> getRoles(final PageRequest pageRequest) {
@@ -85,7 +78,7 @@ public class RolesService {
         Iterable<RoleDAO> RoleDAOIterable = roleRepository.findAllByPaged(pageRequest);
 
         RoleDAOIterable.forEach(RoleDAO -> {
-            Role Role = RoleDAO2Role(RoleDAO);
+            Role Role = roleMapper.map(RoleDAO);
             roleList.add(Role);
         });
 
@@ -105,7 +98,7 @@ public class RolesService {
 
             roleRepository.save(RoleDAO);
 
-            return RoleDAO2Role(RoleDAO); // Return 201 Created with the created entity
+            return roleMapper.map(RoleDAO); // Return 201 Created with the created entity
         } catch (Error e) {
             log.error("Error inserting adres: {}", e);
             throw e;
@@ -127,17 +120,18 @@ public class RolesService {
             if (roleBody.getDescription() != null) {
                 foundRole.setDescription(roleBody.getDescription());
             }
-            foundRole.setHash(foundRole.getHash());
+            foundRole.setHash(foundRole.genHash());
 
             roleRepository.save(foundRole);
 
-            return RoleDAO2Role(foundRole);
+            return roleMapper.map(foundRole);
         } catch (Error e) {
             throw e;
         }
 
     }
 
+    /*
     private Role RoleDAO2Role(final RoleDAO roleDAO) {
         Role role = new Role();
         role.setId(roleDAO.getId());
@@ -154,6 +148,8 @@ public class RolesService {
         role.setDescription(roleDAO.getDescription());
         return role;
     }
+
+     */
 
     public Page<Role> getRolesPage(PageRequest pageRequest) {
         Page<RoleDAO> foundRolesPage = roleRepository.findAllByPage(pageRequest);

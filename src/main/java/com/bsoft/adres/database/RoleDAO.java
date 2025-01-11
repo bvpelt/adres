@@ -52,8 +52,9 @@ public class RoleDAO {
         this.hash = this.hashCode();
     }
 
-    public void genHash() {
+    public Integer genHash() {
         this.hash = hashCode();
+        return this.hash;
     }
 
     public void addUser(UserDAO user) {

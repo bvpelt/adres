@@ -1,14 +1,15 @@
 package com.bsoft.adres.mappers;
 
-import com.bsoft.adres.database.AdresDAO;
 import com.bsoft.adres.database.JsonNullableMapper;
-import com.bsoft.adres.generated.model.Adres;
+import com.bsoft.adres.database.PrivilegeDAO;
+
+import com.bsoft.adres.generated.model.Privilege;
 import lombok.Setter;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValueMappingStrategy;
 import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
+
 
 @Setter
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
@@ -18,10 +19,10 @@ import org.mapstruct.factory.Mappers;
                 JsonNullableMapper.class
         },
         nullValueIterableMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
-public abstract class AdresMapper implements JsonNullableMapper {
+public abstract class  PrivilegeMapper implements JsonNullableMapper {
 
-    public abstract Adres map(AdresDAO source);
+    public abstract Privilege map(PrivilegeDAO privilegeDAO);
 
-    public abstract AdresDAO map(Adres source);
+    public abstract PrivilegeDAO map(Privilege privilege);
 
 }

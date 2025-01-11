@@ -1,5 +1,6 @@
 package com.bsoft.adres.database;
 
+import com.bsoft.adres.generated.model.PrivilegeBody;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,12 +32,18 @@ public class PrivilegeDAO {
     @ManyToMany(mappedBy = "privileges")
     private Collection<RoleDAO> roles = new ArrayList<>();
 
+    public PrivilegeDAO(PrivilegeBody privilegeBody) {
+        this.name = privilegeBody.getName();
+        this.hash = this.genHash();
+    }
+
     public void addRole(RoleDAO role) {
         roles.add(role);
     }
 
-    public void genHash() {
+    public Integer genHash() {
         this.hash = hashCode();
+        return this.hash;
     }
 
     @Override

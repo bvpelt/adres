@@ -131,7 +131,9 @@ cat ~/Downloads/contacts.csv | awk '{split($0, a, ","); printf("%s\t--%s\t--%s\t
 Determine which roles are granted to a specific user
 ```sql
 -- simple query
-select username, rolename from users, role, users_roles where users.id = users_roles.userid and users_roles.roleid = role.id;
+SELECT username, rolename 
+FROM users, role, users_roles 
+WHERE users.id = users_roles.userid AND users_roles.roleid = role.id;
 
 -- alternative with left join
 SELECT
@@ -159,6 +161,11 @@ FROM
     roles_privileges rp ON r.id = rp.roleid
         LEFT JOIN
     privilege p ON rp.privilegeid=p.id;
+
+SELECT u.username, r.rolename, p.name
+FROM users u, users_roles ur, role r, roles_privileges rp, privilege p
+WHERE u.id =ur.userid AND ur.roleid = r.id AND r.id = rp.roleid AND rp.privilegeid = p.id;
+
 ```
 
 ## Metrics
