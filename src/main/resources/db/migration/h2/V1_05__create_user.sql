@@ -13,5 +13,7 @@ create table users
     apikey_id               bigint
 );
 
-create unique index user_username_ix on users (username, account_non_expired, account_non_locked, credentials_non_expired, enabled);
-create unique index user_email_ix on users (email, account_non_expired, account_non_locked, credentials_non_expired, enabled);
+create unique index user_username_ix on users (username, account_non_expired, account_non_locked,
+                                               credentials_non_expired, enabled);
+create unique index user_email_ix on users (email, account_non_expired, account_non_locked, credentials_non_expired,
+                                            enabled);

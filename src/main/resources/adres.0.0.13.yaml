@@ -2,7 +2,7 @@ openapi: "3.0.3"
 info:
   title: Adres API
   version: 0.0.12
-  
+
 servers:
   - url: http://localhost:8080/{basePath}
     description: development
@@ -40,7 +40,7 @@ paths:
         - basicAuth: [ ]
         - bearerAuth: [ ]
       parameters:
-        - $ref: "#/components/parameters/X-API-KEY"      
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -91,7 +91,7 @@ paths:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/override"
-        - $ref: "#/components/parameters/X-API-KEY"      
+        - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
         description: Request parameters
         required: true
@@ -147,7 +147,7 @@ paths:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/X-API-KEY"      
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -172,7 +172,7 @@ paths:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/X-API-KEY"    
+        - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
         description: Request parameters
         content:
@@ -339,7 +339,7 @@ paths:
         - basicAuth: [ ]
         - bearerAuth: [ ]
       parameters:
-        - $ref: "#/components/parameters/X-API-KEY"      
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -369,7 +369,7 @@ paths:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/override"
-        - $ref: "#/components/parameters/X-API-KEY"    
+        - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
         description: Request parameters
         content:
@@ -424,7 +424,7 @@ paths:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/X-API-KEY"    
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -449,7 +449,7 @@ paths:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/X-API-KEY"    
+        - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
         description: Request parameters
         content:
@@ -502,7 +502,7 @@ paths:
       description: |
         Retrieve all known roles, using paging and sorting
       operationId: getRoles
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/page"
@@ -526,10 +526,10 @@ paths:
       description: |
         Delete all roles
       operationId: deleteAllRoles
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
-        - $ref: "#/components/parameters/X-API-KEY"    
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -553,10 +553,10 @@ paths:
         - description
         If the hash value already exists in the backend, the role is considered to exist
       operationId: postRole
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
-        - $ref: "#/components/parameters/X-API-KEY"    
+        - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
         description: Request parameters
         content:
@@ -584,7 +584,7 @@ paths:
       description: |
         Retrieve only one role with id roleId
       operationId: getRole
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
@@ -608,11 +608,11 @@ paths:
       description: |
         Delete only the specified role
       operationId: deleteRole
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/X-API-KEY"      
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -632,11 +632,11 @@ paths:
       description: |
         Update only the role specified with roleId
       operationId: patchRole
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/X-API-KEY"      
+        - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
         description: Request parameters
         content:
@@ -666,7 +666,7 @@ paths:
       description: |
         Retrieve all known users, using paging and sorting
       operationId: getUsers
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/page"
@@ -690,10 +690,10 @@ paths:
       description: |
         Delete all users
       operationId: deleteAllUsers
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
-        - $ref: "#/components/parameters/X-API-KEY"      
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -719,10 +719,10 @@ paths:
         - phone
         If the hash value already exists in the backend, the user is considered to exist
       operationId: postUser
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
-        - $ref: "#/components/parameters/X-API-KEY"      
+        - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
         description: Request parameters
         content:
@@ -750,7 +750,7 @@ paths:
       description: |
         Retrieve only one user with id userId
       operationId: getUser
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
@@ -774,11 +774,11 @@ paths:
       description: |
         Delete only the specified user
       operationId: deleteUser
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/X-API-KEY"      
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -798,11 +798,11 @@ paths:
       description: |
         Update only the user specified with userId
       operationId: patchUser
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/X-API-KEY"      
+        - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
         description: Request parameters
         content:
@@ -914,7 +914,7 @@ components:
     PagedAdresList-01:
       summary: An empty list of adresses
       value:
-        content: []
+        content: [ ]
         pageNumber: 0,
         pageSize: 25,
         totalElements: 0,
@@ -1082,19 +1082,19 @@ components:
       value:
         id: 4
         rolename: JWT-TOKEN
-        description: The JWT-TOKEN can only be used for JWT authentication        
-        
+        description: The JWT-TOKEN can only be used for JWT authentication
+
 
     RoleList:
       summary: List of known roles
       value:
-        - id: 3   
+        - id: 3
           rolename: JWT-TOKEN
-          description: The JWT-TOKEN can only be used for JWT authentication                       
+          description: The JWT-TOKEN can only be used for JWT authentication
         - id: 4
           rolename: USER
           description: The USER kan only read information
-          
+
     UserBody:
       summary: New User definition
       value:
@@ -1106,7 +1106,7 @@ components:
         accountNonLocked: true
         credentialsNonExpired: true
         enabled: true
-        roles: []
+        roles: [ ]
 
     User:
       summary: New user
@@ -1120,8 +1120,8 @@ components:
         accountNonLocked: true
         credentialsNonExpired: true
         enabled: true
-        roles: []
-        
+        roles: [ ]
+
 
     UserList:
       summary: List of known users
@@ -1135,7 +1135,7 @@ components:
           accountNonLocked: true
           credentialsNonExpired: true
           enabled: true
-          roles: []          
+          roles: [ ]
         - id: 5
           username: "tester"
           password: "12345"
@@ -1145,9 +1145,9 @@ components:
           accountNonLocked: true
           credentialsNonExpired: true
           enabled: true
-          roles: []
-          
-    
+          roles: [ ]
+
+
   headers:
     version:
       required: true
@@ -1216,7 +1216,7 @@ components:
         type: array
         items:
           type: string
-        default: []
+        default: [ ]
 
     X-API-KEY:
       name: "X-API-KEY"
@@ -1334,13 +1334,13 @@ components:
           example: password
 
     LoginResponse:
-#      type: object
-#      required:
-#        - authenticated
-#     properties:
-#        authenticated:
-#          type: boolean
-#          example: true
+      #      type: object
+      #      required:
+      #        - authenticated
+      #     properties:
+      #        authenticated:
+      #          type: boolean
+      #          example: true
       type: object
       required:
         - authenticated
@@ -1351,7 +1351,7 @@ components:
         token:
           type: string
           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJwYXNzd29yZCI6Imthc2pkZmtlaSIsImVtYWlsIjoidXNlckBnbWFpbC5jb20iLCJwaG9uZSI6IiszMTY0MDk0OTM0NDUifQ.eO4foDxLy8Rg5EtKLGRTFItLD1y-B0iHHo-tjRyVLn0"
-   
+
     PagedAdresses:
       type: object
       properties:
@@ -1359,7 +1359,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Adres"
-        pageNumber: 
+        pageNumber:
           type: integer
         pageSize:
           type: integer
@@ -1376,7 +1376,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Person"
-        pageNumber: 
+        pageNumber:
           type: integer
         pageSize:
           type: integer
@@ -1393,7 +1393,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Role"
-        pageNumber: 
+        pageNumber:
           type: integer
         pageSize:
           type: integer
@@ -1410,7 +1410,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/User"
-        pageNumber: 
+        pageNumber:
           type: integer
         pageSize:
           type: integer
@@ -1419,7 +1419,7 @@ components:
           format: int64
         totalPages:
           type: integer
-                
+
     Password:
       type: string
       description: base64 encode password
@@ -1554,7 +1554,7 @@ components:
     UserBody:
       type: object
       required:
-        - username        
+        - username
         - email
       properties:
         username:
@@ -1818,14 +1818,14 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/PagedPersons"
-#          examples:
-#            emptylist:
-#              $ref: "#/components/examples/PagedAdresList-01"
-#            fulllist:
-#              $ref: "#/components/examples/PagedAdresList-02"
+      #          examples:
+      #            emptylist:
+      #              $ref: "#/components/examples/PagedAdresList-01"
+      #            fulllist:
+      #              $ref: "#/components/examples/PagedAdresList-02"
       headers:
         version:
-          $ref: "#/components/headers/version"          
+          $ref: "#/components/headers/version"
 
     PagedRoles:
       description: A collection of person pages
@@ -1833,14 +1833,14 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/PagedRoles"
-#          examples:
-#            emptylist:
-#              $ref: "#/components/examples/PagedAdresList-01"
-#            fulllist:
-#              $ref: "#/components/examples/PagedAdresList-02"
+      #          examples:
+      #            emptylist:
+      #              $ref: "#/components/examples/PagedAdresList-01"
+      #            fulllist:
+      #              $ref: "#/components/examples/PagedAdresList-02"
       headers:
         version:
-          $ref: "#/components/headers/version"          
+          $ref: "#/components/headers/version"
 
     PagedUsers:
       description: A collection of person pages
@@ -1848,15 +1848,15 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/PagedUsers"
-#          examples:
-#            emptylist:
-#              $ref: "#/components/examples/PagedAdresList-01"
-#            fulllist:
-#              $ref: "#/components/examples/PagedAdresList-02"
+      #          examples:
+      #            emptylist:
+      #              $ref: "#/components/examples/PagedAdresList-01"
+      #            fulllist:
+      #              $ref: "#/components/examples/PagedAdresList-02"
       headers:
         version:
-          $ref: "#/components/headers/version"          
-        
+          $ref: "#/components/headers/version"
+
     Person:
       description: A specific person
       content:

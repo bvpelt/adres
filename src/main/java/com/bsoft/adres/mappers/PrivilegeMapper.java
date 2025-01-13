@@ -2,7 +2,6 @@ package com.bsoft.adres.mappers;
 
 import com.bsoft.adres.database.JsonNullableMapper;
 import com.bsoft.adres.database.PrivilegeDAO;
-
 import com.bsoft.adres.generated.model.Privilege;
 import lombok.Setter;
 import org.mapstruct.InjectionStrategy;
@@ -19,7 +18,7 @@ import org.mapstruct.ReportingPolicy;
                 JsonNullableMapper.class
         },
         nullValueIterableMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
-public abstract class  PrivilegeMapper implements JsonNullableMapper {
+public abstract class PrivilegeMapper implements JsonNullableMapper {
 
     public abstract Privilege map(PrivilegeDAO privilegeDAO);
 

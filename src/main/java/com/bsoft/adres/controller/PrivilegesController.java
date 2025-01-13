@@ -110,24 +110,24 @@ public class PrivilegesController implements PrivilegesApi {
     }
 
     @Override
-    public ResponseEntity<Privilege> _patchPrivilege(Long id, String X_API_KEY, PrivilegeBody PrivilegeBody) {
+    public ResponseEntity<Privilege> _patchPrivilege(Long id, String X_API_KEY, PrivilegeBody privilegeBody) {
         log.debug("_patchPrivilege apikey: {}", X_API_KEY);
-        Privilege Privilege = privilegesService.patch(id, PrivilegeBody);
+        Privilege privilege = privilegesService.patch(id, privilegeBody);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
-                .body(Privilege); // Return 201 Created with the created entity
+                .body(privilege); // Return 201 Created with the created entity
     }
 
     @Override
-    public ResponseEntity<Privilege> _postPrivilege(String X_API_KEY, PrivilegeBody PrivilegeBody) {
+    public ResponseEntity<Privilege> _postPrivileges(String X_API_KEY, PrivilegeBody privilegeBody) {
         log.debug("_postPrivilege apikey: {}", X_API_KEY);
 
-        Privilege Privilege = privilegesService.postPrivilege(false, PrivilegeBody); // Call the service method
+        Privilege privilege = privilegesService.postPrivilege(false, privilegeBody); // Call the service method
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header("Version", version)
-                .body(Privilege); // Return 201 Created with the created entity
+                .body(privilege); // Return 201 Created with the created entity
     }
 
 }

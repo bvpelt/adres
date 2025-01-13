@@ -30,7 +30,7 @@ public abstract class UserMapper implements JsonNullableMapper {
     public abstract User map(UserDAO source);
 
     @Named("mapToRoles")
-    public List<Role> roleDAOCollectionToRoleList (Collection<RoleDAO> source) {
+    public List<Role> roleDAOCollectionToRoleList(Collection<RoleDAO> source) {
         List<Role> roles = new ArrayList<>();
 
         for (RoleDAO roleDAO : source) {
@@ -51,7 +51,7 @@ public abstract class UserMapper implements JsonNullableMapper {
     public abstract UserDAO map(User source);
 
     @Named("mapToRolesDAO")
-    public Collection<RoleDAO> roleListToRoleCollection (List<Role> source) {
+    public Collection<RoleDAO> roleListToRoleCollection(List<Role> source) {
         Collection<RoleDAO> roles = new ArrayList<>();
 
         for (Role role : source) {

@@ -72,14 +72,15 @@ mvn clean test -P develop -Dspring.profiles.active=develop
 ```
 # Security
 
-| User    | Role      | Privilege             |
-|---------|-----------|-----------------------|
-| admin   | ADMIN     | ALL                   |
-| bvpelt  | OPERATOR  | APP_FULL_ACCESS       |
-| bvpelt  | OPERATOR  | APP_SECURITY_ACCESS   |
-| user    | USER      | APP_READ_ACCESS_BASIC |
-| any     | JWT-TOKEN | APP_READ_ACCESS_JWT   |
-
+| User    | Role          | Privilege       | userid | roleid | privilegeid |
+|---------|---------------|-----------------|--------|--------|-------------|
+| admin   | ADMIN         | ALL             |   1    |    1   |   1         |
+| bvpelt  | FUNC_OPERATOR | APP_WRITE       |   3    |    2   |   3         |
+| bvpelt  | TECH_OPERATOR | APP_MAINTENANCE |   3    |    3   |   2         |
+| fber    | FUNC_OPERATOR | APP_WRITE       |   4    |    2   |   3         |
+| user    | USER          | APP_READ        |   2    |    4   |   4         |
+| develop | DEVELOPER     | ALL             |   5    |    6   |   1         |
+| any     | JWT-TOKEN     | APP_READ_JWT    |        |    5   |   5         |
 
 ## Basic Authentication
 

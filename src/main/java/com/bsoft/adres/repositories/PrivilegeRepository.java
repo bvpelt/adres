@@ -1,7 +1,6 @@
 package com.bsoft.adres.repositories;
 
 import com.bsoft.adres.database.PrivilegeDAO;
-import com.bsoft.adres.database.RoleDAO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

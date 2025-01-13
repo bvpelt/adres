@@ -2,7 +2,7 @@ openapi: "3.0.3"
 info:
   title: Adres API
   version: 0.0.11
-  
+
 servers:
   - url: http://localhost:8080/{basePath}
     description: development
@@ -40,7 +40,7 @@ paths:
         - basicAuth: [ ]
         - bearerAuth: [ ]
       parameters:
-        - $ref: "#/components/parameters/X-API-KEY"      
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -91,7 +91,7 @@ paths:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/override"
-        - $ref: "#/components/parameters/X-API-KEY"      
+        - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
         description: Request parameters
         required: true
@@ -147,7 +147,7 @@ paths:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/X-API-KEY"      
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -172,7 +172,7 @@ paths:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/X-API-KEY"    
+        - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
         description: Request parameters
         content:
@@ -217,9 +217,9 @@ paths:
         "5XX":
           $ref: "#/components/responses/ServerError"
 
-  /login/special: 
-    post: 
-      tags: 
+  /login/special:
+    post:
+      tags:
         - Login
       summary: Login to the application
       description: |
@@ -370,7 +370,7 @@ paths:
         - basicAuth: [ ]
         - bearerAuth: [ ]
       parameters:
-        - $ref: "#/components/parameters/X-API-KEY"      
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -400,7 +400,7 @@ paths:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/override"
-        - $ref: "#/components/parameters/X-API-KEY"    
+        - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
         description: Request parameters
         content:
@@ -455,7 +455,7 @@ paths:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/X-API-KEY"    
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -480,7 +480,7 @@ paths:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/X-API-KEY"    
+        - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
         description: Request parameters
         content:
@@ -533,7 +533,7 @@ paths:
       description: |
         Retrieve all known roles, using paging and sorting
       operationId: getRoles
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/page"
@@ -557,10 +557,10 @@ paths:
       description: |
         Delete all roles
       operationId: deleteAllRoles
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
-        - $ref: "#/components/parameters/X-API-KEY"    
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -584,10 +584,10 @@ paths:
         - description
         If the hash value already exists in the backend, the role is considered to exist
       operationId: postRole
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
-        - $ref: "#/components/parameters/X-API-KEY"    
+        - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
         description: Request parameters
         content:
@@ -615,7 +615,7 @@ paths:
       description: |
         Retrieve only one role with id roleId
       operationId: getRole
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
@@ -639,11 +639,11 @@ paths:
       description: |
         Delete only the specified role
       operationId: deleteRole
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/X-API-KEY"      
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -663,11 +663,11 @@ paths:
       description: |
         Update only the role specified with roleId
       operationId: patchRole
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/X-API-KEY"      
+        - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
         description: Request parameters
         content:
@@ -697,7 +697,7 @@ paths:
       description: |
         Retrieve all known users, using paging and sorting
       operationId: getUsers
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/page"
@@ -721,10 +721,10 @@ paths:
       description: |
         Delete all users
       operationId: deleteAllUsers
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
-        - $ref: "#/components/parameters/X-API-KEY"      
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -750,10 +750,10 @@ paths:
         - phone
         If the hash value already exists in the backend, the user is considered to exist
       operationId: postUser
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
-        - $ref: "#/components/parameters/X-API-KEY"      
+        - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
         description: Request parameters
         content:
@@ -781,7 +781,7 @@ paths:
       description: |
         Retrieve only one user with id userId
       operationId: getUser
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
@@ -805,11 +805,11 @@ paths:
       description: |
         Delete only the specified user
       operationId: deleteUser
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/X-API-KEY"      
+        - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "204":
           $ref: "#/components/responses/Deleted"
@@ -829,11 +829,11 @@ paths:
       description: |
         Update only the user specified with userId
       operationId: patchUser
-      security:        
+      security:
         - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
-        - $ref: "#/components/parameters/X-API-KEY"      
+        - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
         description: Request parameters
         content:
@@ -1080,19 +1080,19 @@ components:
       value:
         id: 4
         rolename: JWT-TOKEN
-        description: The JWT-TOKEN can only be used for JWT authentication        
-        
+        description: The JWT-TOKEN can only be used for JWT authentication
+
 
     RoleList:
       summary: List of known roles
       value:
-        - id: 3   
+        - id: 3
           rolename: JWT-TOKEN
-          description: The JWT-TOKEN can only be used for JWT authentication                       
+          description: The JWT-TOKEN can only be used for JWT authentication
         - id: 4
           rolename: USER
           description: The USER kan only read information
-          
+
     UserBody:
       summary: New User definition
       value:
@@ -1104,7 +1104,7 @@ components:
         accountNonLocked: true
         credentialsNonExpired: true
         enabled: true
-        roles: []
+        roles: [ ]
 
     User:
       summary: New user
@@ -1118,8 +1118,8 @@ components:
         accountNonLocked: true
         credentialsNonExpired: true
         enabled: true
-        roles: []
-        
+        roles: [ ]
+
 
     UserList:
       summary: List of known users
@@ -1133,7 +1133,7 @@ components:
           accountNonLocked: true
           credentialsNonExpired: true
           enabled: true
-          roles: []          
+          roles: [ ]
         - id: 5
           username: "tester"
           password: "12345"
@@ -1143,9 +1143,9 @@ components:
           accountNonLocked: true
           credentialsNonExpired: true
           enabled: true
-          roles: []
-          
-    
+          roles: [ ]
+
+
   headers:
     version:
       required: true

@@ -51,13 +51,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        log.trace("checkJWTToken - JWT Token available {}", authHeader);
 
         jwt = authHeader.substring(7);
         username = jwtService.extractUsername(jwt);
+        log.trace("checkJWTToken - Username: {}", username);
         if ((username != null) && (SecurityContextHolder.getContext().getAuthentication() == null)) { // user not connected
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+            log.trace("checkJWTToken - userDetails: {}", userDetails.toString());
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                log.trace("checkJWTToken - usernamePasswordAuthenticationToken: {}", usernamePasswordAuthenticationToken.toString());
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }

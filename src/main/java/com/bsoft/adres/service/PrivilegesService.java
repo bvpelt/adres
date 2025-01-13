@@ -123,24 +123,25 @@ public class PrivilegesService {
         }
 
     }
-/*
-    private Privilege PrivilegeDAO2Privilege(final PrivilegeDAO PrivilegeDAO) {
-        Privilege Privilege = new Privilege();
-        Privilege.setId(PrivilegeDAO.getId());
-        Privilege.setPrivilegename(PrivilegeDAO.getPrivilegename());
-        Privilege.setDescription(PrivilegeDAO.getDescription());
 
-        return Privilege;
-    }
+    /*
+        private Privilege PrivilegeDAO2Privilege(final PrivilegeDAO PrivilegeDAO) {
+            Privilege Privilege = new Privilege();
+            Privilege.setId(PrivilegeDAO.getId());
+            Privilege.setPrivilegename(PrivilegeDAO.getPrivilegename());
+            Privilege.setDescription(PrivilegeDAO.getDescription());
 
-    public Privilege PrivilegeDAOtoPrivilege(PrivilegeDAO PrivilegeDAO) {
-        Privilege Privilege = new Privilege();
-        Privilege.setId(PrivilegeDAO.getId());
-        Privilege.setPrivilegename(PrivilegeDAO.getPrivilegename());
-        Privilege.setDescription(PrivilegeDAO.getDescription());
-        return Privilege;
-    }
-*/
+            return Privilege;
+        }
+
+        public Privilege PrivilegeDAOtoPrivilege(PrivilegeDAO PrivilegeDAO) {
+            Privilege Privilege = new Privilege();
+            Privilege.setId(PrivilegeDAO.getId());
+            Privilege.setPrivilegename(PrivilegeDAO.getPrivilegename());
+            Privilege.setDescription(PrivilegeDAO.getDescription());
+            return Privilege;
+        }
+    */
     public Page<Privilege> getPrivilegesPage(PageRequest pageRequest) {
         Page<PrivilegeDAO> foundPrivilegesPage = privilegeRepository.findAllByPage(pageRequest);
 
