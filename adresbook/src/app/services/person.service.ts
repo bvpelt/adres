@@ -1,5 +1,5 @@
 import { Inject, Injectable, Optional } from '@angular/core';
-import { BASE_PATH, PagedPersons, Person, PersonBody, PersonsService } from '../core/modules/openapi';
+import { BASE_PATH, Configuration, PagedPersons, Person, PersonBody, PersonsService } from '../core/modules/openapi';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { DynamicconfigService } from './dynamicconfig.service';
 import { Observable } from 'rxjs';
@@ -15,6 +15,11 @@ export class PersonService {
     @Optional() @Inject(BASE_PATH) basePath: string | string[],
     private dynamicConfigService: DynamicconfigService
   ) {
+    var basePathToUse = Array.isArray(BASE_PATH) ? BASE_PATH[0] : BASE_PATH;
+    var config: Configuration = new Configuration({
+      basePath: basePathToUse
+    });
+    this.api = new PersonsService(http, basePath, config);
     this.dynamicConfigService.config$.subscribe((config: any) => {
       if (config) {
         this.api = new PersonsService(http, basePath, config);
@@ -86,7 +91,7 @@ export class PersonService {
     }
 
     if (this.api != undefined) {
-      return this.api.getPersons(page!, size!, ["id" ], xApiKey, 'response', false, options);
+      return this.api.getPersons(page!, size!, ["id"], xApiKey, 'response', false, options);
     } else {
       throw new Error("PersonsService api not yet defined");
     }

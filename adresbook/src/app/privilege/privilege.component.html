@@ -1,0 +1,23 @@
+<h2>Add Privilege</h2>
+
+<div *ngIf="privilege.id != undefined && privilege.id != 0" class="form-group">
+    <label for="id">id: </label>
+    <p id="street"> {{privilege.id}}</p>
+</div>
+
+<div class="form-group">
+    <label for="privilegename">Privilegename: </label>
+    <input id="privilegename" [(ngModel)]="privilege.name" autofocus placeholder="privilegename" tabindex="1">
+</div>
+
+
+<div class="button-container">
+    <button type="button" (click)="onSave(privilege)" tabindex="3">Save</button>
+    <button type="button" (click)="cancel()" tabindex="4">Cancel</button>
+</div>
+
+<div *ngIf="errormessage!=undefined && errormessage.length>0">
+    {{errormessage}}
+</div>
+
+<app-dbgmessages></app-dbgmessages>

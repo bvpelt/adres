@@ -4,12 +4,9 @@
   <a routerLink="/persons">Persons</a>
   <a routerLink="/users">Users</a>
   <a routerLink="/roles">Roles</a>
+  <a routerLink="/privileges">Privileges</a>
   <a routerLink="/login" *ngIf="!(isLoggedIn$ | async)">Login</a>
   <a routerLink="/logout" *ngIf="(isLoggedIn$ | async)">LogOut</a>
 </nav>
-<!--
-<app-adreses></app-adreses>
--->
-
 
 <router-outlet />

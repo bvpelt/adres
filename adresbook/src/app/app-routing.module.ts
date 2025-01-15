@@ -15,6 +15,9 @@ import { UserdetailComponent } from './userdetail/userdetail.component';
 import { RolesComponent } from './roles/roles.component';
 import { RoleComponent } from './role/role.component';
 import { RoledetailComponent } from './roledetail/roledetail.component';
+import { PrivilegesComponent } from './privileges/privileges.component';
+import { PrivilegeComponent } from './privilege/privilege.component';
+import { PrivilegedetailComponent } from './privilegedetail/privilegedetail.component';
 
 
 const routes: Routes = [
@@ -32,6 +35,9 @@ const routes: Routes = [
   { path: 'roles', component: RolesComponent },
   { path: 'addrole', component: RoleComponent },
   { path: 'roledetail/:id', component: RoledetailComponent },
+  { path: 'privileges', component: PrivilegesComponent },
+  { path: 'addprivilege', component: PrivilegeComponent },
+  { path: 'privilegedetail/:id', component: PrivilegedetailComponent },
 ];
 
 @NgModule({

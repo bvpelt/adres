@@ -1,14 +1,15 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { RoleBody, BASE_PATH, RolesService, Role, PagedRoles } from '../core/modules/openapi';
+import { RoleBody, BASE_PATH, RolesService, Role, PagedRoles, PrivilegesService, Privilege, PagedPrivileges, PrivilegeBody } from '../core/modules/openapi';
 import { DynamicconfigService } from './dynamicconfig.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class RoleService {
-  private api: RolesService | undefined;
+export class PrivilegeService {
+private api: PrivilegesService | undefined;
 
   constructor(
     private http: HttpClient,
@@ -17,14 +18,14 @@ export class RoleService {
   ) {
     this.dynamicConfigService.config$.subscribe((config: any) => {
       if (config) {
-        this.api = new RolesService(http, basePath, config);
+        this.api = new PrivilegesService(http, basePath, config);
       }
     });
   }
 
 
   // public deleteRole(id: number, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-  deleteRole(id: number, xApiKey: string): Observable<HttpResponse<any>> {
+  deletePrivilege(id: number, xApiKey: string): Observable<HttpResponse<any>> {
     const headers: HttpHeaders = new HttpHeaders({
       'x-api-key': xApiKey
     });
@@ -34,14 +35,14 @@ export class RoleService {
     }
 
     if (this.api != undefined) {
-      return this.api.deleteRole(id, xApiKey, 'response', false, options);
+      return this.api.deletePrivilege(id, xApiKey, 'response', false, options);
     } else {
       throw new Error("OpenadresService api not yet defined");
     }
   }
 
   // public deleteAllRoles(xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-  deleteAllRoles(xApiKey: string, page?: number, size?: number): Observable<HttpResponse<any>> {
+  deleteAllPrivileges(xApiKey: string, page?: number, size?: number): Observable<HttpResponse<any>> {
     const headers: HttpHeaders = new HttpHeaders({
       'x-api-key': xApiKey
     });
@@ -51,14 +52,14 @@ export class RoleService {
     }
 
     if (this.api != undefined) {
-      return this.api.deleteAllRoles(xApiKey, 'response', false, options);
+      return this.api.deleteAllPrivileges(xApiKey, 'response', false, options);
     } else {
       throw new Error("OpenadresService api not yet defined");
     }
   }
 
   // public getRole(id: number, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Role>>;
-  getRole(id: number, xApiKey: string): Observable<HttpResponse<Role>> {
+  getPrivilege(id: number, xApiKey: string): Observable<HttpResponse<Privilege>> {
     const headers: HttpHeaders = new HttpHeaders({
       'x-api-key': xApiKey
     });
@@ -69,14 +70,14 @@ export class RoleService {
     }
 
     if (this.api != undefined) {
-      return this.api.getRole(id, xApiKey, 'response', false, options);
+      return this.api.getPrivilege(id, xApiKey, 'response', false, options);
     } else {
       throw new Error("OpenadresService api not yet defined");
     }
   }
 
   // public getRoles(page: number, size: number, sort?: Array<string>, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedRoles>>;
-  getRoles(xApiKey: string, page?: number, size?: number): Observable<HttpResponse<PagedRoles>> {
+  getPrivileges(xApiKey: string, page?: number, size?: number): Observable<HttpResponse<PagedPrivileges>> {
     const headers: HttpHeaders = new HttpHeaders({
       'x-api-key': xApiKey
     });
@@ -87,14 +88,14 @@ export class RoleService {
     }
 
     if (this.api != undefined) {
-      return this.api.getRoles(page!, size!, ["id"], xApiKey, 'response', false, options);
+      return this.api.getPrivileges(page!, size!, ["id"], xApiKey, 'response', false, options);
     } else {
       throw new Error("OpenadresService api not yet defined");
     }
   }
 
   // public patchRole(id: number, xAPIKEY?: string, RoleBody?: RoleBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Role>>;
-  patchRole(id: number, xApiKey: string, roleBody?: RoleBody): Observable<HttpResponse<Role>> {
+  patchPrivilege(id: number, xApiKey: string, privilegeBody?: PrivilegeBody): Observable<HttpResponse<Privilege>> {
     const headers: HttpHeaders = new HttpHeaders({
       'x-api-key': xApiKey
     });
@@ -105,7 +106,7 @@ export class RoleService {
     }
 
     if (this.api != undefined) {
-      return this.api.patchRole(id, xApiKey, roleBody, 'response', false, options);
+      return this.api.patchPrivilege(id, xApiKey, privilegeBody, 'response', false, options);
     } else {
       throw new Error("OpenadresService api not yet defined");
     }
@@ -113,7 +114,7 @@ export class RoleService {
 
 
   // public postRole(xAPIKEY?: string, RoleBody?: RoleBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Role>>;
-  postRole(xApiKey: string, roleBody?: RoleBody): Observable<HttpResponse<Role>> {
+  postPrivilege(xApiKey: string, privilegeBody?: PrivilegeBody): Observable<HttpResponse<Privilege>> {
     const headers: HttpHeaders = new HttpHeaders({
       'x-api-key': xApiKey
     });
@@ -123,7 +124,7 @@ export class RoleService {
     }
 
     if (this.api != undefined) {
-      return this.api!.postRole(xApiKey, roleBody!, 'response', false, options);
+      return this.api!.postPrivileges(xApiKey, privilegeBody!, 'response', false, options);
     } else {
       throw new Error("OpenadresService api not yet defined");
     }

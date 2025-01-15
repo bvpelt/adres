@@ -30,14 +30,6 @@ public class PersonService {
     private final AdresRepository adresRepository;
     private final PersonMapper personMapper;
 
-    /*
-    @Autowired
-    public PersonService(final PersonRepository personRepository, final AdresRepository adresRepository) {
-        this.personRepository = personRepository;
-        this.adresRepository = adresRepository;
-    }
-     */
-
     public void deleteAll() {
         try {
             personRepository.deleteAll();

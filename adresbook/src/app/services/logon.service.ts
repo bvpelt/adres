@@ -34,6 +34,9 @@ export class LogonService {
     var config: Configuration = new Configuration({
       basePath: this.basePathToUse
     });
+    this.isLoggedIn.next(false);
+    this.authenticatedUser = undefined;
+    this.authenticatedPassword = undefined;
     this.api = new LoginService(http, basePath, config);
   }
  
