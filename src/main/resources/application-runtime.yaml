@@ -6,11 +6,6 @@ management:
       enabled: true
     prometheus:
       enabled: true
-  info:
-    build:
-      enabled: false
-    env:
-      enabled: true
   endpoints:
     web:
       path-mapping:
@@ -19,6 +14,14 @@ management:
       exposure:
         include: 'health,info,prometheus'
         exclude:
+  info:
+    build:
+      enabled: false
+    env:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
   server:
     port: 8081
 

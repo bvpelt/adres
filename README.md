@@ -275,6 +275,7 @@ Start dashboard ```sudo /bin/systemctl start grafana-server```
 Stop dashboard ```sudo /bin/systemctl stop grafana-server```
 
 [Grafana configuration file](./docs/grafana-springboot.json)
+[Grafana example queries](https://signoz.io/guides/a-regex-in-query-in-grafana/)
 
 - [docker image](https://hub.docker.com/r/prom/prometheus)
 - [prometheus docs](https://prometheus.io/docs/introduction/overview/)
