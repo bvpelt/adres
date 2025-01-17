@@ -169,31 +169,5 @@ public class UsersService {
         }
 
     }
-/*
-    private User UserDAO2User(final UserDAO userDAO) {
-        User user = new User();
-        user.setId(userDAO.getId());
-        user.setUsername(userDAO.getUsername());
-        user.setPassword(userDAO.getPassword());
-        user.setEmail(userDAO.getEmail());
-        user.setPhone(userDAO.getPhone());
-        user.setAccountNonExpired(userDAO.getAccount_non_expired());
-        user.setAccountNonLocked(userDAO.getAccount_non_locked());
-        user.setCredentialsNonExpired(userDAO.getCredentials_non_expired());
-        user.setEnabled(userDAO.getEnabled());
-        user.setRoles(new ArrayList<>());
-        userDAO.getRoles().forEach(role -> {
-            user.getRoles().add(RoleDAOtoRole(role));
-        });
-        return user;
-    }
 
-    public Role RoleDAOtoRole(RoleDAO roleDAO) {
-        Role role = new Role();
-        role.setId(roleDAO.getId());
-        role.setRolename(roleDAO.getRolename());
-        role.setDescription(roleDAO.getDescription());
-        return role;
-    }
-*/
 }
