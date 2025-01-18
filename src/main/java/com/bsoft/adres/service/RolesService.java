@@ -1,6 +1,6 @@
 package com.bsoft.adres.service;
 
-import com.bsoft.adres.database.RoleDAO;
+import com.bsoft.adres.database.RolesDAO;
 import com.bsoft.adres.exceptions.RoleExistsException;
 import com.bsoft.adres.exceptions.RoleNotExistsException;
 import com.bsoft.adres.generated.model.Role;
@@ -37,7 +37,7 @@ public class RolesService {
     public boolean deleteRole(Long roleId) {
         boolean deleted = false;
         try {
-            Optional<RoleDAO> optionalRoleDAO = roleRepository.findByRoleId(roleId);
+            Optional<RolesDAO> optionalRoleDAO = roleRepository.findByRoleId(roleId);
             if (optionalRoleDAO.isEmpty()) {
                 throw new RoleNotExistsException("Role with id " + roleId + " not found and not deleted");
             }
@@ -51,19 +51,19 @@ public class RolesService {
     }
 
     public Role getRole(Long roleId) {
-        Optional<RoleDAO> optionalRoleDAO = roleRepository.findByRoleId(roleId);
+        Optional<RolesDAO> optionalRoleDAO = roleRepository.findByRoleId(roleId);
         if (optionalRoleDAO.isEmpty()) {
             throw new RoleNotExistsException("Role with id " + roleId + " not found");
         }
 
-        RoleDAO RoleDAO = optionalRoleDAO.get();
+        RolesDAO RolesDAO = optionalRoleDAO.get();
 
-        return roleMapper.map(RoleDAO);
+        return roleMapper.map(RolesDAO);
     }
 
     public List<Role> getRoles() {
         List<Role> roleList = new ArrayList<Role>();
-        Iterable<RoleDAO> RoleDAOIterable = roleRepository.findAll();
+        Iterable<RolesDAO> RoleDAOIterable = roleRepository.findAll();
 
         RoleDAOIterable.forEach(RoleDAO -> {
             Role Role = roleMapper.map(RoleDAO);
@@ -75,7 +75,7 @@ public class RolesService {
 
     public List<Role> getRoles(final PageRequest pageRequest) {
         List<Role> roleList = new ArrayList<Role>();
-        Iterable<RoleDAO> RoleDAOIterable = roleRepository.findAllByPaged(pageRequest);
+        Iterable<RolesDAO> RoleDAOIterable = roleRepository.findAllByPaged(pageRequest);
 
         RoleDAOIterable.forEach(RoleDAO -> {
             Role Role = roleMapper.map(RoleDAO);
@@ -86,19 +86,19 @@ public class RolesService {
     }
 
     public Role postRole(Boolean override, final RoleBody roleBody) {
-        RoleDAO RoleDAO = new RoleDAO(roleBody);
+        RolesDAO RolesDAO = new RolesDAO(roleBody);
 
         try {
             if (!override) {
-                Optional<RoleDAO> optionalRoleDAO = roleRepository.findByHash(RoleDAO.getHash());
+                Optional<RolesDAO> optionalRoleDAO = roleRepository.findByHash(RolesDAO.getHash());
                 if (optionalRoleDAO.isPresent()) {
-                    throw new RoleExistsException("Role " + RoleDAO + " already exists cannot insert again");
+                    throw new RoleExistsException("Role " + RolesDAO + " already exists cannot insert again");
                 }
             }
 
-            roleRepository.save(RoleDAO);
+            roleRepository.save(RolesDAO);
 
-            return roleMapper.map(RoleDAO); // Return 201 Created with the created entity
+            return roleMapper.map(RolesDAO); // Return 201 Created with the created entity
         } catch (Error e) {
             log.error("Error inserting adres: {}", e);
             throw e;
@@ -109,11 +109,11 @@ public class RolesService {
         Role role = new Role();
 
         try {
-            Optional<RoleDAO> optionalRoleDAO = roleRepository.findByRoleId(roleId);
+            Optional<RolesDAO> optionalRoleDAO = roleRepository.findByRoleId(roleId);
             if (optionalRoleDAO.isEmpty()) {
                 throw new RoleNotExistsException("Role with id " + roleId + " not found");
             }
-            RoleDAO foundRole = optionalRoleDAO.get();
+            RolesDAO foundRole = optionalRoleDAO.get();
             if (roleBody.getRolename() != null) {
                 foundRole.setRolename(roleBody.getRolename());
             }
@@ -152,7 +152,7 @@ public class RolesService {
      */
 
     public Page<Role> getRolesPage(PageRequest pageRequest) {
-        Page<RoleDAO> foundRolesPage = roleRepository.findAllByPage(pageRequest);
+        Page<RolesDAO> foundRolesPage = roleRepository.findAllByPage(pageRequest);
 
         List<Role> rolesList = new ArrayList<>();
         rolesList = foundRolesPage.getContent().stream()

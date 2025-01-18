@@ -11,6 +11,8 @@ import lombok.Setter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Objects;
 
 @AllArgsConstructor
@@ -38,6 +40,9 @@ public class PersonDAO implements Serializable {
     @Column(name = "dateofbirth")
     private LocalDate dateofbirth;
 
+    @ManyToMany(mappedBy = "persons") //, fetch = FetchType.LAZY)
+    private Collection<AdresDAO> adresses = new ArrayList<>();
+
     public PersonDAO(final Person person) {
         this.id = person.getId();
         this.firstname = person.getFirstName();
@@ -59,6 +64,10 @@ public class PersonDAO implements Serializable {
     public Integer genHash() {
         this.hash = hashCode();
         return this.hash;
+    }
+
+    public void addAdres(AdresDAO adres) {
+        adresses.add(adres);
     }
 
     @Override

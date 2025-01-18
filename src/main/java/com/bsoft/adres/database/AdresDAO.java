@@ -3,11 +3,21 @@ package com.bsoft.adres.database;
 import com.bsoft.adres.generated.model.Adres;
 import com.bsoft.adres.generated.model.AdresBody;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Objects;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "adres", schema = "public", catalog = "adres")
 public class AdresDAO implements Serializable {
@@ -29,8 +39,22 @@ public class AdresDAO implements Serializable {
     @Column(name = "hash")
     private Integer hash;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL) // owning site
+    @JoinTable(
+            name = "adres_person",
+            joinColumns = {
+                    @JoinColumn(name = "adresid", referencedColumnName = "id")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "personid", referencedColumnName = "id")
+            }
+    )
+    private Collection<PersonDAO> persons = new ArrayList<>();
+
+    /*
     public AdresDAO() {
     }
+*/
 
     public AdresDAO(Long id, String street, String housenumber, String zipcode, String city) {
         this.id = id;
@@ -39,6 +63,7 @@ public class AdresDAO implements Serializable {
         this.zipcode = zipcode;
         this.city = city;
         this.hash = hashCode();
+        this.persons = new ArrayList<>();
     }
 
     public AdresDAO(final Adres adres) {
@@ -59,6 +84,18 @@ public class AdresDAO implements Serializable {
         this.hash = this.hashCode();
     }
 
+    public void addPerson(PersonDAO person) {
+        persons.add(person);
+    }
+
+    public void setPersons(Collection<PersonDAO> persons) {
+        persons.forEach(person -> {
+            person.addAdres(this);
+            this.persons.add(person);
+        });
+    }
+
+    /*
     public Long getId() {
         return id;
     }
@@ -106,7 +143,7 @@ public class AdresDAO implements Serializable {
     public void setHash(Integer hash) {
         this.hash = hash;
     }
-
+*/
     public Integer genHash() {
         this.hash = hashCode();
         return this.hash;

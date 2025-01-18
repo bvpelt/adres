@@ -1,7 +1,7 @@
 package com.bsoft.adres;
 
 import com.bsoft.adres.database.PrivilegeDAO;
-import com.bsoft.adres.database.RoleDAO;
+import com.bsoft.adres.database.RolesDAO;
 import com.bsoft.adres.database.UserDAO;
 import com.bsoft.adres.exceptions.UserExistsException;
 import com.bsoft.adres.repositories.PrivilegeRepository;
@@ -144,7 +144,7 @@ public class UserRepositoryTests {
     public void testUserRoles() {
 
         UserDAO existUser = null;
-        RoleDAO existRole = null;
+        RolesDAO existRole = null;
         PrivilegeDAO existprivilege = null;
         PrivilegeDAO existprivilege2 = null;
 
@@ -173,17 +173,17 @@ public class UserRepositoryTests {
             privileges.add(savedprivilege2);
 
 
-            RoleDAO role = new RoleDAO();
+            RolesDAO role = new RolesDAO();
             role.setRolename("TEST");
             role.setDescription("Test rol");
             role.setPrivileges(privileges);
             role.setHash(role.hashCode());
 
-            RoleDAO savedRole = roleRepository.save(role);
-            existRole = entityManager.find(RoleDAO.class, savedRole.getId());
+            RolesDAO savedRole = roleRepository.save(role);
+            existRole = entityManager.find(RolesDAO.class, savedRole.getId());
 
             Assert.isTrue(role.getRolename().equals(existRole.getRolename()), "not equal");
-            List<RoleDAO> roles = new ArrayList<>();
+            List<RolesDAO> roles = new ArrayList<>();
             roles.add(savedRole);
 
             UserDAO user = new UserDAO();
@@ -253,16 +253,16 @@ public class UserRepositoryTests {
         Optional<UserDAO> userByEmail2 = Optional.empty();
 
         try {
-            Optional<RoleDAO> optionalRoleDAO = roleRepository.findByRolename("USER1");
-            RoleDAO defRole = null;
+            Optional<RolesDAO> optionalRoleDAO = roleRepository.findByRolename("USER1");
+            RolesDAO defRole = null;
 
             if (optionalRoleDAO.isPresent()) {
                 defRole = optionalRoleDAO.get();
             } else {
-                RoleDAO roleDAO = new RoleDAO();
-                roleDAO.setRolename("USER1");
-                roleDAO.setDescription("JWT ROLE");
-                defRole = roleRepository.save(roleDAO);
+                RolesDAO rolesDAO = new RolesDAO();
+                rolesDAO.setRolename("USER1");
+                rolesDAO.setDescription("JWT ROLE");
+                defRole = roleRepository.save(rolesDAO);
             }
 
             String userName = "JWT-Test";
@@ -360,7 +360,7 @@ public class UserRepositoryTests {
     @DisplayName("Generate roles")
     @Test
     public void generateRoles() {
-        RoleDAO roleDAO = new RoleDAO();
+        RolesDAO rolesDAO = new RolesDAO();
 
         ArrayList<Pair> roles = new ArrayList<>();
         roles.add(new Pair("ADMIN", "Administrator"));
@@ -370,10 +370,10 @@ public class UserRepositoryTests {
 
 
         roles.forEach(pair -> {
-            roleDAO.setRolename(pair.getName());
-            roleDAO.setDescription(pair.getDescription());
-            roleDAO.genHash();
-            log.info("generateRoles {}: {}", roleDAO.getRolename(), roleDAO);
+            rolesDAO.setRolename(pair.getName());
+            rolesDAO.setDescription(pair.getDescription());
+            rolesDAO.genHash();
+            log.info("generateRoles {}: {}", rolesDAO.getRolename(), rolesDAO);
         });
 
     }

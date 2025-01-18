@@ -18,8 +18,8 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
-@Table(name = "role", schema = "public", catalog = "adres")
-public class RoleDAO {
+@Table(name = "roles", schema = "public", catalog = "adres")
+public class RolesDAO {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -46,7 +46,7 @@ public class RoleDAO {
             inverseJoinColumns = @JoinColumn(name = "privilegeid", referencedColumnName = "id"))
     private Collection<PrivilegeDAO> privileges = new ArrayList<>();
 
-    public RoleDAO(RoleBody roleBody) {
+    public RolesDAO(RoleBody roleBody) {
         this.description = roleBody.getDescription();
         this.rolename = roleBody.getRolename();
         this.hash = this.hashCode();
@@ -71,8 +71,8 @@ public class RoleDAO {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        RoleDAO roleDAO = (RoleDAO) o;
-        return Objects.equals(rolename, roleDAO.rolename) && Objects.equals(description, roleDAO.description);
+        RolesDAO rolesDAO = (RolesDAO) o;
+        return Objects.equals(rolename, rolesDAO.rolename) && Objects.equals(description, rolesDAO.description);
     }
 
     @Override

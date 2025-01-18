@@ -30,14 +30,14 @@ public class PrivilegeDAO {
     private Integer hash = -1;
 
     @ManyToMany(mappedBy = "privileges")
-    private Collection<RoleDAO> roles = new ArrayList<>();
+    private Collection<RolesDAO> roles = new ArrayList<>();
 
     public PrivilegeDAO(PrivilegeBody privilegeBody) {
         this.name = privilegeBody.getName();
         this.hash = this.genHash();
     }
 
-    public void addRole(RoleDAO role) {
+    public void addRole(RolesDAO role) {
         roles.add(role);
     }
 

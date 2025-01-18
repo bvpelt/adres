@@ -1,7 +1,7 @@
 package com.bsoft.adres.mappers;
 
 import com.bsoft.adres.database.JsonNullableMapper;
-import com.bsoft.adres.database.RoleDAO;
+import com.bsoft.adres.database.RolesDAO;
 import com.bsoft.adres.generated.model.Role;
 import lombok.Setter;
 import org.mapstruct.InjectionStrategy;
@@ -19,8 +19,8 @@ import org.mapstruct.ReportingPolicy;
         nullValueIterableMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
 public abstract class RoleMapper implements JsonNullableMapper {
 
-    public abstract Role map(RoleDAO source);
+    public abstract Role map(RolesDAO source);
 
-    public abstract RoleDAO map(Role source);
+    public abstract RolesDAO map(Role source);
 
 }

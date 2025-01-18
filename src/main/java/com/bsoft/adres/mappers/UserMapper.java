@@ -1,7 +1,7 @@
 package com.bsoft.adres.mappers;
 
 import com.bsoft.adres.database.JsonNullableMapper;
-import com.bsoft.adres.database.RoleDAO;
+import com.bsoft.adres.database.RolesDAO;
 import com.bsoft.adres.database.UserDAO;
 import com.bsoft.adres.generated.model.Role;
 import com.bsoft.adres.generated.model.User;
@@ -30,18 +30,18 @@ public abstract class UserMapper implements JsonNullableMapper {
     public abstract User map(UserDAO source);
 
     @Named("mapToRoles")
-    public List<Role> roleDAOCollectionToRoleList(Collection<RoleDAO> source) {
+    public List<Role> roleDAOCollectionToRoleList(Collection<RolesDAO> source) {
         List<Role> roles = new ArrayList<>();
 
-        for (RoleDAO roleDAO : source) {
-            Role role = roleDAOToRole01(roleDAO);
+        for (RolesDAO rolesDAO : source) {
+            Role role = roleDAOToRole(rolesDAO);
             roles.add(role);
         }
         return roles;
     }
 
-    public Role roleDAOToRole01(RoleDAO roleDAO) {
-        return Mappers.getMapper(RoleMapper.class).map(roleDAO);
+    public Role roleDAOToRole(RolesDAO rolesDAO) {
+        return Mappers.getMapper(RoleMapper.class).map(rolesDAO);
     }
 
     @Mapping(target = "account_non_expired", source = "accountNonExpired")
@@ -51,17 +51,17 @@ public abstract class UserMapper implements JsonNullableMapper {
     public abstract UserDAO map(User source);
 
     @Named("mapToRolesDAO")
-    public Collection<RoleDAO> roleListToRoleCollection(List<Role> source) {
-        Collection<RoleDAO> roles = new ArrayList<>();
+    public Collection<RolesDAO> roleListToRoleCollection(List<Role> source) {
+        Collection<RolesDAO> roles = new ArrayList<>();
 
         for (Role role : source) {
-            RoleDAO roleDAO = roleToRoleDAO01(role);
-            roles.add(roleDAO);
+            RolesDAO rolesDAO = roleToRoleDAO01(role);
+            roles.add(rolesDAO);
         }
         return roles;
     }
 
-    public RoleDAO roleToRoleDAO01(Role role) {
+    public RolesDAO roleToRoleDAO01(Role role) {
         return Mappers.getMapper(RoleMapper.class).map(role);
     }
 }

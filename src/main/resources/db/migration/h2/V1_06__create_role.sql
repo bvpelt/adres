@@ -1,4 +1,4 @@
-create table role
+create table roles
 (
     id          bigint auto_increment primary key,
     rolename    varchar(32) not null,
@@ -6,6 +6,6 @@ create table role
     hash        int
 );
 
-create unique index role_rolename_ix on role (rolename);
+create unique index role_rolename_ix on roles (rolename);
 
 

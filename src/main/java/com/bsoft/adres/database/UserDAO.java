@@ -58,7 +58,7 @@ public class UserDAO {
                     @JoinColumn(name = "roleid", referencedColumnName = "id")
             }
     )
-    private Collection<RoleDAO> roles = new ArrayList<>();
+    private Collection<RolesDAO> roles = new ArrayList<>();
 
     public UserDAO(String username, String password, String email, String phone) {
         this.username = username;
@@ -77,7 +77,7 @@ public class UserDAO {
         this.setAccount_non_locked(userbody.getAccountNonLocked());
         this.setCredentials_non_expired(userbody.getCredentialsNonExpired());
         this.setEnabled(userbody.getEnabled());
-        this.setRoles(new HashSet<>());
+        this.setRoles(new ArrayList<>());
         this.hash = hashCode();
     }
 
@@ -90,7 +90,7 @@ public class UserDAO {
         this.setAccount_non_locked(user.getAccountNonLocked());
         this.setCredentials_non_expired(user.getCredentialsNonExpired());
         this.setEnabled(user.getEnabled());
-        this.setRoles(new HashSet<>());
+        this.setRoles(new ArrayList<>());
     }
 
     public Integer genHash() {
@@ -98,11 +98,11 @@ public class UserDAO {
         return this.hash;
     }
 
-    public void addRole(RoleDAO role) {
+    public void addRole(RolesDAO role) {
         roles.add(role);
     }
 
-    public void setRoles(Collection<RoleDAO> roles) {
+    public void setRoles(Collection<RolesDAO> roles) {
         roles.forEach(role -> {
             role.addUser(this);
             this.roles.add(role);

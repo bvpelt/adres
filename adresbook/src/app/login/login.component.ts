@@ -1,4 +1,4 @@
-import { Component  } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild  } from '@angular/core';
 import { LogonService } from '../services/logon.service';
 import { Router } from '@angular/router';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
@@ -11,7 +11,9 @@ import { DynamicconfigService } from '../services/dynamicconfig.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements AfterViewInit {
+  @ViewChild('usernameInput') usernameInput!: ElementRef; 
+
   showPassword = false;
   username: string = "";
   password: string = "";
@@ -25,6 +27,10 @@ export class LoginComponent {
     private router: Router,
     private dynamicconfigService: DynamicconfigService,
     private dbgmessageService: DbgmessageService) {
+  }
+
+  ngAfterViewInit() {
+    this.usernameInput.nativeElement.focus(); 
   }
 
   onLogon() {

@@ -1,6 +1,6 @@
 package com.bsoft.adres.auth;
 
-import com.bsoft.adres.database.RoleDAO;
+import com.bsoft.adres.database.RolesDAO;
 import com.bsoft.adres.database.UserDAO;
 import com.bsoft.adres.exceptions.InvalidUserException;
 import com.bsoft.adres.exceptions.UserExistsException;
@@ -41,17 +41,17 @@ public class AuthenticationService {
     public AuthenticateResponse register(RegisterRequest request) {
         log.debug("AuthenticationService register - authenticationresponse for request: {}", request.toString());
 
-        Optional<RoleDAO> optionalRoleDAO = roleRepository.findByRolename("USER");
-        RoleDAO defRole = null;
+        Optional<RolesDAO> optionalRoleDAO = roleRepository.findByRolename("USER");
+        RolesDAO defRole = null;
 
         if (optionalRoleDAO.isPresent()) {
             defRole = optionalRoleDAO.get();
         } else {
-            RoleDAO roleDAO = new RoleDAO();
-            roleDAO.setRolename("JWT-TOKEN");
-            roleDAO.setDescription("Using JWT token authentication");
-            roleDAO.genHash();
-            defRole = roleRepository.save(roleDAO);
+            RolesDAO rolesDAO = new RolesDAO();
+            rolesDAO.setRolename("JWT-TOKEN");
+            rolesDAO.setDescription("Using JWT token authentication");
+            rolesDAO.genHash();
+            defRole = roleRepository.save(rolesDAO);
         }
 
         var user = new UserDAO();
