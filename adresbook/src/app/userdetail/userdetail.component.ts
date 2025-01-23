@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { LogonService } from '../services/logon.service';
 import { DbgmessageService } from '../services/dbgmessage.service';
 import { Observable } from 'rxjs';
-import { User, UserBody } from '../core/modules/openapi';
+import { Role, User, UserBody } from '../core/modules/openapi';
 import { UserService } from '../services/user.service';
 import { UserschangedService } from '../services/userschanged.service';
+import { faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-userdetail',
@@ -16,12 +18,16 @@ export class UserdetailComponent {
   user?: User = undefined;
   password: string = "";
   errormessage?: string = undefined;
+  selectedRole?: Role = undefined;
+  faPencilIcon = faPencil;
+  faTrashCanIcon = faTrashCan;
 
   isLoggedIn$: Observable<boolean>;
 
   constructor(private route: ActivatedRoute,
     private userService: UserService,
     private router: Router,
+    private location: Location,
     private logonService: LogonService,
     private dbgmessageService: DbgmessageService,
     private userschangedService: UserschangedService) {
@@ -73,6 +79,21 @@ export class UserdetailComponent {
   }
 
   cancel() {
-    this.router.navigate(['/users']);
+    this.location.back();
+  }
+
+
+  onSelectRole(role: Role): void {
+    this.selectedRole = role;
+  }
+
+  onEditRole(role: Role): void {
+    this.selectedRole = role;
+    this.router.navigate(['/roledetail', role.id]);
+  }
+
+
+  onDeleteRole(role: Role): void {
+    this.selectedRole = role;
   }
 }

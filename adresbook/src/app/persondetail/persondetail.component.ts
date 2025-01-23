@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PersonService } from '../services/person.service';
 import { LogonService } from '../services/logon.service';
@@ -21,6 +22,7 @@ export class PersondetailComponent {
   constructor(private route: ActivatedRoute,
     private personService: PersonService,
     private router: Router,
+    private location: Location,
     private logonService: LogonService,
     private dbgmessageService: DbgmessageService,
     private personschangedService: PersonschangedService) {
@@ -67,6 +69,6 @@ export class PersondetailComponent {
   }
 
   cancel() {
-    this.router.navigate(['/persons']);
+    this.location.back();
   }
 }

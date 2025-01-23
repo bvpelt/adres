@@ -44,6 +44,18 @@
         <div class="button-container">
             <button type="button" (click)="cancel()">Continue</button>
         </div>
+
+        <div *ngIf="user.roles && (user.roles.length > 0)">
+            <h3>Roles for this user</h3>
+            <ul class="roles">
+                <li *ngFor="let role of user.roles">
+                    <button [class.selected]="role === selectedRole" type="button" (click)="onSelectRole(role)">
+                        <span class="badge">{{role.id}}</span>
+                        <span class="person">{{role.rolename}} {{role.description}} </span>
+                    </button>
+                </li>
+            </ul>
+        </div>
     </div>
 
     <div *ngIf="isLoggedIn$ | async">
@@ -58,7 +70,7 @@
         </div>
         <div class="form-group">
             <label for="password">Password: </label>
-            <input id="password" [(ngModel)]="password" placeholder="..." tabIndex="2">            
+            <input id="password" [(ngModel)]="password" placeholder="..." tabIndex="2">
         </div>
         <div class="form-group">
             <label for="email">Email: </label>
@@ -88,6 +100,21 @@
         <div class="button-container">
             <button type="button" (click)="onUpdate(user)">Update</button>
             <button type="button" (click)="cancel()">Cancel</button>
+        </div>
+
+        <div *ngIf="user.roles && (user.roles.length > 0)">
+            <h3>Roles for this user</h3>
+            <ul class="roles">
+                <li *ngFor="let role of user.roles">
+                    <button [class.selected]="role === selectedRole" type="button" (click)="onSelectRole(role)">
+                        <span class="badge">{{role.id}}</span>
+                        <span class="person">{{role.rolename}} {{role.description}} </span>
+                    </button>
+                    <fa-icon *ngIf="isLoggedIn$ | async" [icon]="faPencilIcon" (click)="onEditRole(role)"></fa-icon>
+                    <fa-icon *ngIf="isLoggedIn$ | async" [icon]="faTrashCanIcon"
+                        (click)="onDeleteRole(role)"></fa-icon>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

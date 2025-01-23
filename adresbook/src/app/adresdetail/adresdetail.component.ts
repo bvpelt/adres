@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { Adres } from '../core/modules/openapi/model/adres';
 import { AdresService } from '../services/adres.service';
 import { LogonService } from '../services/logon.service';
-import { AdresBody } from '../core/modules/openapi';
+import { AdresBody, Person } from '../core/modules/openapi';
 import { Observable } from 'rxjs';
 import { AdresseschangedService } from '../services/adresseschanged.service';
 import { DbgmessageService } from '../services/dbgmessage.service';
+import { faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-adresdetail',
@@ -16,12 +18,16 @@ import { DbgmessageService } from '../services/dbgmessage.service';
 export class AdresdetailComponent {
   adres?: Adres = undefined;
   errormessage?: string = undefined;
+  selectedPerson?: Person = undefined;
+  faPencilIcon = faPencil;
+  faTrashCanIcon = faTrashCan;
 
   isLoggedIn$: Observable<boolean>;
 
   constructor(private route: ActivatedRoute,
     private adresService: AdresService,
     private router: Router,
+    private location: Location,
     private logonService: LogonService,
     private dbgmessageService: DbgmessageService,
     private adresseschangedService: AdresseschangedService) {
@@ -69,6 +75,20 @@ export class AdresdetailComponent {
   }
 
   cancel() {
-    this.router.navigate(['/adresses']);
+    this.location.back();
+  }
+
+  onSelectPerson(person: Person): void {
+    this.selectedPerson = person;
+  }
+
+  onEditPerson(person: Person): void {
+    this.selectedPerson = person;
+    this.router.navigate(['/persondetail', person.id]);
+  }
+
+
+  onDeletePerson(person: Person): void {
+    this.selectedPerson = person;
   }
 }

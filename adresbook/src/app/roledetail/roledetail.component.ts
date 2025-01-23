@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LogonService } from '../services/logon.service';
 import { DbgmessageService } from '../services/dbgmessage.service';
@@ -22,15 +23,16 @@ export class RoledetailComponent {
   constructor(private route: ActivatedRoute,
     private roleService: RoleService,
     private router: Router,
+    private location: Location,
     private logonService: LogonService,
     private dbgmessageService: DbgmessageService,
     private roleschangedService: RoleschangedService) {
-    this.getUser(this.logonService.xApiKey);
+    this.getRole(this.logonService.xApiKey);
     this.isLoggedIn$ = this.logonService.isLoggedIn$;
   }
 
 
-  getUser(xApiKey: string): void {
+  getRole(xApiKey: string): void {
     const id: number = Number(this.route.snapshot.paramMap.get('id'));
 
     this.roleService.getRole(id, xApiKey)
@@ -71,7 +73,7 @@ export class RoledetailComponent {
   }
 
   cancel() {
-    this.router.navigate(['/roles']);
+    this.location.back();
   }
 
 }

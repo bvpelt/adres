@@ -29,6 +29,19 @@
         <div class="button-container">
             <button type="button" (click)="cancel()">Continue</button>
         </div>
+
+        <div *ngIf="adres.persons && (adres.persons!.length > 0)">
+            <h3>Persons on this adres</h3>
+            <ul class="persons">
+                <li *ngFor="let person of adres.persons">
+                    <button [class.selected]="person === selectedPerson" type="button" (click)="onSelectPerson(person)">
+                        <span class="badge">{{person.id}}</span>
+                        <span class="person">{{person.firstName}} {{person.infix}} {{person.lastName}}
+                            {{person.dateOfBirth}} </span>
+                    </button>
+                </li>
+            </ul>
+        </div>
     </div>
 
     <div *ngIf="isLoggedIn$ | async">
@@ -57,6 +70,22 @@
         <div class="button-container">
             <button type="button" (click)="onUpdate(adres)">Update</button>
             <button type="button" (click)="cancel()">Cancel</button>
+        </div>
+
+        <div *ngIf="adres.persons && (adres.persons!.length > 0)">
+            <h3>Persons on this adres</h3>
+            <ul class="persons">
+                <li *ngFor="let person of adres.persons">
+                    <button [class.selected]="person === selectedPerson" type="button" (click)="onEditPerson(person)">
+                        <span class="badge">{{person.id}}</span>
+                        <span class="person">{{person.firstName}} {{person.infix}} {{person.lastName}}
+                            {{person.dateOfBirth}} </span>
+                    </button>
+                    <fa-icon *ngIf="isLoggedIn$ | async" [icon]="faPencilIcon" (click)="onEditPerson(person)"></fa-icon>
+                    <fa-icon *ngIf="isLoggedIn$ | async" [icon]="faTrashCanIcon"
+                        (click)="onDeletePerson(person)"></fa-icon>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

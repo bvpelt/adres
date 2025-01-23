@@ -19,22 +19,22 @@ public interface RoleRepository extends PagingAndSortingRepository<RolesDAO, Lon
         CrudRepository<RolesDAO, Long>,
         JpaSpecificationExecutor<RolesDAO> {
 
-    @Query(value = "SELECT * FROM role where rolename = :rolename", nativeQuery = true)
+    @Query(value = "SELECT * FROM roles where rolename = :rolename", nativeQuery = true)
     Optional<RolesDAO> findByRolename(final String rolename);
 
-    @Query(value = "SELECT * FROM role where id = :id", nativeQuery = true)
+    @Query(value = "SELECT * FROM roles where id = :id", nativeQuery = true)
     Optional<RolesDAO> findByRoleId(Long id);
 
-    @Query(value = "SELECT * FROM role",
+    @Query(value = "SELECT * FROM roles",
             countQuery = "SELECT * FROM role",
             nativeQuery = true)
     List<RolesDAO> findAllByPaged(final Pageable pageable);
 
-    @Query(value = "SELECT * FROM role WHERE hash = :hash", nativeQuery = true)
+    @Query(value = "SELECT * FROM roles WHERE hash = :hash", nativeQuery = true)
     Optional<RolesDAO> findByHash(@Param("hash") Integer hash);
 
-    @Query(value = "SELECT * FROM role",
-            countQuery = "SELECT * FROM role",
+    @Query(value = "SELECT * FROM roles",
+            countQuery = "SELECT * FROM roles",
             nativeQuery = true)
     Page<RolesDAO> findAllByPage(PageRequest pageRequest);
 }
