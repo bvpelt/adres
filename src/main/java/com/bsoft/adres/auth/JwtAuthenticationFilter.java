@@ -61,7 +61,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.trace("checkJWTToken - userDetails: {}", userDetails.toString());
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                log.trace("checkJWTToken - usernamePasswordAuthenticationToken: {}", usernamePasswordAuthenticationToken.toString());
+                log.trace("checkJWTToken - usernamePasswordAuthenticationToken: {}", usernamePasswordAuthenticationToken);
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
