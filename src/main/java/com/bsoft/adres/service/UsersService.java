@@ -9,10 +9,12 @@ import com.bsoft.adres.mappers.UserMapper;
 import com.bsoft.adres.repositories.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,14 +22,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
 public class UsersService {
 
-    private final UsersRepository usersRepository;
-    private final UserMapper userMapper;
+    @Autowired
+    private UsersRepository usersRepository;
 
-    private final BCryptPasswordEncoder bCryptPasswordEncoder; // = new BCryptPasswordEncoder();
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder; // = new BCryptPasswordEncoder();
 
     public void deleteAll() {
         try {
@@ -110,7 +115,7 @@ public class UsersService {
             }
 
             String pwd = userBody.getPassword();
-            String encodedPwd = bCryptPasswordEncoder.encode(pwd);
+            String encodedPwd = passwordEncoder.encode(pwd);
             userDAO.setPassword(encodedPwd);
             userDAO.genHash();
 
@@ -138,7 +143,7 @@ public class UsersService {
                 foundUser.setUsername(userBody.getUsername());
             }
             if (userBody.getPassword() != null) {
-                String encodedPwd = bCryptPasswordEncoder.encode(userBody.getPassword());
+                String encodedPwd = passwordEncoder.encode(userBody.getPassword());
                 foundUser.setPassword(encodedPwd);
             }
             if (userBody.getPhone() != null) {

@@ -1,3 +1,4 @@
+###
 GET http://localhost:8081/actuator
 Accept: application/vnd.spring-boot.actuator.v3+json
 Authorization: Basic YWRtaW46MTIzNDU=
@@ -185,3 +186,36 @@ Accept: application/json
 Content-Type: application/json
 x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
 
+###
+POST http://localhost:8080/adres/api/v1/login/jwt/authenticate
+Accept: application/json
+Content-Type: application/json
+x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
+
+{
+  "username": "bvpelt",
+  "password": "12345"
+}
+> {%
+    client.global.set("auth_token", response.body.token);
+    client.log("Logging Bearer Token.");
+    client.log("Bearer " + response.body.token);
+%}
+
+###
+GET http://localhost:8080/adres/api/v1/users
+Accept: application/json
+Content-Type: application/json
+x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
+Authorization: Bearer {{auth_token}}
+
+###
+POST http://localhost:8080/adres/api/v1/login/user
+Accept: application/json
+Content-Type: application/json
+x-api-key: f0583805-03f6-4c7f-8e40-f83f55b7c077
+
+{
+  "username": "user",
+  "password": "12345"
+}

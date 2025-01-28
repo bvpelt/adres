@@ -157,7 +157,7 @@ FROM
         LEFT JOIN
     users_roles ur ON u.id = ur.userid
         LEFT JOIN
-    role r ON ur.roleid = r.id
+    roles r ON ur.roleid = r.id
         LEFT JOIN
     roles_privileges rp ON r.id = rp.roleid
         LEFT JOIN

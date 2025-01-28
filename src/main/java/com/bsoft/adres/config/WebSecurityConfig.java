@@ -1,67 +1,98 @@
 package com.bsoft.adres.config;
 
-import com.bsoft.adres.auth.JwtAuthenticationFilter;
-import lombok.RequiredArgsConstructor;
+import com.bsoft.adres.jwt.AuthTokenFilter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import  com.bsoft.adres.jwt.AuthEntryPointJwt;
 
 import java.util.List;
 
 @Slf4j
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
+@EnableMethodSecurity
 public class WebSecurityConfig {
+/*
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    private final AuthenticationProvider authenticationProvider;
+    @Autowired
+    private AuthenticationProvider authenticationProvider;
+*/
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthEntryPointJwt unauthorizedHandler;
+
+    @Bean
+    public AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception {
+        return builder.getAuthenticationManager();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http
-                .cors(cors -> cors.configurationSource(request -> {
+        http.cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
                     config.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:8080", "https://editor.swagger.io/", "https://editor-next.swagger.io/"));
                     config.setAllowedMethods(List.of("*")); // Allow all HTTP methods
                     config.setAllowedHeaders(List.of("*")); // Allow all headers
                     return config;
-                }))
-                .csrf(AbstractHttpConfigurer::disable)
-                .securityMatcher("/**")
-                .authorizeHttpRequests(registry -> registry
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/favicon.ico").permitAll()
-                        .requestMatchers("/h2-console/**").hasAnyAuthority("ALL", "APP_MAINTENANCE")
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/error").permitAll()
-                        .requestMatchers("/adres/api/v1/login/**").permitAll()
-                        .requestMatchers("/actuator/**").permitAll() // .hasAnyAuthority("ALL", "APP_SECURITY_ACCESS")
-                        .requestMatchers(HttpMethod.GET, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").permitAll() //.hasAnyAuthority("ALL", "APP_WRITE", "APP_READ", "APP_MAINTENANCE")
-                        .requestMatchers(HttpMethod.DELETE, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
-                        .requestMatchers(HttpMethod.POST, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
-                        .requestMatchers(HttpMethod.PATCH, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
-                        .requestMatchers("/adres/api/v1/user/**", "/adres/api/v1/roles/**").hasAnyAuthority("ALL", "APP_MAINTENANCE")
-                        .anyRequest().authenticated()
-                )
-                .headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.frameOptions(frameOptionsConfig -> frameOptionsConfig.disable()))
-                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // create new session for each request
-                .formLogin(AbstractHttpConfigurer::disable)
-                .authenticationProvider(authenticationProvider)
-                .httpBasic(Customizer.withDefaults())
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-        ;
+                }));
+
+       // http.securityMatcher("/**")
+        http.authorizeHttpRequests((requests) -> {
+            requests.requestMatchers("/actuator/**","/h2-console/**", "/adres/api/v1/login/**", "/favicon.ico","/v3/api-docs/**", "/swagger-ui/**", "/error").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").permitAll() //.hasAnyAuthority("ALL", "APP_WRITE", "APP_READ", "APP_MAINTENANCE")
+                    .requestMatchers(HttpMethod.DELETE, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
+                    .requestMatchers(HttpMethod.POST, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
+                    .requestMatchers(HttpMethod.PATCH, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
+                    .requestMatchers("/adres/api/v1/user/**", "/adres/api/v1/roles/**").hasAnyAuthority("ALL", "APP_MAINTENANCE")
+                    .anyRequest().authenticated();
+        });
+
+        http.sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // create new session for each request
+
+        // add exception handler
+        http.exceptionHandling(exception -> {
+            exception.authenticationEntryPoint(unauthorizedHandler);
+        });
+
+        // http.httpBasic(Customizer.withDefaults());
+
+        http.headers(headers ->
+                headers.frameOptions(frameOptions ->
+                        frameOptions.sameOrigin()));
+
+        http.csrf(csrf ->
+                csrf.disable());
+
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        //http.formLogin(AbstractHttpConfigurer::disable);
+        //http.authenticationProvider(authenticationProvider);
+        //http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
