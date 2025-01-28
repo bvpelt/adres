@@ -1,5 +1,6 @@
 package com.bsoft.adres.config;
 
+import com.bsoft.adres.jwt.AuthEntryPointJwt;
 import com.bsoft.adres.jwt.AuthTokenFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import  com.bsoft.adres.jwt.AuthEntryPointJwt;
 
 import java.util.List;
 
@@ -25,22 +26,18 @@ import java.util.List;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class WebSecurityConfig {
-/*
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-
-    @Autowired
-    private AuthenticationProvider authenticationProvider;
-*/
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
 
+    @Autowired
+    private AuthenticationConfiguration authenticationConfiguration;
+
     @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter() {
+    public AuthTokenFilter jwtTokenFilter() {
         return new AuthTokenFilter();
     }
 
@@ -50,19 +47,19 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain jwtFilterChain(HttpSecurity http) throws Exception {
 
         http.cors(cors -> cors.configurationSource(request -> {
-                    CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:8080", "https://editor.swagger.io/", "https://editor-next.swagger.io/"));
-                    config.setAllowedMethods(List.of("*")); // Allow all HTTP methods
-                    config.setAllowedHeaders(List.of("*")); // Allow all headers
-                    return config;
-                }));
+            CorsConfiguration config = new CorsConfiguration();
+            config.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:8080", "https://editor.swagger.io/", "https://editor-next.swagger.io/"));
+            config.setAllowedMethods(List.of("*")); // Allow all HTTP methods
+            config.setAllowedHeaders(List.of("*")); // Allow all headers
+            return config;
+        }));
 
-       // http.securityMatcher("/**")
+        // http.securityMatcher("/**")
         http.authorizeHttpRequests((requests) -> {
-            requests.requestMatchers("/actuator/**","/h2-console/**", "/adres/api/v1/login/**", "/favicon.ico","/v3/api-docs/**", "/swagger-ui/**", "/error").permitAll()
+            requests.requestMatchers("/actuator/**", "/h2-console/**", "/adres/api/v1/login/**", "/favicon.ico", "/v3/api-docs/**", "/swagger-ui/**", "/error").permitAll()
                     .requestMatchers(HttpMethod.GET, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").permitAll() //.hasAnyAuthority("ALL", "APP_WRITE", "APP_READ", "APP_MAINTENANCE")
                     .requestMatchers(HttpMethod.DELETE, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
                     .requestMatchers(HttpMethod.POST, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
@@ -79,7 +76,8 @@ public class WebSecurityConfig {
             exception.authenticationEntryPoint(unauthorizedHandler);
         });
 
-        // http.httpBasic(Customizer.withDefaults());
+        // enable basic authentication
+        http.httpBasic(Customizer.withDefaults());
 
         http.headers(headers ->
                 headers.frameOptions(frameOptions ->
@@ -88,11 +86,7 @@ public class WebSecurityConfig {
         http.csrf(csrf ->
                 csrf.disable());
 
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
-        //http.formLogin(AbstractHttpConfigurer::disable);
-        //http.authenticationProvider(authenticationProvider);
-        //http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

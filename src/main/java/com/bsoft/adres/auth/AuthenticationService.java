@@ -11,13 +11,11 @@ import com.bsoft.adres.repositories.UsersRepository;
 import com.bsoft.adres.security.MyUserPrincipal;
 import com.bsoft.adres.service.UsersService;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,11 +36,6 @@ public class AuthenticationService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    /*
-    @Autowired
-    private JwtService jwtService;
-*/
 
     @Autowired
     private JwtUtils jwtUtils;
@@ -83,7 +76,7 @@ public class AuthenticationService {
         }
 
         MyUserPrincipal myUserPrincipal = new MyUserPrincipal(user);
-        //var jwtToken = jwtService.generateToken(myUserPrincipal);
+
         var jwtToken = jwtUtils.generateTokenFromUsername(myUserPrincipal);
 
         log.trace("AuthenticationService register - generated token: {}", jwtToken);
@@ -107,7 +100,7 @@ public class AuthenticationService {
                 .orElseThrow();
 
         MyUserPrincipal myUserPrincipal = new MyUserPrincipal(user);
-        //var jwtToken = jwtService.generateToken(myUserPrincipal);
+
         var jwtToken = jwtUtils.generateTokenFromUsername(myUserPrincipal);
 
         log.trace("AuthenticationService authenticate - generated token: {}", jwtToken);
@@ -125,7 +118,7 @@ public class AuthenticationService {
         Boolean authenticated = passwordEncoder.matches(loginRequest.getPassword(), user.getPassword());
         if (authenticated) {
             MyUserPrincipal myUserPrincipal = new MyUserPrincipal(new UserDAO(user));
-            //var jwtToken = jwtService.generateToken(myUserPrincipal);
+
             var jwtToken = jwtUtils.generateTokenFromUsername(myUserPrincipal);
 
             loginResponse.setToken(jwtToken);

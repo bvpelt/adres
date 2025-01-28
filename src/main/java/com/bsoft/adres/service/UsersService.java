@@ -7,13 +7,11 @@ import com.bsoft.adres.generated.model.User;
 import com.bsoft.adres.generated.model.UserBody;
 import com.bsoft.adres.mappers.UserMapper;
 import com.bsoft.adres.repositories.UsersRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

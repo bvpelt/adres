@@ -1,12 +1,12 @@
 package com.bsoft.adres.jwt;
 
-
 import com.bsoft.adres.service.ApiKeyService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,7 +32,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private ApiKeyService apiKeyService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
         log.debug("doFilterInternal called for URI: {}", request.getRequestURI());
         try {
             checkAPIKey(request);
@@ -56,6 +56,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             log.error("Cannot set user authentication: {}", e);
         }
 
+        log.trace("doFilterInternal calling chain for URI: {}", request.getRequestURI());
         filterChain.doFilter(request, response);
     }
 
@@ -102,4 +103,5 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         }
         return ipAddress;
     }
+
 }
