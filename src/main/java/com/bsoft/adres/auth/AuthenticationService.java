@@ -4,7 +4,9 @@ import com.bsoft.adres.database.RolesDAO;
 import com.bsoft.adres.database.UserDAO;
 import com.bsoft.adres.exceptions.InvalidUserException;
 import com.bsoft.adres.exceptions.UserExistsException;
-import com.bsoft.adres.generated.model.*;
+import com.bsoft.adres.generated.model.LoginRequest;
+import com.bsoft.adres.generated.model.LoginResponse;
+import com.bsoft.adres.generated.model.User;
 import com.bsoft.adres.jwt.JwtUtils;
 import com.bsoft.adres.repositories.RoleRepository;
 import com.bsoft.adres.repositories.UsersRepository;
@@ -44,7 +46,7 @@ public class AuthenticationService {
     private AuthenticationManager authenticationManager;
 
     @Transactional
-    public AuthenticateResponse register(RegisterRequest request) {
+    public LoginResponse register(LoginRequest request) {
         log.debug("AuthenticationService register - authenticationresponse for request: {}", request.toString());
 
         Optional<RolesDAO> optionalRoleDAO = roleRepository.findByRolename("USER");
@@ -78,13 +80,16 @@ public class AuthenticationService {
         MyUserPrincipal myUserPrincipal = new MyUserPrincipal(user);
 
         var jwtToken = jwtUtils.generateTokenFromUsername(myUserPrincipal);
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setToken(jwtToken);
+        loginResponse.setAuthenticated(true);
 
         log.trace("AuthenticationService register - generated token: {}", jwtToken);
 
-        return new AuthenticateResponse(jwtToken);
+        return loginResponse;
     }
 
-    public AuthenticateResponse authenticate(AuthenticateRequest request) {
+    public LoginResponse authenticate(LoginRequest request) {
 
         try {
             authenticationManager.authenticate(
@@ -102,10 +107,13 @@ public class AuthenticationService {
         MyUserPrincipal myUserPrincipal = new MyUserPrincipal(user);
 
         var jwtToken = jwtUtils.generateTokenFromUsername(myUserPrincipal);
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setToken(jwtToken);
+        loginResponse.setAuthenticated(true);
 
         log.trace("AuthenticationService authenticate - generated token: {}", jwtToken);
 
-        return new AuthenticateResponse(jwtToken);
+        return loginResponse;
     }
 
     public LoginResponse basicjwt(LoginRequest loginRequest) {

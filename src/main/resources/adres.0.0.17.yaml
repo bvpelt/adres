@@ -1,7 +1,8 @@
 openapi: "3.0.3"
 info:
   title: Adres API
-  version: 0.0.10
+  version: 0.0.17
+
 servers:
   - url: http://localhost:8080/{basePath}
     description: development
@@ -22,7 +23,9 @@ tags:
   - name: Persons
     description: "Persons"
   - name: Roles
+    description: "The roles a user can have"
   - name: Users
+    description: "The users who have special access"
 
 paths:
   /adresses:
@@ -34,8 +37,8 @@ paths:
         Delete all adres
       operationId: deleteAllAdreses
       security:
-        - basicAuth: [ ]
-        - bearerAuth: [ ]
+        - basicAuth: []
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/X-API-KEY"
       responses:
@@ -64,7 +67,7 @@ paths:
         - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "200":
-          $ref: "#/components/responses/Adresses"
+          $ref: "#/components/responses/PagedAdresses"
         "429":
           $ref: "#/components/responses/ToManyRequests"
         "5XX":
@@ -84,8 +87,8 @@ paths:
         If the hash value already exists in the backend, the adres is considered to exist
       operationId: postAdres
       security:
-        - basicAuth: [ ]
-        - bearerAuth: [ ]
+        - basicAuth: []
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/override"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -140,8 +143,8 @@ paths:
         Delete only the specified adres
       operationId: deleteAdres
       security:
-        - basicAuth: [ ]
-        - bearerAuth: [ ]
+        - basicAuth: []
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -165,8 +168,8 @@ paths:
         Update only the adres specified with adresId
       operationId: patchAdres
       security:
-        - basicAuth: [ ]
-        - bearerAuth: [ ]
+        - basicAuth: []
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -259,13 +262,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AuthenticateRequest"
+              $ref: "#/components/schemas/LoginRequest"
             examples:
-              authenticaterequest:
-                $ref: "#/components/examples/AuthenticateRequest"
+              loginrequest:
+                $ref: "#/components/examples/LoginRequest"
       responses:
         "201":
-          $ref: "#/components/responses/AuthenticateResponse"
+          $ref: "#/components/responses/LoginResponse"
         "400":
           $ref: "#/components/responses/IllegalInput"
         "429":
@@ -288,13 +291,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RegisterRequest"
+              $ref: "#/components/schemas/LoginRequest"
             examples:
               registerrequest:
-                $ref: "#/components/examples/RegisterRequest"
+                $ref: "#/components/examples/LoginRequest"
       responses:
         "200":
-          $ref: "#/components/responses/AuthenticateResponse"
+          $ref: "#/components/responses/LoginResponse"
         "400":
           $ref: "#/components/responses/IllegalInput"
         "429":
@@ -317,7 +320,7 @@ paths:
         - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "200":
-          $ref: "#/components/responses/Persons"
+          $ref: "#/components/responses/PagedPersons"
         "404":
           $ref: "#/components/responses/NotFound"
         "429":
@@ -333,8 +336,8 @@ paths:
         Delete all persons
       operationId: deleteAllPersons
       security:
-        - basicAuth: [ ]
-        - bearerAuth: [ ]
+        - basicAuth: []
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/X-API-KEY"
       responses:
@@ -362,8 +365,8 @@ paths:
         If the hash value already exists in the backend, the person is considered to exist
       operationId: postPerson
       security:
-        - basicAuth: [ ]
-        - bearerAuth: [ ]
+        - basicAuth: []
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/override"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -417,8 +420,8 @@ paths:
         Delete only the specified person
       operationId: deletePerson
       security:
-        - basicAuth: [ ]
-        - bearerAuth: [ ]
+        - basicAuth: []
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -442,8 +445,8 @@ paths:
         Update only the person specified with personId
       operationId: patchPerson
       security:
-        - basicAuth: [ ]
-        - bearerAuth: [ ]
+        - basicAuth: []
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -491,6 +494,169 @@ paths:
         "5XX":
           $ref: "#/components/responses/ServerError"
 
+  /privileges:
+    get:
+      tags:
+        - Privileges
+      summary: Retrieve all known privileges
+      description: |
+        Retrieve all known privileges, using paging and sorting
+      operationId: getPrivileges
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "200":
+          $ref: "#/components/responses/PagedPrivileges"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    delete:
+      tags:
+        - Privileges
+      summary: Delete all privileges
+      description: |
+        Delete all privileges
+      operationId: deleteAllPrivileges
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    post:
+      tags:
+        - Privileges
+      summary: Create a new privilege
+      description: |
+        Create a new privileges
+        To determine if an privileges is new the input is compared on the hash value of:
+        - name        
+        If the hash value already exists in the backend, the role is considered to exist
+      operationId: postPrivileges
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/X-API-KEY"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PrivilegeBody"
+      #            examples:
+      #              privilege:
+      #                $ref: "#/components/examples/PrivilegeBody"
+      responses:
+        "201":
+          $ref: "#/components/responses/Privilege"
+        "303":
+          $ref: "#/components/responses/AlreadyExists"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+  /privileges/{id}:
+    get:
+      tags:
+        - Privileges
+      summary: Retrieve the specified privilege
+      description: |
+        Retrieve only one privilege with id privilegeId
+      operationId: getPrivilege
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "200":
+          $ref: "#/components/responses/Privilege"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    delete:
+      tags:
+        - Privileges
+      summary: Delete the specified privilege
+      description: |
+        Delete only the specified privilege
+      operationId: deletePrivilege
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    patch:
+      tags:
+        - Privileges
+      summary: Update the specified privilege
+      description: |
+        Update only the privilege specified with privilegeId
+      operationId: patchPrivilege
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/X-API-KEY"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PrivilegeBody"
+      #            examples:
+      #              privilege:
+      #                $ref: "#/components/examples/PrivilegeBody"
+      responses:
+        "200":
+          $ref: "#/components/responses/Privilege"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
   /roles:
     get:
       tags:
@@ -500,7 +666,7 @@ paths:
         Retrieve all known roles, using paging and sorting
       operationId: getRoles
       security:
-        - bearerAuth: [ ]
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
@@ -508,7 +674,7 @@ paths:
         - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "200":
-          $ref: "#/components/responses/Roles"
+          $ref: "#/components/responses/PagedRoles"
         "404":
           $ref: "#/components/responses/NotFound"
         "429":
@@ -519,12 +685,12 @@ paths:
     delete:
       tags:
         - Roles
-      summary: Delete all
+      summary: Delete all roles
       description: |
         Delete all roles
       operationId: deleteAllRoles
       security:
-        - bearerAuth: [ ]
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/X-API-KEY"
       responses:
@@ -551,7 +717,7 @@ paths:
         If the hash value already exists in the backend, the role is considered to exist
       operationId: postRole
       security:
-        - bearerAuth: [ ]
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
@@ -582,7 +748,7 @@ paths:
         Retrieve only one role with id roleId
       operationId: getRole
       security:
-        - bearerAuth: [ ]
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -606,7 +772,7 @@ paths:
         Delete only the specified role
       operationId: deleteRole
       security:
-        - bearerAuth: [ ]
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -630,7 +796,7 @@ paths:
         Update only the role specified with roleId
       operationId: patchRole
       security:
-        - bearerAuth: [ ]
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -641,7 +807,7 @@ paths:
             schema:
               $ref: "#/components/schemas/RoleBody"
             examples:
-              user:
+              role:
                 $ref: "#/components/examples/RoleBody"
       responses:
         "200":
@@ -664,7 +830,7 @@ paths:
         Retrieve all known users, using paging and sorting
       operationId: getUsers
       security:
-        - bearerAuth: [ ]
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
@@ -672,7 +838,7 @@ paths:
         - $ref: "#/components/parameters/X-API-KEY"
       responses:
         "200":
-          $ref: "#/components/responses/Users"
+          $ref: "#/components/responses/PagedUsers"
         "404":
           $ref: "#/components/responses/NotFound"
         "429":
@@ -688,7 +854,7 @@ paths:
         Delete all users
       operationId: deleteAllUsers
       security:
-        - bearerAuth: [ ]
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/X-API-KEY"
       responses:
@@ -717,7 +883,7 @@ paths:
         If the hash value already exists in the backend, the user is considered to exist
       operationId: postUser
       security:
-        - bearerAuth: [ ]
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
@@ -748,7 +914,7 @@ paths:
         Retrieve only one user with id userId
       operationId: getUser
       security:
-        - bearerAuth: [ ]
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -772,7 +938,7 @@ paths:
         Delete only the specified user
       operationId: deleteUser
       security:
-        - bearerAuth: [ ]
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -796,7 +962,7 @@ paths:
         Update only the user specified with userId
       operationId: patchUser
       security:
-        - bearerAuth: [ ]
+        - bearerAuth: []
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -850,7 +1016,7 @@ components:
 
     AdresList-01:
       summary: An empty list of adresses
-      value: [ ]
+      value: []
 
     AdresList-02:
       summary: An empty list of adresses
@@ -871,36 +1037,198 @@ components:
           zipcode: "5017 JS"
           city: "Tilburg"
 
-    AuthenticateRequest:
-      summary: A authentication request
-      value:
-        username: "user01"
-        password: "pwd01"
-
-    AuthenticationResponse:
-      summary: Authentication response
-      value:
-        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJwYXNzd29yZCI6Imthc2pkZmtlaSIsImVtYWlsIjoidXNlckBnbWFpbC5jb20iLCJwaG9uZSI6IiszMTY0MDk0OTM0NDUifQ.eO4foDxLy8Rg5EtKLGRTFItLD1y-B0iHHo-tjRyVLn0"
-
     Deleted:
       summary: An entry is deleted succesfull
       value:
 
     LoginResponseAllowed:
-      summary: A login response with access allowed
+      summary: A login response with basicauthentication access allowed
       value:
         authenticated: true
+
+    LoginJWTResponseAllowed:
+      summary: A login response with basicauthentication and jwt access allowed
+      value:
+        authenticated: true
+        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJwYXNzd29yZCI6Imthc2pkZmtlaSIsImVtYWlsIjoidXNlckBnbWFpbC5jb20iLCJwaG9uZSI6IiszMTY0MDk0OTM0NDUifQ.eO4foDxLy8Rg5EtKLGRTFItLD1y-B0iHHo-tjRyVLn0"
 
     LoginRequest:
       summary: Login request
       value:
         username: jandegroot
         password: 432kdkakl43k
+        email: user@gmail.com
 
     LoginResponseDenied:
       summary: A login response with access denied
       value:
         authenticated: false
+
+    PagedAdresList-01:
+      summary: An empty list of adresses
+      value:
+        content: []
+        pageNumber: 0,
+        pageSize: 25,
+        totalElements: 0,
+        totalPages: 0
+
+    PagedAdresList-02:
+      summary: A list of adresses
+      value:
+        content:
+          - id: 1
+            street: "Kerkewijk"
+            housenumber: "125"
+            zipcode: "3904 JB"
+            city: "Veenendaal"
+          - id: 2
+            street: "Kerkstraat"
+            housenumber: "14"
+            zipcode: "1541 HA"
+            city: "Koog aan de Zaan"
+          - id: 3
+            street: "Spoorlaan"
+            housenumber: "14"
+            zipcode: "5017 JS"
+            city: "Tilburg"
+        pageNumber: 0,
+        pageSize: 25,
+        totalElements: 3,
+        totalPages: 1
+
+    PagedPrivilegesList-01:
+      summary: An empty list of privileges
+      value:
+        content: []
+        pageNumber: 0,
+        pageSize: 25,
+        totalElements: 0,
+        totalPages: 0
+
+    PagedPrivilegesList-02:
+      summary: A list of privileges
+      value:
+        content:
+          - id: 1
+            name: "ALL"
+          - id: 2
+            name: "USER"
+          - id: 3
+            name: "DEVELOPER"
+        pageNumber: 0,
+        pageSize: 25,
+        totalElements: 3,
+        totalPages: 1
+
+    PagedRolesList-01:
+      summary: An empty list of roles
+      value:
+        content: []
+        pageNumber: 0,
+        pageSize: 25,
+        totalElements: 0,
+        totalPages: 0
+
+    PagedRolesList-02:
+      summary: A list of roles
+      value:
+        content:
+          - id: 1
+            rolename: "READER"
+            description: |
+              "Read access to resources"
+            privileges:
+              - id: 1
+                name: "USER"
+          - id: 2
+            rolename: "WRITER"
+            description: |
+              "Read and writeaccess to resources"
+            privileges:
+              - id: 2
+                name: "USER"
+          - id: 3
+            rolename: "ADMIN"
+            description: |
+              "FULL access to resources"
+            privileges:
+              - id: 3
+                name: "ALL"
+        pageNumber: 0,
+        pageSize: 25,
+        totalElements: 3,
+        totalPages: 1
+
+    PagedUsersList-01:
+      summary: An empty list of users
+      value:
+        content: []
+        pageNumber: 0,
+        pageSize: 25,
+        totalElements: 0,
+        totalPages: 0
+
+    PagedUsersList-02:
+      summary: A list of users
+      value:
+        content:
+          - id: 1
+            username: "Peter"
+            password: "9494$((DKD))"
+            email: "peter@gmail.com"
+            phone: "+31694032930"
+            accountNonExpired: true
+            accountNonLocked: true
+            credentialsNonExpired: true
+            enabled: true
+            roles:
+              - id: 1
+                rolename: "READER"
+                description: |
+                  "Read access to resources"
+                privileges:
+                  - id: 1
+                    name: "USER"
+          - id: 2
+            username: "John"
+            password: "9494$((DKD))"
+            email: "john@gmail.com"
+            phone: "+31692332930"
+            accountNonExpired: true
+            accountNonLocked: true
+            credentialsNonExpired: true
+            enabled: true
+            roles:
+              - id: 2
+                rolename: "WRITER"
+                description: |
+                  "Read and writeaccess to resources"
+                privileges:
+                  - id: 2
+                    name: "USER"
+          - id: 3
+            username: "Charles"
+            password: "9494$((DKD))"
+            email: "charles@gmail.com"
+            phone: "+31694039492"
+            accountNonExpired: true
+            accountNonLocked: true
+            credentialsNonExpired: true
+            enabled: true
+            roles:
+              - id: 3
+                roles:
+                rolename: "ADMIN"
+                description: |
+                  "FULL access to resources"
+                privileges:
+                  - id: 3
+                    name: "ALL"
+        pageNumber: 0,
+        pageSize: 25,
+        totalElements: 3,
+        totalPages: 1
 
     Person-01:
       summary: A single person with all fields
@@ -927,7 +1255,7 @@ components:
         infix: "van Der"
         lastName: "Vlist"
         dateOfBirth: "2022-01-04"
-        adresses: [ ]
+        adresses: []
 
     PersonAdres-02:
       summary: A person with all fields and no adresses
@@ -949,9 +1277,14 @@ components:
         lastName: "Vlist"
         dateOfBirth: "2022-01-04"
 
+    Privilege:
+      summary: A new privilege
+      value:
+        name: READ
+
     PersonList-01:
       summary: An empty list of persons
-      value: [ ]
+      value: []
 
     PersonList-02:
       summary: An empty list of persons
@@ -1028,7 +1361,7 @@ components:
         password: "kasjdfkei"
         email: "user@gmail.com"
         phone: "+316409493445"
-    
+
     RoleBody:
       summary: New Role definition
       value:
@@ -1041,7 +1374,6 @@ components:
         id: 4
         rolename: JWT-TOKEN
         description: The JWT-TOKEN can only be used for JWT authentication
-
 
     RoleList:
       summary: List of known roles
@@ -1064,7 +1396,7 @@ components:
         accountNonLocked: true
         credentialsNonExpired: true
         enabled: true
-        roles: [ ]
+        roles: []
 
     User:
       summary: New user
@@ -1078,8 +1410,7 @@ components:
         accountNonLocked: true
         credentialsNonExpired: true
         enabled: true
-        roles: [ ]
-
+        roles: []
 
     UserList:
       summary: List of known users
@@ -1093,7 +1424,7 @@ components:
           accountNonLocked: true
           credentialsNonExpired: true
           enabled: true
-          roles: [ ]
+          roles: []
         - id: 5
           username: "tester"
           password: "12345"
@@ -1103,15 +1434,14 @@ components:
           accountNonLocked: true
           credentialsNonExpired: true
           enabled: true
-          roles: [ ]
-
+          roles: []
 
   headers:
     version:
       required: true
       schema:
         type: string
-      example: 0.0.9
+      example: 0.0.11
 
   parameters:
     id:
@@ -1131,7 +1461,7 @@ components:
         $ref: "#/components/schemas/BasicAuthorization"
 
     override:
-      name: Override
+      name: override
       in: query
       description: parameter to override check on existence
       required: true
@@ -1171,8 +1501,10 @@ components:
       in: query
       description: field names to sort on
       schema:
-        type: string
-        default: ""
+        type: array
+        items:
+          type: string
+        default: []
 
     X-API-KEY:
       name: "X-API-KEY"
@@ -1211,6 +1543,10 @@ components:
         city:
           type: string
           example: Veenendaal
+        persons:
+          type: array
+          items:
+            $ref: "#/components/schemas/Person"
 
     Email:
       type: string
@@ -1284,10 +1620,16 @@ components:
       properties:
         username:
           type: string
-          example: username
+          example: "username"
         password:
           type: string
-          example: password
+          example: "password"
+        email:
+          type: string
+          example: "user@gmail.com"
+        phone:
+          type: string
+          example: "+31645978573"
 
     LoginResponse:
       type: object
@@ -1297,6 +1639,94 @@ components:
         authenticated:
           type: boolean
           example: true
+        token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJwYXNzd29yZCI6Imthc2pkZmtlaSIsImVtYWlsIjoidXNlckBnbWFpbC5jb20iLCJwaG9uZSI6IiszMTY0MDk0OTM0NDUifQ.eO4foDxLy8Rg5EtKLGRTFItLD1y-B0iHHo-tjRyVLn0"
+
+    PagedAdresses:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/Adres"
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+        totalElements:
+          type: number
+          format: int64
+        totalPages:
+          type: integer
+
+    PagedPersons:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/Person"
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+        totalElements:
+          type: number
+          format: int64
+        totalPages:
+          type: integer
+
+    PagedPrivileges:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/Privilege"
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+        totalElements:
+          type: number
+          format: int64
+        totalPages:
+          type: integer
+
+    PagedRoles:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/Role"
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+        totalElements:
+          type: number
+          format: int64
+        totalPages:
+          type: integer
+
+    PagedUsers:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+        totalElements:
+          type: number
+          format: int64
+        totalPages:
+          type: integer
 
     Password:
       type: string
@@ -1413,6 +1843,10 @@ components:
           type: string
           maxLength: 128
           example: This role gives read access
+        privileges:
+          type: array
+          items:
+            $ref: "#/components/schemas/Privilege"
 
     Roles:
       type: array
@@ -1433,7 +1867,6 @@ components:
       type: object
       required:
         - username
-        - password
         - email
       properties:
         username:
@@ -1479,6 +1912,24 @@ components:
       type: string
       maxLength: 24
       example: "+316409493445"
+
+    Privilege:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              $ref: "#/components/schemas/Id"
+        - $ref: "#/components/schemas/PrivilegeBody"
+
+    PrivilegeBody:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
 
     Problem:
       type: object
@@ -1527,7 +1978,7 @@ components:
 
     X-API-KEY:
       type: string
-      pattern: '^([0-9a-f]{8})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{12})'
+      pattern: "^([0-9a-f]{8})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{12})"
 
   responses:
     Adres:
@@ -1575,19 +2026,6 @@ components:
         version:
           $ref: "#/components/headers/version"
 
-    AuthenticateResponse:
-      description: The response on an authentication request
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/AuthenticateResponse"
-          examples:
-            response:
-              $ref: "#/components/examples/AuthenticationResponse"
-      headers:
-        version:
-          $ref: "#/components/headers/version"
-
     Deleted:
       description: Resource deleted
       headers:
@@ -1629,6 +2067,8 @@ components:
           examples:
             accessallowed:
               $ref: "#/components/examples/LoginResponseAllowed"
+            accessjwtallowed:
+              $ref: "#/components/examples/LoginJWTResponseAllowed"
             accessdenied:
               $ref: "#/components/examples/LoginResponseDenied"
       headers:
@@ -1670,6 +2110,81 @@ components:
           examples:
             tomanyrequests:
               $ref: "#/components/examples/Problem-429"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    PagedAdresses:
+      description: A collection of adres pages
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/PagedAdresses"
+          examples:
+            emptylist:
+              $ref: "#/components/examples/PagedAdresList-01"
+            fulllist:
+              $ref: "#/components/examples/PagedAdresList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    PagedPersons:
+      description: A collection of person pages
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/PagedPersons"
+          examples:
+            emptylist:
+              $ref: "#/components/examples/PagedAdresList-01"
+            fulllist:
+              $ref: "#/components/examples/PagedAdresList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    PagedPrivileges:
+      description: A collection of privilege pages
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/PagedPrivileges"
+          examples:
+            emptylist:
+              $ref: "#/components/examples/PagedPrivilegesList-01"
+            fulllist:
+              $ref: "#/components/examples/PagedAdresList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    PagedRoles:
+      description: A collection of roles pages
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/PagedRoles"
+          examples:
+            emptylist:
+              $ref: "#/components/examples/PagedRolesList-01"
+            fulllist:
+              $ref: "#/components/examples/PagedRolesList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    PagedUsers:
+      description: A collection of person pages
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/PagedUsers"
+          examples:
+            emptylist:
+              $ref: "#/components/examples/PagedUsersList-01"
+            fulllist:
+              $ref: "#/components/examples/PagedUsersList-02"
       headers:
         version:
           $ref: "#/components/headers/version"
@@ -1719,6 +2234,20 @@ components:
         version:
           $ref: "#/components/headers/version"
 
+    Privilege:
+      description: A privilege
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Privilege"
+          examples:
+            allfields:
+              $ref: "#/components/examples/Privilege"
+
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
     Role:
       description: A role
       content:
@@ -1728,7 +2257,7 @@ components:
           examples:
             allfields:
               $ref: "#/components/examples/Role"
-      
+
       headers:
         version:
           $ref: "#/components/headers/version"

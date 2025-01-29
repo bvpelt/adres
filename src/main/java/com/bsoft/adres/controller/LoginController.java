@@ -2,7 +2,8 @@ package com.bsoft.adres.controller;
 
 import com.bsoft.adres.auth.AuthenticationService;
 import com.bsoft.adres.generated.api.LoginApi;
-import com.bsoft.adres.generated.model.*;
+import com.bsoft.adres.generated.model.LoginRequest;
+import com.bsoft.adres.generated.model.LoginResponse;
 import com.bsoft.adres.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,19 +38,19 @@ public class LoginController implements LoginApi {
     }
 
     @Override
-    public ResponseEntity<AuthenticateResponse> _postAuthenticate(String X_API_KEY, AuthenticateRequest authenticateRequest) {
+    public ResponseEntity<LoginResponse> _postAuthenticate(String X_API_KEY, LoginRequest loginRequest) {
         log.debug("_postAuthenticate apikey: {}", X_API_KEY);
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
-                .body(authenticationService.authenticate(authenticateRequest));
+                .body(authenticationService.authenticate(loginRequest));
     }
 
     @Override
-    public ResponseEntity<AuthenticateResponse> _postRegister(String X_API_KEY, RegisterRequest registerRequest) {
+    public ResponseEntity<LoginResponse> _postRegister(String X_API_KEY, LoginRequest loginRequest) {
         log.debug("_postRegister apikey: {}", X_API_KEY);
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
-                .body(authenticationService.register(registerRequest));
+                .body(authenticationService.register(loginRequest));
     }
 
 }
