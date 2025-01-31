@@ -54,6 +54,8 @@
             <input id="dateofbirth" [(ngModel)]="person.dateOfBirth" placeholder="2002-02-02"  tabindex="4">
         </div>
 
+
+
         <div class="button-container">
             <button type="button" (click)="onUpdate(person)"  tabindex="5">Update</button>
             <button type="button" (click)="cancel()"  tabindex="6">Cancel</button>
@@ -61,6 +63,14 @@
     </div>
 </div>
 
+
 <div *ngIf="errormessage!=undefined && errormessage.length>0">
     {{errormessage}}
+</div>
+
+<div>           
+    <app-datepicker 
+      [(ngModel)]="myDate" 
+      (selectedDateChange)="onDateChanged($event)" 
+    ></app-datepicker>
 </div>

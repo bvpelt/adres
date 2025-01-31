@@ -8,15 +8,20 @@ import { PersonschangedService } from '../services/personschanged.service';
 import { Observable } from 'rxjs';
 import { Person, PersonBody } from '../core/modules/openapi';
 
+
+
 @Component({
   selector: 'app-persondetail',
-  templateUrl: './persondetail.component.html',
+  templateUrl: './persondetail.component.html',  
   styleUrl: './persondetail.component.css'
 })
 export class PersondetailComponent {
+
+  myDate: Date | null = null; 
+  
   person?: Person = undefined;
   errormessage?: string = undefined;
-
+  
   isLoggedIn$: Observable<boolean>;
 
   constructor(private route: ActivatedRoute,
@@ -46,6 +51,11 @@ export class PersondetailComponent {
           this.errormessage = 'PersondetailComponent Status: ' + error.status + ' details: ' + error.error.detail;
         }
       });
+  }
+
+  onDateChanged(date: Date) {
+    this.myDate = date; 
+    console.log('Selected date:', this.myDate); 
   }
 
   onUpdate(person: Person) {

@@ -34,6 +34,13 @@ import { RoledetailComponent } from './roledetail/roledetail.component';
 import { PrivilegesComponent } from './privileges/privileges.component';
 import { PrivilegeComponent } from './privilege/privilege.component';
 import { PrivilegedetailComponent } from './privilegedetail/privilegedetail.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { DatepickerComponent } from './datepicker/datepicker.component';
 
 export function apiConfigFactory(): Configuration {
   const params: ConfigurationParameters = {
@@ -64,9 +71,16 @@ export function apiConfigFactory(): Configuration {
     PrivilegesComponent,
     PrivilegeComponent,
     PrivilegedetailComponent,
+  
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule, 
+    
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+
     FontAwesomeModule,
     FormsModule,
     AppRoutingModule,
@@ -80,7 +94,9 @@ export function apiConfigFactory(): Configuration {
       // Add a unique identifier to the service worker configuration   
     }) : []
   ],
-  providers: [],
+  providers: [
+    provideAnimationsAsync()
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
