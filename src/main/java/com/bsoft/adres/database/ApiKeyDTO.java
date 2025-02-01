@@ -15,7 +15,7 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name = "apikey", schema = "public", catalog = "adres")
-public class ApiKeyDao {
+public class ApiKeyDTO {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -32,8 +32,8 @@ public class ApiKeyDao {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof ApiKeyDao apiKeyDao)) return false;
-        return Objects.equals(apikey, apiKeyDao.apikey) && Objects.equals(inuse, apiKeyDao.inuse);
+        if (!(o instanceof ApiKeyDTO apiKeyDTO)) return false;
+        return Objects.equals(apikey, apiKeyDTO.apikey) && Objects.equals(inuse, apiKeyDTO.inuse);
     }
 
     @Override

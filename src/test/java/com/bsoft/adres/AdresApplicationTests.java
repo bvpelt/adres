@@ -1,13 +1,12 @@
 package com.bsoft.adres;
 
-import com.bsoft.adres.database.AdresDAO;
-import com.bsoft.adres.database.ApiKeyDao;
-import com.bsoft.adres.database.UserDAO;
+import com.bsoft.adres.database.AdresDTO;
+import com.bsoft.adres.database.ApiKeyDTO;
+import com.bsoft.adres.database.UserDTO;
 import com.bsoft.adres.service.ApiKeyService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -35,11 +34,11 @@ class AdresApplicationTests {
     @DisplayName("testUsers")
     @Test
     public void testUsers() {
-        ArrayList<UserDAO> users = new ArrayList<>();
-        users.add(new UserDAO("admin", bCryptPasswordEncoder.encode("12345"), "admin@gmail.com", "0612345678"));
-        users.add(new UserDAO("user", bCryptPasswordEncoder.encode("12345"), "user@gmail.com", "0634567812"));
-        users.add(new UserDAO("bvpelt", bCryptPasswordEncoder.encode("12345"), "bvpelt@gmail.com", "0656781234"));
-        users.add(new UserDAO("guest", bCryptPasswordEncoder.encode("12345"), "guest@gmail.com", "0678123456"));
+        ArrayList<UserDTO> users = new ArrayList<>();
+        users.add(new UserDTO("admin", bCryptPasswordEncoder.encode("12345"), "admin@gmail.com", "0612345678"));
+        users.add(new UserDTO("user", bCryptPasswordEncoder.encode("12345"), "user@gmail.com", "0634567812"));
+        users.add(new UserDTO("bvpelt", bCryptPasswordEncoder.encode("12345"), "bvpelt@gmail.com", "0656781234"));
+        users.add(new UserDTO("guest", bCryptPasswordEncoder.encode("12345"), "guest@gmail.com", "0678123456"));
 
         users.forEach(user -> {
             log.info(user.toString());
@@ -53,8 +52,8 @@ class AdresApplicationTests {
         int maxKeys = 15;
 
         for (int i = 0; i < maxKeys; i++) {
-            ApiKeyDao apiKeyDao = apiKeyService.generateApiKey();
-            log.info("Generated api key: {}", apiKeyDao.toString());
+            ApiKeyDTO apiKeyDTO = apiKeyService.generateApiKey();
+            log.info("Generated api key: {}", apiKeyDTO.toString());
         }
     }
 
@@ -62,10 +61,10 @@ class AdresApplicationTests {
     @Test
     public void testAdresses() {
         int maxAdresses = 15;
-        ArrayList<AdresDAO> adresses = new ArrayList<>();
+        ArrayList<AdresDTO> adresses = new ArrayList<>();
 
         for (int i = 0; i < maxAdresses; i++) {
-            AdresDAO adressDao = new AdresDAO();
+            AdresDTO adressDao = new AdresDTO();
             adressDao.setStreet("Kerkewijk");
             adressDao.setHousenumber(Integer.toString(i));
             adressDao.setZipcode("3904 KL");

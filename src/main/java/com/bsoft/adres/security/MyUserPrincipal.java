@@ -1,6 +1,6 @@
 package com.bsoft.adres.security;
 
-import com.bsoft.adres.database.UserDAO;
+import com.bsoft.adres.database.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,9 +13,9 @@ import java.util.List;
 @Slf4j
 public class MyUserPrincipal implements UserDetails {
 
-    private final UserDAO user;
+    private final UserDTO user;
 
-    public MyUserPrincipal(UserDAO user) {
+    public MyUserPrincipal(UserDTO user) {
         this.user = user;
         log.trace("MyUserPrincipal created {}", user);
     }

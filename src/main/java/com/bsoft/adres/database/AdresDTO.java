@@ -20,7 +20,7 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name = "adres", schema = "public", catalog = "adres")
-public class AdresDAO implements Serializable {
+public class AdresDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -49,14 +49,14 @@ public class AdresDAO implements Serializable {
                     @JoinColumn(name = "personid", referencedColumnName = "id")
             }
     )
-    private Collection<PersonDAO> persons = new ArrayList<>();
+    private Collection<PersonDTO> persons = new ArrayList<>();
 
     /*
     public AdresDAO() {
     }
 */
 
-    public AdresDAO(Long id, String street, String housenumber, String zipcode, String city) {
+    public AdresDTO(Long id, String street, String housenumber, String zipcode, String city) {
         this.id = id;
         this.street = street;
         this.housenumber = housenumber;
@@ -66,7 +66,7 @@ public class AdresDAO implements Serializable {
         this.persons = new ArrayList<>();
     }
 
-    public AdresDAO(final Adres adres) {
+    public AdresDTO(final Adres adres) {
         this.id = adres.getId();
         this.street = adres.getStreet();
         this.housenumber = adres.getHousenumber();
@@ -75,7 +75,7 @@ public class AdresDAO implements Serializable {
         this.hash = this.hashCode();
     }
 
-    public AdresDAO(final AdresBody adres) {
+    public AdresDTO(final AdresBody adres) {
         this.id = null;
         this.street = adres.getStreet();
         this.housenumber = adres.getHousenumber();
@@ -84,11 +84,11 @@ public class AdresDAO implements Serializable {
         this.hash = this.hashCode();
     }
 
-    public void addPerson(PersonDAO person) {
+    public void addPerson(PersonDTO person) {
         persons.add(person);
     }
 
-    public void setPersons(Collection<PersonDAO> persons) {
+    public void setPersons(Collection<PersonDTO> persons) {
         persons.forEach(person -> {
             person.addAdres(this);
             this.persons.add(person);
@@ -152,8 +152,8 @@ public class AdresDAO implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        AdresDAO adresDAO = (AdresDAO) o;
-        return Objects.equals(street, adresDAO.street) && Objects.equals(housenumber, adresDAO.housenumber) && Objects.equals(zipcode, adresDAO.zipcode) && Objects.equals(city, adresDAO.city);
+        AdresDTO adresDTO = (AdresDTO) o;
+        return Objects.equals(street, adresDTO.street) && Objects.equals(housenumber, adresDTO.housenumber) && Objects.equals(zipcode, adresDTO.zipcode) && Objects.equals(city, adresDTO.city);
     }
 
     @Override

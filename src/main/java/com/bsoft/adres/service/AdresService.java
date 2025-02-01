@@ -1,7 +1,7 @@
 package com.bsoft.adres.service;
 
-import com.bsoft.adres.database.AdresDAO;
-import com.bsoft.adres.database.PersonDAO;
+import com.bsoft.adres.database.AdresDTO;
+import com.bsoft.adres.database.PersonDTO;
 import com.bsoft.adres.exceptions.AdresExistsException;
 import com.bsoft.adres.exceptions.AdresNotExistsException;
 import com.bsoft.adres.generated.model.Adres;
@@ -10,8 +10,8 @@ import com.bsoft.adres.generated.model.AdresPerson;
 import com.bsoft.adres.mappers.AdresMapper;
 import com.bsoft.adres.repositories.AdresRepository;
 import com.bsoft.adres.repositories.PersonRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -22,39 +22,44 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
 public class AdresService {
-    private final AdresRepository adresRepository;
-    private final PersonRepository personRepository;
-    private final AdresMapper adresMapper;
+
+    @Autowired
+    private AdresRepository adresRepository;
+
+    @Autowired
+    private PersonRepository personRepository;
+
+    @Autowired
+    private AdresMapper adresMapper;
 
     public void deleteAll() {
         try {
             adresRepository.deleteAll();
         } catch (Exception e) {
-            log.error("Deleting all adresses failed: {}", e);
+            log.error("Deleting all adresses failed: {}", e.toString());
         }
     }
 
     public boolean deleteAdres(Long adresId) {
         boolean deleted = false;
         try {
-            Optional<AdresDAO> optionalAdresDAO = adresRepository.findByAdresId(adresId);
+            Optional<AdresDTO> optionalAdresDAO = adresRepository.findByAdresId(adresId);
             if (!optionalAdresDAO.isPresent()) {
                 throw new AdresNotExistsException("Adres with id " + adresId + " not found and not deleted");
             }
             adresRepository.deleteById(adresId);
             deleted = true;
         } catch (Exception e) {
-            log.error("Delete adres failed: {}", e);
+            log.error("Delete adres failed: {}", e.toString());
             throw e;
         }
         return deleted;
     }
 
     public Adres getAdres(Long adresId) {
-        Optional<AdresDAO> optionalAdresDAO = adresRepository.findByAdresId(adresId);
+        Optional<AdresDTO> optionalAdresDAO = adresRepository.findByAdresId(adresId);
         if (!optionalAdresDAO.isPresent()) {
             throw new AdresNotExistsException("Adres with id " + adresId + " not found");
         }
@@ -64,7 +69,7 @@ public class AdresService {
 
     public List<Adres> getAdresses() {
         List<Adres> result = new ArrayList<Adres>();
-        Iterable<AdresDAO> iadres = adresRepository.findAll();
+        Iterable<AdresDTO> iadres = adresRepository.findAll();
 
         iadres.forEach(adresDAO -> {
             Adres newAdres = adresMapper.map(adresDAO);
@@ -74,10 +79,9 @@ public class AdresService {
         return result;
     }
 
-
     public Page<Adres> getAdressesPage(final PageRequest pageRequest) {
 
-        Page<AdresDAO> foundAdresPage = adresRepository.findAllByPage(pageRequest);
+        Page<AdresDTO> foundAdresPage = adresRepository.findAllByPage(pageRequest);
 
         List<Adres> adresList = new ArrayList<>();
         adresList = foundAdresPage.getContent().stream()
@@ -89,7 +93,7 @@ public class AdresService {
 
     public List<Adres> getAdresses(final PageRequest pageRequest) {
         List<Adres> adresList = new ArrayList<Adres>();
-        Iterable<AdresDAO> adresDAOIterable = adresRepository.findAllByPaged(pageRequest);
+        Iterable<AdresDTO> adresDAOIterable = adresRepository.findAllByPaged(pageRequest);
 
         adresDAOIterable.forEach(adresDAO -> {
             adresList.add(adresMapper.map(adresDAO));
@@ -99,76 +103,60 @@ public class AdresService {
     }
 
     public Adres postAdres(Boolean override, final AdresBody adresBody) {
-        AdresDAO adresDAO = new AdresDAO(adresBody);
+        AdresDTO adresDTO = new AdresDTO(adresBody);
 
         try {
             if (!override) {
-                Optional<AdresDAO> optionalAdresDAO = adresRepository.findByHash(adresDAO.getHash());
+                Optional<AdresDTO> optionalAdresDAO = adresRepository.findByHash(adresDTO.getHash());
                 if (optionalAdresDAO.isPresent()) {
-                    throw new AdresExistsException("Adres " + adresDAO + " already exists cannot insert again");
+                    throw new AdresExistsException("Adres " + adresDTO + " already exists cannot insert again");
                 }
             }
 
-            adresRepository.save(adresDAO);
+            adresRepository.save(adresDTO);
 
-            return adresMapper.map(adresDAO); // Return 201 Created with the created entity
+            return adresMapper.map(adresDTO); // Return 201 Created with the created entity
         } catch (Error e) {
-            log.error("Error inserting adres: {}", e);
+            log.error("Error inserting adres: {}", e.toString());
             throw e;
         }
     }
 
     public Adres patch(Long adresId, final AdresBody adresBody) {
 
-        try {
-            Optional<AdresDAO> optionalAdresDAO = adresRepository.findByAdresId(adresId);
-            if (!optionalAdresDAO.isPresent()) {
-                throw new AdresNotExistsException("Adres with id " + adresId + " not found");
-            }
-            AdresDAO foundAdres = optionalAdresDAO.get();
-            if (adresBody.getStreet() != null) {
-                foundAdres.setStreet(adresBody.getStreet());
-            }
-            if (adresBody.getHousenumber() != null) {
-                foundAdres.setHousenumber(adresBody.getHousenumber());
-            }
-            if (adresBody.getZipcode() != null) {
-                foundAdres.setZipcode(adresBody.getZipcode());
-            }
-            if (adresBody.getCity() != null) {
-                foundAdres.setCity(adresBody.getCity());
-            }
-
-            foundAdres.setHash(foundAdres.genHash());
-
-            adresRepository.save(foundAdres);
-
-            return adresMapper.map(foundAdres);
-        } catch (Error e) {
-            throw e;
+        Optional<AdresDTO> optionalAdresDAO = adresRepository.findByAdresId(adresId);
+        if (!optionalAdresDAO.isPresent()) {
+            throw new AdresNotExistsException("Adres with id " + adresId + " not found");
+        }
+        AdresDTO foundAdres = optionalAdresDAO.get();
+        if (adresBody.getStreet() != null) {
+            foundAdres.setStreet(adresBody.getStreet());
+        }
+        if (adresBody.getHousenumber() != null) {
+            foundAdres.setHousenumber(adresBody.getHousenumber());
+        }
+        if (adresBody.getZipcode() != null) {
+            foundAdres.setZipcode(adresBody.getZipcode());
+        }
+        if (adresBody.getCity() != null) {
+            foundAdres.setCity(adresBody.getCity());
         }
 
-    }
-/*
-    private Adres AdresDAO2Adres(final AdresDAO adresDAO) {
-        Adres adres = new Adres();
-        adres.setId(adresDAO.getId());
-        adres.setStreet(adresDAO.getStreet());
-        adres.setHousenumber(adresDAO.getHousenumber());
-        adres.setZipcode(adresDAO.getZipcode());
-        adres.setCity(adresDAO.getCity());
+        foundAdres.setHash(foundAdres.genHash());
 
-        return adres;
+        adresRepository.save(foundAdres);
+
+        return adresMapper.map(foundAdres);
+
     }
-*/
 
     public AdresPerson getAdresPerson(Long adresId) {
-        Optional<AdresDAO> adresDAO = adresRepository.findByAdresId(adresId);
+        Optional<AdresDTO> adresDAO = adresRepository.findByAdresId(adresId);
         if (!adresDAO.isPresent()) {
             throw new AdresNotExistsException("Adres with id: " + adresId + " not found");
         }
         List<Long> personIds = new ArrayList<Long>();
-        List<PersonDAO> personList = personRepository.findPersonsByAdresId(adresId);
+        List<PersonDTO> personList = personRepository.findPersonsByAdresId(adresId);
 
         personList.forEach(personDAO -> {
             personIds.add(personDAO.getId());
@@ -184,4 +172,5 @@ public class AdresService {
 
         return adresPerson;
     }
+
 }

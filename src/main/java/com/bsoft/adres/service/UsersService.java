@@ -1,6 +1,6 @@
 package com.bsoft.adres.service;
 
-import com.bsoft.adres.database.UserDAO;
+import com.bsoft.adres.database.UserDTO;
 import com.bsoft.adres.exceptions.UserExistsException;
 import com.bsoft.adres.exceptions.UserNotExistsException;
 import com.bsoft.adres.generated.model.User;
@@ -36,51 +36,51 @@ public class UsersService {
         try {
             usersRepository.deleteAll();
         } catch (Exception e) {
-            log.error("Deleting all users failed: {}", e);
+            log.error("Deleting all users failed: {}", e.toString());
         }
     }
 
     public boolean deleteUser(Long userId) {
         boolean deleted = false;
         try {
-            Optional<UserDAO> optionalUserDAO = usersRepository.findByUserId(userId);
+            Optional<UserDTO> optionalUserDAO = usersRepository.findByUserId(userId);
             if (optionalUserDAO.isEmpty()) {
                 throw new UserNotExistsException("User with id " + userId + " not found and not deleted");
             }
             usersRepository.deleteById(userId);
             deleted = true;
         } catch (Exception e) {
-            log.error("Delete user failed: {}", e);
+            log.error("Delete user failed: {}", e.toString());
             throw e;
         }
         return deleted;
     }
 
     public User getUser(Long userId) {
-        Optional<UserDAO> optionalUserDAO = usersRepository.findByUserId(userId);
+        Optional<UserDTO> optionalUserDAO = usersRepository.findByUserId(userId);
         if (optionalUserDAO.isEmpty()) {
             throw new UserNotExistsException("User with id " + userId + " not found");
         }
 
-        UserDAO userDAO = optionalUserDAO.get();
+        UserDTO userDTO = optionalUserDAO.get();
 
-        return userMapper.map(userDAO);
+        return userMapper.map(userDTO);
     }
 
     public User getUserByName(String username) {
-        Optional<UserDAO> optionalUserDAO = usersRepository.findByUserName(username);
+        Optional<UserDTO> optionalUserDAO = usersRepository.findByUserName(username);
         if (optionalUserDAO.isEmpty()) {
             throw new UserNotExistsException("User with name " + username + " not found");
         }
 
-        UserDAO userDAO = optionalUserDAO.get();
+        UserDTO userDTO = optionalUserDAO.get();
 
-        return userMapper.map(userDAO);
+        return userMapper.map(userDTO);
     }
 
     public List<User> getUsers() {
         List<User> userList = new ArrayList<User>();
-        Iterable<UserDAO> userDAOIterable = usersRepository.findAll();
+        Iterable<UserDTO> userDAOIterable = usersRepository.findAll();
 
         userDAOIterable.forEach(userDAO -> {
             User user = userMapper.map(userDAO);
@@ -91,7 +91,7 @@ public class UsersService {
     }
 
     public Page<User> getUsersPage(PageRequest pageRequest) {
-        Page<UserDAO> foundUsersPage = usersRepository.findAllByPage(pageRequest);
+        Page<UserDTO> foundUsersPage = usersRepository.findAllByPage(pageRequest);
 
         List<User> usersList = new ArrayList<>();
         usersList = foundUsersPage.getContent().stream()
@@ -102,26 +102,26 @@ public class UsersService {
     }
 
     public User postUser(Boolean override, final UserBody userBody) {
-        UserDAO userDAO = new UserDAO(userBody);
+        UserDTO userDTO = new UserDTO(userBody);
 
         try {
             if (!override) {
-                Optional<UserDAO> optionalUserDAO = usersRepository.findByHash(userDAO.getHash());
+                Optional<UserDTO> optionalUserDAO = usersRepository.findByHash(userDTO.getHash());
                 if (optionalUserDAO.isPresent()) {
-                    throw new UserExistsException("User " + userDAO + " already exists cannot insert again");
+                    throw new UserExistsException("User " + userDTO + " already exists cannot insert again");
                 }
             }
 
             String pwd = userBody.getPassword();
             String encodedPwd = passwordEncoder.encode(pwd);
-            userDAO.setPassword(encodedPwd);
-            userDAO.genHash();
+            userDTO.setPassword(encodedPwd);
+            userDTO.genHash();
 
-            usersRepository.save(userDAO);
+            usersRepository.save(userDTO);
 
-            return userMapper.map(userDAO); // Return 201 Created with the created entity
+            return userMapper.map(userDTO); // Return 201 Created with the created entity
         } catch (Error e) {
-            log.error("Error inserting adres: {}", e);
+            log.error("Error inserting adres: {}", e.toString());
             throw e;
         }
     }
@@ -129,11 +129,11 @@ public class UsersService {
     public User patch(Long userId, final UserBody userBody) {
 
         try {
-            Optional<UserDAO> optionalUserDAO = usersRepository.findByUserId(userId);
+            Optional<UserDTO> optionalUserDAO = usersRepository.findByUserId(userId);
             if (optionalUserDAO.isEmpty()) {
                 throw new UserNotExistsException("User with id " + userId + " not found");
             }
-            UserDAO foundUser = optionalUserDAO.get();
+            UserDTO foundUser = optionalUserDAO.get();
             if (userBody.getEmail() != null) {
                 foundUser.setEmail(userBody.getEmail());
             }
@@ -167,7 +167,7 @@ public class UsersService {
 
             return userMapper.map(foundUser);
         } catch (Error e) {
-            log.error("Error patching adres: {}", e);
+            log.error("Error patching adres: {}", e.toString());
             throw e;
         }
 

@@ -1,8 +1,8 @@
 package com.bsoft.adres;
 
-import com.bsoft.adres.database.PrivilegeDAO;
-import com.bsoft.adres.database.RolesDAO;
-import com.bsoft.adres.database.UserDAO;
+import com.bsoft.adres.database.PrivilegeDTO;
+import com.bsoft.adres.database.RolesDTO;
+import com.bsoft.adres.database.UserDTO;
 import com.bsoft.adres.exceptions.UserExistsException;
 import com.bsoft.adres.repositories.PrivilegeRepository;
 import com.bsoft.adres.repositories.RoleRepository;
@@ -46,16 +46,16 @@ public class UserRepositoryTests {
     @DisplayName("testCreateUser")
     @Test
     public void testCreateUser() {
-        UserDAO user = new UserDAO();
+        UserDTO user = new UserDTO();
         user.setEmail("ravikumar@gmail.com");
         user.setPassword("ravi2020");
         user.setUsername("Ravi");
         user.setHash(1);
 
 
-        UserDAO savedUser = usersRepository.save(user);
+        UserDTO savedUser = usersRepository.save(user);
 
-        UserDAO existUser = entityManager.find(UserDAO.class, savedUser.getId());
+        UserDTO existUser = entityManager.find(UserDTO.class, savedUser.getId());
 
         Assert.isTrue(user.getEmail().equals(existUser.getEmail()), "not equal");
 
@@ -68,7 +68,7 @@ public class UserRepositoryTests {
     @Test
     public void testPasswordEncoder01() {
 
-        UserDAO user = new UserDAO();
+        UserDTO user = new UserDTO();
         user.setEmail("admin-11@gmail.com");
         user.setPassword("12345");
         user.setUsername("admin-11");
@@ -77,9 +77,9 @@ public class UserRepositoryTests {
         log.info("user: {}, password: {} - encoded: {}", user.getUsername(), user.getPassword(), encodedPassword);
         user.setPassword(encodedPassword);
         user.genHash();
-        UserDAO savedUser = usersRepository.save(user);
+        UserDTO savedUser = usersRepository.save(user);
 
-        UserDAO existUser = entityManager.find(UserDAO.class, savedUser.getId());
+        UserDTO existUser = entityManager.find(UserDTO.class, savedUser.getId());
 
         Assert.isTrue(user.getEmail().equals(existUser.getEmail()), "not equal");
 
@@ -93,7 +93,7 @@ public class UserRepositoryTests {
     @Test
     public void testPasswordEncoder02() {
 
-        UserDAO user = new UserDAO();
+        UserDTO user = new UserDTO();
         user.setEmail("user-12@gmail.com");
         user.setPassword("12345");
         user.setUsername("user-12");
@@ -102,9 +102,9 @@ public class UserRepositoryTests {
         log.info("user: {}, password: {} - encoded: {}", user.getUsername(), user.getPassword(), encodedPassword);
         user.setPassword(encodedPassword);
         user.genHash();
-        UserDAO savedUser = usersRepository.save(user);
+        UserDTO savedUser = usersRepository.save(user);
 
-        UserDAO existUser = entityManager.find(UserDAO.class, savedUser.getId());
+        UserDTO existUser = entityManager.find(UserDTO.class, savedUser.getId());
 
         Assert.isTrue(user.getEmail().equals(existUser.getEmail()), "not equal");
 
@@ -118,7 +118,7 @@ public class UserRepositoryTests {
     @Test
     public void testPasswordEncoder03() {
 
-        UserDAO user = new UserDAO();
+        UserDTO user = new UserDTO();
         user.setEmail("bvpelt-13@gmail.com");
         user.setPassword("12345");
         user.setUsername("bvpelt-13");
@@ -127,9 +127,9 @@ public class UserRepositoryTests {
         log.info("user: {}, password: {} - encoded: {}", user.getUsername(), user.getPassword(), encodedPassword);
         user.setPassword(encodedPassword);
         user.genHash();
-        UserDAO savedUser = usersRepository.save(user);
+        UserDTO savedUser = usersRepository.save(user);
 
-        UserDAO existUser = entityManager.find(UserDAO.class, savedUser.getId());
+        UserDTO existUser = entityManager.find(UserDTO.class, savedUser.getId());
 
         Assert.isTrue(user.getEmail().equals(existUser.getEmail()), "not equal");
 
@@ -143,50 +143,50 @@ public class UserRepositoryTests {
     @Test
     public void testUserRoles() {
 
-        UserDAO existUser = null;
-        RolesDAO existRole = null;
-        PrivilegeDAO existprivilege = null;
-        PrivilegeDAO existprivilege2 = null;
+        UserDTO existUser = null;
+        RolesDTO existRole = null;
+        PrivilegeDTO existprivilege = null;
+        PrivilegeDTO existprivilege2 = null;
 
         try {
-            PrivilegeDAO privilege = new PrivilegeDAO();
+            PrivilegeDTO privilege = new PrivilegeDTO();
             privilege.setName("TEST_READ");
             privilege.setHash(privilege.hashCode());
 
 
-            PrivilegeDAO savedprivilege = privilegeRepository.save(privilege);
-            existprivilege = entityManager.find(PrivilegeDAO.class, savedprivilege.getId());
+            PrivilegeDTO savedprivilege = privilegeRepository.save(privilege);
+            existprivilege = entityManager.find(PrivilegeDTO.class, savedprivilege.getId());
 
             Assert.isTrue(privilege.getName().equals(existprivilege.getName()), "not equal");
-            List<PrivilegeDAO> privileges = new ArrayList<>();
+            List<PrivilegeDTO> privileges = new ArrayList<>();
             privileges.add(savedprivilege);
 
-            PrivilegeDAO privilege2 = new PrivilegeDAO();
+            PrivilegeDTO privilege2 = new PrivilegeDTO();
             privilege2.setName("TEST_WRITE");
             privilege2.setHash(privilege2.hashCode());
 
 
-            PrivilegeDAO savedprivilege2 = privilegeRepository.save(privilege2);
-            existprivilege2 = entityManager.find(PrivilegeDAO.class, savedprivilege2.getId());
+            PrivilegeDTO savedprivilege2 = privilegeRepository.save(privilege2);
+            existprivilege2 = entityManager.find(PrivilegeDTO.class, savedprivilege2.getId());
 
             Assert.isTrue(privilege2.getName().equals(existprivilege2.getName()), "not equal");
             privileges.add(savedprivilege2);
 
 
-            RolesDAO role = new RolesDAO();
+            RolesDTO role = new RolesDTO();
             role.setRolename("TEST");
             role.setDescription("Test rol");
             role.setPrivileges(privileges);
             role.setHash(role.hashCode());
 
-            RolesDAO savedRole = roleRepository.save(role);
-            existRole = entityManager.find(RolesDAO.class, savedRole.getId());
+            RolesDTO savedRole = roleRepository.save(role);
+            existRole = entityManager.find(RolesDTO.class, savedRole.getId());
 
             Assert.isTrue(role.getRolename().equals(existRole.getRolename()), "not equal");
-            List<RolesDAO> roles = new ArrayList<>();
+            List<RolesDTO> roles = new ArrayList<>();
             roles.add(savedRole);
 
-            UserDAO user = new UserDAO();
+            UserDTO user = new UserDTO();
             user.setEmail("test-user-14@gmail.com");
             user.setPassword("12345");
             user.setUsername("test-user-14");
@@ -196,9 +196,9 @@ public class UserRepositoryTests {
             String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
             log.info("user: {}, password: {} - encoded: {}", user.getUsername(), user.getPassword(), encodedPassword);
             user.setPassword(encodedPassword);
-            UserDAO savedUser = usersRepository.save(user);
+            UserDTO savedUser = usersRepository.save(user);
 
-            existUser = entityManager.find(UserDAO.class, savedUser.getId());
+            existUser = entityManager.find(UserDTO.class, savedUser.getId());
 
             Assert.isTrue(user.getEmail().equals(existUser.getEmail()), "not equal");
 
@@ -247,22 +247,22 @@ public class UserRepositoryTests {
     public void secUserTest() {
         boolean existUser1 = false;
         boolean existUser2 = false;
-        Optional<UserDAO> userByName1 = Optional.empty();
-        Optional<UserDAO> userByEmail1 = Optional.empty();
-        Optional<UserDAO> userByName2 = Optional.empty();
-        Optional<UserDAO> userByEmail2 = Optional.empty();
+        Optional<UserDTO> userByName1 = Optional.empty();
+        Optional<UserDTO> userByEmail1 = Optional.empty();
+        Optional<UserDTO> userByName2 = Optional.empty();
+        Optional<UserDTO> userByEmail2 = Optional.empty();
 
         try {
-            Optional<RolesDAO> optionalRoleDAO = roleRepository.findByRolename("USER1");
-            RolesDAO defRole = null;
+            Optional<RolesDTO> optionalRoleDAO = roleRepository.findByRolename("USER1");
+            RolesDTO defRole = null;
 
             if (optionalRoleDAO.isPresent()) {
                 defRole = optionalRoleDAO.get();
             } else {
-                RolesDAO rolesDAO = new RolesDAO();
-                rolesDAO.setRolename("USER1");
-                rolesDAO.setDescription("JWT ROLE");
-                defRole = roleRepository.save(rolesDAO);
+                RolesDTO rolesDTO = new RolesDTO();
+                rolesDTO.setRolename("USER1");
+                rolesDTO.setDescription("JWT ROLE");
+                defRole = roleRepository.save(rolesDTO);
             }
 
             String userName = "JWT-Test";
@@ -274,7 +274,7 @@ public class UserRepositoryTests {
             if (existUser1) {
                 throw new UserExistsException("User already exists");
             }
-            var user1 = new UserDAO();
+            var user1 = new UserDTO();
             user1.setUsername(userName + "01");
             user1.setPassword(bCryptPasswordEncoder.encode("JWTPASSWORD"));
             defRole.addUser(user1);
@@ -283,7 +283,7 @@ public class UserRepositoryTests {
             user1.genHash();
 
             try {
-                UserDAO newUser1 = usersRepository.save(user1);
+                UserDTO newUser1 = usersRepository.save(user1);
                 userByName1 = Optional.of(newUser1);
             } catch (Exception e) {
                 log.error("User: {} not saved, error: ", user1.getUsername(), e);
@@ -297,7 +297,7 @@ public class UserRepositoryTests {
             if (existUser2) {
                 throw new UserExistsException("User already exists");
             }
-            var user2 = new UserDAO();
+            var user2 = new UserDTO();
             user2.setUsername(userName + "02");
             user2.setPassword(bCryptPasswordEncoder.encode("JWTPASSWORD"));
             defRole.addUser(user2);
@@ -305,7 +305,7 @@ public class UserRepositoryTests {
             user2.setEmail(userName + "02" + email);
             user2.genHash();
             try {
-                UserDAO newUser2 = usersRepository.save(user2);
+                UserDTO newUser2 = usersRepository.save(user2);
                 userByName2 = Optional.of(newUser2);
             } catch (Exception e) {
                 log.error("User: {} not saved, error: ", user2.getUsername(), e);
@@ -341,7 +341,7 @@ public class UserRepositoryTests {
     @DisplayName("Generate privileges")
     @Test
     public void generatePrivileges() {
-        PrivilegeDAO privilegeDAO = new PrivilegeDAO();
+        PrivilegeDTO privilegeDTO = new PrivilegeDTO();
         ArrayList<String> privileges = new ArrayList<>();
         privileges.add("ALL");
         privileges.add("APP_FULL_ACCESS");
@@ -350,9 +350,9 @@ public class UserRepositoryTests {
         privileges.add("APP_READ_ACCESS_JWT");
 
         privileges.forEach(privilege -> {
-            privilegeDAO.setName(privilege);
-            privilegeDAO.genHash();
-            log.info("generatePrivileges {}: {}", privilege, privilegeDAO);
+            privilegeDTO.setName(privilege);
+            privilegeDTO.genHash();
+            log.info("generatePrivileges {}: {}", privilege, privilegeDTO);
         });
     }
 
@@ -360,7 +360,7 @@ public class UserRepositoryTests {
     @DisplayName("Generate roles")
     @Test
     public void generateRoles() {
-        RolesDAO rolesDAO = new RolesDAO();
+        RolesDTO rolesDTO = new RolesDTO();
 
         ArrayList<Pair> roles = new ArrayList<>();
         roles.add(new Pair("ADMIN", "Administrator"));
@@ -370,10 +370,10 @@ public class UserRepositoryTests {
 
 
         roles.forEach(pair -> {
-            rolesDAO.setRolename(pair.getName());
-            rolesDAO.setDescription(pair.getDescription());
-            rolesDAO.genHash();
-            log.info("generateRoles {}: {}", rolesDAO.getRolename(), rolesDAO);
+            rolesDTO.setRolename(pair.getName());
+            rolesDTO.setDescription(pair.getDescription());
+            rolesDTO.genHash();
+            log.info("generateRoles {}: {}", rolesDTO.getRolename(), rolesDTO);
         });
 
     }
@@ -381,20 +381,20 @@ public class UserRepositoryTests {
     @DisplayName("Generate users")
     @Test
     public void generateUsers() {
-        UserDAO userDAO = new UserDAO();
+        UserDTO userDTO = new UserDTO();
 
         ArrayList<Quart> users = new ArrayList<>();
-        users.add(new Quart("admin","12345", "admin@gmail.com", "0612345678"));
-        users.add(new Quart("bvpelt","12345", "bvpelt@gmail.com", "0656789012"));
-        users.add(new Quart("user","12345", "user@gmail.com", "0678901234"));
+        users.add(new Quart("admin", "12345", "admin@gmail.com", "0612345678"));
+        users.add(new Quart("bvpelt", "12345", "bvpelt@gmail.com", "0656789012"));
+        users.add(new Quart("user", "12345", "user@gmail.com", "0678901234"));
 
         users.forEach(quart -> {
-            userDAO.setUsername(quart.getUsername());
-            userDAO.setPassword(quart.getPassword());
-            userDAO.setEmail(quart.getEmail());
-            userDAO.setPhone(quart.getPhone());
-            userDAO.genHash();
-            log.info("generateUsers {}: {}", userDAO.getUsername(), userDAO.toString());
+            userDTO.setUsername(quart.getUsername());
+            userDTO.setPassword(quart.getPassword());
+            userDTO.setEmail(quart.getEmail());
+            userDTO.setPhone(quart.getPhone());
+            userDTO.genHash();
+            log.info("generateUsers {}: {}", userDTO.getUsername(), userDTO);
         });
     }
 }

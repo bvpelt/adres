@@ -19,12 +19,12 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name = "users", schema = "public", catalog = "adres")
-public class UserDAO {
+public class UserDTO {
     @Serial
     private static final long serialVersionUID = 1L;
     @ManyToOne
     @JoinColumn(name = "apikey_id")
-    ApiKeyDao apiKey;
+    ApiKeyDTO apiKey;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -57,9 +57,9 @@ public class UserDAO {
                     @JoinColumn(name = "roleid", referencedColumnName = "id")
             }
     )
-    private Collection<RolesDAO> roles = new ArrayList<>();
+    private Collection<RolesDTO> roles = new ArrayList<>();
 
-    public UserDAO(String username, String password, String email, String phone) {
+    public UserDTO(String username, String password, String email, String phone) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -67,7 +67,7 @@ public class UserDAO {
         this.hash = hashCode();
     }
 
-    public UserDAO(final UserBody userbody) {
+    public UserDTO(final UserBody userbody) {
         this.setUsername(userbody.getUsername());
         this.setPassword(userbody.getPassword());
         this.setEmail(userbody.getEmail());
@@ -80,7 +80,7 @@ public class UserDAO {
         this.hash = hashCode();
     }
 
-    public UserDAO(final User user) {
+    public UserDTO(final User user) {
         this.setUsername(user.getUsername());
         this.setPassword(user.getPassword());
         this.setEmail(user.getEmail());
@@ -97,11 +97,11 @@ public class UserDAO {
         return this.hash;
     }
 
-    public void addRole(RolesDAO role) {
+    public void addRole(RolesDTO role) {
         roles.add(role);
     }
 
-    public void setRoles(Collection<RolesDAO> roles) {
+    public void setRoles(Collection<RolesDTO> roles) {
         roles.forEach(role -> {
             role.addUser(this);
             this.roles.add(role);
@@ -111,8 +111,8 @@ public class UserDAO {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        UserDAO userDAO = (UserDAO) o;
-        return Objects.equals(username, userDAO.username) && Objects.equals(password, userDAO.password) && Objects.equals(email, userDAO.email) && Objects.equals(phone, userDAO.phone) && Objects.equals(account_non_expired, userDAO.account_non_expired) && Objects.equals(account_non_locked, userDAO.account_non_locked) && Objects.equals(credentials_non_expired, userDAO.credentials_non_expired) && Objects.equals(enabled, userDAO.enabled);
+        UserDTO userDTO = (UserDTO) o;
+        return Objects.equals(username, userDTO.username) && Objects.equals(password, userDTO.password) && Objects.equals(email, userDTO.email) && Objects.equals(phone, userDTO.phone) && Objects.equals(account_non_expired, userDTO.account_non_expired) && Objects.equals(account_non_locked, userDTO.account_non_locked) && Objects.equals(credentials_non_expired, userDTO.credentials_non_expired) && Objects.equals(enabled, userDTO.enabled);
     }
 
     @Override

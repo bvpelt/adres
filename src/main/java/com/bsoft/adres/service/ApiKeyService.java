@@ -1,8 +1,7 @@
 package com.bsoft.adres.service;
 
-import com.bsoft.adres.database.ApiKeyDao;
+import com.bsoft.adres.database.ApiKeyDTO;
 import com.bsoft.adres.repositories.ApiKeyRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
 public class ApiKeyService {
 
@@ -29,16 +27,16 @@ public class ApiKeyService {
         }
 
         // 2. Check if API Key exists in the database
-        Optional<ApiKeyDao> apiKeyOptional = apiKeyRepository.findByKey(apiKey);
+        Optional<ApiKeyDTO> apiKeyOptional = apiKeyRepository.findByKey(apiKey);
         result = apiKeyOptional.isPresent();
 
         log.trace("isValidApiKey checking key: {} value: {}", apiKey, result);
         return result;
     }
 
-    public ApiKeyDao generateApiKey() {
+    public ApiKeyDTO generateApiKey() {
         String randomKey = UUID.randomUUID().toString();
-        ApiKeyDao apiKey = new ApiKeyDao();
+        ApiKeyDTO apiKey = new ApiKeyDTO();
         apiKey.setApikey(randomKey);
 
         return apiKey;

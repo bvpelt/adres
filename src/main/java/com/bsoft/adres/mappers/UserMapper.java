@@ -1,8 +1,8 @@
 package com.bsoft.adres.mappers;
 
 import com.bsoft.adres.database.JsonNullableMapper;
-import com.bsoft.adres.database.RolesDAO;
-import com.bsoft.adres.database.UserDAO;
+import com.bsoft.adres.database.RolesDTO;
+import com.bsoft.adres.database.UserDTO;
 import com.bsoft.adres.generated.model.Role;
 import com.bsoft.adres.generated.model.User;
 import lombok.Setter;
@@ -27,41 +27,42 @@ public abstract class UserMapper implements JsonNullableMapper {
     @Mapping(target = "accountNonLocked", source = "account_non_locked")
     @Mapping(target = "credentialsNonExpired", source = "credentials_non_expired")
     @Mapping(source = "roles", target = "roles", qualifiedByName = "mapToRoles")
-    public abstract User map(UserDAO source);
+    public abstract User map(UserDTO source);
 
     @Named("mapToRoles")
-    public List<Role> roleDAOCollectionToRoleList(Collection<RolesDAO> source) {
+    public List<Role> roleDTOCollectionToRoleList(Collection<RolesDTO> source) {
         List<Role> roles = new ArrayList<>();
 
-        for (RolesDAO rolesDAO : source) {
-            Role role = roleDAOToRole(rolesDAO);
+        for (RolesDTO rolesDTO : source) {
+            Role role = roleDTOToRole(rolesDTO);
             roles.add(role);
         }
         return roles;
     }
 
-    public Role roleDAOToRole(RolesDAO rolesDAO) {
-        return Mappers.getMapper(RoleMapper.class).map(rolesDAO);
+    public Role roleDTOToRole(RolesDTO rolesDTO) {
+        return Mappers.getMapper(RoleMapper.class).map(rolesDTO);
     }
 
     @Mapping(target = "account_non_expired", source = "accountNonExpired")
     @Mapping(target = "account_non_locked", source = "accountNonLocked")
     @Mapping(target = "credentials_non_expired", source = "credentialsNonExpired")
-    @Mapping(source = "roles", target = "roles", qualifiedByName = "mapToRolesDAO")
-    public abstract UserDAO map(User source);
+    @Mapping(source = "roles", target = "roles", qualifiedByName = "mapToRolesDTO")
+    public abstract UserDTO map(User source);
 
-    @Named("mapToRolesDAO")
-    public Collection<RolesDAO> roleListToRoleCollection(List<Role> source) {
-        Collection<RolesDAO> roles = new ArrayList<>();
+    @Named("mapToRolesDTO")
+    public Collection<RolesDTO> roleListToRoleCollection(List<Role> source) {
+        Collection<RolesDTO> roles = new ArrayList<>();
 
         for (Role role : source) {
-            RolesDAO rolesDAO = roleToRoleDAO01(role);
-            roles.add(rolesDAO);
+            RolesDTO rolesDTO = roleToRoleDTO(role);
+            roles.add(rolesDTO);
         }
         return roles;
     }
 
-    public RolesDAO roleToRoleDAO01(Role role) {
+    public RolesDTO roleToRoleDTO(Role role) {
+
         return Mappers.getMapper(RoleMapper.class).map(role);
     }
 }

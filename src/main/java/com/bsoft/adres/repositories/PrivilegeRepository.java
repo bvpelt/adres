@@ -1,6 +1,6 @@
 package com.bsoft.adres.repositories;
 
-import com.bsoft.adres.database.PrivilegeDAO;
+import com.bsoft.adres.database.PrivilegeDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,26 +15,26 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PrivilegeRepository extends PagingAndSortingRepository<PrivilegeDAO, Long>,
-        CrudRepository<PrivilegeDAO, Long>,
-        JpaSpecificationExecutor<PrivilegeDAO> {
+public interface PrivilegeRepository extends PagingAndSortingRepository<PrivilegeDTO, Long>,
+        CrudRepository<PrivilegeDTO, Long>,
+        JpaSpecificationExecutor<PrivilegeDTO> {
 
     @Query(value = "SELECT * FROM privilege where name = :privilegename", nativeQuery = true)
-    Optional<PrivilegeDAO> findByPrivilegename(final String privilegename);
+    Optional<PrivilegeDTO> findByPrivilegename(final String privilegename);
 
     @Query(value = "SELECT * FROM privilege where id = :id", nativeQuery = true)
-    Optional<PrivilegeDAO> findByPrivilegeId(Long id);
+    Optional<PrivilegeDTO> findByPrivilegeId(Long id);
 
     @Query(value = "SELECT * FROM privilege",
             countQuery = "SELECT * FROM privilege",
             nativeQuery = true)
-    List<PrivilegeDAO> findAllByPaged(final Pageable pageable);
+    List<PrivilegeDTO> findAllByPaged(final Pageable pageable);
 
     @Query(value = "SELECT * FROM privilege WHERE hash = :hash", nativeQuery = true)
-    Optional<PrivilegeDAO> findByHash(@Param("hash") Integer hash);
+    Optional<PrivilegeDTO> findByHash(@Param("hash") Integer hash);
 
     @Query(value = "SELECT * FROM privilege",
             countQuery = "SELECT * FROM privilege",
             nativeQuery = true)
-    Page<PrivilegeDAO> findAllByPage(PageRequest pageRequest);
+    Page<PrivilegeDTO> findAllByPage(PageRequest pageRequest);
 }

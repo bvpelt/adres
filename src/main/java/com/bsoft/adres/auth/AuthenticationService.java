@@ -1,7 +1,7 @@
 package com.bsoft.adres.auth;
 
-import com.bsoft.adres.database.RolesDAO;
-import com.bsoft.adres.database.UserDAO;
+import com.bsoft.adres.database.RolesDTO;
+import com.bsoft.adres.database.UserDTO;
 import com.bsoft.adres.exceptions.InvalidUserException;
 import com.bsoft.adres.exceptions.UserExistsException;
 import com.bsoft.adres.generated.model.LoginRequest;
@@ -49,20 +49,20 @@ public class AuthenticationService {
     public LoginResponse register(LoginRequest request) {
         log.debug("AuthenticationService register - authenticationresponse for request: {}", request.toString());
 
-        Optional<RolesDAO> optionalRoleDAO = roleRepository.findByRolename("USER");
-        RolesDAO defRole = null;
+        Optional<RolesDTO> optionalRoleDAO = roleRepository.findByRolename("USER");
+        RolesDTO defRole = null;
 
         if (optionalRoleDAO.isPresent()) {
             defRole = optionalRoleDAO.get();
         } else {
-            RolesDAO rolesDAO = new RolesDAO();
-            rolesDAO.setRolename("JWT-TOKEN");
-            rolesDAO.setDescription("Using JWT token authentication");
-            rolesDAO.genHash();
-            defRole = roleRepository.save(rolesDAO);
+            RolesDTO rolesDTO = new RolesDTO();
+            rolesDTO.setRolename("JWT-TOKEN");
+            rolesDTO.setDescription("Using JWT token authentication");
+            rolesDTO.genHash();
+            defRole = roleRepository.save(rolesDTO);
         }
 
-        var user = new UserDAO();
+        var user = new UserDTO();
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         defRole.addUser(user);
@@ -125,7 +125,7 @@ public class AuthenticationService {
 
         Boolean authenticated = passwordEncoder.matches(loginRequest.getPassword(), user.getPassword());
         if (authenticated) {
-            MyUserPrincipal myUserPrincipal = new MyUserPrincipal(new UserDAO(user));
+            MyUserPrincipal myUserPrincipal = new MyUserPrincipal(new UserDTO(user));
 
             var jwtToken = jwtUtils.generateTokenFromUsername(myUserPrincipal);
 

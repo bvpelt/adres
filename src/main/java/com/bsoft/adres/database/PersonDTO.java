@@ -21,7 +21,7 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name = "person", schema = "public", catalog = "adres")
-public class PersonDAO implements Serializable {
+public class PersonDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -41,9 +41,9 @@ public class PersonDAO implements Serializable {
     private LocalDate dateofbirth;
 
     @ManyToMany(mappedBy = "persons") //, fetch = FetchType.LAZY)
-    private Collection<AdresDAO> adresses = new ArrayList<>();
+    private Collection<AdresDTO> adresses = new ArrayList<>();
 
-    public PersonDAO(final Person person) {
+    public PersonDTO(final Person person) {
         this.id = person.getId();
         this.firstname = person.getFirstName();
         this.infix = person.getInfix();
@@ -52,7 +52,7 @@ public class PersonDAO implements Serializable {
         this.hash = this.hashCode();
     }
 
-    public PersonDAO(final PersonBody person) {
+    public PersonDTO(final PersonBody person) {
         this.id = null;
         this.firstname = person.getFirstName();
         this.infix = person.getInfix();
@@ -66,15 +66,15 @@ public class PersonDAO implements Serializable {
         return this.hash;
     }
 
-    public void addAdres(AdresDAO adres) {
+    public void addAdres(AdresDTO adres) {
         adresses.add(adres);
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        PersonDAO personDAO = (PersonDAO) o;
-        return Objects.equals(firstname, personDAO.firstname) && Objects.equals(infix, personDAO.infix) && Objects.equals(lastname, personDAO.lastname) && Objects.equals(dateofbirth, personDAO.dateofbirth);
+        PersonDTO personDTO = (PersonDTO) o;
+        return Objects.equals(firstname, personDTO.firstname) && Objects.equals(infix, personDTO.infix) && Objects.equals(lastname, personDTO.lastname) && Objects.equals(dateofbirth, personDTO.dateofbirth);
     }
 
     @Override

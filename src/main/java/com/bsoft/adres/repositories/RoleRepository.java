@@ -1,6 +1,6 @@
 package com.bsoft.adres.repositories;
 
-import com.bsoft.adres.database.RolesDAO;
+import com.bsoft.adres.database.RolesDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,26 +15,26 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface RoleRepository extends PagingAndSortingRepository<RolesDAO, Long>,
-        CrudRepository<RolesDAO, Long>,
-        JpaSpecificationExecutor<RolesDAO> {
+public interface RoleRepository extends PagingAndSortingRepository<RolesDTO, Long>,
+        CrudRepository<RolesDTO, Long>,
+        JpaSpecificationExecutor<RolesDTO> {
 
     @Query(value = "SELECT * FROM roles where rolename = :rolename", nativeQuery = true)
-    Optional<RolesDAO> findByRolename(final String rolename);
+    Optional<RolesDTO> findByRolename(final String rolename);
 
     @Query(value = "SELECT * FROM roles where id = :id", nativeQuery = true)
-    Optional<RolesDAO> findByRoleId(Long id);
+    Optional<RolesDTO> findByRoleId(Long id);
 
     @Query(value = "SELECT * FROM roles",
             countQuery = "SELECT * FROM role",
             nativeQuery = true)
-    List<RolesDAO> findAllByPaged(final Pageable pageable);
+    List<RolesDTO> findAllByPaged(final Pageable pageable);
 
     @Query(value = "SELECT * FROM roles WHERE hash = :hash", nativeQuery = true)
-    Optional<RolesDAO> findByHash(@Param("hash") Integer hash);
+    Optional<RolesDTO> findByHash(@Param("hash") Integer hash);
 
     @Query(value = "SELECT * FROM roles",
             countQuery = "SELECT * FROM roles",
             nativeQuery = true)
-    Page<RolesDAO> findAllByPage(PageRequest pageRequest);
+    Page<RolesDTO> findAllByPage(PageRequest pageRequest);
 }

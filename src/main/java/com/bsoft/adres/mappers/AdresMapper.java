@@ -1,8 +1,8 @@
 package com.bsoft.adres.mappers;
 
-import com.bsoft.adres.database.AdresDAO;
+import com.bsoft.adres.database.AdresDTO;
 import com.bsoft.adres.database.JsonNullableMapper;
-import com.bsoft.adres.database.PersonDAO;
+import com.bsoft.adres.database.PersonDTO;
 import com.bsoft.adres.generated.model.Adres;
 import com.bsoft.adres.generated.model.Person;
 import lombok.Setter;
@@ -24,38 +24,38 @@ import java.util.List;
 public abstract class AdresMapper implements JsonNullableMapper {
 
     @Mapping(source = "persons", target = "persons", qualifiedByName = "mapToPersons")
-    public abstract Adres map(AdresDAO source);
+    public abstract Adres map(AdresDTO source);
 
     @Named("mapToPersons")
-    public List<Person> personDAOCollectionToPersonList(Collection<PersonDAO> source) {
+    public List<Person> personDTOCollectionToPersonList(Collection<PersonDTO> source) {
         List<Person> persons = new ArrayList<>();
 
-        for (PersonDAO personDAO : source) {
-            Person person = personDAOToPerson(personDAO);
+        for (PersonDTO personDTO : source) {
+            Person person = personDTOToPerson(personDTO);
             persons.add(person);
         }
         return persons;
     }
 
-    public Person personDAOToPerson(PersonDAO personDAO) {
-        return Mappers.getMapper(PersonMapper.class).map(personDAO);
+    public Person personDTOToPerson(PersonDTO personDTO) {
+        return Mappers.getMapper(PersonMapper.class).map(personDTO);
     }
 
-    @Mapping(source = "persons", target = "persons", qualifiedByName = "mapToPersonsDAO")
-    public abstract AdresDAO map(Adres source);
+    @Mapping(source = "persons", target = "persons", qualifiedByName = "mapToPersonsDTO")
+    public abstract AdresDTO map(Adres source);
 
-    @Named("mapToPersonsDAO")
-    public Collection<PersonDAO> personListToPersonCollection(List<Person> source) {
-        Collection<PersonDAO> persons = new ArrayList<>();
+    @Named("mapToPersonsDTO")
+    public Collection<PersonDTO> personListToPersonCollection(List<Person> source) {
+        Collection<PersonDTO> persons = new ArrayList<>();
 
         for (Person person : source) {
-            PersonDAO personDAO = roleToRoleDAO(person);
-            persons.add(personDAO);
+            PersonDTO personDTO = roleToRoleDTO(person);
+            persons.add(personDTO);
         }
         return persons;
     }
 
-    public PersonDAO roleToRoleDAO(Person person) {
+    public PersonDTO roleToRoleDTO(Person person) {
         return Mappers.getMapper(PersonMapper.class).map(person);
     }
 

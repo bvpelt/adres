@@ -1,6 +1,6 @@
 package com.bsoft.adres.security;
 
-import com.bsoft.adres.database.UserDAO;
+import com.bsoft.adres.database.UserDTO;
 import com.bsoft.adres.repositories.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class MyUserDetailsService implements UserDetailsService {
     public MyUserPrincipal
     loadUserByUsername(String username) throws UsernameNotFoundException {
         log.debug("loadUserByUsername check user: {}", username);
-        Optional<UserDAO> userDAO = usersRepository.findByUserName(username);
+        Optional<UserDTO> userDAO = usersRepository.findByUserName(username);
         if (userDAO.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }

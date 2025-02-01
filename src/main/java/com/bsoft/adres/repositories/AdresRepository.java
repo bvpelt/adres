@@ -1,6 +1,6 @@
 package com.bsoft.adres.repositories;
 
-import com.bsoft.adres.database.AdresDAO;
+import com.bsoft.adres.database.AdresDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -14,26 +14,26 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AdresRepository extends PagingAndSortingRepository<AdresDAO, Long>,
-        CrudRepository<AdresDAO, Long>,
-        JpaSpecificationExecutor<AdresDAO> {
+public interface AdresRepository extends PagingAndSortingRepository<AdresDTO, Long>,
+        CrudRepository<AdresDTO, Long>,
+        JpaSpecificationExecutor<AdresDTO> {
 
     @Query(value = "SELECT * FROM adres WHERE id = :id", nativeQuery = true)
-    Optional<AdresDAO> findByAdresId(@Param("id") Long id);
+    Optional<AdresDTO> findByAdresId(@Param("id") Long id);
 
     @Query(value = "SELECT * FROM adres WHERE hash = :hash", nativeQuery = true)
-    Optional<AdresDAO> findByHash(@Param("hash") Integer hash);
+    Optional<AdresDTO> findByHash(@Param("hash") Integer hash);
 
     @Query(value = "SELECT * FROM adres",
             countQuery = "SELECT * FROM adres",
             nativeQuery = true)
-    List<AdresDAO> findAllByPaged(Pageable pageable);
+    List<AdresDTO> findAllByPaged(Pageable pageable);
 
     @Query(value = "SELECT * FROM adres",
             countQuery = "SELECT * FROM adres",
             nativeQuery = true)
-    Page<AdresDAO> findAllByPage(Pageable pageable);
+    Page<AdresDTO> findAllByPage(Pageable pageable);
 
     @Query(value = "SELECT adres.* FROM adres, adres_person WHERE adres.id = adres_person.adresid and adres_person.personid = :personId", nativeQuery = true)
-    List<AdresDAO> findAdresByPersonId(Long personId);
+    List<AdresDTO> findAdresByPersonId(Long personId);
 }

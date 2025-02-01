@@ -17,7 +17,7 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name = "privilege", schema = "public", catalog = "adres")
-public class PrivilegeDAO {
+public class PrivilegeDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -30,14 +30,14 @@ public class PrivilegeDAO {
     private Integer hash = -1;
 
     @ManyToMany(mappedBy = "privileges")
-    private Collection<RolesDAO> roles = new ArrayList<>();
+    private Collection<RolesDTO> roles = new ArrayList<>();
 
-    public PrivilegeDAO(PrivilegeBody privilegeBody) {
+    public PrivilegeDTO(PrivilegeBody privilegeBody) {
         this.name = privilegeBody.getName();
         this.hash = this.genHash();
     }
 
-    public void addRole(RolesDAO role) {
+    public void addRole(RolesDTO role) {
         roles.add(role);
     }
 
@@ -48,7 +48,7 @@ public class PrivilegeDAO {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof PrivilegeDAO that)) return false;
+        if (!(o instanceof PrivilegeDTO that)) return false;
         return Objects.equals(name, that.name);
     }
 

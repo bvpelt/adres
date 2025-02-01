@@ -1,7 +1,7 @@
 package com.bsoft.adres.service;
 
-import com.bsoft.adres.database.AdresDAO;
-import com.bsoft.adres.database.PersonDAO;
+import com.bsoft.adres.database.AdresDTO;
+import com.bsoft.adres.database.PersonDTO;
 import com.bsoft.adres.exceptions.PersonExistsException;
 import com.bsoft.adres.exceptions.PersonNotExistsException;
 import com.bsoft.adres.generated.model.Person;
@@ -10,8 +10,8 @@ import com.bsoft.adres.generated.model.PersonBody;
 import com.bsoft.adres.mappers.PersonMapper;
 import com.bsoft.adres.repositories.AdresRepository;
 import com.bsoft.adres.repositories.PersonRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -22,19 +22,23 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
 public class PersonService {
 
-    private final PersonRepository personRepository;
-    private final AdresRepository adresRepository;
-    private final PersonMapper personMapper;
+    @Autowired
+    private PersonRepository personRepository;
+
+    @Autowired
+    private AdresRepository adresRepository;
+
+    @Autowired
+    private PersonMapper personMapper;
 
     public void deleteAll() {
         try {
             personRepository.deleteAll();
         } catch (Exception e) {
-            log.error("Deleting all persons failed: {}", e);
+            log.error("Deleting all persons failed: {}", e.toString());
             throw e;
         }
     }
@@ -42,22 +46,22 @@ public class PersonService {
     public boolean deletePerson(Long personId) {
         boolean deleted = false;
         try {
-            Optional<PersonDAO> optionalPersonDAO = personRepository.findByPersonId(personId);
+            Optional<PersonDTO> optionalPersonDAO = personRepository.findByPersonId(personId);
             if (!optionalPersonDAO.isPresent()) {
                 throw new PersonNotExistsException("Person with id " + personId + " not found and not deleted");
             }
             personRepository.deleteById(personId);
             deleted = true;
         } catch (Exception e) {
-            log.error("Delete person failed: {}", e);
+            log.error("Delete person failed: {}", e.toString());
             throw e;
         }
         return deleted;
     }
 
     public Person getPerson(Long personId) {
-        Optional<PersonDAO> optionalPersonDAO = personRepository.findByPersonId(personId);
-        if (!optionalPersonDAO.isPresent()) {
+        Optional<PersonDTO> optionalPersonDAO = personRepository.findByPersonId(personId);
+        if (optionalPersonDAO.isEmpty()) {
             throw new PersonNotExistsException("Person with id " + personId + " not found");
         }
         return personMapper.map(optionalPersonDAO.get());
@@ -65,12 +69,12 @@ public class PersonService {
 
 
     public PersonAdres getPersonAdres(Long personId) {
-        Optional<PersonDAO> optionalPersonDAO = personRepository.findByPersonId(personId);
-        if (!optionalPersonDAO.isPresent()) {
+        Optional<PersonDTO> optionalPersonDAO = personRepository.findByPersonId(personId);
+        if (optionalPersonDAO.isEmpty()) {
             throw new PersonNotExistsException("Person with id " + personId + " not found");
         }
         List<Long> adresIds = new ArrayList<Long>();
-        List<AdresDAO> adresList = adresRepository.findAdresByPersonId(personId);
+        List<AdresDTO> adresList = adresRepository.findAdresByPersonId(personId);
 
         adresList.forEach(adres -> {
             adresIds.add(adres.getId());
@@ -89,7 +93,7 @@ public class PersonService {
 
     public List<Person> getPersons() {
         List<Person> result = new ArrayList<Person>();
-        Iterable<PersonDAO> iPerson = personRepository.findAll();
+        Iterable<PersonDTO> iPerson = personRepository.findAll();
 
         iPerson.forEach(PersonDAO -> {
             Person newPerson = personMapper.map(PersonDAO);
@@ -101,7 +105,7 @@ public class PersonService {
 
     public List<Person> getPersons(final PageRequest pageRequest) {
         List<Person> PersonList = new ArrayList<Person>();
-        Iterable<PersonDAO> PersonDAOIterable = personRepository.findAllByPaged(pageRequest);
+        Iterable<PersonDTO> PersonDAOIterable = personRepository.findAllByPaged(pageRequest);
 
         PersonDAOIterable.forEach(PersonDAO -> {
             PersonList.add(personMapper.map(PersonDAO));
@@ -111,53 +115,49 @@ public class PersonService {
     }
 
     public Person postPerson(Boolean override, final PersonBody PersonBody) {
-        PersonDAO PersonDAO = new PersonDAO(PersonBody);
+        PersonDTO PersonDTO = new PersonDTO(PersonBody);
 
         try {
             if (!override) {
-                Optional<PersonDAO> optionalPersonDAO = personRepository.findByHash(PersonDAO.getHash());
+                Optional<PersonDTO> optionalPersonDAO = personRepository.findByHash(PersonDTO.getHash());
                 if (optionalPersonDAO.isPresent()) {
-                    throw new PersonExistsException("Person " + PersonDAO + " already exists cannot insert again");
+                    throw new PersonExistsException("Person " + PersonDTO + " already exists cannot insert again");
                 }
             }
 
-            personRepository.save(PersonDAO);
+            personRepository.save(PersonDTO);
 
-            return personMapper.map(PersonDAO); // Return 201 Created with the created entity
+            return personMapper.map(PersonDTO); // Return 201 Created with the created entity
         } catch (Error e) {
-            log.error("Error inserting Person: {}", e);
+            log.error("Error inserting Person: {}", e.toString());
             throw e;
         }
     }
 
     public Person patch(Long PersonId, final PersonBody PersonBody) {
 
-        try {
-            Optional<PersonDAO> optionalPersonDAO = personRepository.findByPersonId(PersonId);
-            if (!optionalPersonDAO.isPresent()) {
-                throw new PersonNotExistsException("Person with id " + PersonId + " not found");
-            }
-            PersonDAO foundPerson = optionalPersonDAO.get();
-            if (PersonBody.getFirstName() != null) {
-                foundPerson.setFirstname(PersonBody.getFirstName());
-            }
-            if (PersonBody.getInfix() != null) {
-                foundPerson.setInfix(PersonBody.getInfix());
-            }
-            if (PersonBody.getLastName() != null) {
-                foundPerson.setLastname(PersonBody.getLastName());
-            }
-            if (PersonBody.getDateOfBirth() != null) {
-                foundPerson.setDateofbirth(PersonBody.getDateOfBirth());
-            }
-            foundPerson.setHash(foundPerson.genHash());
-
-            personRepository.save(foundPerson);
-
-            return personMapper.map(foundPerson);
-        } catch (Error e) {
-            throw e;
+        Optional<PersonDTO> optionalPersonDAO = personRepository.findByPersonId(PersonId);
+        if (!optionalPersonDAO.isPresent()) {
+            throw new PersonNotExistsException("Person with id " + PersonId + " not found");
         }
+        PersonDTO foundPerson = optionalPersonDAO.get();
+        if (PersonBody.getFirstName() != null) {
+            foundPerson.setFirstname(PersonBody.getFirstName());
+        }
+        if (PersonBody.getInfix() != null) {
+            foundPerson.setInfix(PersonBody.getInfix());
+        }
+        if (PersonBody.getLastName() != null) {
+            foundPerson.setLastname(PersonBody.getLastName());
+        }
+        if (PersonBody.getDateOfBirth() != null) {
+            foundPerson.setDateofbirth(PersonBody.getDateOfBirth());
+        }
+        foundPerson.setHash(foundPerson.genHash());
+
+        personRepository.save(foundPerson);
+
+        return personMapper.map(foundPerson);
 
     }
 
@@ -175,7 +175,7 @@ public class PersonService {
      */
 
     public Page<Person> getPersonsPage(PageRequest pageRequest) {
-        Page<PersonDAO> foundPersonPage = personRepository.findAllByPage(pageRequest);
+        Page<PersonDTO> foundPersonPage = personRepository.findAllByPage(pageRequest);
 
         List<Person> personList = new ArrayList<>();
         personList = foundPersonPage.getContent().stream()

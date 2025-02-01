@@ -19,7 +19,7 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name = "roles", schema = "public", catalog = "adres")
-public class RolesDAO {
+public class RolesDTO {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -38,15 +38,15 @@ public class RolesDAO {
     private Integer hash = -1;
 
     @ManyToMany(mappedBy = "roles") //, fetch = FetchType.LAZY)
-    private Collection<UserDAO> users = new ArrayList<>();
+    private Collection<UserDTO> users = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "roles_privileges",
             joinColumns = @JoinColumn(name = "roleid", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "privilegeid", referencedColumnName = "id"))
-    private Collection<PrivilegeDAO> privileges = new ArrayList<>();
+    private Collection<PrivilegeDTO> privileges = new ArrayList<>();
 
-    public RolesDAO(RoleBody roleBody) {
+    public RolesDTO(RoleBody roleBody) {
         this.description = roleBody.getDescription();
         this.rolename = roleBody.getRolename();
         this.hash = this.hashCode();
@@ -57,11 +57,11 @@ public class RolesDAO {
         return this.hash;
     }
 
-    public void addUser(UserDAO user) {
+    public void addUser(UserDTO user) {
         users.add(user);
     }
 
-    public void setPrivileges(Collection<PrivilegeDAO> privileges) {
+    public void setPrivileges(Collection<PrivilegeDTO> privileges) {
         privileges.forEach(privilege -> {
             privilege.addRole(this);
             this.privileges.add(privilege);
@@ -71,8 +71,8 @@ public class RolesDAO {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        RolesDAO rolesDAO = (RolesDAO) o;
-        return Objects.equals(rolename, rolesDAO.rolename) && Objects.equals(description, rolesDAO.description);
+        RolesDTO rolesDTO = (RolesDTO) o;
+        return Objects.equals(rolename, rolesDTO.rolename) && Objects.equals(description, rolesDTO.description);
     }
 
     @Override

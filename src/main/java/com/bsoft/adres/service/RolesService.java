@@ -1,14 +1,14 @@
 package com.bsoft.adres.service;
 
-import com.bsoft.adres.database.RolesDAO;
+import com.bsoft.adres.database.RolesDTO;
 import com.bsoft.adres.exceptions.RoleExistsException;
 import com.bsoft.adres.exceptions.RoleNotExistsException;
 import com.bsoft.adres.generated.model.Role;
 import com.bsoft.adres.generated.model.RoleBody;
 import com.bsoft.adres.mappers.RoleMapper;
 import com.bsoft.adres.repositories.RoleRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -19,51 +19,53 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
 public class RolesService {
 
-    private final RoleRepository roleRepository;
-    private final RoleMapper roleMapper;
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private RoleMapper roleMapper;
 
     public void deleteAll() {
         try {
             roleRepository.deleteAll();
         } catch (Exception e) {
-            log.error("Deleting all roles failed: {}", e);
+            log.error("Deleting all roles failed: {}", e.toString());
         }
     }
 
     public boolean deleteRole(Long roleId) {
         boolean deleted = false;
         try {
-            Optional<RolesDAO> optionalRoleDAO = roleRepository.findByRoleId(roleId);
+            Optional<RolesDTO> optionalRoleDAO = roleRepository.findByRoleId(roleId);
             if (optionalRoleDAO.isEmpty()) {
                 throw new RoleNotExistsException("Role with id " + roleId + " not found and not deleted");
             }
             roleRepository.deleteById(roleId);
             deleted = true;
         } catch (Exception e) {
-            log.error("Delete role failed: {}", e);
+            log.error("Delete role failed: {}", e.toString());
             throw e;
         }
         return deleted;
     }
 
     public Role getRole(Long roleId) {
-        Optional<RolesDAO> optionalRoleDAO = roleRepository.findByRoleId(roleId);
+        Optional<RolesDTO> optionalRoleDAO = roleRepository.findByRoleId(roleId);
         if (optionalRoleDAO.isEmpty()) {
             throw new RoleNotExistsException("Role with id " + roleId + " not found");
         }
 
-        RolesDAO RolesDAO = optionalRoleDAO.get();
+        RolesDTO RolesDTO = optionalRoleDAO.get();
 
-        return roleMapper.map(RolesDAO);
+        return roleMapper.map(RolesDTO);
     }
 
     public List<Role> getRoles() {
         List<Role> roleList = new ArrayList<Role>();
-        Iterable<RolesDAO> RoleDAOIterable = roleRepository.findAll();
+        Iterable<RolesDTO> RoleDAOIterable = roleRepository.findAll();
 
         RoleDAOIterable.forEach(RoleDAO -> {
             Role Role = roleMapper.map(RoleDAO);
@@ -75,7 +77,7 @@ public class RolesService {
 
     public List<Role> getRoles(final PageRequest pageRequest) {
         List<Role> roleList = new ArrayList<Role>();
-        Iterable<RolesDAO> RoleDAOIterable = roleRepository.findAllByPaged(pageRequest);
+        Iterable<RolesDTO> RoleDAOIterable = roleRepository.findAllByPaged(pageRequest);
 
         RoleDAOIterable.forEach(RoleDAO -> {
             Role Role = roleMapper.map(RoleDAO);
@@ -86,21 +88,21 @@ public class RolesService {
     }
 
     public Role postRole(Boolean override, final RoleBody roleBody) {
-        RolesDAO RolesDAO = new RolesDAO(roleBody);
+        RolesDTO RolesDTO = new RolesDTO(roleBody);
 
         try {
             if (!override) {
-                Optional<RolesDAO> optionalRoleDAO = roleRepository.findByHash(RolesDAO.getHash());
+                Optional<RolesDTO> optionalRoleDAO = roleRepository.findByHash(RolesDTO.getHash());
                 if (optionalRoleDAO.isPresent()) {
-                    throw new RoleExistsException("Role " + RolesDAO + " already exists cannot insert again");
+                    throw new RoleExistsException("Role " + RolesDTO + " already exists cannot insert again");
                 }
             }
 
-            roleRepository.save(RolesDAO);
+            roleRepository.save(RolesDTO);
 
-            return roleMapper.map(RolesDAO); // Return 201 Created with the created entity
+            return roleMapper.map(RolesDTO); // Return 201 Created with the created entity
         } catch (Error e) {
-            log.error("Error inserting adres: {}", e);
+            log.error("Error inserting adres: {}", e.toString());
             throw e;
         }
     }
@@ -108,26 +110,22 @@ public class RolesService {
     public Role patch(Long roleId, final RoleBody roleBody) {
         Role role = new Role();
 
-        try {
-            Optional<RolesDAO> optionalRoleDAO = roleRepository.findByRoleId(roleId);
-            if (optionalRoleDAO.isEmpty()) {
-                throw new RoleNotExistsException("Role with id " + roleId + " not found");
-            }
-            RolesDAO foundRole = optionalRoleDAO.get();
-            if (roleBody.getRolename() != null) {
-                foundRole.setRolename(roleBody.getRolename());
-            }
-            if (roleBody.getDescription() != null) {
-                foundRole.setDescription(roleBody.getDescription());
-            }
-            foundRole.setHash(foundRole.genHash());
-
-            roleRepository.save(foundRole);
-
-            return roleMapper.map(foundRole);
-        } catch (Error e) {
-            throw e;
+        Optional<RolesDTO> optionalRoleDAO = roleRepository.findByRoleId(roleId);
+        if (optionalRoleDAO.isEmpty()) {
+            throw new RoleNotExistsException("Role with id " + roleId + " not found");
         }
+        RolesDTO foundRole = optionalRoleDAO.get();
+        if (roleBody.getRolename() != null) {
+            foundRole.setRolename(roleBody.getRolename());
+        }
+        if (roleBody.getDescription() != null) {
+            foundRole.setDescription(roleBody.getDescription());
+        }
+        foundRole.setHash(foundRole.genHash());
+
+        roleRepository.save(foundRole);
+
+        return roleMapper.map(foundRole);
 
     }
 
@@ -152,7 +150,7 @@ public class RolesService {
      */
 
     public Page<Role> getRolesPage(PageRequest pageRequest) {
-        Page<RolesDAO> foundRolesPage = roleRepository.findAllByPage(pageRequest);
+        Page<RolesDTO> foundRolesPage = roleRepository.findAllByPage(pageRequest);
 
         List<Role> rolesList = new ArrayList<>();
         rolesList = foundRolesPage.getContent().stream()
