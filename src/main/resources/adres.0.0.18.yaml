@@ -1,0 +1,2321 @@
+openapi: "3.0.3"
+info:
+  title: Adres API
+  version: 0.0.18
+
+servers:
+  - url: http://localhost:8080/{basePath}
+    description: development
+    variables:
+      basePath:
+        default: "adres/api/v1"
+  - url: http://localhost/{basePath}
+    description: production
+    variables:
+      basePath:
+        default: "adres/api/v1"
+
+tags:
+  - name: Adresses
+    description: "Adres data for persons"
+  - name: Login
+    description: "Login methods for basicauthentication or JWT tokens"
+  - name: Persons
+    description: "Persons"
+  - name: Roles
+    description: "The roles a user can have"
+  - name: Users
+    description: "The users who have special access"
+
+paths:
+  /adresses:
+    delete:
+      tags:
+        - Adresses
+      summary: Delete all
+      description: |
+        Delete all adres
+      operationId: deleteAllAdreses
+      security:
+        - basicAuth: []
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    get:
+      tags:
+        - Adresses
+      summary: Retrieve all known adresses
+      description: |
+        Retrieve all known adresses, using paging and sorting
+      operationId: getAdresses
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "200":
+          $ref: "#/components/responses/PagedAdresses"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    post:
+      tags:
+        - Adresses
+      summary: Create a new adres
+      description: |
+        Create a new adres
+        To determine if an adres is new the input is compared on the hash value of:
+        - street
+        - housenumber
+        - zipcode
+        - city
+        If the hash value already exists in the backend, the adres is considered to exist
+      operationId: postAdres
+      security:
+        - basicAuth: []
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/override"
+        - $ref: "#/components/parameters/X-API-KEY"
+      requestBody:
+        description: Request parameters
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdresBody"
+            examples:
+              adres:
+                $ref: "#/components/examples/AdresBody"
+      responses:
+        "201":
+          $ref: "#/components/responses/Adres"
+        "303":
+          $ref: "#/components/responses/AlreadyExists"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+  /adresses/{id}:
+    get:
+      tags:
+        - Adresses
+      summary: Retrieve the specified adres
+      description: |
+        Retrieve only one adres with id adresId
+      operationId: getAdres
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "200":
+          $ref: "#/components/responses/Adres"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    delete:
+      tags:
+        - Adresses
+      summary: Delete the specified adres
+      description: |
+        Delete only the specified adres
+      operationId: deleteAdres
+      security:
+        - basicAuth: []
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    patch:
+      tags:
+        - Adresses
+      summary: Update the specified adres
+      description: |
+        Update only the adres specified with adresId
+      operationId: patchAdres
+      security:
+        - basicAuth: []
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/X-API-KEY"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdresBody"
+            examples:
+              person:
+                $ref: "#/components/examples/AdresBody"
+      responses:
+        "200":
+          $ref: "#/components/responses/Adres"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+  /adresses/{id}/persons:
+    get:
+      tags:
+        - Adresses
+      summary: Retrieve the specified adres with references to all persons
+      description: |
+        Retrieve only one adres with id adresId and references to all persons on that adress
+      operationId: getAdresPerons
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "200":
+          $ref: "#/components/responses/AdresPerson"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+  /login/user:
+    post:
+      tags:
+        - Login
+      summary: Login into the application
+      description: |
+        Login into the application by providing username password.
+      operationId: postLogin
+      parameters:
+        - $ref: "#/components/parameters/X-API-KEY"
+      requestBody:
+        description: Request parameters
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+            examples:
+              login:
+                $ref: "#/components/examples/LoginRequest"
+      responses:
+        "201":
+          $ref: "#/components/responses/LoginResponse"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+  /login/jwt/authenticate:
+    post:
+      tags:
+        - Login
+      summary: Authenticate a user to get access to the resources
+      description: |
+        Authenticate a user and get a token which must be uses to access the resources
+      operationId: postAuthenticate
+      parameters:
+        - $ref: "#/components/parameters/X-API-KEY"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+            examples:
+              loginrequest:
+                $ref: "#/components/examples/LoginRequest"
+      responses:
+        "201":
+          $ref: "#/components/responses/LoginResponse"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+  /login/jwt/register:
+    post:
+      tags:
+        - Login
+      summary: Register for the application
+      description: |
+        Register for the application by providing username password. A JWT token will be returned an must be used as token for other calls
+      operationId: postRegister
+      parameters:
+        - $ref: "#/components/parameters/X-API-KEY"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+            examples:
+              registerrequest:
+                $ref: "#/components/examples/LoginRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/LoginResponse"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+  /persons:
+    get:
+      tags:
+        - Persons
+      summary: Retrieve all known persons
+      description: |
+        Retrieve all known persons, using paging and sorting
+      operationId: getPersons
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "200":
+          $ref: "#/components/responses/PagedPersons"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    delete:
+      tags:
+        - Persons
+      summary: Delete all persons
+      description: |
+        Delete all persons
+      operationId: deleteAllPersons
+      security:
+        - basicAuth: []
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    post:
+      tags:
+        - Persons
+      summary: Create a new person
+      description: |
+        Create a new person
+        To determine if an person is new the input is compared on the hash value of:
+        - firstName
+        - infix
+        - lastName
+        If the hash value already exists in the backend, the person is considered to exist
+      operationId: postPerson
+      security:
+        - basicAuth: []
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/override"
+        - $ref: "#/components/parameters/X-API-KEY"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PersonBody"
+            examples:
+              person:
+                $ref: "#/components/examples/PersonBody"
+      responses:
+        "201":
+          $ref: "#/components/responses/Person"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+  /persons/{id}:
+    get:
+      tags:
+        - Persons
+      summary: Retrieve the specified person
+      description: |
+        Retrieve only one person with id personId
+      operationId: getPerson
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "200":
+          $ref: "#/components/responses/Person"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    delete:
+      tags:
+        - Persons
+      summary: Delete the specified person
+      description: |
+        Delete only the specified person
+      operationId: deletePerson
+      security:
+        - basicAuth: []
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    patch:
+      tags:
+        - Persons
+      summary: Update the specified person
+      description: |
+        Update only the person specified with personId
+      operationId: patchPerson
+      security:
+        - basicAuth: []
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/X-API-KEY"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PersonBody"
+            examples:
+              person:
+                $ref: "#/components/examples/PersonBody"
+      responses:
+        "200":
+          $ref: "#/components/responses/Person"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+  /persons/{id}/adresses:
+    get:
+      tags:
+        - Persons
+      summary: Retrieve the specified person with references to all adresses
+      description: |
+        Retrieve only one person with id personId and references to all adreses for that person
+      operationId: getPeronsAdresses
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "200":
+          $ref: "#/components/responses/PersonAdres"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+  /privileges:
+    get:
+      tags:
+        - Privileges
+      summary: Retrieve all known privileges
+      description: |
+        Retrieve all known privileges, using paging and sorting
+      operationId: getPrivileges
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "200":
+          $ref: "#/components/responses/PagedPrivileges"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    delete:
+      tags:
+        - Privileges
+      summary: Delete all privileges
+      description: |
+        Delete all privileges
+      operationId: deleteAllPrivileges
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    post:
+      tags:
+        - Privileges
+      summary: Create a new privilege
+      description: |
+        Create a new privileges
+        To determine if an privileges is new the input is compared on the hash value of:
+        - name        
+        If the hash value already exists in the backend, the role is considered to exist
+      operationId: postPrivileges
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/X-API-KEY"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PrivilegeBody"
+      #            examples:
+      #              privilege:
+      #                $ref: "#/components/examples/PrivilegeBody"
+      responses:
+        "201":
+          $ref: "#/components/responses/Privilege"
+        "303":
+          $ref: "#/components/responses/AlreadyExists"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+  /privileges/{id}:
+    get:
+      tags:
+        - Privileges
+      summary: Retrieve the specified privilege
+      description: |
+        Retrieve only one privilege with id privilegeId
+      operationId: getPrivilege
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "200":
+          $ref: "#/components/responses/Privilege"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    delete:
+      tags:
+        - Privileges
+      summary: Delete the specified privilege
+      description: |
+        Delete only the specified privilege
+      operationId: deletePrivilege
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    patch:
+      tags:
+        - Privileges
+      summary: Update the specified privilege
+      description: |
+        Update only the privilege specified with privilegeId
+      operationId: patchPrivilege
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/X-API-KEY"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PrivilegeBody"
+      #            examples:
+      #              privilege:
+      #                $ref: "#/components/examples/PrivilegeBody"
+      responses:
+        "200":
+          $ref: "#/components/responses/Privilege"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+  /roles:
+    get:
+      tags:
+        - Roles
+      summary: Retrieve all known roles
+      description: |
+        Retrieve all known roles, using paging and sorting
+      operationId: getRoles
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "200":
+          $ref: "#/components/responses/PagedRoles"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    delete:
+      tags:
+        - Roles
+      summary: Delete all roles
+      description: |
+        Delete all roles
+      operationId: deleteAllRoles
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    post:
+      tags:
+        - Roles
+      summary: Create a new role
+      description: |
+        Create a new role
+        To determine if an role is new the input is compared on the hash value of:
+        - rolename
+        - description
+        If the hash value already exists in the backend, the role is considered to exist
+      operationId: postRole
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/X-API-KEY"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoleBody"
+            examples:
+              adres:
+                $ref: "#/components/examples/RoleBody"
+      responses:
+        "201":
+          $ref: "#/components/responses/Role"
+        "303":
+          $ref: "#/components/responses/AlreadyExists"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+  /roles/{id}:
+    get:
+      tags:
+        - Roles
+      summary: Retrieve the specified role
+      description: |
+        Retrieve only one role with id roleId
+      operationId: getRole
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "200":
+          $ref: "#/components/responses/Role"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    delete:
+      tags:
+        - Roles
+      summary: Delete the specified role
+      description: |
+        Delete only the specified role
+      operationId: deleteRole
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    patch:
+      tags:
+        - Roles
+      summary: Update the specified role
+      description: |
+        Update only the role specified with roleId
+      operationId: patchRole
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/X-API-KEY"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoleBody"
+            examples:
+              role:
+                $ref: "#/components/examples/RoleBody"
+      responses:
+        "200":
+          $ref: "#/components/responses/Role"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Retrieve all known users
+      description: |
+        Retrieve all known users, using paging and sorting
+      operationId: getUsers
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "200":
+          $ref: "#/components/responses/PagedUsers"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    delete:
+      tags:
+        - Users
+      summary: Delete all
+      description: |
+        Delete all users
+      operationId: deleteAllUsers
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    post:
+      tags:
+        - Users
+      summary: Create a new user
+      description: |
+        Create a new user
+        To determine if an user is new the input is compared on the hash value of:
+        - username
+        - password
+        - email
+        - phone
+        If the hash value already exists in the backend, the user is considered to exist
+      operationId: postUser
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/X-API-KEY"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserBody"
+            examples:
+              adres:
+                $ref: "#/components/examples/UserBody"
+      responses:
+        "201":
+          $ref: "#/components/responses/User"
+        "303":
+          $ref: "#/components/responses/AlreadyExists"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Retrieve the specified user
+      description: |
+        Retrieve only one user with id userId
+      operationId: getUser
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "200":
+          $ref: "#/components/responses/User"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    delete:
+      tags:
+        - Users
+      summary: Delete the specified user
+      description: |
+        Delete only the specified user
+      operationId: deleteUser
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/X-API-KEY"
+      responses:
+        "204":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+    patch:
+      tags:
+        - Users
+      summary: Update the specified user
+      description: |
+        Update only the user specified with userId
+      operationId: patchUser
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/X-API-KEY"
+      requestBody:
+        description: Request parameters
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserBody"
+            examples:
+              user:
+                $ref: "#/components/examples/UserBody"
+      responses:
+        "200":
+          $ref: "#/components/responses/User"
+        "400":
+          $ref: "#/components/responses/IllegalInput"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/ToManyRequests"
+        "5XX":
+          $ref: "#/components/responses/ServerError"
+
+components:
+  examples:
+    Adres-01:
+      summary: A new Adres with all fields
+      value:
+        id: 1
+        street: "Kerkewijk"
+        housenumber: "125"
+        zipcode: "3904 JB"
+        city: "Veenendaal"
+
+    Adres-02:
+      summary: A new Adres with only required fields
+      value:
+        id: 2
+        street: "Kerkstraat"
+        housenumber: "14"
+        city: "Koog aan de Zaan"
+
+    AdresBody:
+      summary: A new adres
+      value:
+        - street: "Kerkewijk"
+          housenumber: "125"
+          zipcode: "3904 JB"
+          city: "Veenendaal"
+
+    AdresList-01:
+      summary: An empty list of adresses
+      value: []
+
+    AdresList-02:
+      summary: An empty list of adresses
+      value:
+        - id: 1
+          street: "Kerkewijk"
+          housenumber: "125"
+          zipcode: "3904 JB"
+          city: "Veenendaal"
+        - id: 2
+          street: "Kerkstraat"
+          housenumber: "14"
+          zipcode: "1541 HA"
+          city: "Koog aan de Zaan"
+        - id: 3
+          street: "Spoorlaan"
+          housenumber: "14"
+          zipcode: "5017 JS"
+          city: "Tilburg"
+
+    Deleted:
+      summary: An entry is deleted succesfull
+      value:
+
+    LoginResponseAllowed:
+      summary: A login response with basicauthentication access allowed
+      value:
+        authenticated: true
+
+    LoginJWTResponseAllowed:
+      summary: A login response with basicauthentication and jwt access allowed
+      value:
+        authenticated: true
+        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJwYXNzd29yZCI6Imthc2pkZmtlaSIsImVtYWlsIjoidXNlckBnbWFpbC5jb20iLCJwaG9uZSI6IiszMTY0MDk0OTM0NDUifQ.eO4foDxLy8Rg5EtKLGRTFItLD1y-B0iHHo-tjRyVLn0"
+
+    LoginRequest:
+      summary: Login request
+      value:
+        username: jandegroot
+        password: 432kdkakl43k
+        email: user@gmail.com
+
+    LoginResponseDenied:
+      summary: A login response with access denied
+      value:
+        authenticated: false
+
+    PagedAdresList-01:
+      summary: An empty list of adresses
+      value:
+        content: []
+        pageNumber: 0,
+        pageSize: 25,
+        totalElements: 0,
+        totalPages: 0
+
+    PagedAdresList-02:
+      summary: A list of adresses
+      value:
+        content:
+          - id: 1
+            street: "Kerkewijk"
+            housenumber: "125"
+            zipcode: "3904 JB"
+            city: "Veenendaal"
+          - id: 2
+            street: "Kerkstraat"
+            housenumber: "14"
+            zipcode: "1541 HA"
+            city: "Koog aan de Zaan"
+          - id: 3
+            street: "Spoorlaan"
+            housenumber: "14"
+            zipcode: "5017 JS"
+            city: "Tilburg"
+        pageNumber: 0,
+        pageSize: 25,
+        totalElements: 3,
+        totalPages: 1
+
+    PagedPrivilegesList-01:
+      summary: An empty list of privileges
+      value:
+        content: []
+        pageNumber: 0,
+        pageSize: 25,
+        totalElements: 0,
+        totalPages: 0
+
+    PagedPrivilegesList-02:
+      summary: A list of privileges
+      value:
+        content:
+          - id: 1
+            name: "ALL"
+          - id: 2
+            name: "USER"
+          - id: 3
+            name: "DEVELOPER"
+        pageNumber: 0,
+        pageSize: 25,
+        totalElements: 3,
+        totalPages: 1
+
+    PagedRolesList-01:
+      summary: An empty list of roles
+      value:
+        content: []
+        pageNumber: 0,
+        pageSize: 25,
+        totalElements: 0,
+        totalPages: 0
+
+    PagedRolesList-02:
+      summary: A list of roles
+      value:
+        content:
+          - id: 1
+            rolename: "READER"
+            description: |
+              "Read access to resources"
+            privileges:
+              - id: 1
+                name: "USER"
+          - id: 2
+            rolename: "WRITER"
+            description: |
+              "Read and writeaccess to resources"
+            privileges:
+              - id: 2
+                name: "USER"
+          - id: 3
+            rolename: "ADMIN"
+            description: |
+              "FULL access to resources"
+            privileges:
+              - id: 3
+                name: "ALL"
+        pageNumber: 0,
+        pageSize: 25,
+        totalElements: 3,
+        totalPages: 1
+
+    PagedUsersList-01:
+      summary: An empty list of users
+      value:
+        content: []
+        pageNumber: 0,
+        pageSize: 25,
+        totalElements: 0,
+        totalPages: 0
+
+    PagedUsersList-02:
+      summary: A list of users
+      value:
+        content:
+          - id: 1
+            username: "Peter"
+            password: "9494$((DKD))"
+            email: "peter@gmail.com"
+            phone: "+31694032930"
+            accountNonExpired: true
+            accountNonLocked: true
+            credentialsNonExpired: true
+            enabled: true
+            roles:
+              - id: 1
+                rolename: "READER"
+                description: |
+                  "Read access to resources"
+                privileges:
+                  - id: 1
+                    name: "USER"
+          - id: 2
+            username: "John"
+            password: "9494$((DKD))"
+            email: "john@gmail.com"
+            phone: "+31692332930"
+            accountNonExpired: true
+            accountNonLocked: true
+            credentialsNonExpired: true
+            enabled: true
+            roles:
+              - id: 2
+                rolename: "WRITER"
+                description: |
+                  "Read and writeaccess to resources"
+                privileges:
+                  - id: 2
+                    name: "USER"
+          - id: 3
+            username: "Charles"
+            password: "9494$((DKD))"
+            email: "charles@gmail.com"
+            phone: "+31694039492"
+            accountNonExpired: true
+            accountNonLocked: true
+            credentialsNonExpired: true
+            enabled: true
+            roles:
+              - id: 3
+                roles:
+                rolename: "ADMIN"
+                description: |
+                  "FULL access to resources"
+                privileges:
+                  - id: 3
+                    name: "ALL"
+        pageNumber: 0,
+        pageSize: 25,
+        totalElements: 3,
+        totalPages: 1
+
+    Person-01:
+      summary: A single person with all fields
+      value:
+        id: 1
+        firstName: "Jos"
+        infix: "van Der"
+        lastName: "Vlist"
+        dateOfBirth: "2022-01-04"
+
+    Person-02:
+      summary: A single person without infix
+      value:
+        id: 3
+        firstName: "Albert"
+        lastName: "Einstein"
+        dateOfBirth: "2022-01-04"
+
+    PersonAdres-01:
+      summary: A person with all fields and no adresses
+      value:
+        id: 1
+        firstName: "Jos"
+        infix: "van Der"
+        lastName: "Vlist"
+        dateOfBirth: "2022-01-04"
+        adresses: []
+
+    PersonAdres-02:
+      summary: A person with all fields and no adresses
+      value:
+        id: 1
+        firstName: "Jos"
+        infix: "van Der"
+        lastName: "Vlist"
+        dateOfBirth: "2022-01-04"
+        adresses:
+          - 1
+          - 2
+
+    PersonBody:
+      summary: A new person with all fields filled
+      value:
+        firstName: "Jos"
+        infix: "van Der"
+        lastName: "Vlist"
+        dateOfBirth: "2022-01-04"
+
+    Privilege:
+      summary: A new privilege
+      value:
+        name: READ
+
+    PersonList-01:
+      summary: An empty list of persons
+      value: []
+
+    PersonList-02:
+      summary: An empty list of persons
+      value:
+        - id: 1
+          firstName: "Jos"
+          infix: "van Der"
+          lastName: "Vlist"
+          dateOfBirth: "2022-01-04"
+        - id: 2
+          firstName: "Karel"
+          lastName: "Appel"
+          dateOfBirth: "2022-01-04"
+        - id: 3
+          firstName: "Albert"
+          lastName: "Einstein"
+          dateOfBirth: "2022-01-04"
+
+    Problem-303:
+      summary: Bad Request
+      value:
+        type: "http://localhost:8080/already-existed"
+        title: "Adres alreay existed, not expected"
+        status: 303
+        detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574} already exists"
+        path: "/adresses"
+
+    Problem-400:
+      summary: Bad Request
+      value:
+        type: "http://localhost:8080/bad-request"
+        title: "Bad request"
+        status: 400,
+        error: "Bad request"
+        detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574}"
+        path: "/adresses"
+
+    Problem-404:
+      summary: Not Found
+      value:
+        type: "http://localhost:8080/not-found"
+        title: "Not Found"
+        status: 404,
+        error: "Not found"
+        detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574}"
+        path: "/adresses"
+
+    Problem-429:
+      summary: To many requests
+      value:
+        type: "http://localhost:8080/to-many-requests"
+        title: "To many requests"
+        status: 429,
+        error: "To many requests"
+        detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574}"
+        path: "/adresses"
+
+    Problem-5XX:
+      summary: Server fout
+      value:
+        type: "http://localhost:8080/server-error"
+        title: "Internal Server Error"
+        status: 500,
+        error: "Internal Server Error"
+        detail: "Adres AdresDAO{adresid=null, street='Kerkewijk', housenumber='125', zipcode='3904 JB', city='Veenendaal', hash=-697771574}"
+        path: "/adresses"
+
+    RegisterRequest:
+      summary: Authentication register request
+      description: |
+        Register the user and return a valid token
+      value:
+        username: "user"
+        password: "kasjdfkei"
+        email: "user@gmail.com"
+        phone: "+316409493445"
+
+    RoleBody:
+      summary: New Role definition
+      value:
+        rolename: JWT-TOKEN
+        description: The JWT-TOKEN can only be used for JWT authentication
+
+    Role:
+      summary: New Role definition
+      value:
+        id: 4
+        rolename: JWT-TOKEN
+        description: The JWT-TOKEN can only be used for JWT authentication
+
+    RoleList:
+      summary: List of known roles
+      value:
+        - id: 3
+          rolename: JWT-TOKEN
+          description: The JWT-TOKEN can only be used for JWT authentication
+        - id: 4
+          rolename: USER
+          description: The USER kan only read information
+
+    UserBody:
+      summary: New User definition
+      value:
+        username: "user"
+        password: "12345"
+        email: "user@gmail.com"
+        phone: "0687654321"
+        accountNonExpired: true
+        accountNonLocked: true
+        credentialsNonExpired: true
+        enabled: true
+        roles: []
+
+    User:
+      summary: New user
+      value:
+        id: 5
+        username: "user"
+        password: "12345"
+        email: "user@gmail.com"
+        phone: "0687654321"
+        accountNonExpired: true
+        accountNonLocked: true
+        credentialsNonExpired: true
+        enabled: true
+        roles: []
+
+    UserList:
+      summary: List of known users
+      value:
+        - id: 4
+          username: "user"
+          password: "12345"
+          email: "user@gmail.com"
+          phone: "0687654321"
+          accountNonExpired: true
+          accountNonLocked: true
+          credentialsNonExpired: true
+          enabled: true
+          roles: []
+        - id: 5
+          username: "tester"
+          password: "12345"
+          email: "tester@gmail.com"
+          phone: "0687654321"
+          accountNonExpired: true
+          accountNonLocked: true
+          credentialsNonExpired: true
+          enabled: true
+          roles: []
+
+  headers:
+    version:
+      required: true
+      schema:
+        type: string
+      example: 0.0.11
+
+  parameters:
+    id:
+      name: id
+      in: path
+      description: The identification of the resource to return
+      required: true
+      schema:
+        type: integer
+        format: int64
+
+    basicauth:
+      name: Authorization
+      in: header
+      required: true
+      schema:
+        $ref: "#/components/schemas/BasicAuthorization"
+
+    override:
+      name: override
+      in: query
+      description: parameter to override check on existence
+      required: true
+      schema:
+        type: boolean
+        default: false
+
+    page:
+      name: page
+      in: query
+      description: pagenumber starts on 1
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+        format: int32
+
+    size:
+      name: size
+      in: query
+      description: |
+        number of elements on each page
+        - minimum    1
+        - default   25
+        - maximum: 100
+      required: true
+      schema:
+        type: integer
+        maximum: 100
+        default: 25
+        minimum: 1
+        format: int32
+
+    sort:
+      name: sort
+      in: query
+      description: field names to sort on
+      schema:
+        type: array
+        items:
+          type: string
+        default: []
+
+    X-API-KEY:
+      name: "X-API-KEY"
+      in: header
+      description: An api key used to track usage of the api
+      schema:
+        $ref: "#/components/schemas/X-API-KEY"
+
+  schemas:
+    Adres:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              $ref: "#/components/schemas/Id"
+        - $ref: "#/components/schemas/AdresBody"
+
+    AdresBody:
+      type: object
+      required:
+        - street
+        - housenumber
+        - city
+      properties:
+        street:
+          type: string
+          example: Kerkewijk
+        housenumber:
+          type: string
+          example: 125
+        zipcode:
+          type: string
+          example: 3904 JB
+        city:
+          type: string
+          example: Veenendaal
+        persons:
+          type: array
+          items:
+            $ref: "#/components/schemas/Person"
+          default: []
+
+    Email:
+      type: string
+      pattern: '^(.[^@]*)@(.[^@]*)\.(.[^@]*)$'
+      maxLength: 128
+      example: mymail@gmail.com
+
+    Id:
+      type: integer
+      format: int64
+      example: 1
+
+    AdresIds:
+      type: object
+      properties:
+        adresses:
+          type: array
+          items:
+            $ref: "#/components/schemas/Id"
+
+    AdresPerson:
+      allOf:
+        - $ref: "#/components/schemas/Adres"
+        - $ref: "#/components/schemas/PersonIds"
+
+    AdresPerson1:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              $ref: "#/components/schemas/Id"
+        - $ref: "#/components/schemas/AdresBody"
+        - $ref: "#/components/schemas/PersonIds"
+
+    Adresses:
+      type: array
+      items:
+        $ref: "#/components/schemas/Adres"
+
+    AuthenticateRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          $ref: "#/components/schemas/Username"
+        password:
+          $ref: "#/components/schemas/Password"
+
+    BasicAuthorization:
+      type: string
+
+    Deleted:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - "OK"
+          description: Status of delete operationId
+          example: "OK"
+
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: "username"
+        password:
+          type: string
+          example: "password"
+        email:
+          type: string
+          example: "user@gmail.com"
+        phone:
+          type: string
+          example: "+31645978573"
+
+    LoginResponse:
+      type: object
+      required:
+        - authenticated
+      properties:
+        authenticated:
+          type: boolean
+          example: true
+        token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJwYXNzd29yZCI6Imthc2pkZmtlaSIsImVtYWlsIjoidXNlckBnbWFpbC5jb20iLCJwaG9uZSI6IiszMTY0MDk0OTM0NDUifQ.eO4foDxLy8Rg5EtKLGRTFItLD1y-B0iHHo-tjRyVLn0"
+
+    PagedAdresses:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/Adres"
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+        totalElements:
+          type: number
+          format: int64
+        totalPages:
+          type: integer
+
+    PagedPersons:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/Person"
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+        totalElements:
+          type: number
+          format: int64
+        totalPages:
+          type: integer
+
+    PagedPrivileges:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/Privilege"
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+        totalElements:
+          type: number
+          format: int64
+        totalPages:
+          type: integer
+
+    PagedRoles:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/Role"
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+        totalElements:
+          type: number
+          format: int64
+        totalPages:
+          type: integer
+
+    PagedUsers:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+        totalElements:
+          type: number
+          format: int64
+        totalPages:
+          type: integer
+
+    Password:
+      type: string
+      description: base64 encode password
+      maxLength: 48
+      example: kasjdkfkei
+
+    Person:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              $ref: "#/components/schemas/Id"
+        - $ref: "#/components/schemas/PersonBody"
+
+    PersonAdres:
+      allOf:
+        - $ref: "#/components/schemas/Person"
+        - $ref: "#/components/schemas/AdresIds"
+
+    PersonAdres1:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              $ref: "#/components/schemas/Id"
+        - $ref: "#/components/schemas/PersonBody"
+        - $ref: "#/components/schemas/AdresIds"
+
+    PersonBody:
+      type: object
+      required:
+        - firstName
+        - lastName
+      properties:
+        firstName:
+          type: string
+          maxLength: 24
+          example: Jos
+        infix:
+          type: string
+          maxLength: 12
+          example: van der
+        lastName:
+          type: string
+          maxLength: 48
+          example: Vlist
+        dateOfBirth:
+          type: string
+          format: date
+          example: 2022-03-04
+
+    PersonIds:
+      type: object
+      properties:
+        persons:
+          type: array
+          items:
+            $ref: "#/components/schemas/Id"
+
+    Persons:
+      type: array
+      items:
+        $ref: "#/components/schemas/Person"
+
+    RegisterRequest:
+      type: object
+      required:
+        - username
+        - password
+        - email
+      properties:
+        username:
+          $ref: "#/components/schemas/Username"
+        password:
+          $ref: "#/components/schemas/Password"
+        email:
+          $ref: "#/components/schemas/Email"
+        phone:
+          $ref: "#/components/schemas/Phone"
+
+    AuthenticateResponse:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+
+    Role:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              $ref: "#/components/schemas/Id"
+        - $ref: "#/components/schemas/RoleBody"
+
+    RoleBody:
+      type: object
+      required:
+        - rolename
+      properties:
+        rolename:
+          type: string
+          maxLength: 32
+          example: reader
+        description:
+          type: string
+          maxLength: 128
+          example: This role gives read access
+        privileges:
+          type: array
+          items:
+            $ref: "#/components/schemas/Privilege"
+          default: []
+
+    Roles:
+      type: array
+      items:
+        $ref: "#/components/schemas/Role"
+
+    User:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              $ref: "#/components/schemas/Id"
+        - $ref: "#/components/schemas/UserBody"
+
+    UserBody:
+      type: object
+      required:
+        - username
+        - email
+      properties:
+        username:
+          $ref: "#/components/schemas/Username"
+        password:
+          $ref: "#/components/schemas/Password"
+        email:
+          $ref: "#/components/schemas/Email"
+        phone:
+          $ref: "#/components/schemas/Phone"
+        accountNonExpired:
+          type: boolean
+          default: true
+          example: true
+        accountNonLocked:
+          type: boolean
+          default: true
+          example: true
+        credentialsNonExpired:
+          type: boolean
+          default: true
+          example: true
+        enabled:
+          type: boolean
+          default: true
+          example: true
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/Role"
+          default: []
+
+    Username:
+      type: string
+      maxLength: 24
+      example: user
+
+    Users:
+      type: array
+      items:
+        $ref: "#/components/schemas/User"
+
+    Phone:
+      type: string
+      maxLength: 24
+      example: "+316409493445"
+
+    Privilege:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              $ref: "#/components/schemas/Id"
+        - $ref: "#/components/schemas/PrivilegeBody"
+
+    PrivilegeBody:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+
+    Problem:
+      type: object
+      description: |
+        Standaardformaat (`application/problem+json`) voor probleemdetails
+        in HTTP API's (RFC 7807).
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          maximum: 600
+          exclusiveMaximum: true
+          minimum: 100
+          type: integer
+          description:
+            De HTTP statuscode gegenereerd door de server waar het probleem
+            zich voordoet.
+          format: int32
+          example: 500
+        error:
+          type: string
+        trace:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+
+    ProblemDetail:
+      type: object
+      required:
+        - status
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+
+    X-API-KEY:
+      type: string
+      pattern: "^([0-9a-f]{8})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{12})"
+
+  responses:
+    Adres:
+      description: An adres
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Adres"
+          examples:
+            allfields:
+              $ref: "#/components/examples/Adres-01"
+            noinfix:
+              $ref: "#/components/examples/Adres-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    AdresPerson:
+      description: An adres with references to a person
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AdresPerson"
+          examples:
+            allfields:
+              $ref: "#/components/examples/Adres-01"
+            noinfix:
+              $ref: "#/components/examples/Adres-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    Adresses:
+      description: A collection of adresses
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Adresses"
+          examples:
+            emptylist:
+              $ref: "#/components/examples/AdresList-01"
+            fulllist:
+              $ref: "#/components/examples/AdresList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    Deleted:
+      description: Resource deleted
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    AlreadyExists:
+      description: Resource already exists
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetail"
+          examples:
+            badrequest:
+              $ref: "#/components/examples/Problem-303"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    IllegalInput:
+      description: Ongeldige input
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetail"
+          examples:
+            badrequest:
+              $ref: "#/components/examples/Problem-400"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    LoginResponse:
+      description: The response on a login request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/LoginResponse"
+          examples:
+            accessallowed:
+              $ref: "#/components/examples/LoginResponseAllowed"
+            accessjwtallowed:
+              $ref: "#/components/examples/LoginJWTResponseAllowed"
+            accessdenied:
+              $ref: "#/components/examples/LoginResponseDenied"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    NotFound:
+      description: Geen resultaat gevonden
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetail"
+          examples:
+            notfound:
+              $ref: "#/components/examples/Problem-404"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    ServerError:
+      description: Ongeldige input
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetail"
+          examples:
+            servererror:
+              $ref: "#/components/examples/Problem-5XX"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    ToManyRequests:
+      description: Ongeldige input
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetail"
+          examples:
+            tomanyrequests:
+              $ref: "#/components/examples/Problem-429"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    PagedAdresses:
+      description: A collection of adres pages
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/PagedAdresses"
+          examples:
+            emptylist:
+              $ref: "#/components/examples/PagedAdresList-01"
+            fulllist:
+              $ref: "#/components/examples/PagedAdresList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    PagedPersons:
+      description: A collection of person pages
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/PagedPersons"
+          examples:
+            emptylist:
+              $ref: "#/components/examples/PagedAdresList-01"
+            fulllist:
+              $ref: "#/components/examples/PagedAdresList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    PagedPrivileges:
+      description: A collection of privilege pages
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/PagedPrivileges"
+          examples:
+            emptylist:
+              $ref: "#/components/examples/PagedPrivilegesList-01"
+            fulllist:
+              $ref: "#/components/examples/PagedAdresList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    PagedRoles:
+      description: A collection of roles pages
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/PagedRoles"
+          examples:
+            emptylist:
+              $ref: "#/components/examples/PagedRolesList-01"
+            fulllist:
+              $ref: "#/components/examples/PagedRolesList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    PagedUsers:
+      description: A collection of person pages
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/PagedUsers"
+          examples:
+            emptylist:
+              $ref: "#/components/examples/PagedUsersList-01"
+            fulllist:
+              $ref: "#/components/examples/PagedUsersList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    Person:
+      description: A specific person
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Person"
+          examples:
+            allfields:
+              $ref: "#/components/examples/Person-01"
+            noinfix:
+              $ref: "#/components/examples/Person-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    PersonAdres:
+      description: An person with references to adresses
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/PersonAdres"
+          examples:
+            allfields:
+              $ref: "#/components/examples/PersonAdres-01"
+            noinfix:
+              $ref: "#/components/examples/PersonAdres-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    Persons:
+      description: A collection of persons
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Persons"
+          examples:
+            emptylist:
+              $ref: "#/components/examples/PersonList-01"
+            fulllist:
+              $ref: "#/components/examples/PersonList-02"
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    Privilege:
+      description: A privilege
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Privilege"
+          examples:
+            allfields:
+              $ref: "#/components/examples/Privilege"
+
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    Role:
+      description: A role
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Role"
+          examples:
+            allfields:
+              $ref: "#/components/examples/Role"
+
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    Roles:
+      description: A collection of roles
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Roles"
+          examples:
+            emptylist:
+              $ref: "#/components/examples/RoleList"
+
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    User:
+      description: An user
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/User"
+          examples:
+            allfields:
+              $ref: "#/components/examples/User"
+
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+    Users:
+      description: A collection of users
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Users"
+          examples:
+            emptylist:
+              $ref: "#/components/examples/UserList"
+
+      headers:
+        version:
+          $ref: "#/components/headers/version"
+
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

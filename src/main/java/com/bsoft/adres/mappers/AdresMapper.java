@@ -1,6 +1,7 @@
 package com.bsoft.adres.mappers;
 
 import com.bsoft.adres.database.AdresDTO;
+import com.bsoft.adres.generated.model.AdresBody;
 import com.bsoft.adres.database.JsonNullableMapper;
 import com.bsoft.adres.database.PersonDTO;
 import com.bsoft.adres.generated.model.Adres;
@@ -49,13 +50,13 @@ public abstract class AdresMapper implements JsonNullableMapper {
         Collection<PersonDTO> persons = new ArrayList<>();
 
         for (Person person : source) {
-            PersonDTO personDTO = roleToRoleDTO(person);
+            PersonDTO personDTO = personToPersonDTO(person);
             persons.add(personDTO);
         }
         return persons;
     }
 
-    public PersonDTO roleToRoleDTO(Person person) {
+    public PersonDTO personToPersonDTO(Person person) {
         return Mappers.getMapper(PersonMapper.class).map(person);
     }
 

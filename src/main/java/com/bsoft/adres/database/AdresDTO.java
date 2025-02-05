@@ -51,11 +51,6 @@ public class AdresDTO implements Serializable {
     )
     private Collection<PersonDTO> persons = new ArrayList<>();
 
-    /*
-    public AdresDAO() {
-    }
-*/
-
     public AdresDTO(Long id, String street, String housenumber, String zipcode, String city) {
         this.id = id;
         this.street = street;
@@ -73,6 +68,15 @@ public class AdresDTO implements Serializable {
         this.zipcode = adres.getZipcode();
         this.city = adres.getCity();
         this.hash = this.hashCode();
+        this.persons = new ArrayList<>();
+
+        if (adres.getPersons() != null) {
+            adres.getPersons().forEach(p -> {
+                PersonDTO personDTO = new PersonDTO(p);
+                //personDTO.getAdresses().add(this);
+                this.persons.add(personDTO);
+            });
+        }
     }
 
     public AdresDTO(final AdresBody adres) {
@@ -82,6 +86,14 @@ public class AdresDTO implements Serializable {
         this.zipcode = adres.getZipcode();
         this.city = adres.getCity();
         this.hash = this.hashCode();
+        this.persons = new ArrayList<>();
+
+        if (adres.getPersons() != null)  {
+            adres.getPersons().forEach(p -> {
+                PersonDTO personDTO = new PersonDTO(p);
+                this.persons.add(personDTO);
+            });
+        }
     }
 
     public void addPerson(PersonDTO person) {
@@ -89,61 +101,16 @@ public class AdresDTO implements Serializable {
     }
 
     public void setPersons(Collection<PersonDTO> persons) {
-        persons.forEach(person -> {
-            person.addAdres(this);
-            this.persons.add(person);
-        });
+        if (persons.isEmpty()) {
+            this.persons = new ArrayList<>();
+        } else {
+            persons.forEach(person -> {
+                person.addAdres(this);
+                this.persons.add(person);
+            });
+        }
     }
 
-    /*
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getHousenumber() {
-        return housenumber;
-    }
-
-    public void setHousenumber(String housenumber) {
-        this.housenumber = housenumber;
-    }
-
-    public String getZipcode() {
-        return zipcode;
-    }
-
-    public void setZipcode(String zipcode) {
-        this.zipcode = zipcode;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public Integer getHash() {
-        return hash;
-    }
-
-    public void setHash(Integer hash) {
-        this.hash = hash;
-    }
-*/
     public Integer genHash() {
         this.hash = hashCode();
         return this.hash;

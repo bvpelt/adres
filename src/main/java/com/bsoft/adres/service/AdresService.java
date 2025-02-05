@@ -1,5 +1,6 @@
 package com.bsoft.adres.service;
 
+
 import com.bsoft.adres.database.AdresDTO;
 import com.bsoft.adres.database.PersonDTO;
 import com.bsoft.adres.exceptions.AdresExistsException;
@@ -7,7 +8,9 @@ import com.bsoft.adres.exceptions.AdresNotExistsException;
 import com.bsoft.adres.generated.model.Adres;
 import com.bsoft.adres.generated.model.AdresBody;
 import com.bsoft.adres.generated.model.AdresPerson;
+import com.bsoft.adres.generated.model.Person;
 import com.bsoft.adres.mappers.AdresMapper;
+import com.bsoft.adres.mappers.PersonMapper;
 import com.bsoft.adres.repositories.AdresRepository;
 import com.bsoft.adres.repositories.PersonRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +36,8 @@ public class AdresService {
 
     @Autowired
     private AdresMapper adresMapper;
+    @Autowired
+    private PersonMapper personMapper;
 
     public void deleteAll() {
         try {
@@ -102,6 +107,16 @@ public class AdresService {
         return adresList;
     }
 
+    // Helper method to check if a Person already exists in the list
+    private boolean personExistsInList(List<PersonDTO> personList, PersonDTO personToCheck) {
+        for (PersonDTO person : personList) {
+            if (person.equals(personToCheck)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Adres postAdres(Boolean override, final AdresBody adresBody) {
         AdresDTO adresDTO = new AdresDTO(adresBody);
 
@@ -112,6 +127,37 @@ public class AdresService {
                     throw new AdresExistsException("Adres " + adresDTO + " already exists cannot insert again");
                 }
             }
+
+            List<Person> inputPersons = adresBody.getPersons();
+            List<PersonDTO> outputPersons = new ArrayList<>();
+
+
+            inputPersons.forEach(person -> {
+                if (person.getId() != null) {
+                    Optional<PersonDTO> optionalPersonDTO = personRepository.findById(person.getId());
+                    if (optionalPersonDTO.isPresent()) {
+                        log.info("Person: {} already exists", person);
+                        PersonDTO personDTO = optionalPersonDTO.get();
+                        outputPersons.add(personDTO);
+                    } else {
+                        log.error("This person with id {} should exists - person {}", person.getId(), person);
+                    }
+                } else {
+                    log.info("Person: {} not exists", person);
+                    PersonDTO personDTO = personMapper.map(person);
+                    personDTO.getAdresses().add(adresDTO);
+                    personRepository.save(personDTO);
+                    outputPersons.add(personDTO);
+                }
+            });
+
+            adresDTO.setPersons(new ArrayList<>());
+
+            outputPersons.forEach(person -> {
+                person.getAdresses().add(adresDTO);
+                adresDTO.getPersons().add(person);
+            });
+
 
             adresRepository.save(adresDTO);
 

@@ -59,6 +59,9 @@ Workflow
 - add tags to main branch ```git tag -m <tag message> <releasenumber>; git push origin --tags```
 - checkout develop to keepon working ```git checkout develop```
 
+## Testing
+See https://www.baeldung.com/spring-boot-testing
+
 ## Environment
 
 On my windows laptop start with [setup](setup.cmd)
@@ -280,6 +283,94 @@ Stop dashboard ```sudo /bin/systemctl stop grafana-server```
 - [docker image](https://hub.docker.com/r/prom/prometheus)
 - [prometheus docs](https://prometheus.io/docs/introduction/overview/)
 - [prometheus config](https://github.com/prometheus/prometheus/blob/main/documentation/examples/prometheus.yml)
+
+## n..m relations
+
+### Scenario 1: New AdresDTO with 0 PersonDTO's
+```java
+AdresDTO newAdresDTO = new AdresDTO("New Street", "12A", "1234 AB", "Amsterdam");
+adresRepository.save(newAdresDTO); // Persists the AdresDTO without any PersonDTOs
+```
+
+### Scenario 2: New AdresDTO with n new PersonDTO's
+```java
+AdresDTO newAdresDTO = new AdresDTO("New Street", "12A", "1234 AB", "Amsterdam");
+
+PersonDTO person1 = new PersonDTO("John", "", "Doe", LocalDate.of(1980, 1, 1));
+PersonDTO person2 = new PersonDTO("Jane", "", "Doe", LocalDate.of(1985, 2, 1));
+
+newAdresDTO.getPersons().add(person1);
+newAdresDTO.getPersons().add(person2);
+
+adresRepository.save(newAdresDTO);
+// Persists the AdresDTO and both new PersonDTOs (since CascadeType.PERSIST is used)
+```
+
+### Scenario 3: New AdresDTO with n new PersonDTO's and m existing PersonDTO's
+```java
+AdresDTO newAdresDTO = new AdresDTO("New Street", "12A", "1234 AB", "Amsterdam");
+
+// Create new PersonDTOs
+PersonDTO person1 = new PersonDTO("John", "", "Doe", LocalDate.of(1980, 1, 1));
+PersonDTO person2 = new PersonDTO("Jane", "", "Doe", LocalDate.of(1985, 2, 1));
+
+// Find existing PersonDTOs (assuming you have their IDs)
+PersonDTO existingPerson1 = personRepository.findById(1L).get();
+PersonDTO existingPerson2 = personRepository.findById(2L).get();
+
+// Add new and existing PersonDTOs to the AdresDTO
+newAdresDTO.getPersons().add(person1);
+newAdresDTO.getPersons().add(person2);
+newAdresDTO.getPersons().add(existingPerson1);
+newAdresDTO.getPersons().add(existingPerson2);
+
+adresRepository.save(newAdresDTO);
+// Persists the AdresDTO, new PersonDTOs (person1 & person2), 
+// and updates the relationship for existing PersonDTOs (existingPerson1 & existingPerson2)
+```
+
+### Scenario 4: Existing AdresDTO with n new PersonDTO's
+```java
+// Fetch the existing AdresDTO
+AdresDTO existingAdresDTO = adresRepository.findById(1L).get();
+
+// Create new PersonDTOs
+PersonDTO person1 = new PersonDTO("John", "", "Doe", LocalDate.of(1980, 1, 1));
+PersonDTO person2 = new PersonDTO("Jane", "", "Doe", LocalDate.of(1985, 2, 1));
+
+// Add new PersonDTOs to the existing AdresDTO
+existingAdresDTO.getPersons().add(person1);
+existingAdresDTO.getPersons().add(person2);
+
+adresRepository.save(existingAdresDTO);
+// Persists the new PersonDTOs (person1 & person2) 
+// and updates the relationship for the existing AdresDTO
+```
+
+### Scenario 5: Existing AdresDTO with n new PersonDTO's and m existing PersonDTO's
+```java
+// Fetch the existing AdresDTO
+AdresDTO existingAdresDTO = adresRepository.findById(1L).get();
+
+// Create new PersonDTOs
+PersonDTO person1 = new PersonDTO("John", "", "Doe", LocalDate.of(1980, 1, 1));
+PersonDTO person2 = new PersonDTO("Jane", "", "Doe", LocalDate.of(1985, 2, 1));
+
+// Find existing PersonDTOs (assuming you have their IDs)
+PersonDTO existingPerson1 = personRepository.findById(3L).get();
+PersonDTO existingPerson2 = personRepository.findById(4L).get();
+
+// Add new and existing PersonDTOs to the existing AdresDTO
+existingAdresDTO.getPersons().add(person1);
+existingAdresDTO.getPersons().add(person2);
+existingAdresDTO.getPersons().add(existingPerson1);
+existingAdresDTO.getPersons().add(existingPerson2);
+
+adresRepository.save(existingAdresDTO);
+// Persists the new PersonDTOs (person1 & person2) 
+// and updates the relationship for the existing AdresDTO 
+// and the existing PersonDTOs (existingPerson1 & existingPerson2)
+```
 
 ## References
 
