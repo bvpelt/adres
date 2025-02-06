@@ -28,7 +28,7 @@ public class JwtUtils {
 
     public String getJwtFromHeader(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        log.debug("Authorization header: {}", bearerToken);
+        log.trace("Authorization header: {}", bearerToken);
 
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
@@ -62,7 +62,7 @@ public class JwtUtils {
 
     public boolean validateToken(String authToken) {
         try {
-            log.debug("Validate token: {}", authToken);
+            log.trace("Validate token: {}", authToken);
             Jwts.parser()
                     .verifyWith((SecretKey) key())
                     .build()

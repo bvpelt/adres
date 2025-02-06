@@ -33,7 +33,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
-        log.debug("doFilterInternal called for URI: {}", request.getRequestURI());
+        log.trace("doFilterInternal called for URI: {}", request.getRequestURI());
         try {
             checkAPIKey(request);
 
@@ -55,14 +55,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             log.error("Cannot set user authentication: {}", e);
         }
-
-        log.trace("doFilterInternal calling chain for URI: {}", request.getRequestURI());
+        
         filterChain.doFilter(request, response);
     }
 
     private String parseJwt(HttpServletRequest request) {
         String jwt = jwtUtils.getJwtFromHeader(request);
-        log.debug("parseJwt called for URI: {}, token: {}", request.getRequestURI(), jwt);
+        log.trace("parseJwt called for URI: {}, token: {}", request.getRequestURI(), jwt);
 
         return jwt;
     }

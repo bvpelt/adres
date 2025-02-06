@@ -57,9 +57,10 @@ public class WebSecurityConfig {
             return config;
         }));
 
-        // http.securityMatcher("/**")
+        http.securityMatcher("/adres/api/v1/**");
         http.authorizeHttpRequests((requests) -> {
-            requests.requestMatchers("/actuator/**", "/h2-console/**", "/adres/api/v1/login/**", "/favicon.ico", "/v3/api-docs/**", "/swagger-ui/**", "/error").permitAll()
+            requests
+//            .requestMatchers("/actuator/**", "/h2-console/**", "/adres/api/v1/login/**", "/favicon.ico", "/v3/api-docs/**", "/swagger-ui/**", "/error").permitAll()
                     .requestMatchers(HttpMethod.GET, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").permitAll() //.hasAnyAuthority("ALL", "APP_WRITE", "APP_READ", "APP_MAINTENANCE")
                     .requestMatchers(HttpMethod.DELETE, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
                     .requestMatchers(HttpMethod.POST, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")

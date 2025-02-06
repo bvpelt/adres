@@ -9,7 +9,7 @@ logging:
       apache:
         http: info
       springframework:
-        security: debug
+        security: info
     com:
       bsoft: debug
 
