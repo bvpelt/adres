@@ -33,7 +33,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
-        log.trace("doFilterInternal called for URI: {}", request.getRequestURI());
+        log.trace("doFilterInternal called for method: {} URI: {}", request.getMethod(), request.getRequestURI());
+        log.trace("doFilterInternal called with respone status: {}", response.getStatus());
+        log.trace("doFilterInternal called with filter: {}", filterChain.toString());
+
         try {
             checkAPIKey(request);
 
@@ -53,7 +56,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            log.error("Cannot set user authentication: {}", e);
+            log.error("Cannot set user authentication: {}", e.toString());
         }
         
         filterChain.doFilter(request, response);

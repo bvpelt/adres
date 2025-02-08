@@ -2,6 +2,7 @@ logging:
   level:
     org:
       springframework: info
+      springdoc: error
     com:
       bsoft: debug
 

@@ -1453,12 +1453,12 @@ components:
         type: integer
         format: int64
 
-    basicauth:
-      name: Authorization
-      in: header
-      required: true
-      schema:
-        $ref: "#/components/schemas/BasicAuthorization"
+    #    basicauth:
+    #      name: Authorization
+    #      in: header
+    #      required: true
+    #      schema:
+    #        $ref: "#/components/schemas/BasicAuthorization"
 
     override:
       name: override
@@ -1573,45 +1573,10 @@ components:
         - $ref: "#/components/schemas/Adres"
         - $ref: "#/components/schemas/PersonIds"
 
-    AdresPerson1:
-      allOf:
-        - type: object
-          required:
-            - id
-          properties:
-            id:
-              $ref: "#/components/schemas/Id"
-        - $ref: "#/components/schemas/AdresBody"
-        - $ref: "#/components/schemas/PersonIds"
-
     Adresses:
       type: array
       items:
         $ref: "#/components/schemas/Adres"
-
-    AuthenticateRequest:
-      type: object
-      required:
-        - username
-        - password
-      properties:
-        username:
-          $ref: "#/components/schemas/Username"
-        password:
-          $ref: "#/components/schemas/Password"
-
-    BasicAuthorization:
-      type: string
-
-    Deleted:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-            - "OK"
-          description: Status of delete operationId
-          example: "OK"
 
     LoginRequest:
       type: object
@@ -1750,17 +1715,6 @@ components:
         - $ref: "#/components/schemas/Person"
         - $ref: "#/components/schemas/AdresIds"
 
-    PersonAdres1:
-      allOf:
-        - type: object
-          required:
-            - id
-          properties:
-            id:
-              $ref: "#/components/schemas/Id"
-        - $ref: "#/components/schemas/PersonBody"
-        - $ref: "#/components/schemas/AdresIds"
-
     PersonBody:
       type: object
       required:
@@ -1796,30 +1750,6 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/Person"
-
-    RegisterRequest:
-      type: object
-      required:
-        - username
-        - password
-        - email
-      properties:
-        username:
-          $ref: "#/components/schemas/Username"
-        password:
-          $ref: "#/components/schemas/Password"
-        email:
-          $ref: "#/components/schemas/Email"
-        phone:
-          $ref: "#/components/schemas/Phone"
-
-    AuthenticateResponse:
-      type: object
-      required:
-        - token
-      properties:
-        token:
-          type: string
 
     Role:
       allOf:
@@ -1932,34 +1862,6 @@ components:
         - name
       properties:
         name:
-          type: string
-
-    Problem:
-      type: object
-      description: |
-        Standaardformaat (`application/problem+json`) voor probleemdetails
-        in HTTP API's (RFC 7807).
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          maximum: 600
-          exclusiveMaximum: true
-          minimum: 100
-          type: integer
-          description:
-            De HTTP statuscode gegenereerd door de server waar het probleem
-            zich voordoet.
-          format: int32
-          example: 500
-        error:
-          type: string
-        trace:
-          type: string
-        message:
-          type: string
-        path:
           type: string
 
     ProblemDetail:

@@ -14,7 +14,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -27,14 +27,14 @@ import java.util.List;
 @EnableMethodSecurity
 public class WebSecurityConfig {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
 
-    @Autowired
-    private AuthenticationConfiguration authenticationConfiguration;
+//    @Autowired
+//    private AuthenticationConfiguration authenticationConfiguration;
 
     @Bean
     public AuthTokenFilter jwtTokenFilter() {
@@ -51,16 +51,16 @@ public class WebSecurityConfig {
 
         http.cors(cors -> cors.configurationSource(request -> {
             CorsConfiguration config = new CorsConfiguration();
-            config.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:8080", "https://editor.swagger.io/", "https://editor-next.swagger.io/"));
+            config.setAllowedOrigins(List.of("http://localhost:4200", "https://editor.swagger.io/", "https://editor-next.swagger.io/"));
             config.setAllowedMethods(List.of("*")); // Allow all HTTP methods
             config.setAllowedHeaders(List.of("*")); // Allow all headers
             return config;
         }));
 
-        http.securityMatcher("/adres/api/v1/**");
+        // http.securityMatcher("/adres/api/v1/**");
         http.authorizeHttpRequests((requests) -> {
             requests
-//            .requestMatchers("/actuator/**", "/h2-console/**", "/adres/api/v1/login/**", "/favicon.ico", "/v3/api-docs/**", "/swagger-ui/**", "/error").permitAll()
+                    .requestMatchers("/actuator/**", "/h2-console/**", "/adres/api/v1/login/**", "/favicon.ico", "/v3/**", "/swagger-ui/**", "/error").permitAll()
                     .requestMatchers(HttpMethod.GET, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").permitAll() //.hasAnyAuthority("ALL", "APP_WRITE", "APP_READ", "APP_MAINTENANCE")
                     .requestMatchers(HttpMethod.DELETE, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
                     .requestMatchers(HttpMethod.POST, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
