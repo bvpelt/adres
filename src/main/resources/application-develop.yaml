@@ -2,7 +2,8 @@ logging:
   level:
     org:
       springframework: info
-      springdoc: error
+      springdoc: debug
+      web: trace
     com:
       bsoft: debug
 
@@ -15,11 +16,11 @@ management:
     health:
       show-details: always
     metrics:
-      enabled: true
+      access: read_only
     prometheus:
-      enabled: true
+      access: read_only
     shutdown:
-      enabled: true
+      access: unrestricted
   info:
     build:
       enabled: true

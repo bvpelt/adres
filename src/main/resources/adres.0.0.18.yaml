@@ -25,7 +25,8 @@ tags:
   - name: Roles
     description: "The roles a user can have"
   - name: Users
-    description: "The users who have special access"
+    description: |
+      The users who have special access
 
 paths:
   /adresses:

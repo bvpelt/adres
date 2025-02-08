@@ -13,8 +13,9 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -27,14 +28,9 @@ import java.util.List;
 @EnableMethodSecurity
 public class WebSecurityConfig {
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
-
+    org.springdoc.core.service.GenericResponseService genericResponseService;
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
-
-//    @Autowired
-//    private AuthenticationConfiguration authenticationConfiguration;
 
     @Bean
     public AuthTokenFilter jwtTokenFilter() {
@@ -57,10 +53,11 @@ public class WebSecurityConfig {
             return config;
         }));
 
+        /*
         // http.securityMatcher("/adres/api/v1/**");
         http.authorizeHttpRequests((requests) -> {
             requests
-                    .requestMatchers("/actuator/**", "/h2-console/**", "/adres/api/v1/login/**", "/favicon.ico", "/v3/**", "/swagger-ui/**", "/error").permitAll()
+                    .requestMatchers("/actuator/**", "/h2-console/**", "/adres/api/v1/login/**", "/favicon.ico", "/v3/**", "/swagger-ui/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").permitAll() //.hasAnyAuthority("ALL", "APP_WRITE", "APP_READ", "APP_MAINTENANCE")
                     .requestMatchers(HttpMethod.DELETE, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
                     .requestMatchers(HttpMethod.POST, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
@@ -69,6 +66,23 @@ public class WebSecurityConfig {
                     .anyRequest().authenticated();
         });
 
+         */
+
+
+        /* =======*/
+
+        http.securityMatcher("/**");
+        http.authorizeHttpRequests((requests) -> {
+            requests
+                    .requestMatchers("/actuator/**", "/h2-console/**", "/adres/api/v1/login/**", "/favicon.ico", "/v3/**", "/swagger-ui/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").permitAll()
+                    .requestMatchers(HttpMethod.DELETE, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
+                    .requestMatchers(HttpMethod.POST, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
+                    .requestMatchers(HttpMethod.PATCH, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
+                    .requestMatchers("/adres/api/v1/user/**", "/adres/api/v1/roles/**").hasAnyAuthority("ALL", "APP_MAINTENANCE")
+                    .anyRequest().authenticated();
+        });
+        /* -------*/
         http.sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // create new session for each request
 
@@ -81,11 +95,9 @@ public class WebSecurityConfig {
         http.httpBasic(Customizer.withDefaults());
 
         http.headers(headers ->
-                headers.frameOptions(frameOptions ->
-                        frameOptions.sameOrigin()));
+                headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
 
-        http.csrf(csrf ->
-                csrf.disable());
+        http.csrf(AbstractHttpConfigurer::disable);
 
         http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 

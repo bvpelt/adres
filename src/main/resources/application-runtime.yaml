@@ -1,11 +1,20 @@
+logging:
+  level:
+    org:
+      springframework:
+        security: info
+        spring-doc: trace
+    com:
+      bsoft: debug
+
 management:
   endpoint:
     health:
       show-details: always
     metrics:
-      enabled: true
+      access: read_only
     prometheus:
-      enabled: true
+      access: read_only
   endpoints:
     web:
       path-mapping:

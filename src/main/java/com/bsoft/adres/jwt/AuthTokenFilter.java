@@ -6,7 +6,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,34 +31,47 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private ApiKeyService apiKeyService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
-        log.trace("doFilterInternal called for method: {} URI: {}", request.getMethod(), request.getRequestURI());
-        log.trace("doFilterInternal called with respone status: {}", response.getStatus());
-        log.trace("doFilterInternal called with filter: {}", filterChain.toString());
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.debug("doFilterInternal called for method: {} URI: {}", request.getMethod(), request.getRequestURI());
+        log.debug("doFilterInternal called with respone status: {}", response.getStatus());
+        log.debug("doFilterInternal called with filter: {}", filterChain.toString());
 
-        try {
-            checkAPIKey(request);
+        if (!request.getRequestURI().isEmpty()) {
+            try {
+                checkAPIKey(request);
 
-            String jwt = parseJwt(request);
-            if (jwt != null && jwtUtils.validateToken(jwt)) {
-                String username = jwtUtils.getUsernameFromToken(jwt);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                String jwt = parseJwt(request);
+                if (jwt != null && jwtUtils.validateToken(jwt)) {
+                    String username = jwtUtils.getUsernameFromToken(jwt);
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,
-                        null,
-                        userDetails.getAuthorities());
-                log.debug("Roles from JWT: {}", userDetails.getAuthorities());
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,
+                            null,
+                            userDetails.getAuthorities());
+                    log.debug("Roles from JWT: {}", userDetails.getAuthorities());
 
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                // Authenticating the user for the duration of the request
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    // Authenticating the user for the duration of the request
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            } catch (Exception e) {
+                log.error("Cannot set user authentication: {}", e.toString());
+                throw new ServletException(e);
             }
-        } catch (Exception e) {
-            log.error("Cannot set user authentication: {}", e.toString());
+
+            try {
+                    filterChain.doFilter(request, response);
+            } catch (ServletException e) {
+                log.error("ServletException caught in filterchaing: {}", e.toString());
+                //throw new RuntimeException(e);
+            } catch (IOException e) {
+                log.error("ServletException caught in filterchaing: {}", e.toString());
+                throw new RuntimeException(e);
+            }
+        } else {
+            log.error("Request URI is empty");
         }
-        
-        filterChain.doFilter(request, response);
     }
 
     private String parseJwt(HttpServletRequest request) {

@@ -1,4 +1,4 @@
-package com.bsoft.adres.auth;
+package com.bsoft.adres.service;
 
 import com.bsoft.adres.database.RolesDTO;
 import com.bsoft.adres.database.UserDTO;
@@ -11,7 +11,6 @@ import com.bsoft.adres.jwt.JwtUtils;
 import com.bsoft.adres.repositories.RoleRepository;
 import com.bsoft.adres.repositories.UsersRepository;
 import com.bsoft.adres.security.MyUserPrincipal;
-import com.bsoft.adres.service.UsersService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

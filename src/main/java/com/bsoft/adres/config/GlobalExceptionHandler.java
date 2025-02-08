@@ -2,15 +2,18 @@ package com.bsoft.adres.config;
 
 import com.bsoft.adres.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.ConcreteProxy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.net.URI;
 
-@RestControllerAdvice
+//@RestControllerAdvice
+@ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
 

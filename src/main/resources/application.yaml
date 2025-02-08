@@ -30,8 +30,10 @@ springdoc:
   swagger-ui:
     show-common-extensions: true
     with-credentials: false
-    url: http://localhost:8080/swagger-ui/index.html
+#    url: http://localhost:8080/swagger-ui/index.html
+    path: /swagger-ui/index.html
     tagsSorter: alpha
+    validator-url: "https://validator.swagger.io/validator"
 
 info:
   project:
