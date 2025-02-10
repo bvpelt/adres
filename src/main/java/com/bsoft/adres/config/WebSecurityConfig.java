@@ -2,6 +2,7 @@ package com.bsoft.adres.config;
 
 import com.bsoft.adres.jwt.AuthEntryPointJwt;
 import com.bsoft.adres.jwt.AuthTokenFilter;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,7 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.List;
@@ -53,28 +55,12 @@ public class WebSecurityConfig {
             return config;
         }));
 
-        /*
-        // http.securityMatcher("/adres/api/v1/**");
-        http.authorizeHttpRequests((requests) -> {
-            requests
-                    .requestMatchers("/actuator/**", "/h2-console/**", "/adres/api/v1/login/**", "/favicon.ico", "/v3/**", "/swagger-ui/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").permitAll() //.hasAnyAuthority("ALL", "APP_WRITE", "APP_READ", "APP_MAINTENANCE")
-                    .requestMatchers(HttpMethod.DELETE, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
-                    .requestMatchers(HttpMethod.POST, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
-                    .requestMatchers(HttpMethod.PATCH, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
-                    .requestMatchers("/adres/api/v1/user/**", "/adres/api/v1/roles/**").hasAnyAuthority("ALL", "APP_MAINTENANCE")
-                    .anyRequest().authenticated();
-        });
-
-         */
-
-
-        /* =======*/
-
         http.securityMatcher("/**");
         http.authorizeHttpRequests((requests) -> {
             requests
-                    .requestMatchers("/actuator/**", "/h2-console/**", "/adres/api/v1/login/**", "/favicon.ico", "/v3/**", "/swagger-ui/**").permitAll()
+                    .requestMatchers("/actuator/**", "/h2-console/**", "/adres/api/v1/login/**", "/favicon.ico").permitAll()
+                    .requestMatchers("/swagger-ui/**").permitAll()
+                    .requestMatchers("/v3/api-docs/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").permitAll()
                     .requestMatchers(HttpMethod.DELETE, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
                     .requestMatchers(HttpMethod.POST, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")
@@ -82,7 +68,17 @@ public class WebSecurityConfig {
                     .requestMatchers("/adres/api/v1/user/**", "/adres/api/v1/roles/**").hasAnyAuthority("ALL", "APP_MAINTENANCE")
                     .anyRequest().authenticated();
         });
-        /* -------*/
+
+        http.securityMatcher(
+                AntPathRequestMatcher.antMatcher("/**").matches(request -> {
+                    if (request instanceof HttpServletRequest httpServletRequest) {
+                        return !httpServletRequest.getServletPath().startsWith("/swagger-ui")
+                                && !httpServletRequest.getServletPath().startsWith("/v3/api-docs");
+                    }
+                    return true; // Allow other request types (if applicable)
+                })
+        );
+        
         http.sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // create new session for each request
 

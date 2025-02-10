@@ -15,8 +15,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-
 @Slf4j
 @Component
 public class AuthTokenFilter extends OncePerRequestFilter {
@@ -31,9 +29,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private ApiKeyService apiKeyService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException{
         log.debug("doFilterInternal called for method: {} URI: {}", request.getMethod(), request.getRequestURI());
-        log.debug("doFilterInternal called with respone status: {}", response.getStatus());
+        log.debug("doFilterInternal called with response status: {}", response.getStatus());
         log.debug("doFilterInternal called with filter: {}", filterChain.toString());
 
         if (!request.getRequestURI().isEmpty()) {
@@ -63,10 +61,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             try {
                     filterChain.doFilter(request, response);
             } catch (ServletException e) {
-                log.error("ServletException caught in filterchaing: {}", e.toString());
-                //throw new RuntimeException(e);
-            } catch (IOException e) {
-                log.error("ServletException caught in filterchaing: {}", e.toString());
+                log.error("ServletException caught in filterchain: {}", e.toString());
+                throw new RuntimeException(e);
+            } catch (Exception e) {
+                log.error("Exception caught in filterchain: {}", e.toString());
                 throw new RuntimeException(e);
             }
         } else {
@@ -91,14 +89,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 log.trace("requestUri match /adres/api/v1: {}", requestUri);
                 String refererHeader = request.getHeader("Referer");
                 String ipAdres = getClientIpAddr(request);
-                if (xapiHeader == null) {
-                    log.error("doFilterInternal - No X-API-KEY, referer: {}, ipadres: {}", (refererHeader != null ? refererHeader : ""), ipAdres);
-                    throw new ServletException("X-API-KEY required");
-                } else {
-                    if (!apiKeyService.isValidApiKey(xapiHeader)) {
-                        log.error("doFilterInternal - No X-API-KEY, referer: {}, ipadres: {}", (refererHeader != null ? refererHeader : ""), ipAdres);
-                        throw new ServletException("X-API-KEY has invalid format or is not known!");
-                    }
+                if ((xapiHeader == null) || (!apiKeyService.isValidApiKey(xapiHeader))) {
+                    log.error("doFilterInternal - No (valid) X-API-KEY, referer: {}, ipadres: {}", (refererHeader != null ? refererHeader : ""), ipAdres);
+                    throw new ServletException("X-API-KEY has invalid format or is not known!");
                 }
             }
         }

@@ -272,6 +272,7 @@
                                 <useJakartaEe>true</useJakartaEe>
                                 <useSpringBoot3>true</useSpringBoot3>
                                 <validateSpec>true</validateSpec>
+                                <sourceFolder>target/generated-sources/openapi/src/main/java</sourceFolder>
                             </configOptions>
                             <schemaMappings>
                                 <schemaMapping>ProblemDetail=org.springframework.http.ProblemDetail</schemaMapping>
