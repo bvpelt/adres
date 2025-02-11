@@ -21,6 +21,7 @@ export class AdresdetailComponent {
   selectedPerson?: Person = undefined;
   faPencilIcon = faPencil;
   faTrashCanIcon = faTrashCan;
+  selectPerson: boolean = false;
 
   isLoggedIn$: Observable<boolean>;
 
@@ -90,5 +91,9 @@ export class AdresdetailComponent {
 
   onDeletePerson(person: Person): void {
     this.selectedPerson = person;
+  }
+
+  onAddPerson(): void {
+    this.selectPerson = !this.selectPerson;
   }
 }

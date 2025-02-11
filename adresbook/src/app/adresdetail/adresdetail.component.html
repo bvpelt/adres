@@ -87,6 +87,12 @@
                 </li>
             </ul>
         </div>
+
+            <div class="button-container">
+                <button type="button" (click)="onAddPerson()">Add Person</button>               
+            </div>
+
+            <app-personselect *ngIf="selectPerson" [adres]="adres"></app-personselect>
     </div>
 </div>
 

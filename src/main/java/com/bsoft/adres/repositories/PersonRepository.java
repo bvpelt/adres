@@ -36,4 +36,9 @@ public interface PersonRepository extends PagingAndSortingRepository<PersonDTO, 
             countQuery = "SELECT * FROM person",
             nativeQuery = true)
     Page<PersonDTO> findAllByPage(PageRequest pageRequest);
+
+    @Query(value = "SELECT * from person where id not in (select p.id from person p, adres_person ap where p.id = ap.personid and ap.adresid = :adresId)",
+            countQuery = "SELECT * from person where id not in (select p.id from person p, adres_person ap where p.id = ap.personid and ap.adresid = :adresId)",
+            nativeQuery = true)
+    Page<PersonDTO> findAllByAdresIdAndPaged(Long adresId, PageRequest pageRequest);
 }
