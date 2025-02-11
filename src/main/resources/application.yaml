@@ -25,13 +25,15 @@ spring:
     active: '@activeProfile@'
 
 springdoc:
+  api-docs:
+    path: /v3/api-docs
   enable-spring-security: false
   show-actuator: true
   swagger-ui:
     show-common-extensions: true
     with-credentials: false
 #    url: http://localhost:8080/swagger-ui/index.html
-    path: /swagger-ui/index.html
+    path: /swagger-ui.html
     tagsSorter: alpha
     validator-url: "https://validator.swagger.io/validator"
 
