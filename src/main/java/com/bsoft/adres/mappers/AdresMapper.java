@@ -1,7 +1,6 @@
 package com.bsoft.adres.mappers;
 
 import com.bsoft.adres.database.AdresDTO;
-import com.bsoft.adres.generated.model.AdresBody;
 import com.bsoft.adres.database.JsonNullableMapper;
 import com.bsoft.adres.database.PersonDTO;
 import com.bsoft.adres.generated.model.Adres;

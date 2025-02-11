@@ -29,10 +29,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private ApiKeyService apiKeyService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException{
-        log.debug("doFilterInternal called for method: {} URI: {}", request.getMethod(), request.getRequestURI());
-        log.debug("doFilterInternal called with response status: {}", response.getStatus());
-        log.debug("doFilterInternal called with filter: {}", filterChain.toString());
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException {
+        log.trace("doFilterInternal called for method: {} URI: {}", request.getMethod(), request.getRequestURI());
 
         if (!request.getRequestURI().isEmpty()) {
             try {
@@ -46,7 +44,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,
                             null,
                             userDetails.getAuthorities());
-                    log.debug("Roles from JWT: {}", userDetails.getAuthorities());
+                    log.trace("Roles from JWT: {}", userDetails.getAuthorities());
 
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
@@ -59,7 +57,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             }
 
             try {
-                    filterChain.doFilter(request, response);
+                filterChain.doFilter(request, response);
             } catch (ServletException e) {
                 log.error("ServletException caught in filterchain: {}", e.toString());
                 throw new RuntimeException(e);

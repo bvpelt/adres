@@ -1,9 +1,9 @@
 package com.bsoft.adres.controller;
 
-import com.bsoft.adres.service.AuthenticationService;
 import com.bsoft.adres.generated.api.LoginApi;
 import com.bsoft.adres.generated.model.LoginRequest;
 import com.bsoft.adres.generated.model.LoginResponse;
+import com.bsoft.adres.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

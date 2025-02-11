@@ -28,7 +28,6 @@ import java.util.List;
 @EnableMethodSecurity
 public class WebSecurityConfig {
 
-    org.springdoc.core.service.GenericResponseService genericResponseService;
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
 
@@ -47,7 +46,7 @@ public class WebSecurityConfig {
 
         http.cors(cors -> cors.configurationSource(request -> {
             CorsConfiguration config = new CorsConfiguration();
-            config.setAllowedOrigins(List.of("http://localhost:4200", "https://editor.swagger.io/", "https://editor-next.swagger.io/"));
+            config.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:8080", "https://editor.swagger.io/", "https://editor-next.swagger.io/"));
             config.setAllowedMethods(List.of("*")); // Allow all HTTP methods
             config.setAllowedHeaders(List.of("*")); // Allow all headers
             return config;
@@ -56,8 +55,11 @@ public class WebSecurityConfig {
         http.securityMatcher("/**");
         http.authorizeHttpRequests((requests) -> {
             requests
-                    .requestMatchers("/actuator/**", "/h2-console/**", "/adres/api/v1/login/**", "/favicon.ico").permitAll()
-                    .requestMatchers("/swagger-ui/**").permitAll()
+                    .requestMatchers("/actuator/**").permitAll()
+                    .requestMatchers("/adres/api/v1/login/**").permitAll()
+                    .requestMatchers("/favicon.ico").permitAll()
+                    .requestMatchers("/h2-console/**").permitAll()
+                    .requestMatchers("/swagger-ui.html", "/swagger-ui/**").permitAll()
                     .requestMatchers("/v3/api-docs/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").permitAll()
                     .requestMatchers(HttpMethod.DELETE, "/adres/api/v1/adresses/**", "/adres/api/v1/persons/**").hasAnyAuthority("ALL", "APP_WRITE", "APP_MAINTENANCE")

@@ -88,7 +88,7 @@ public class AdresDTO implements Serializable {
         this.hash = this.hashCode();
         this.persons = new ArrayList<>();
 
-        if (adres.getPersons() != null)  {
+        if (adres.getPersons() != null) {
             adres.getPersons().forEach(p -> {
                 PersonDTO personDTO = new PersonDTO(p);
                 this.persons.add(personDTO);
