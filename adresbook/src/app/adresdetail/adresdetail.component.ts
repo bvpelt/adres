@@ -5,7 +5,7 @@ import { Adres } from '../core/modules/openapi/model/adres';
 import { AdresService } from '../services/adres.service';
 import { LogonService } from '../services/logon.service';
 import { AdresBody, Person } from '../core/modules/openapi';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AdresseschangedService } from '../services/adresseschanged.service';
 import { DbgmessageService } from '../services/dbgmessage.service';
 import { faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons';
@@ -21,7 +21,8 @@ export class AdresdetailComponent {
   selectedPerson?: Person = undefined;
   faPencilIcon = faPencil;
   faTrashCanIcon = faTrashCan;
-  selectPerson: boolean = false;
+  private _selectPerson = new BehaviorSubject<boolean>(false);
+  selectPerson$ = this._selectPerson.asObservable();
 
   isLoggedIn$: Observable<boolean>;
 
@@ -94,6 +95,7 @@ export class AdresdetailComponent {
   }
 
   onAddPerson(): void {
-    this.selectPerson = !this.selectPerson;
+    this.dbgmessageService.info("AdresdetailComponent togglede selectperson");    
+    this._selectPerson.next(!this._selectPerson.value);
   }
 }

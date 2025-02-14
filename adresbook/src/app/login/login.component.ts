@@ -17,6 +17,7 @@ export class LoginComponent implements AfterViewInit {
   showPassword = false;
   username: string = "";
   password: string = "";
+  email: string = "";
   faEyeIcon = faEye;
   faEyeSlashIcon = faEyeSlash;
 
@@ -34,7 +35,7 @@ export class LoginComponent implements AfterViewInit {
   }
 
   onLogon() {
-    this.logonService.doLogin(this.username, this.password)
+    this.logonService.doLogin(this.username, this.password, this.email)
       .subscribe({
         next:
           response => {

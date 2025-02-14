@@ -94,7 +94,7 @@ export class AdresService {
     }
 
     if (this.api != undefined) {
-      return this.api.getAdresses(page!, size!, ["id"], xApiKey, 'response', false, options);
+      return this.api.getAdresses(page!, size!,  xApiKey, ["id"], 'response', false, options);
     } else {
       throw new Error("OpenadresService api not yet defined");
     }
@@ -130,7 +130,7 @@ export class AdresService {
     }
 
     if (this.api != undefined) {
-      return this.api!.postAdres(override, adresBody!, xApiKey, 'response', false, options);
+      return this.api!.postAdres(override, xApiKey, adresBody!, 'response', false, options);
     } else {
       throw new Error("OpenadresService api not yet defined");
     }

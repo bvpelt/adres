@@ -71,6 +71,20 @@ public class UsersService {
         Optional<UserDTO> optionalUserDAO = usersRepository.findByUserName(username);
         if (optionalUserDAO.isEmpty()) {
             throw new UserNotExistsException("User with name " + username + " not found");
+        } else {
+            UserDTO userDTO = optionalUserDAO.get();
+            if (!userDTO.getEnabled()) {
+                throw new UserNotExistsException("User not enabled");
+            }
+            if (!userDTO.getAccount_non_expired()) {
+                throw new UserNotExistsException("User not expired");
+            }
+            if (!userDTO.getAccount_non_locked()) {
+                throw new UserNotExistsException("User locked");
+            }
+            if (!userDTO.getCredentials_non_expired()) {
+                throw new UserNotExistsException("User credentials expired");
+            }
         }
 
         UserDTO userDTO = optionalUserDAO.get();

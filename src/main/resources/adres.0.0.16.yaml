@@ -1427,7 +1427,7 @@ components:
         persons:
           type: array
           items:
-            $ref: "#/components/schemas/Person"          
+            $ref: "#/components/schemas/Person"
 
     Email:
       type: string

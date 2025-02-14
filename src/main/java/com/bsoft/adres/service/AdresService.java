@@ -196,6 +196,17 @@ public class AdresService {
 
     }
 
+    public Page<Person> getAdresPersonPage(Long adresId, final PageRequest pageRequest) {
+        Page<PersonDTO> foundAdresPersonPage = personRepository.findAllByAdresIdAndPaged(adresId, pageRequest);
+
+        List<Person> personList = new ArrayList<>();
+        personList = foundAdresPersonPage.getContent().stream()
+                .map(personMapper::map) // Apply mapper to each PersonDTO
+                .toList();
+
+        return new PageImpl<>(personList, foundAdresPersonPage.getPageable(), foundAdresPersonPage.getTotalElements());
+    }
+
     public AdresPerson getAdresPerson(Long adresId) {
         Optional<AdresDTO> adresDAO = adresRepository.findByAdresId(adresId);
         if (!adresDAO.isPresent()) {

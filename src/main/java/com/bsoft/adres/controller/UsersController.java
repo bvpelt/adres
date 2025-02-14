@@ -69,7 +69,7 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<PagedUsers> _getUsers(Integer page, Integer size, List<String> sort, String X_API_KEY) {
+    public ResponseEntity<PagedUsers> _getUsers(Integer page, Integer size, String X_API_KEY, List<String> sort) {
 
         log.debug("_getUsers apikey: {}", X_API_KEY);
         List<Sort.Order> sortParameter;
@@ -89,7 +89,7 @@ public class UsersController implements UsersApi {
             throw new InvalidParameterException("Page size must be greater than 0");
         }
         //
-        if (sort != null && sort.size() > 0) {
+        if (sort != null && !sort.isEmpty()) {
             List<Sort.Order> orders = ControllerSortUtil.getSortOrder(sort);
             pageRequest = PageRequest.of(page - 1, size, Sort.by(orders));
         } else {

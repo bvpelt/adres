@@ -18,17 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class LoginController implements LoginApi {
 
-//    private final UsersService usersService;
-
-//    private final PasswordEncoder passwordEncoder;
-
     private final AuthenticationService authenticationService;
 
     @Value("${info.project.version}")
     private String version;
 
     @Override
-    public ResponseEntity<LoginResponse> _postLogin(LoginRequest loginRequest, String X_API_KEY) {
+    public ResponseEntity<LoginResponse> _postLogin(String X_API_KEY, LoginRequest loginRequest) {
         log.debug("_postTestLogin apikey: {}", X_API_KEY);
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)

@@ -37,8 +37,8 @@ paths:
         Delete all adres
       operationId: deleteAllAdreses
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/X-API-KEY"
       responses:
@@ -87,8 +87,8 @@ paths:
         If the hash value already exists in the backend, the adres is considered to exist
       operationId: postAdres
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/override"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -143,8 +143,8 @@ paths:
         Delete only the specified adres
       operationId: deleteAdres
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -168,8 +168,8 @@ paths:
         Update only the adres specified with adresId
       operationId: patchAdres
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -336,8 +336,8 @@ paths:
         Delete all persons
       operationId: deleteAllPersons
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/X-API-KEY"
       responses:
@@ -365,8 +365,8 @@ paths:
         If the hash value already exists in the backend, the person is considered to exist
       operationId: postPerson
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/override"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -420,8 +420,8 @@ paths:
         Delete only the specified person
       operationId: deletePerson
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -445,8 +445,8 @@ paths:
         Update only the person specified with personId
       operationId: patchPerson
       security:
-        - basicAuth: []
-        - bearerAuth: []
+        - basicAuth: [ ]
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -503,7 +503,7 @@ paths:
         Retrieve all known privileges, using paging and sorting
       operationId: getPrivileges
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
@@ -527,7 +527,7 @@ paths:
         Delete all privileges
       operationId: deleteAllPrivileges
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/X-API-KEY"
       responses:
@@ -553,7 +553,7 @@ paths:
         If the hash value already exists in the backend, the role is considered to exist
       operationId: postPrivileges
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
@@ -584,7 +584,7 @@ paths:
         Retrieve only one privilege with id privilegeId
       operationId: getPrivilege
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -608,7 +608,7 @@ paths:
         Delete only the specified privilege
       operationId: deletePrivilege
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -632,7 +632,7 @@ paths:
         Update only the privilege specified with privilegeId
       operationId: patchPrivilege
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -666,7 +666,7 @@ paths:
         Retrieve all known roles, using paging and sorting
       operationId: getRoles
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
@@ -690,7 +690,7 @@ paths:
         Delete all roles
       operationId: deleteAllRoles
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/X-API-KEY"
       responses:
@@ -717,7 +717,7 @@ paths:
         If the hash value already exists in the backend, the role is considered to exist
       operationId: postRole
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
@@ -748,7 +748,7 @@ paths:
         Retrieve only one role with id roleId
       operationId: getRole
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -772,7 +772,7 @@ paths:
         Delete only the specified role
       operationId: deleteRole
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -796,7 +796,7 @@ paths:
         Update only the role specified with roleId
       operationId: patchRole
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -830,7 +830,7 @@ paths:
         Retrieve all known users, using paging and sorting
       operationId: getUsers
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/size"
@@ -854,7 +854,7 @@ paths:
         Delete all users
       operationId: deleteAllUsers
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/X-API-KEY"
       responses:
@@ -883,7 +883,7 @@ paths:
         If the hash value already exists in the backend, the user is considered to exist
       operationId: postUser
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/X-API-KEY"
       requestBody:
@@ -914,7 +914,7 @@ paths:
         Retrieve only one user with id userId
       operationId: getUser
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -938,7 +938,7 @@ paths:
         Delete only the specified user
       operationId: deleteUser
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -962,7 +962,7 @@ paths:
         Update only the user specified with userId
       operationId: patchUser
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - $ref: "#/components/parameters/id"
         - $ref: "#/components/parameters/X-API-KEY"
@@ -1016,7 +1016,7 @@ components:
 
     AdresList-01:
       summary: An empty list of adresses
-      value: []
+      value: [ ]
 
     AdresList-02:
       summary: An empty list of adresses
@@ -1067,7 +1067,7 @@ components:
     PagedAdresList-01:
       summary: An empty list of adresses
       value:
-        content: []
+        content: [ ]
         pageNumber: 0,
         pageSize: 25,
         totalElements: 0,
@@ -1100,7 +1100,7 @@ components:
     PagedPrivilegesList-01:
       summary: An empty list of privileges
       value:
-        content: []
+        content: [ ]
         pageNumber: 0,
         pageSize: 25,
         totalElements: 0,
@@ -1124,7 +1124,7 @@ components:
     PagedRolesList-01:
       summary: An empty list of roles
       value:
-        content: []
+        content: [ ]
         pageNumber: 0,
         pageSize: 25,
         totalElements: 0,
@@ -1163,7 +1163,7 @@ components:
     PagedUsersList-01:
       summary: An empty list of users
       value:
-        content: []
+        content: [ ]
         pageNumber: 0,
         pageSize: 25,
         totalElements: 0,
@@ -1255,7 +1255,7 @@ components:
         infix: "van Der"
         lastName: "Vlist"
         dateOfBirth: "2022-01-04"
-        adresses: []
+        adresses: [ ]
 
     PersonAdres-02:
       summary: A person with all fields and no adresses
@@ -1284,7 +1284,7 @@ components:
 
     PersonList-01:
       summary: An empty list of persons
-      value: []
+      value: [ ]
 
     PersonList-02:
       summary: An empty list of persons
@@ -1396,7 +1396,7 @@ components:
         accountNonLocked: true
         credentialsNonExpired: true
         enabled: true
-        roles: []
+        roles: [ ]
 
     User:
       summary: New user
@@ -1410,7 +1410,7 @@ components:
         accountNonLocked: true
         credentialsNonExpired: true
         enabled: true
-        roles: []
+        roles: [ ]
 
     UserList:
       summary: List of known users
@@ -1424,7 +1424,7 @@ components:
           accountNonLocked: true
           credentialsNonExpired: true
           enabled: true
-          roles: []
+          roles: [ ]
         - id: 5
           username: "tester"
           password: "12345"
@@ -1434,7 +1434,7 @@ components:
           accountNonLocked: true
           credentialsNonExpired: true
           enabled: true
-          roles: []
+          roles: [ ]
 
   headers:
     version:
@@ -1504,7 +1504,7 @@ components:
         type: array
         items:
           type: string
-        default: []
+        default: [ ]
 
     X-API-KEY:
       name: "X-API-KEY"

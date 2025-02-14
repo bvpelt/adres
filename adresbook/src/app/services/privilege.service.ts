@@ -88,7 +88,7 @@ private api: PrivilegesService | undefined;
     }
 
     if (this.api != undefined) {
-      return this.api.getPrivileges(page!, size!, ["id"], xApiKey, 'response', false, options);
+      return this.api.getPrivileges(page!, size!, xApiKey,  ["id"], 'response', false, options);
     } else {
       throw new Error("OpenadresService api not yet defined");
     }

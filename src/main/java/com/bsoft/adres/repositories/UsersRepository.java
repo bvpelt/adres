@@ -22,7 +22,8 @@ public interface UsersRepository extends PagingAndSortingRepository<UserDTO, Lon
     Find active user based on username
      */
 
-    @Query(value = "SELECT * FROM users where username = :username and account_non_expired = true and account_non_locked = true and credentials_non_expired = true and enabled = true", nativeQuery = true)
+    //@Query(value = "SELECT * FROM users where username = :username and account_non_expired = true and account_non_locked = true and credentials_non_expired = true and enabled = true", nativeQuery = true)
+    @Query(value = "SELECT * FROM users where username = :username", nativeQuery = true)
     Optional<UserDTO> findByUserName(final String username);
 
     /*

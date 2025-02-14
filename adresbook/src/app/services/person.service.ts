@@ -91,7 +91,7 @@ export class PersonService {
     }
 
     if (this.api != undefined) {
-      return this.api.getPersons(page!, size!, ["id"], xApiKey, 'response', false, options);
+      return this.api.getPersons(page!, size!, xApiKey,  ["id"],'response', false, options);
     } else {
       throw new Error("PersonsService api not yet defined");
     }

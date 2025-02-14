@@ -87,7 +87,7 @@ export class RoleService {
     }
 
     if (this.api != undefined) {
-      return this.api.getRoles(page!, size!, ["id"], xApiKey, 'response', false, options);
+      return this.api.getRoles(page!, size!, xApiKey,  ["id"], 'response', false, options);
     } else {
       throw new Error("OpenadresService api not yet defined");
     }

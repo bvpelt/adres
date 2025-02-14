@@ -3,10 +3,7 @@ package com.bsoft.adres.controller;
 import com.bsoft.adres.exceptions.AdresNotDeletedException;
 import com.bsoft.adres.exceptions.InvalidParameterException;
 import com.bsoft.adres.generated.api.AdressesApi;
-import com.bsoft.adres.generated.model.Adres;
-import com.bsoft.adres.generated.model.AdresBody;
-import com.bsoft.adres.generated.model.AdresPerson;
-import com.bsoft.adres.generated.model.PagedAdresses;
+import com.bsoft.adres.generated.model.*;
 import com.bsoft.adres.service.AdresService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -70,34 +67,54 @@ public class AdresController implements AdressesApi {
     }
 
     @Override
-    public ResponseEntity<AdresPerson> _getAdresPerons(Long adresId, String X_API_KEY) {
+    public ResponseEntity<PagedPersons> _getAdresPerons(Integer page, Integer size, Long id, String X_API_KEY, List<String> sort) {
         log.debug("_getAdresPerons apikey: {}", X_API_KEY);
-        AdresPerson adresPerson = adresService.getAdresPerson(adresId);
+        List<Sort.Order> sortParameter;
+        PageRequest pageRequest;
+        log.trace("_getAdresPerons pagenumber: {} pagesize: {}, sort: {}, api-key: {}", page, size, sort, "");
+        // Validate input parameters
+        if (page == 0) {
+            page = 25;
+        }
+        if (page < 1) {
+            throw new InvalidParameterException("Page number must be greater than 0");
+        }
+
+        if (sort != null && !sort.isEmpty()) {
+            List<Sort.Order> orders = ControllerSortUtil.getSortOrder(sort);
+            pageRequest = PageRequest.of(page - 1, size, Sort.by(orders));
+        } else {
+            pageRequest = PageRequest.of(page - 1, size);
+        }
+
+        PagedPersons pageResponse = new PagedPersons();
+        Page<Person> personPage = adresService.getAdresPersonPage(id, pageRequest);
+        pageResponse.setContent(personPage.getContent());
+        pageResponse.setPageNumber(personPage.getNumber() + 1);
+        pageResponse.setPageSize(personPage.getSize());
+        pageResponse.setTotalElements(BigDecimal.valueOf(personPage.getTotalElements()));
+        pageResponse.setTotalPages(personPage.getTotalPages());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
-                .body(adresPerson); // Return 201 Created with the created entity
+                .body(pageResponse);
     }
 
+
     @Override
-    public ResponseEntity<PagedAdresses> _getAdresses(Integer page, Integer size, List<String> sort, String X_API_KEY) {
+    public ResponseEntity<PagedAdresses> _getAdresses(Integer page, Integer size, String X_API_KEY, List<String> sort) {
         log.debug("_getAdresses apikey: {}", X_API_KEY);
         List<Sort.Order> sortParameter;
         PageRequest pageRequest;
         log.trace("_getAdresses pagenumber: {} pagesize: {}, sort: {}, api-key: {}", page, size, sort, "");
         // Validate input parameters
-        if (page == null) {
-            page = 1;
+        if (page == 0) {
+            page = 25;
         }
         if (page < 1) {
             throw new InvalidParameterException("Page number must be greater than 0");
         }
-        if (page == null) { // set to default
-            page = 25;
-        }
-        if (page < 1) {
-            throw new InvalidParameterException("Page size must be greater than 0");
-        }
+
         if (sort != null && !sort.isEmpty()) {
             List<Sort.Order> orders = ControllerSortUtil.getSortOrder(sort);
             pageRequest = PageRequest.of(page - 1, size, Sort.by(orders));
@@ -112,7 +129,6 @@ public class AdresController implements AdressesApi {
         pageResponse.setPageSize(adresPage.getSize());
         pageResponse.setTotalElements(BigDecimal.valueOf(adresPage.getTotalElements()));
         pageResponse.setTotalPages(adresPage.getTotalPages());
-
 
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
@@ -130,7 +146,7 @@ public class AdresController implements AdressesApi {
     }
 
     @Override
-    public ResponseEntity<Adres> _postAdres(Boolean override, AdresBody adresBody, String X_API_KEY) {
+    public ResponseEntity<Adres> _postAdres(Boolean override, String X_API_KEY, AdresBody adresBody) {
         log.debug("_postAdres apikey: {}", X_API_KEY);
         if (override == null) {
             override = false;

@@ -46,13 +46,13 @@ export class LogonService {
     this.authenticatedPassword = undefined;
   }
 
-  doLogin(username: string, password: string): Observable<HttpResponse<LoginResponse>> {
-    return this.postLogin(this.xApiKey, username, password);
+  doLogin(username: string, password: string, email: string): Observable<HttpResponse<LoginResponse>> {
+    return this.postLogin(this.xApiKey, username, password, email);
   }
 
   //public postLogin(loginRequest: LoginRequest, xAPIKEY?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LoginResponse>>;
-  private postLogin(xApiKey: string, username: string, password: string): Observable<HttpResponse<LoginResponse>> {
-    const loginRequest: LoginRequest = { username: username, password: password };
+  private postLogin(xApiKey: string, username: string, password: string, email: string): Observable<HttpResponse<LoginResponse>> {
+    const loginRequest: LoginRequest = { username: username, password: password, email: email };
     const headers: HttpHeaders = new HttpHeaders({
       'x-api-key': xApiKey
     });
@@ -63,7 +63,7 @@ export class LogonService {
     };
 
     if (this.api != undefined) {
-      return this.api.postLogin(loginRequest, xApiKey, 'response', false, options);
+      return this.api.postLogin( xApiKey, loginRequest, 'response', false, options);
     } else {
       console.log("LogonService no api available")
       throw Error("No api");

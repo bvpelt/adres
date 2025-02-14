@@ -17,6 +17,7 @@ public class GlobalExceptionHandler {
 
     private final String adresses = "adresses";
     private final String persons = "persons";
+    private final String users = "users";
 
     @ExceptionHandler(AdresExistsException.class)
     public ResponseEntity<ProblemDetail> handleAdresExistsException(AdresExistsException ex) {
@@ -68,6 +69,15 @@ public class GlobalExceptionHandler {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
         problemDetail.setTitle("Person not found");
         problemDetail.setInstance(URI.create(persons));
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
+    }
+
+    @ExceptionHandler(UserNotExistsException.class)
+    public ResponseEntity<ProblemDetail> handleExcehandleUserNotExistsException(UserNotExistsException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        problemDetail.setTitle("User problem");
+        problemDetail.setInstance(URI.create(users));
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
     }

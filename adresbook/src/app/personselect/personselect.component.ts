@@ -21,10 +21,10 @@ export class PersonselectComponent {
     private location: Location,
     private logonService: LogonService,
     private dbgmessageService: DbgmessageService) {
-      
+      this.dbgmessageService.info("PersonselectComponent received adres: " + ((this.adres == undefined) ? "" : JSON.stringify(this.adres)));
     }
 
     getPersons() {
-      this.logonService.xApiKey
+      
     }
 }

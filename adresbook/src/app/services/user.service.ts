@@ -87,7 +87,7 @@ export class UserService {
     }
 
     if (this.api != undefined) {
-      return this.api.getUsers(page!, size!, ["id"], xApiKey, 'response', false, options);
+      return this.api.getUsers(page!, size!, xApiKey, ["id"], 'response', false, options);
     } else {
       throw new Error("OpenadresService api not yet defined");
     }
