@@ -21,8 +21,10 @@ export class AdresdetailComponent {
   selectedPerson?: Person = undefined;
   faPencilIcon = faPencil;
   faTrashCanIcon = faTrashCan;
-  private _selectPerson = new BehaviorSubject<boolean>(false);
-  selectPerson$ = this._selectPerson.asObservable();
+  selectPerson: boolean = false;
+//  private _selectPerson = new BehaviorSubject<boolean>(this.selectPerson);
+//  selectPerson$ = this._selectPerson.asObservable();
+  debugMessages: boolean = true;
 
   isLoggedIn$: Observable<boolean>;
 
@@ -36,6 +38,9 @@ export class AdresdetailComponent {
     this.getAdres(this.logonService.xApiKey);
 
     this.isLoggedIn$ = this.logonService.isLoggedIn$;
+//    this.selectPerson$.subscribe(value => {
+//      this.selectPerson = value;      
+//    });
   }
 
 
@@ -95,7 +100,8 @@ export class AdresdetailComponent {
   }
 
   onAddPerson(): void {
-    this.dbgmessageService.info("AdresdetailComponent togglede selectperson");    
-    this._selectPerson.next(!this._selectPerson.value);
+    this.dbgmessageService.info("AdresdetailComponent toggled selectperson");    
+   // this._selectPerson.next(!this._selectPerson.value);
+   this.selectPerson = !this.selectPerson;
   }
 }

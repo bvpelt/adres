@@ -12,12 +12,7 @@
         <fa-icon *ngIf="showPassword" (click)="togglePasswordVisibility()" [icon]="faEyeIcon"></fa-icon>
         <fa-icon *ngIf="!showPassword" (click)="togglePasswordVisibility()" [icon]="faEyeSlashIcon"></fa-icon>
     </div>
-
-    <div class="form-group">
-        <label for="email">Email: </label>
-        <input #emailInput autocomplete="on" id="email" [(ngModel)]="email" autofocus placeholder="email" tabindex="3">        
-    </div>
-
+    
     <button type="button" (click)="onLogon()" tabindex="3">Logon</button>
 </div>
 

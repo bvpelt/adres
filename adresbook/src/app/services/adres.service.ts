@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { AdressesService } from '../core/modules/openapi/api/api';
 import { Adres } from '../core/modules/openapi/model/adres';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { AdresBody, BASE_PATH, Configuration, PagedAdresses } from '../core/modules/openapi';
+import { AdresBody, BASE_PATH, Configuration, PagedAdresses, PagedPersons } from '../core/modules/openapi';
 import { DynamicconfigService } from './dynamicconfig.service';
 
 @Injectable({
@@ -135,5 +135,24 @@ export class AdresService {
       throw new Error("OpenadresService api not yet defined");
     }
   }
+
+  // public getAdresPerons(page: number, size: number, id: number, xAPIKEY: string, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedPersons>>;
+  getAdresPerons(xApiKey: string, id: number, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PagedPersons>> {
+    const headers: HttpHeaders = new HttpHeaders({
+      'x-api-key': xApiKey
+    });
+
+    const options: any = {
+      headers: headers,
+      httpHeaderAccept: 'application/json'
+    }
+
+    if (this.api != undefined) {
+      return this.api.getAdresPerons(page!, size!, id, xApiKey, ["id"], 'response', false, options);
+    } else {
+      throw new Error("OpenadresService api not yet defined");
+    }
+  }
+
 
 }

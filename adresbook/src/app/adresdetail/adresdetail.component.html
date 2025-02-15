@@ -46,8 +46,8 @@
 
     <div *ngIf="isLoggedIn$ | async">
         <div *ngIf="adres.id != undefined && adres.id != 0" class="form-group">
-            <label for="id">id: </label>
-            <p id="id"> {{adres.id}}</p>
+            <label>id: </label>
+            <p> {{adres.id}}</p>
         </div>
 
         <div class="form-group">
@@ -91,8 +91,8 @@
         <div class="button-container">
             <button type="button" (click)="onAddPerson()">Add Person</button>
         </div>
-
-        <div *ngIf="selectPerson$ | async">
+       
+        <div *ngIf="selectPerson">
             <app-personselect [adres]="adres"></app-personselect>
         </div>
     </div>
@@ -102,4 +102,6 @@
     {{errormessage}}
 </div>
 
-<app-dbgmessages></app-dbgmessages>
+<div *ngIf="debugMessages">
+    <app-dbgmessages></app-dbgmessages>
+</div>

@@ -60,7 +60,7 @@ export class AdresesComponent implements OnInit {
           response => {
             if (response.body) {
               const adresPage: PagedAdresses = response.body;
-              const adresses: Adres[] = response.body as Adres[];
+              //const adresses: Adres[] = response.body as Adres[];
               this.adreses = adresPage.content!;
               this.dbgmessageService.trace('AdresesComponent - before prevpage: ' + this.prevpage + ' page: ' + this.page + ' nextpage: ' + this.nextpage + ' total: ' + adresPage.totalPages);
               if (adresPage.totalElements != undefined) {

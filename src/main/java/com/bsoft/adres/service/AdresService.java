@@ -117,20 +117,27 @@ public class AdresService {
         return false;
     }
 
+    /**
+     * Create a new Adres with possible existing persons
+     *
+     * @param override
+     * @param adresBody
+     *
+     * @return the updated adres
+     */
     public Adres postAdres(Boolean override, final AdresBody adresBody) {
         AdresDTO adresDTO = new AdresDTO(adresBody);
 
         try {
             if (!override) {
-                Optional<AdresDTO> optionalAdresDAO = adresRepository.findByHash(adresDTO.getHash());
-                if (optionalAdresDAO.isPresent()) {
+                Optional<AdresDTO> optionalAdresDTO = adresRepository.findByHash(adresDTO.getHash());
+                if (optionalAdresDTO.isPresent()) {
                     throw new AdresExistsException("Adres " + adresDTO + " already exists cannot insert again");
                 }
             }
 
             List<Person> inputPersons = adresBody.getPersons();
             List<PersonDTO> outputPersons = new ArrayList<>();
-
 
             inputPersons.forEach(person -> {
                 if (person.getId() != null) {
@@ -158,6 +165,77 @@ public class AdresService {
                 adresDTO.getPersons().add(person);
             });
 
+            adresRepository.save(adresDTO);
+
+            return adresMapper.map(adresDTO); // Return 201 Created with the created entity
+        } catch (Error e) {
+            log.error("Error inserting adres: {}", e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * Update an existing adres
+     *
+     * @param adres with a personlist. Each person in the list should exist!!
+     *
+     * @return the updated adres
+     * [TODO] Finish code
+     */
+    public Adres updateAdres(final Adres adres) {
+
+        try {
+
+            Optional<AdresDTO> optionalAdresDTO = adresRepository.findById(adres.getId());
+            if (optionalAdresDTO.isEmpty()) {
+                throw new AdresNotExistsException("Adres " + adres.toString() + " does not exist");
+            }
+
+            AdresDTO adresDTO = optionalAdresDTO.get();        // list with exising persons
+
+            List<Person> existingPersons = adres.getPersons(); // existing in input
+            List<PersonDTO> newPersons = new ArrayList<>();    // found based on input
+
+            existingPersons.forEach(person -> {
+                if (person.getId() != null) {
+                    Optional<PersonDTO> optionalPersonDTO = personRepository.findById(person.getId());
+                    if (optionalPersonDTO.isPresent()) {
+                        log.info("Person: {} already exists", person);
+                        PersonDTO personDTO = optionalPersonDTO.get();
+                        newPersons.add(personDTO);
+                    } else {
+                        log.error("This person with id {} should exists - person {}", person.getId(), person);
+                    }
+                } else {
+                    log.error("Person: {} not exists == should not occur", person);
+                    /*
+                    PersonDTO personDTO = personMapper.map(person);
+                    personDTO.getAdresses().add(adresDTO);
+                    personRepository.save(personDTO);
+                    newPersons.add(personDTO);
+                     */
+                }
+            });
+
+            adresDTO.setPersons(new ArrayList<>());
+
+            newPersons.forEach(person -> {
+                //
+                // if person not in original list
+                // add person
+                // else skip person
+                if (!personExistsInList(adresDTO.getPersons().stream().toList(), person)) {
+                    person.getAdresses().add(adresDTO);
+                    adresDTO.getPersons().add(person);
+                }
+            });
+
+            // remove persons not in newpersons list from original list
+            adresDTO.getPersons().forEach(person -> {
+                if (!personExistsInList(newPersons.stream().toList(), person)) {
+
+                }
+            });
 
             adresRepository.save(adresDTO);
 
