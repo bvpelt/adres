@@ -114,20 +114,21 @@ public class PersonService {
         return PersonList;
     }
 
-    public Person postPerson(Boolean override, final PersonBody PersonBody) {
-        PersonDTO PersonDTO = new PersonDTO(PersonBody);
+    public Person postPerson(Boolean override, final PersonBody personBody) {
+        PersonDTO personDTO = new PersonDTO(personBody);
 
         try {
             if (!override) {
-                Optional<PersonDTO> optionalPersonDAO = personRepository.findByHash(PersonDTO.getHash());
+                Optional<PersonDTO> optionalPersonDAO = personRepository.findByHash(personDTO.getHash());
                 if (optionalPersonDAO.isPresent()) {
-                    throw new PersonExistsException("Person " + PersonDTO + " already exists cannot insert again");
+                    throw new PersonExistsException("Person " + personDTO + " already exists cannot insert again");
                 }
             }
 
-            personRepository.save(PersonDTO);
+            personDTO.genHash();
+            personRepository.save(personDTO);
 
-            return personMapper.map(PersonDTO); // Return 201 Created with the created entity
+            return personMapper.map(personDTO); // Return 201 Created with the created entity
         } catch (Error e) {
             log.error("Error inserting Person: {}", e.toString());
             throw e;
@@ -160,19 +161,6 @@ public class PersonService {
         return personMapper.map(foundPerson);
 
     }
-
-    /*
-    private Person PersonDAO2Person(final PersonDAO personDAO) {
-        Person person = new Person();
-        person.setFirstName(personDAO.getFirstname());
-        person.setId(personDAO.getId());
-        person.setInfix(personDAO.getInfix());
-        person.setLastName(personDAO.getLastname());
-        person.setDateOfBirth(personDAO.getDateofbirth());
-        return person;
-    }
-
-     */
 
     public Page<Person> getPersonsPage(PageRequest pageRequest) {
         Page<PersonDTO> foundPersonPage = personRepository.findAllByPage(pageRequest);

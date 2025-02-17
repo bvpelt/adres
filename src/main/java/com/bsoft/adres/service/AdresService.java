@@ -20,9 +20,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -122,7 +120,6 @@ public class AdresService {
      *
      * @param override
      * @param adresBody
-     *
      * @return the updated adres
      */
     public Adres postAdres(Boolean override, final AdresBody adresBody) {
@@ -152,6 +149,7 @@ public class AdresService {
                 } else {
                     log.info("Person: {} not exists", person);
                     PersonDTO personDTO = personMapper.map(person);
+                    personDTO.genHash();
                     personDTO.getAdresses().add(adresDTO);
                     personRepository.save(personDTO);
                     outputPersons.add(personDTO);
@@ -178,9 +176,7 @@ public class AdresService {
      * Update an existing adres
      *
      * @param adres with a personlist. Each person in the list should exist!!
-     *
      * @return the updated adres
-     * [TODO] Finish code
      */
     public Adres updateAdres(final Adres adres) {
 
@@ -188,82 +184,51 @@ public class AdresService {
 
             Optional<AdresDTO> optionalAdresDTO = adresRepository.findById(adres.getId());
             if (optionalAdresDTO.isEmpty()) {
-                throw new AdresNotExistsException("Adres " + adres.toString() + " does not exist");
+                throw new AdresNotExistsException("Adres " + adres + " does not exist");
             }
 
-            AdresDTO adresDTO = optionalAdresDTO.get();        // list with exising persons
+            AdresDTO existingAdres = optionalAdresDTO.get();        // list with exising persons
+            AdresDTO updatedAdresDTO = adresMapper.map(adres);
 
-            List<Person> existingPersons = adres.getPersons(); // existing in input
-            List<PersonDTO> newPersons = new ArrayList<>();    // found based on input
+            // Handle removed persons
+            Set<PersonDTO> existingPersons = new HashSet<>(existingAdres.getPersons());
+            existingPersons.removeAll(updatedAdresDTO.getPersons());
+            existingAdres.getPersons().removeAll(existingPersons);
 
-            existingPersons.forEach(person -> {
-                if (person.getId() != null) {
-                    Optional<PersonDTO> optionalPersonDTO = personRepository.findById(person.getId());
-                    if (optionalPersonDTO.isPresent()) {
-                        log.info("Person: {} already exists", person);
-                        PersonDTO personDTO = optionalPersonDTO.get();
-                        newPersons.add(personDTO);
-                    } else {
-                        log.error("This person with id {} should exists - person {}", person.getId(), person);
-                    }
-                } else {
-                    log.error("Person: {} not exists == should not occur", person);
-                    /*
-                    PersonDTO personDTO = personMapper.map(person);
-                    personDTO.getAdresses().add(adresDTO);
-                    personRepository.save(personDTO);
-                    newPersons.add(personDTO);
-                     */
-                }
-            });
-
-            adresDTO.setPersons(new ArrayList<>());
-
+            // Handle added persons
+            Set<PersonDTO> newPersons = new HashSet<>(updatedAdresDTO.getPersons());
+            newPersons.removeAll(existingAdres.getPersons());
             newPersons.forEach(person -> {
-                //
-                // if person not in original list
-                // add person
-                // else skip person
-                if (!personExistsInList(adresDTO.getPersons().stream().toList(), person)) {
-                    person.getAdresses().add(adresDTO);
-                    adresDTO.getPersons().add(person);
-                }
+                person = personRepository.save(person);
+                existingAdres.getPersons().add(person);
             });
+            adresRepository.save(existingAdres);
 
-            // remove persons not in newpersons list from original list
-            adresDTO.getPersons().forEach(person -> {
-                if (!personExistsInList(newPersons.stream().toList(), person)) {
-
-                }
-            });
-
-            adresRepository.save(adresDTO);
-
-            return adresMapper.map(adresDTO); // Return 201 Created with the created entity
+            return adresMapper.map(existingAdres); // Return 201 Created with the created entity
         } catch (Error e) {
             log.error("Error inserting adres: {}", e.toString());
             throw e;
         }
     }
 
-    public Adres patch(Long adresId, final AdresBody adresBody) {
+    public Adres patch(Long adresId, final Adres adres) {
 
         Optional<AdresDTO> optionalAdresDAO = adresRepository.findByAdresId(adresId);
         if (!optionalAdresDAO.isPresent()) {
             throw new AdresNotExistsException("Adres with id " + adresId + " not found");
         }
         AdresDTO foundAdres = optionalAdresDAO.get();
-        if (adresBody.getStreet() != null) {
-            foundAdres.setStreet(adresBody.getStreet());
+        if (adres.getStreet() != null) {
+            foundAdres.setStreet(adres.getStreet());
         }
-        if (adresBody.getHousenumber() != null) {
-            foundAdres.setHousenumber(adresBody.getHousenumber());
+        if (adres.getHousenumber() != null) {
+            foundAdres.setHousenumber(adres.getHousenumber());
         }
-        if (adresBody.getZipcode() != null) {
-            foundAdres.setZipcode(adresBody.getZipcode());
+        if (adres.getZipcode() != null) {
+            foundAdres.setZipcode(adres.getZipcode());
         }
-        if (adresBody.getCity() != null) {
-            foundAdres.setCity(adresBody.getCity());
+        if (adres.getCity() != null) {
+            foundAdres.setCity(adres.getCity());
         }
 
         foundAdres.setHash(foundAdres.genHash());

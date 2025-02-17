@@ -53,6 +53,7 @@ export class AdresdetailComponent {
           response => {
             if (response.body) {
               this.adres = response.body;
+              console.log("AdresdetailComponent get adres: " + JSON.stringify(this.adres));
             }
           },
         error: error => {
@@ -62,8 +63,9 @@ export class AdresdetailComponent {
   }
 
   onUpdate(adres: Adres) {
-    const adresbody: AdresBody = { street: adres.street, housenumber: adres.housenumber, zipcode: adres.zipcode, city: adres.city };
-    this.adresService.patchAdres(adres.id, this.logonService.xApiKey, adresbody)
+    const patchedAdres: Adres = { id: adres.id, street: adres.street, housenumber: adres.housenumber, zipcode: adres.zipcode, city: adres.city, persons: adres.persons };
+    console.log("AdresdetailComponent update adres: " + JSON.stringify(this.adres));
+    this.adresService.patchAdres(adres.id, this.logonService.xApiKey, patchedAdres)
       .subscribe({
         next:
           response => {
@@ -87,6 +89,10 @@ export class AdresdetailComponent {
 
   onSelectPerson(person: Person): void {
     this.selectedPerson = person;
+    if (this.adres) {
+      console.log("AdresdetailComponent add person: " + JSON.stringify(person));
+      this.adres.persons?.push(person);
+    }
   }
 
   onEditPerson(person: Person): void {
@@ -97,11 +103,26 @@ export class AdresdetailComponent {
 
   onDeletePerson(person: Person): void {
     this.selectedPerson = person;
+    if (this.adres) {
+      console.log("AdresdetailComponent remove person: " + JSON.stringify(person));
+      this.adres = this.removePersonFromAdres(this.adres, person);
+    }
   }
 
   onAddPerson(): void {
     this.dbgmessageService.info("AdresdetailComponent toggled selectperson");    
    // this._selectPerson.next(!this._selectPerson.value);
    this.selectPerson = !this.selectPerson;
+  }
+
+  removePersonFromAdres(adres: Adres, personToRemove: Person): Adres {
+    if (!adres || !adres.persons) {
+      return adres; // Return the original adres if it's invalid or has no persons
+    }
+  
+    return {
+      ...adres, 
+      persons: adres.persons.filter(person => person.id !== personToRemove.id) 
+    };
   }
 }

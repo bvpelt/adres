@@ -100,8 +100,8 @@ export class AdresService {
     }
   }
 
-  // public patchAdres(id: number, xAPIKEY?: string, adresBody?: AdresBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Adres>>;
-  patchAdres(id: number, xApiKey: string, adresBody?: AdresBody): Observable<HttpResponse<Adres>> {
+  // public patchAdres(id: number, xAPIKEY?: string, adres?: Adres, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Adres>>;
+  patchAdres(id: number, xApiKey: string, adres?: Adres): Observable<HttpResponse<Adres>> {
     const headers: HttpHeaders = new HttpHeaders({
       'x-api-key': xApiKey
     });
@@ -112,7 +112,7 @@ export class AdresService {
     }
 
     if (this.api != undefined) {
-      return this.api.patchAdres(id, xApiKey, adresBody, 'response', false, options);
+      return this.api.patchAdres(id, xApiKey, adres, 'response', false, options);
     } else {
       throw new Error("OpenadresService api not yet defined");
     }

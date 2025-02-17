@@ -136,13 +136,15 @@ public class AdresController implements AdressesApi {
     }
 
     @Override
-    public ResponseEntity<Adres> _patchAdres(Long id, String X_API_KEY, AdresBody adresBody) {
+    public ResponseEntity<Adres> _patchAdres(Long id, String X_API_KEY, Adres adres) {
         log.debug("_patchAdres apikey: {}", X_API_KEY);
-        Adres adres = adresService.patch(id, adresBody);
+        Adres updatedAdres = null;
+        //updatedAdres = adresService.patch(id, adres);
+        updatedAdres = adresService.updateAdres(adres);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Version", version)
-                .body(adres); // Return 201 Created with the created entity
+                .body(updatedAdres); // Return 201 Created with the created entity
     }
 
     @Override

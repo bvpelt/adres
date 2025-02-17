@@ -170,6 +170,10 @@ SELECT u.username, r.rolename, p.name
 FROM users u, users_roles ur, role r, roles_privileges rp, privilege p
 WHERE u.id =ur.userid AND ur.roleid = r.id AND r.id = rp.roleid AND rp.privilegeid = p.id;
 
+
+SELECT a.*, p.*
+FROM adres a, adres_person ap, person p
+WHERE a.id = 4 AND a.id = ap.adresid AND ap.personid = p.id;
 ```
 
 ## Metrics

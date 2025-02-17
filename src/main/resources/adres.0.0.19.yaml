@@ -179,10 +179,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AdresBody"
+              $ref: "#/components/schemas/Adres"
             examples:
               person:
-                $ref: "#/components/examples/AdresBody"
+                $ref: "#/components/examples/Adres"
       responses:
         "200":
           $ref: "#/components/responses/Adres"
@@ -1009,6 +1009,29 @@ components:
         street: "Kerkstraat"
         housenumber: "14"
         city: "Koog aan de Zaan"
+
+    Adres:
+      summary: A new adres
+      value:
+        street: "Kerkewijk"
+        housenumber: "125"
+        zipcode: "3904 JB"
+        city: "Veenendaal"
+        persons:
+          - id: 1
+            firstName: "Jos"
+            infix: "van Der"
+            lastName: "Vlist"
+            dateOfBirth: "2022-01-04"
+          - id: 2
+            firstName: "Karel"
+            lastName: "Appel"
+            dateOfBirth: "2022-01-04"
+          - id: 3
+            firstName: "Albert"
+            lastName: "Einstein"
+            dateOfBirth: "2022-01-04"
+          
 
     AdresBody:
       summary: A new adres
