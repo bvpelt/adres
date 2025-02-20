@@ -23,6 +23,6 @@ public class ErrorDetails {
         super();
         this.status = status;
         this.message = message;
-        errors = Collections.singletonList(error);
+        this.errors = Collections.singletonList(error);
     }
 }
