@@ -7,6 +7,7 @@ import com.bsoft.adres.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,11 +24,17 @@ public class LoginController implements LoginApi {
     @Value("${info.project.version}")
     private String version;
 
+    private HttpHeaders getVersionHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Version", version);
+        return headers;
+    }
+
     @Override
     public ResponseEntity<LoginResponse> _postLogin(String X_API_KEY, LoginRequest loginRequest) {
         log.debug("_postTestLogin apikey: {}", X_API_KEY);
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(authenticationService.basicjwt(loginRequest));
     }
 
@@ -35,7 +42,7 @@ public class LoginController implements LoginApi {
     public ResponseEntity<LoginResponse> _postAuthenticate(String X_API_KEY, LoginRequest loginRequest) {
         log.debug("_postAuthenticate apikey: {}", X_API_KEY);
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(authenticationService.authenticate(loginRequest));
     }
 
@@ -43,7 +50,7 @@ public class LoginController implements LoginApi {
     public ResponseEntity<LoginResponse> _postRegister(String X_API_KEY, LoginRequest loginRequest) {
         log.debug("_postRegister apikey: {}", X_API_KEY);
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(authenticationService.register(loginRequest));
     }
 

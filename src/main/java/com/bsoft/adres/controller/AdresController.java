@@ -24,12 +24,19 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("${application.basePath}")
 @Controller
+
 public class AdresController implements AdressesApi {
 
     private final AdresService adresService;
 
     @Value("${info.project.version}")
     private String version;
+
+    private HttpHeaders getVersionHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Version", version);
+        return headers;
+    }
 
     @Override
     public ResponseEntity<Void> _deleteAdres(Long id, String X_API_KEY) {
@@ -39,8 +46,7 @@ public class AdresController implements AdressesApi {
             throw new AdresNotDeletedException("Adres not deleted");
         }
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Version", version);
+        HttpHeaders headers = getVersionHeaders();
 
         return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
@@ -50,8 +56,7 @@ public class AdresController implements AdressesApi {
         log.debug("_deleteAllAdreses apikey: {}", X_API_KEY);
         adresService.deleteAll();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Version", version);
+        HttpHeaders headers = getVersionHeaders();
 
         return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
@@ -62,7 +67,7 @@ public class AdresController implements AdressesApi {
         Adres adres = adresService.getAdres(adresId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(adres); // Return 201 Created with the created entity
     }
 
@@ -96,7 +101,7 @@ public class AdresController implements AdressesApi {
         pageResponse.setTotalPages(personPage.getTotalPages());
 
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(pageResponse);
     }
 
@@ -131,7 +136,7 @@ public class AdresController implements AdressesApi {
         pageResponse.setTotalPages(adresPage.getTotalPages());
 
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(pageResponse);
     }
 
@@ -143,7 +148,7 @@ public class AdresController implements AdressesApi {
         updatedAdres = adresService.updateAdres(adres);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(updatedAdres); // Return 201 Created with the created entity
     }
 
@@ -156,7 +161,9 @@ public class AdresController implements AdressesApi {
         Adres adres = adresService.postAdres(override, adresBody); // Call the service method
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(adres); // Return 201 Created with the created entity
     }
 }
+
+

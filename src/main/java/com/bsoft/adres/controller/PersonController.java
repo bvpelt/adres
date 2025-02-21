@@ -34,13 +34,18 @@ public class PersonController implements PersonsApi {
     @Value("${info.project.version}")
     private String version;
 
+    private HttpHeaders getVersionHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Version", version);
+        return headers;
+    }
+
     @Override
     public ResponseEntity<Void> _deleteAllPersons(String X_API_KEY) {
         log.debug("_deleteAllPersons apikey: {}", X_API_KEY);
         personService.deleteAll();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Version", version);
+        HttpHeaders headers = getVersionHeaders();
 
         return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
@@ -53,8 +58,7 @@ public class PersonController implements PersonsApi {
             throw new PersonNotDeletedException("Person not deleted");
         }
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Version", version);
+        HttpHeaders headers = getVersionHeaders();
 
         return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
@@ -65,7 +69,7 @@ public class PersonController implements PersonsApi {
         PersonAdres personAdres = personService.getPersonAdres(personId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(personAdres);
     }
 
@@ -75,7 +79,7 @@ public class PersonController implements PersonsApi {
         Person person = personService.getPerson(personId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(person); // Return 201 Created with the created entity
     }
 
@@ -115,7 +119,7 @@ public class PersonController implements PersonsApi {
         pageResponse.setTotalPages(personPage.getTotalPages());
 
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(pageResponse);
     }
 
@@ -125,7 +129,7 @@ public class PersonController implements PersonsApi {
         Person person = personService.patch(id, personBody);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(person); // Return 201 Created with the created entity
 
     }
@@ -139,7 +143,7 @@ public class PersonController implements PersonsApi {
         Person person = personService.postPerson(override, personBody); // Call the service method
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(person); // Return 201 Created with the created entity
     }
 }

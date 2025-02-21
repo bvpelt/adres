@@ -391,6 +391,3 @@ adresRepository.save(existingAdresDTO);
 - [JWT Token](https://www.youtube.com/watch?v=KxqlJblhzfI)
 - [JWT Documentation](https://github.com/jwtk/jjwt )
 - [Metrics](https://piotrminkowski.wordpress.com/2018/05/11/exporting-metrics-to-influxdb-and-prometheus-using-spring-boot-actuator/)
-
-
-

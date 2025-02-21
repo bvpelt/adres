@@ -33,6 +33,12 @@ public class PrivilegesController implements PrivilegesApi {
     @Value("${info.project.version}")
     private String version;
 
+    private HttpHeaders getVersionHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Version", version);
+        return headers;
+    }
+
     @Override
     public ResponseEntity<Void> _deletePrivilege(Long id, String X_API_KEY) {
         log.debug("_deletePrivilege apikey: {}", X_API_KEY);
@@ -41,8 +47,7 @@ public class PrivilegesController implements PrivilegesApi {
             throw new PrivilegeNotDeletedException("Privilege not deleted");
         }
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Version", version);
+        HttpHeaders headers = getVersionHeaders();
 
         return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
@@ -52,8 +57,7 @@ public class PrivilegesController implements PrivilegesApi {
         log.debug("_deleteAllPrivileges apikey: {}", X_API_KEY);
         privilegesService.deleteAll();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Version", version);
+        HttpHeaders headers = getVersionHeaders();
 
         return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
@@ -64,7 +68,7 @@ public class PrivilegesController implements PrivilegesApi {
         Privilege Privilege = privilegesService.getPrivilege(PrivilegeId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(Privilege); // Return 201 Created with the created entity
     }
 
@@ -105,7 +109,7 @@ public class PrivilegesController implements PrivilegesApi {
         pageResponse.setTotalPages(PrivilegePage.getTotalPages());
 
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(pageResponse);
     }
 
@@ -115,7 +119,7 @@ public class PrivilegesController implements PrivilegesApi {
         Privilege privilege = privilegesService.patch(id, privilegeBody);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(privilege); // Return 201 Created with the created entity
     }
 
@@ -126,7 +130,7 @@ public class PrivilegesController implements PrivilegesApi {
         Privilege privilege = privilegesService.postPrivilege(false, privilegeBody); // Call the service method
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(privilege); // Return 201 Created with the created entity
     }
 

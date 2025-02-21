@@ -33,6 +33,12 @@ public class RolesController implements RolesApi {
     @Value("${info.project.version}")
     private String version;
 
+    private HttpHeaders getVersionHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Version", version);
+        return headers;
+    }
+
     @Override
     public ResponseEntity<Void> _deleteRole(Long id, String X_API_KEY) {
         log.debug("_deleteRole apikey: {}", X_API_KEY);
@@ -41,8 +47,7 @@ public class RolesController implements RolesApi {
             throw new RoleNotDeletedException("Role not deleted");
         }
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Version", version);
+        HttpHeaders headers = getVersionHeaders();
 
         return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
@@ -52,8 +57,7 @@ public class RolesController implements RolesApi {
         log.debug("_deleteAllRoles apikey: {}", X_API_KEY);
         rolesService.deleteAll();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Version", version);
+        HttpHeaders headers = getVersionHeaders();
 
         return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
@@ -64,7 +68,7 @@ public class RolesController implements RolesApi {
         Role Role = rolesService.getRole(roleId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(Role); // Return 201 Created with the created entity
     }
 
@@ -105,7 +109,7 @@ public class RolesController implements RolesApi {
         pageResponse.setTotalPages(rolePage.getTotalPages());
 
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(pageResponse);
     }
 
@@ -115,7 +119,7 @@ public class RolesController implements RolesApi {
         Role Role = rolesService.patch(id, roleBody);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(Role); // Return 201 Created with the created entity
     }
 
@@ -126,7 +130,7 @@ public class RolesController implements RolesApi {
         Role Role = rolesService.postRole(false, roleBody); // Call the service method
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(Role); // Return 201 Created with the created entity
     }
 

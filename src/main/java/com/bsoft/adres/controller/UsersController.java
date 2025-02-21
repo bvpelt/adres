@@ -33,6 +33,12 @@ public class UsersController implements UsersApi {
     @Value("${info.project.version}")
     private String version;
 
+    private HttpHeaders getVersionHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Version", version);
+        return headers;
+    }
+
     @Override
     public ResponseEntity<Void> _deleteUser(Long id, String X_API_KEY) {
         log.debug("_deleteUser apikey: {}", X_API_KEY);
@@ -41,8 +47,7 @@ public class UsersController implements UsersApi {
             throw new UserNotDeletedException("User not deleted");
         }
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Version", version);
+        HttpHeaders headers = getVersionHeaders();
 
         return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
@@ -52,8 +57,7 @@ public class UsersController implements UsersApi {
         log.debug("_deleteAllUsers apikey: {}", X_API_KEY);
         usersService.deleteAll();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Version", version);
+        HttpHeaders headers = getVersionHeaders();
 
         return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
@@ -64,10 +68,10 @@ public class UsersController implements UsersApi {
         User user = usersService.getUser(userId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(user); // Return 201 Created with the created entity
     }
-
+    
     @Override
     public ResponseEntity<PagedUsers> _getUsers(Integer page, Integer size, String X_API_KEY, List<String> sort) {
 
@@ -105,7 +109,7 @@ public class UsersController implements UsersApi {
         pageResponse.setTotalPages(usersPage.getTotalPages());
 
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(pageResponse);
     }
 
@@ -115,7 +119,7 @@ public class UsersController implements UsersApi {
         User user = usersService.patch(id, userBody);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(user); // Return 201 Created with the created entity
     }
 
@@ -126,7 +130,7 @@ public class UsersController implements UsersApi {
         User user = usersService.postUser(false, userBody); // Call the service method
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .header("Version", version)
+                .headers(getVersionHeaders())
                 .body(user); // Return 201 Created with the created entity
     }
 
