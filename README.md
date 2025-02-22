@@ -375,6 +375,51 @@ adresRepository.save(existingAdresDTO);
 // and updates the relationship for the existing AdresDTO 
 // and the existing PersonDTOs (existingPerson1 & existingPerson2)
 ```
+## Docker
+
+### Docker compose
+
+docker-compose.yaml
+```yaml
+version: "3.8"
+
+services:
+  spring-boot-app:
+    image: your-spring-boot-image:latest # Replace with your image name
+    ports:
+    - "8080:8080" # Expose your main application port
+    - "8081:8081" # Expose the actuator port
+    networks:
+    - app-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+    - "9090:9090"
+    volumes:
+    - ./prometheus.yml:/etc/prometheus/prometheus.yml # Mount the config file
+    networks:
+    - app-network
+  depends_on:
+    - spring-boot-app
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+    - "3000:3000"
+    volumes:
+    - grafana_data:/var/lib/grafana # Persist Grafana data
+    networks:
+    - app-network
+    depends_on:
+    - prometheus
+
+networks:
+  app-network: # Create a network for communication
+
+volumes:
+  grafana_data: # Named volume for Grafana data persistence
+```
 
 ## References
 

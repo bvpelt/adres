@@ -35,10 +35,10 @@ public class PersonDTO implements Serializable {
     private String infix;
     @Column(name = "lastname")
     private String lastname;
-    @Column(name = "hash")
-    private Integer hash;
     @Column(name = "dateofbirth")
     private LocalDate dateofbirth;
+    @Column(name = "hash")
+    private Integer hash;
 
     @ManyToMany(mappedBy = "persons") //, fetch = FetchType.LAZY)
     private Collection<AdresDTO> adresses = new ArrayList<>();

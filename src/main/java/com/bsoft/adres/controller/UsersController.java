@@ -71,7 +71,7 @@ public class UsersController implements UsersApi {
                 .headers(getVersionHeaders())
                 .body(user); // Return 201 Created with the created entity
     }
-    
+
     @Override
     public ResponseEntity<PagedUsers> _getUsers(Integer page, Integer size, String X_API_KEY, List<String> sort) {
 

@@ -47,6 +47,7 @@ public class UserDTO {
     private Boolean enabled = true;
     @Column(name = "hash")
     private Integer hash = -1;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL) // owning site
     @JoinTable(
             name = "users_roles",

@@ -324,6 +324,25 @@
                 <artifactId>git-commit-id-plugin</artifactId>
                 <version>4.9.10</version>
             </plugin>
+
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.13</version> <executions>
+                <execution>
+                    <id>default</id>
+                    <goals>
+                        <goal>build</goal>
+                        <goal>push</goal> </goals>
+                    <configuration>
+                        <repository>your-docker-registry/your-spring-boot-image</repository>  <tag>latest</tag>
+                        <buildArgs>
+                            <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                        </buildArgs>
+                    </configuration>
+                </execution>
+            </executions>
+            </plugin>
         </plugins>
     </build>
 
