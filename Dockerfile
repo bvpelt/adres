@@ -1,4 +1,6 @@
-FROM openjdk:25-jdk-slim # Or a suitable base image
+FROM openjdk:25-jdk-slim
+MAINTAINER Bart van Pelt <brtvnplt@gmail.com>
+# Or a suitable base image
 
 ARG JAR_FILE
 

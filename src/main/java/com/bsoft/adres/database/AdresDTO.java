@@ -80,7 +80,7 @@ public class AdresDTO implements Serializable {
     }
 
     public AdresDTO(final AdresBody adres) {
-        this.id = null;
+        //this.id = null;
         this.street = adres.getStreet();
         this.housenumber = adres.getHousenumber();
         this.zipcode = adres.getZipcode();

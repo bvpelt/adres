@@ -37,14 +37,14 @@ management:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/adres
-    username: testuser
-    password: 12345
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/adres}
+    username: ${SPRING_DATASOURCE_USERNAME:testuser}
+    password: ${SPRING_DATASOURCE_PASSWORD:12345}
   flyway:
     enabled: true
-    url: jdbc:postgresql://localhost:5432/adres
-    user: testuser
-    password: 12345
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/adres}
+    user: ${SPRING_DATASOURCE_USERNAME:testuser}
+    password: ${SPRING_DATASOURCE_PASSWORD:12345}
     validateMigrationNaming: true
     locations: classpath:db/migration/postgresql
   jpa:

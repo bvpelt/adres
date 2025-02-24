@@ -4,6 +4,7 @@ import com.bsoft.adres.database.PersonDTO;
 import com.bsoft.adres.generated.model.Adres;
 import com.bsoft.adres.generated.model.AdresBody;
 import com.bsoft.adres.generated.model.Person;
+import com.bsoft.adres.repositories.AdresRepository;
 import com.bsoft.adres.repositories.PersonRepository;
 import com.bsoft.adres.service.AdresService;
 import jakarta.transaction.Transactional;
@@ -35,6 +36,8 @@ public class AdresServiceTest {
     private AdresService adresService;
     @Autowired
     private PersonRepository personRepository;
+    @Autowired
+    private AdresRepository adresRepository;
 
     @Transactional
     @Test
@@ -45,8 +48,17 @@ public class AdresServiceTest {
         adresBody.setHousenumber("housenumber");
         adresBody.setZipcode("zipcode");
 
-        Adres adres = adresService.postAdres(false, adresBody);
-        log.info("Saved adres: {}", adres);
+        Adres adres = null;
+        try {
+            adres = adresService.postAdres(false, adresBody);
+
+            log.info("Saved adres: {}", adres);
+        } finally {
+            if (adres != null) {
+                log.info("Cleanup adres: {}", adres);
+                adresRepository.deleteById(adres.getId());
+            }
+        }
     }
 
     @Transactional

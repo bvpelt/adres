@@ -86,7 +86,7 @@ public class AdresIntegrationTest {
                         .header("x-api-key", "f0583805-03f6-4c7f-8e40-f83f55b7c077"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON))
-                .andExpect(jsonPath("$.title").value("Adres not found"))
+                .andExpect(jsonPath("$.title").value("Not Found"))
         ;
     }
 

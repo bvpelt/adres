@@ -163,9 +163,9 @@ public class AdresService {
                 adresDTO.getPersons().add(person);
             });
 
-            adresRepository.save(adresDTO);
+            AdresDTO savedAdres = adresRepository.save(adresDTO);
 
-            return adresMapper.map(adresDTO); // Return 201 Created with the created entity
+            return adresMapper.map(savedAdres); // Return 201 Created with the created entity
         } catch (Error e) {
             log.error("Error inserting adres: {}", e.toString());
             throw e;

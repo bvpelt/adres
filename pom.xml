@@ -328,20 +328,25 @@
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>1.4.13</version> <executions>
-                <execution>
-                    <id>default</id>
-                    <goals>
-                        <goal>build</goal>
-                        <goal>push</goal> </goals>
-                    <configuration>
-                        <repository>your-docker-registry/your-spring-boot-image</repository>  <tag>latest</tag>
-                        <buildArgs>
-                            <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
-                        </buildArgs>
-                    </configuration>
-                </execution>
-            </executions>
+                <version>1.4.13</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>tag</goal>
+                            <goal>push</goal>
+                        </goals>
+                        <configuration>
+                            <!-- <contextDirectory>.</contextDirectory> -->
+                            <repository>dockerpinguin/adres</repository>  <!-- Set your Docker Hub repo -->
+                            <tag>latest</tag>  <!-- Tag with Maven project version -->
+                            <buildArgs>
+                                <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                            </buildArgs>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
