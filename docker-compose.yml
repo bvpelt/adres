@@ -26,7 +26,7 @@ services:
     image: dockerpinguin/adres:latest  # Change to match your built image version
     networks:
       - backend  # Connect to the network
-    container_name: my_spring_app
+    container_name: adres
     restart: always
     depends_on:
       - postgres
@@ -40,10 +40,34 @@ services:
       - "8080:8080"
       - "8081:8081"
 
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"  # Expose Prometheus UI
+    networks:
+      - backend
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yml # Mount Prometheus configuration
+    depends_on:
+      - app
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"  # Expose Grafana UI
+    networks:
+      - backend
+    volumes:
+      - grafana_data:/var/lib/grafana # Persist Grafana data
+    depends_on:
+      - prometheus
+
+
 networks:
   backend:  # Give your network a descriptive name
     driver: bridge
 
 volumes:
   postgres_data:
+  grafana_data:
 
