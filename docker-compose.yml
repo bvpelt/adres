@@ -1,51 +1,48 @@
 version: "3.8"
 
-networks:
-  my-network:  # Give your network a descriptive name
-
 services:
   postgres:
     image: postgres:15
-    networks:
-      - my-network  # Connect to the network
     container_name: my_postgres
     restart: always
-    # set shared memory limit when using docker-compose
-    shm_size: 128mb
     environment:
       POSTGRES_USER: testuser
       POSTGRES_PASSWORD: 12345
       POSTGRES_DB: adres
-      PGPORT: 5555
-    ports:
-      - "5555:5555"
-    command: ["postgres", "-c", "port=5555"]  # Force PostgreSQL to listen on 5555
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U testuser -d adres"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 20s
-
+    networks:
+      - backend  # Connect to the network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   app:
     image: dockerpinguin/adres:latest  # Change to match your built image version
     networks:
-      - my-network  # Connect to the network
+      - backend  # Connect to the network
     container_name: my_spring_app
     restart: always
     depends_on:
       - postgres
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5555/adres
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres/adres
       SPRING_DATASOURCE_USERNAME: testuser
       SPRING_DATASOURCE_PASSWORD: 12345
       SPRING_PROFILES_ACTIVE: runtime
-    command: ["java", "-DactiveProfile=runtime", "-jar", "/app.jar"]
+    command: ["java", "-Dspring.profiles.active=runtime", "-jar", "/app.jar"]
     ports:
       - "8080:8080"
+      - "8081:8081"
+
+networks:
+  backend:  # Give your network a descriptive name
+    driver: bridge
 
 volumes:
   postgres_data:
