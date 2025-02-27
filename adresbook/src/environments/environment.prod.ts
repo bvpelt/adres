@@ -1,5 +1,5 @@
 export const environment = {
     production: true,
     enableServiceWorker: true,
-    apiUrl: 'http://localhost/adres/api/v1'
+    apiUrl: window["env"] && window["env"]["API_BASE_URL"] || "http://localhost:8080/adres/api/v1"
   };
