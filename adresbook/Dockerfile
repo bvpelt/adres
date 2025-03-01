@@ -9,7 +9,9 @@ RUN ls -altr /usr/share/nginx/html
 
 COPY dist/adresbook/browser/  /usr/share/nginx/html
 
-RUN ls -altr /usr/share/nginx/html
+# Replace placeholder with environment variable
+RUN envsubst '\$API_BASE_URL' < /usr/share/nginx/html/index.html > /usr/share/nginx/html/temp.html && \
+    mv /usr/share/nginx/html/temp.html /usr/share/nginx/html/index.html
 
 COPY nginx.conf /etc/nginx/nginx.conf
 

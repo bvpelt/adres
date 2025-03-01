@@ -16,7 +16,6 @@ From the project directory
 ```bash
 mvn -P runtime -DactiveProfile=runtime clean compile
 ```
-
 ### Building client side
 From the project directory
 ```bash
@@ -376,6 +375,9 @@ adresRepository.save(existingAdresDTO);
 // and the existing PersonDTOs (existingPerson1 & existingPerson2)
 ```
 ## Docker
+
+See https://docs.docker.com/engine/install/ubuntu/
+dont forget https://docs.docker.com/engine/install/linux-postinstall/
 
 ### Docker compose
 
