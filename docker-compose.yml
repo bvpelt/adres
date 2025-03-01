@@ -35,6 +35,11 @@ services:
       SPRING_DATASOURCE_USERNAME: testuser
       SPRING_DATASOURCE_PASSWORD: 12345
       SPRING_PROFILES_ACTIVE: runtime
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/app-health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     command: ["java", "-Dspring.profiles.active=runtime", "-jar", "/app.jar"]
     ports:
       - "8080:8080"
@@ -63,13 +68,14 @@ services:
       - prometheus
 
   angular-app:
-    build:
-      context: ./adresbook # Path to your Angular app directory
-      dockerfile: Dockerfile.angular
+    image: dockerpinguin/angular-app:v1.0
+    networks:
+      - backend  # Connect to the network
     ports:
-      - "81:80"
+      - "81:81"
     depends_on:
-      - adres-app
+      adres-app:
+        condition: service_healthy
     environment:
       API_BASE_URL: http://adres-app:8080/adres/api/v1 # Important!
 
