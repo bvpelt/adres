@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { ApiModule, Configuration, ConfigurationParameters } from './core/modules/openapi';
 import { environment } from '../environments/environment';
 
+
 import { HttpClientModule } from '@angular/common/http';
 
 import { BASE_PATH } from './core/modules/openapi';
@@ -35,11 +36,12 @@ import { PrivilegesComponent } from './privileges/privileges.component';
 import { PrivilegeComponent } from './privilege/privilege.component';
 import { PrivilegedetailComponent } from './privilegedetail/privilegedetail.component';
 import { PersonselectComponent } from './personselect/personselect.component';
+import { ConfigService} from "./services/config.service";
 
-export function apiConfigFactory(): Configuration {
+export function apiConfigFactory(configService: ConfigService): Configuration { // Inject ConfigService
   const params: ConfigurationParameters = {
     // set configuration parameters here.
-    basePath: environment.apiUrl,
+    basePath: configService.getApiUrl(),
   }
   return new Configuration(params);
 }
@@ -72,17 +74,25 @@ export function apiConfigFactory(): Configuration {
     FontAwesomeModule,
     FormsModule,
     AppRoutingModule,
-    ApiModule.forRoot(apiConfigFactory),
+    ApiModule.forRoot(() => apiConfigFactory(null)), // Pass a dummy factory function
+
     HttpClientModule,
     environment.enableServiceWorker ? ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000',
-      // Add a unique identifier to the service worker configuration   
+      // Add a unique identifier to the service worker configuration
     }) : []
   ],
-  providers: [],
+  providers: [
+    ConfigService,
+    {
+      provide: Configuration,
+      useFactory: apiConfigFactory,
+      deps: [ConfigService],
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

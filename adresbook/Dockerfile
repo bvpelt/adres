@@ -1,11 +1,9 @@
 
 FROM nginx:alpine
 
-MAINTAINER Bart van Pelt <brtvnplt@gmail.com>
+LABEL maintainer="Bart van Pelt <brtvnplt@gmail.com>"cd
 
 RUN mkdir -p /usr/share/nginx/html # Create the directory
-
-RUN ls -altr /usr/share/nginx/html
 
 COPY dist/adresbook/browser/  /usr/share/nginx/html
 
