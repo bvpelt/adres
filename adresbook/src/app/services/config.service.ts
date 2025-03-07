@@ -1,4 +1,4 @@
-// src/app/config.service.ts
+// src/app/services/config.service.ts
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 
@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
 export class ConfigService {
   getApiUrl(): string {
     if (environment.production) {
-      return window["env"] && window["env"]["API_BASE_URL"] || environment.apiUrl;
+      return window.env && window.env.API_BASE_URL || environment.apiUrl;
     } else {
       return environment.apiUrl;
     }

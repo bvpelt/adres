@@ -376,12 +376,41 @@ adresRepository.save(existingAdresDTO);
 ```
 ## Docker
 
-See https://docs.docker.com/engine/install/ubuntu/
-dont forget https://docs.docker.com/engine/install/linux-postinstall/
+### Installatie (Ubuntu)
+Zie:
+- https://docs.docker.com/engine/install/ubuntu/
+- don't forget https://docs.docker.com/engine/install/linux-postinstall/
+
+### Building the Docker compose images
+
+**Spring-boot image**
+The spring-boot image is generated using
+```bash
+mvn -DactiveProfile=runtime clean package
+docker build --build-arg JAR_FILE=adres-0.0.19.jar --no-cache -t dockerpinguin/adres:latest .
+```
+The result is a docker image
+
+**Angular app**
+The angular app is generated using (from the project directory)
+```bash
+cd adresbook
+npm run genapi 
+npm run build -- --configuration production
+docker build --build-arg API_BASE_URL="http://adres-app:8080/adres/api/v1" --no-cache -t dockerpinguin/angular-app:latest .
+```
+**Docker cleanup**
+```bash
+docker image prune -a
+```
 
 ### Docker compose
 
 see [docker-compose.yaml](docker-compose.yml)
+
+```bash
+docker compose up
+```
 
 ## References
 

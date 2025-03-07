@@ -3,7 +3,11 @@ FROM nginx:alpine
 
 LABEL maintainer="Bart van Pelt <brtvnplt@gmail.com>"cd
 
-RUN mkdir -p /usr/share/nginx/html # Create the directory
+# Install bash and curl
+RUN apk update && apk add bash curl
+
+# Create the directory
+RUN mkdir -p /usr/share/nginx/html
 
 COPY dist/adresbook/browser/  /usr/share/nginx/html
 

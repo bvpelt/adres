@@ -1,25 +1,21 @@
 import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
+import { HttpClientModule } from '@angular/common/http';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
+import { environment } from '../environments/environment';
+import { ConfigService } from './services/config.service';
+
+import { ApiModule, Configuration, ConfigurationParameters } from './core/modules/openapi';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ApiModule, Configuration, ConfigurationParameters } from './core/modules/openapi';
-import { environment } from '../environments/environment';
-
-
-import { HttpClientModule } from '@angular/common/http';
-
-import { BASE_PATH } from './core/modules/openapi';
-
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 import { AdresesComponent } from './adreses/adreses.component';
 import { AdresComponent } from './adres/adres.component';
 import { AdresdetailComponent } from './adresdetail/adresdetail.component';
-import { ServiceWorkerModule } from '@angular/service-worker';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { DbgmessagesComponent } from './dbgmessages/dbgmessages.component';
@@ -36,7 +32,7 @@ import { PrivilegesComponent } from './privileges/privileges.component';
 import { PrivilegeComponent } from './privilege/privilege.component';
 import { PrivilegedetailComponent } from './privilegedetail/privilegedetail.component';
 import { PersonselectComponent } from './personselect/personselect.component';
-import { ConfigService} from "./services/config.service";
+
 
 export function apiConfigFactory(configService: ConfigService): Configuration { // Inject ConfigService
   const params: ConfigurationParameters = {
@@ -74,7 +70,7 @@ export function apiConfigFactory(configService: ConfigService): Configuration { 
     FontAwesomeModule,
     FormsModule,
     AppRoutingModule,
-    ApiModule.forRoot(() => apiConfigFactory(null)), // Pass a dummy factory function
+    ApiModule.forRoot(() => new Configuration()), // Pass a dummy factory function
 
     HttpClientModule,
     environment.enableServiceWorker ? ServiceWorkerModule.register('ngsw-worker.js', {

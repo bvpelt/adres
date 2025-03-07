@@ -1,4 +1,4 @@
-version: "3.8"
+# version: "3.8"
 
 services:
   postgres:
@@ -68,7 +68,7 @@ services:
       - prometheus
 
   angular-app:
-    image: dockerpinguin/angular-app:v1.0
+    image: dockerpinguin/angular-app:latest
     networks:
       - backend  # Connect to the network
     ports:
