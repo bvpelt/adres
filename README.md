@@ -411,6 +411,10 @@ see [docker-compose.yaml](docker-compose.yml)
 ```bash
 docker compose up
 ```
+## Minikube
+See
+- docs https://minikube.sigs.k8s.io/docs/
+- installing https://www.linuxtechi.com/how-to-install-minikube-on-ubuntu/
 
 ## References
 
