@@ -416,6 +416,28 @@ See
 - docs https://minikube.sigs.k8s.io/docs/
 - installing https://www.linuxtechi.com/how-to-install-minikube-on-ubuntu/
 
+```bash
+# from projectdirectory
+minikube start
+
+# create configmap for dashboards for grafana
+kubectl create configmap spring-boot-dashboard --from-file=kubernetes/grafana-spring-boot.json
+kubectl create configmap jvm-dashboard --from-file=kubernetes/grafana-jvm.json
+
+# update grafana dashboard
+kubectl create configmap spring-boot-dashboard --from-file=kubernetes/grafana-spring-boot.json --dry-run=client -o yaml | kubectl apply -f -
+
+# start config
+kubectl apply -f kubernetes/postgresql.yaml
+kubectl apply -f kubernetes/adres-app.yaml
+kubectl apply -f kubernetes/prometheus.yaml
+kubectl apply -f kubernetes/grafana.yaml
+kubectl apply -f kubernetes/angular-app.yaml
+
+minikube service angular-app --url
+minikube service grafana --url
+```
+
 ## References
 
 - [Spring security](https://www.baeldung.com/security-spring)
