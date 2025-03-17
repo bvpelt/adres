@@ -280,7 +280,7 @@ Start dashboard ```sudo /bin/systemctl start grafana-server```
 
 Stop dashboard ```sudo /bin/systemctl stop grafana-server```
 
-[Grafana configuration file](./docs/grafana-springboot.json)
+[Grafana configuration file](kubernetes/grafana-springboot.json)
 [Grafana example queries](https://signoz.io/guides/a-regex-in-query-in-grafana/)
 
 - [docker image](https://hub.docker.com/r/prom/prometheus)
@@ -415,17 +415,22 @@ docker compose up
 See
 - docs https://minikube.sigs.k8s.io/docs/
 - installing https://www.linuxtechi.com/how-to-install-minikube-on-ubuntu/
+- maven plugin https://github.com/GoogleContainerTools/jib/blob/master/jib-maven-plugin/README.md#quickstart 
 
 ```bash
 # from projectdirectory
 minikube start
 
 # create configmap for dashboards for grafana
-kubectl create configmap spring-boot-dashboard --from-file=kubernetes/grafana-spring-boot.json
-kubectl create configmap jvm-dashboard --from-file=kubernetes/grafana-jvm.json
+kubectl create configmap spring-boot-dashboard --from-file=docs/grafana-springboot.json
+kubectl create configmap jvm-dashboard --from-file=docs/grafana-jvm.json
+kubectl create configmap prometheus-config --from-file=docs/prometheus.yaml
 
-# update grafana dashboard
-kubectl create configmap spring-boot-dashboard --from-file=kubernetes/grafana-spring-boot.json --dry-run=client -o yaml | kubectl apply -f -
+# update configmaps
+kubectl create configmap spring-boot-dashboard --from-file=docs/grafana-springboot.json --dry-run=client -o yaml | kubectl apply -f -
+kubectl create configmap jvm-dashboard --from-file=docs/grafana-jvm.json --dry-run=client -o yaml | kubectl apply -f -
+kubectl create configmap prometheus-configmap --from-file=docs/prometheus.yaml --dry-run=client -o yaml | kubectl apply -f -
+
 
 # start config
 kubectl apply -f kubernetes/postgresql.yaml

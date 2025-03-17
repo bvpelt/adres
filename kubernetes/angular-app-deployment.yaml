@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: angular-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: angular-app-deployment
+  template:
+    metadata:
+      labels:
+        app: angular-app-deployment
+    spec:
+      containers:
+        - name: angular-app
+          image: dockerpinguin/angular-app:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: API_BASE_URL
+              value: http://adres-app-service:8080/adres/api/v1

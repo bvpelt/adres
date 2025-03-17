@@ -31,9 +31,11 @@
     </scm>
 
     <properties>
+        <docker.image.prefix>dockerpinguin</docker.image.prefix>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-boot.mainClass>com.bsoft.adres.AdresApplication</spring-boot.mainClass>
         <springdoc.api.default-response-messages-language>en</springdoc.api.default-response-messages-language>
     </properties>
 
@@ -326,28 +328,39 @@
             </plugin>
 
             <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>1.4.13</version>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.4.4</version>
+                <configuration>
+                    <from>
+                        <image>openjdk:21-jdk-slim</image><!-- Use the appropriate JDK/JRE version -->
+                    </from>
+                    <to>
+                        <image>dockerpinguin/${project.artifactId}:${project.version}</image>
+                        <tags>
+                            <tag>${project.version}</tag>
+                            <tag>latest</tag>
+                        </tags>
+                    </to>
+                    <containerizingMode>packaged</containerizingMode>
+                    <container>
+                        <mainClass>${spring-boot.mainClass}</mainClass>
+                        <ports>
+                            <port>8080</port>
+                            <port>8081</port>
+                        </ports>
+                    </container>
+                </configuration>
                 <executions>
                     <execution>
-                        <id>default</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>build</goal>
-                            <goal>tag</goal>
-                            <goal>push</goal>
                         </goals>
-                        <configuration>
-                            <!-- <contextDirectory>.</contextDirectory> -->
-                            <repository>dockerpinguin/adres</repository>  <!-- Set your Docker Hub repo -->
-                            <tag>latest</tag>  <!-- Tag with Maven project version -->
-                            <buildArgs>
-                                <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
-                            </buildArgs>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
 
