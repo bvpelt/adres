@@ -46,7 +46,7 @@ public class WebSecurityConfig {
 
         http.cors(cors -> cors.configurationSource(request -> {
             CorsConfiguration config = new CorsConfiguration();
-            config.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:8080", "https://editor.swagger.io/", "https://editor-next.swagger.io/"));
+            config.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:81", "http://localhost:8080", "https://editor.swagger.io/", "https://editor-next.swagger.io/"));
             config.setAllowedMethods(List.of("*")); // Allow all HTTP methods
             config.setAllowedHeaders(List.of("*")); // Allow all headers
             return config;

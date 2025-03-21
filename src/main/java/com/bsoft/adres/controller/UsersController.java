@@ -105,7 +105,7 @@ public class UsersController implements UsersApi {
         pageResponse.setContent(usersPage.getContent());
         pageResponse.setPageNumber(usersPage.getNumber() + 1);
         pageResponse.setPageSize(usersPage.getSize());
-        pageResponse.setTotalElements(BigDecimal.valueOf(usersPage.getTotalElements()));
+        pageResponse.setTotalElements(BigDecimal.valueOf(usersPage.getTotalElements()).longValue());
         pageResponse.setTotalPages(usersPage.getTotalPages());
 
         return ResponseEntity.status(HttpStatus.OK)
