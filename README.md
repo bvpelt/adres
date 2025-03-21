@@ -377,6 +377,9 @@ adresRepository.save(existingAdresDTO);
 ```
 ## Docker
 
+Login on the browser at https://hub.docker.com with your personal account
+Login on terminal. One gets a code to enter in the browser. Credentials are set on ~/.docker/config.json
+
 ### Docker compose
 
 see [docker-compose.yaml](docker-compose.yml)
