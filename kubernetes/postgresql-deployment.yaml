@@ -12,6 +12,13 @@ spec:
       labels:
         app: postgres
     spec:
+      initContainers:
+        - name: wait-for-pvc
+          image: busybox
+          command: ["sh", "-c", "until [ -d /var/lib/postgresql/data ]; do echo 'Waiting for PVC...'; sleep 2; done"]
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
       containers:
         - name: postgres
           image: postgres:15

@@ -37,3 +37,15 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
+          readinessProbe:   # ✅ Add this to delay service traffic until app is ready
+            httpGet:
+              path: /actuator/app-health
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+      initContainers:
+        - name: wait-for-db
+          image: busybox
+          command: ['sh', '-c', 'until nc -z postgres 5432; do echo waiting for database; sleep 2; done;']

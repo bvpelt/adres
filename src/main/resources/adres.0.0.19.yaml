@@ -1677,7 +1677,7 @@ components:
         pageSize:
           type: integer
         totalElements:
-          type: number
+          type: integer
           format: int64
         totalPages:
           type: integer
@@ -1694,7 +1694,7 @@ components:
         pageSize:
           type: integer
         totalElements:
-          type: number
+          type: integer
           format: int64
         totalPages:
           type: integer
@@ -1711,7 +1711,7 @@ components:
         pageSize:
           type: integer
         totalElements:
-          type: number
+          type: integer
           format: int64
         totalPages:
           type: integer
@@ -1728,7 +1728,7 @@ components:
         pageSize:
           type: integer
         totalElements:
-          type: number
+          type: integer
           format: int64
         totalPages:
           type: integer
@@ -1745,7 +1745,7 @@ components:
         pageSize:
           type: integer
         totalElements:
-          type: number
+          type: integer
           format: int64
         totalPages:
           type: integer

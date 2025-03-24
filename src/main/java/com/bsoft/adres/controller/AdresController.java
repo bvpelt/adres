@@ -97,7 +97,7 @@ public class AdresController implements AdressesApi {
         pageResponse.setContent(personPage.getContent());
         pageResponse.setPageNumber(personPage.getNumber() + 1);
         pageResponse.setPageSize(personPage.getSize());
-        pageResponse.setTotalElements(BigDecimal.valueOf(personPage.getTotalElements()));
+        pageResponse.setTotalElements(BigDecimal.valueOf(personPage.getTotalElements()).longValue());
         pageResponse.setTotalPages(personPage.getTotalPages());
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -132,7 +132,7 @@ public class AdresController implements AdressesApi {
         pageResponse.setContent(adresPage.getContent());
         pageResponse.setPageNumber(adresPage.getNumber() + 1);
         pageResponse.setPageSize(adresPage.getSize());
-        pageResponse.setTotalElements(BigDecimal.valueOf(adresPage.getTotalElements()));
+        pageResponse.setTotalElements(BigDecimal.valueOf(adresPage.getTotalElements()).longValue());
         pageResponse.setTotalPages(adresPage.getTotalPages());
 
         return ResponseEntity.status(HttpStatus.OK)

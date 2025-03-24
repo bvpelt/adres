@@ -105,7 +105,7 @@ public class RolesController implements RolesApi {
         pageResponse.setContent(rolePage.getContent());
         pageResponse.setPageNumber(rolePage.getNumber() + 1);
         pageResponse.setPageSize(rolePage.getSize());
-        pageResponse.setTotalElements(BigDecimal.valueOf(rolePage.getTotalElements()));
+        pageResponse.setTotalElements(BigDecimal.valueOf(rolePage.getTotalElements()).longValue());
         pageResponse.setTotalPages(rolePage.getTotalPages());
 
         return ResponseEntity.status(HttpStatus.OK)

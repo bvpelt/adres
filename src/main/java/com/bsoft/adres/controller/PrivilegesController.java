@@ -105,7 +105,7 @@ public class PrivilegesController implements PrivilegesApi {
         pageResponse.setContent(PrivilegePage.getContent());
         pageResponse.setPageNumber(PrivilegePage.getNumber() + 1);
         pageResponse.setPageSize(PrivilegePage.getSize());
-        pageResponse.setTotalElements(BigDecimal.valueOf(PrivilegePage.getTotalElements()));
+        pageResponse.setTotalElements(BigDecimal.valueOf(PrivilegePage.getTotalElements()).longValue());
         pageResponse.setTotalPages(PrivilegePage.getTotalPages());
 
         return ResponseEntity.status(HttpStatus.OK)

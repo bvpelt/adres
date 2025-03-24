@@ -433,11 +433,14 @@ kubectl create configmap prometheus-configmap --from-file=docs/prometheus.yaml -
 
 
 # start config
-kubectl apply -f kubernetes/postgresql.yaml
-kubectl apply -f kubernetes/adres-app.yaml
+kubectl apply -f kubernetes/postgresql-deployment.yaml
+kubectl apply -f kubernetes/postgresql-service.yaml
+kubectl apply -f kubernetes/adres-app-deployment.yaml
+kubectl apply -f kubernetes/adres-app-service.yaml
 kubectl apply -f kubernetes/prometheus.yaml
 kubectl apply -f kubernetes/grafana.yaml
-kubectl apply -f kubernetes/angular-app.yaml
+kubectl apply -f kubernetes/angular-app-deployment.yaml
+kubectl apply -f kubernetes/angular-app-service.yaml
 
 minikube service angular-app --url
 minikube service grafana --url

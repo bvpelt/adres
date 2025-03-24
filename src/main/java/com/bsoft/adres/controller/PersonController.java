@@ -115,7 +115,7 @@ public class PersonController implements PersonsApi {
         pageResponse.setContent(personPage.getContent());
         pageResponse.setPageNumber(personPage.getNumber() + 1);
         pageResponse.setPageSize(personPage.getSize());
-        pageResponse.setTotalElements(BigDecimal.valueOf(personPage.getTotalElements()));
+        pageResponse.setTotalElements(BigDecimal.valueOf(personPage.getTotalElements()).longValue());
         pageResponse.setTotalPages(personPage.getTotalPages());
 
         return ResponseEntity.status(HttpStatus.OK)
