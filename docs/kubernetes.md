@@ -111,7 +111,7 @@ A client to interact with the kubernetes cluster using the api server.
 Kubectl can interact with each kubernetes cluster.
 
 # Workshop
-Install hybervisor (KVM on ubuntu 24.04), minikube and kubectl. See [Actual installation of KVM](#Actual installation of KVM)
+Install hybervisor (KVM on ubuntu 24.04), minikube and kubectl. See [Actual installation of KVM](#actual-installation-of-kvm)
 
 minikube start --driver=kvm2
 
