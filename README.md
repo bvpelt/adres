@@ -411,6 +411,9 @@ see [docker-compose.yaml](docker-compose.yml)
 ```bash
 docker compose up
 ```
+## Kubernetes
+See
+- https://www.youtube.com/watch?v=X48VuDVv0do
 ## Minikube
 See
 - docs https://minikube.sigs.k8s.io/docs/
@@ -419,7 +422,11 @@ See
 
 ```bash
 # from projectdirectory
-minikube start
+# remove previous minikube installations
+minikube delete
+
+minikube start driver=docker
+
 
 # create configmap for dashboards for grafana
 kubectl create configmap spring-boot-dashboard --from-file=docs/grafana-springboot.json
@@ -435,10 +442,19 @@ kubectl create configmap prometheus-configmap --from-file=docs/prometheus.yaml -
 # start config
 kubectl apply -f kubernetes/postgresql-deployment.yaml
 kubectl apply -f kubernetes/postgresql-service.yaml
+
 kubectl apply -f kubernetes/adres-app-deployment.yaml
 kubectl apply -f kubernetes/adres-app-service.yaml
-kubectl apply -f kubernetes/prometheus.yaml
-kubectl apply -f kubernetes/grafana.yaml
+
+kubectl apply -f kubernetes/prometheus-config.yaml
+kubectl apply -f kubernetes/prometheus-deployment.yaml
+
+kubectl apply -f kubernetes/grafana-secret.yaml
+kubectl apply -f kubernetes/grafana-dashboard-provider.yaml
+kubectl apply -f kubernetes/grafana-dashboard-datasources.yaml
+kubectl apply -f kubernetes/grafana-dashboard-dashboards.yaml
+kubectl apply -f kubernetes/grafana-dashboard-deployment.yaml
+kubectl apply -f kubernetes/grafana-dashboard-service.yaml
 kubectl apply -f kubernetes/angular-app-deployment.yaml
 kubectl apply -f kubernetes/angular-app-service.yaml
 

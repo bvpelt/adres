@@ -13,35 +13,57 @@ spec:
       labels:
         app: grafana
     spec:
+      initContainers:
+        - name: wait-for-prometheus
+          image: busybox
+          command: ['sh', '-c', 'until wget -qO- http://prometheus:9090/-/ready; do echo waiting for prometheus; sleep 5; done;']
+#        - name: wait-for-config-provider
+#          image: busybox
+#          command: ['sh', '-c', 'until [ -f /etc/grafana/provisioning/dashboards/provider.yaml ]; do echo waiting for dashboard provider; sleep 2; done;']
+#          volumeMounts:
+#            - name: grafana-dashboard-provider
+#              mountPath: /etc/grafana/provisioning/dashboards
       containers:
         - name: grafana
           image: grafana/grafana:latest
           ports:
             - containerPort: 3000
           env:
+            - name: DS_PROMETHEUS
+              value: "Prometheus"
+            - name: DS_PROM
+              value: "Prometheus"
             - name: GF_SECURITY_ADMIN_USER
               valueFrom:
                 secretKeyRef:
-                  name: grafana-admin-credentials
+                  name: grafana-secret
                   key: admin-user
             - name: GF_SECURITY_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: grafana-admin-credentials
+                  name: grafana-secret
                   key: admin-password
             - name: GF_PATHS_PROVISIONING
               value: "/etc/grafana/provisioning"
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
           volumeMounts:
-            - name: grafana-datasources
+            - name: grafana-datasource
               mountPath: /etc/grafana/provisioning/datasources
             - name: grafana-dashboard-provider
               mountPath: /etc/grafana/provisioning/dashboards
             - name: grafana-dashboards
               mountPath: /var/lib/grafana/dashboards
       volumes:
-        - name: grafana-datasources
+        - name: grafana-datasource
           configMap:
-            name: grafana-datasources
+            name: grafana-datasource
         - name: grafana-dashboard-provider
           configMap:
             name: grafana-dashboard-provider

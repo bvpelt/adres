@@ -1,5 +1,7 @@
 # Minikube (Tutorial)
 
+See https://minikube.sigs.k8s.io/docs/
+
 Using minikube 
 
 ```bash

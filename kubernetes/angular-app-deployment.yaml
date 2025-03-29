@@ -12,11 +12,22 @@ spec:
       labels:
         app: angular-app
     spec:
+      initContainers:
+        - name: wait-for-adres-app
+          image: busybox
+          command: ['sh', '-c', 'until nc -z adres-app 8080; do echo waiting for adres-app; sleep 2; done;']
       containers:
         - name: angular-app
-          image: dockerpinguin/angular-app:latest
+          image: dockerpinguin/adresbook:latest
           ports:
             - containerPort: 80
           env:
             - name: API_BASE_URL
-              value: http://adres-app-service:8080/adres/api/v1
+              value: http://adres-app:8080/adres/api/v1
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 5
