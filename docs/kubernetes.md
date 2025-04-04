@@ -3,7 +3,7 @@
 See
 - https://www.youtube.com/watch?v=X48VuDVv0do
 
-1:02:00
+1:45:00
 
 ## Intro
 Kubernetes is an open source container orchestration tool.
@@ -418,12 +418,384 @@ nginx-deployment-558d6675d6-tw7km   1/1     Running   0          119s
 
 ```
 
-### Layers of abstraction
+# K8s Configuration files
+The format of the configuration files is in yaml, which is very struct on indentations. 
+In order to check big file there are online resources like https://yamlchecker.com/ and https://www.yamllint.com/.
+
+Each configuration file consists of 3 parts
+- metadata
+- specification, attributes of each component (kind) specification are different
+- status, this is automatically added and updated by kubernetes. Because kubernetes will alway check what is the actual and the desired state. The status is updated continously. If the status does not match kubernetes tries to fix this. Kubernetes gets the status data from etcd - the cluster brain.
+
+Useually the kubernetes configuration files are stored with the code.
+
+In the kubernetes deployment file there is in the spec: section a template: section which is the blueprint of 
+the pods using the same format with metadata and specification as the deployment configuration file. Basically
+it is a configuration file in a configuration.
+
+## Connection between components
+To define connections between components one uses labels and selectors. The metadata part contains the labels, the spec part contains the selectors.
+
+Deployment definition (minimum configuration)
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx         # Deployment label
+spec:                  # Specification deployment
+  replicas: 2          # Changed from 1 -> 2
+  selector:
+    matchLabels:
+      app: nginx       # Selector for pod label
+  template:
+    metadata:
+      labels:          # Pod label
+        app: nginx
+    spec:              # Specification pod
+      containers:
+        - name: nginx
+          image: nginx:1.27.4
+          ports:
+          - containerPort: 8080
+```
+
+Service definition (minimum configuration)
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80           # External service port
+      targetPort: 8080   # Forward to pod target port
+```
+
+Use deployment and service definitions
+```bash
+kubectl apply -f nginx-deployment.yaml 
+deployment.apps/nginx-deployment configured
+kubectl apply -f nginx-service.yaml 
+service/nginx-service created
+```
+
+Check service
+```bash
+kubectl describe service nginx-service
+Name:                     nginx-service
+Namespace:                default
+Labels:                   <none>
+Annotations:              <none>
+Selector:                 app=nginx
+Type:                     ClusterIP
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.101.250.230
+IPs:                      10.101.250.230
+Port:                     <unset>  80/TCP
+TargetPort:               8080/TCP
+Endpoints:                10.244.0.13:8080,10.244.0.14:8080
+Session Affinity:         None
+Internal Traffic Policy:  Cluster
+Events:                   <none>
+
+# Check IP adresses and port mapping
+kubectl get pod -o wide
+NAME                                READY   STATUS    RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+nginx-deployment-7d4695759d-mzq4b   1/1     Running   0          6m48s   10.244.0.14   minikube   <none>           <none>
+nginx-deployment-7d4695759d-swss4   1/1     Running   0          6m49s   10.244.0.13   minikube   <none>           <none>
+
+# Get complete view of deployment
+kubectl describe deployment nginx-deployment
+Name:                   nginx-deployment
+Namespace:              default
+CreationTimestamp:      Wed, 02 Apr 2025 21:21:52 +0200
+Labels:                 app=nginx
+Annotations:            deployment.kubernetes.io/revision: 2
+Selector:               app=nginx
+Replicas:               2 desired | 2 updated | 2 total | 2 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=nginx
+  Containers:
+   nginx:
+    Image:         nginx:1.27.4
+    Port:          8080/TCP
+    Host Port:     0/TCP
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  nginx-deployment-558d6675d6 (0/0 replicas created)
+NewReplicaSet:   nginx-deployment-7d4695759d (2/2 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  4m52s  deployment-controller  Scaled up replica set nginx-deployment-7d4695759d from 0 to 1
+  Normal  ScalingReplicaSet  4m51s  deployment-controller  Scaled down replica set nginx-deployment-558d6675d6 from 2 to 1
+  Normal  ScalingReplicaSet  4m51s  deployment-controller  Scaled up replica set nginx-deployment-7d4695759d from 1 to 2
+  Normal  ScalingReplicaSet  4m49s  deployment-controller  Scaled down replica set nginx-deployment-558d6675d6 from 1 to 0
+
+# Get etcd status information
+kubectl get deployment nginx-deployment -o yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "2"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"nginx"},"name":"nginx-deployment","namespace":"default"},"spec":{"replicas":2,"selector":{"matchLabels":{"app":"nginx"}},"template":{"metadata":{"labels":{"app":"nginx"}},"spec":{"containers":[{"image":"nginx:1.27.4","name":"nginx","ports":[{"containerPort":8080}]}]}}}}
+  creationTimestamp: "2025-04-02T19:21:52Z"
+  generation: 3
+  labels:
+    app: nginx
+  name: nginx-deployment
+  namespace: default
+  resourceVersion: "12392"
+  uid: 08364aa9-5dac-4d5e-b246-a8f7cda09468
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: nginx
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - image: nginx:1.27.4
+        imagePullPolicy: IfNotPresent
+        name: nginx
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 2
+  conditions:
+  - lastTransitionTime: "2025-04-04T16:36:43Z"
+    lastUpdateTime: "2025-04-04T16:36:43Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2025-04-02T19:21:52Z"
+    lastUpdateTime: "2025-04-04T17:35:56Z"
+    message: ReplicaSet "nginx-deployment-7d4695759d" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 3
+  readyReplicas: 2
+  replicas: 2
+  updatedReplicas: 2
+
+# Delete resources
+kubectl delete -f nginx-deployment.yaml 
+deployment.apps "nginx-deployment" deleted
+kubectl delete -f nginx-service.yaml 
+service "nginx-service" deleted
+
+```
+# Complete deployment example
+A complete example using:
+- mongodb
+- mongo-expres
+
+To get this working you need:
+- deployment definitions for pod of mongodb and mongo-expres
+- service definitions for mongodb and mongo-expres
+- a configmap with configuration settings
+- a secret for authentication
+
+Requirements
+- Only internal components can use the mongodb using an internal service
+- Mongo-expres uses the mongodb, so a 
+  - mongodb url is needed, this is stored in a configmap
+  - credentials for the database (username / password) are required, these are stored as a secret
+  Using environment variables in the mongo-expres deployment definition
+- Make mongo-expres accessible for a browser
+
+![Schematic view of kubernetes config](./images/mongosetup.png)
+
+The flow of a request from the browser is
+![Flow of an external request](./images/mongoflow.png)
+
+Check the current content of the minikube cluster
+```bash
+kubectl get all
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   2d11h
+```
+## Build configuration files
+In https://hub.docker.com/search?q=mongo there is info on how to use the mongo image.
+The default port for mongodb is 27017.
+For credentials MONGO_INITDB_ROOT_USERNAME, MONGO_INITDB_ROOT_PASSWORD are used.
+The credentials come from a kubernetes secret.
+
+Create secrets
+```bash
+echo -n 'username' | base64
+dXNlcm5hbWU=
+
+echo -n 'password' | base64
+cGFzc3dvcmQ=
+```
+
+```bash
+kubectl apply -f mongo-secret.yaml
+secret/mongodb-secret created
+
+kubectl describe secret mongodb-secret
+Name:         mongodb-secret
+Namespace:    default
+Labels:       <none>
+Annotations:  <none>
+
+Type:  Opaque
+
+Data
+====
+mongo-root-password:  8 bytes
+mongo-root-username:  8 bytes
+```
+```bash
+kubectl apply -f mongo.yaml 
+deployment.apps/mongodb-deployment created
+
+kubectl get all
+NAME                                      READY   STATUS    RESTARTS   AGE
+pod/mongodb-deployment-6d9d7c68f6-rfmfw   1/1     Running   0          82s
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   2d12h
+
+NAME                                 READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/mongodb-deployment   1/1     1            1           83s
+
+NAME                                            DESIRED   CURRENT   READY   AGE
+replicaset.apps/mongodb-deployment-6d9d7c68f6   1         1         1       82s
+
+kubectl get deployment
+NAME                 READY   UP-TO-DATE   AVAILABLE   AGE
+mongodb-deployment   1/1     1            1           2m25s
+
+kubectl get pod
+NAME                                  READY   STATUS    RESTARTS   AGE
+mongodb-deployment-6d9d7c68f6-rfmfw   1/1     Running   0          2m18s
+```
+
+Define the serice in mongo.yaml and activate the service
+```bash
+kubectl apply -f mongo.yaml 
+deployment.apps/mongodb-deployment unchanged
+service/mongodb-service created
+
+kubectl get service -o wide
+NAME              TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE     SELECTOR
+kubernetes        ClusterIP   10.96.0.1        <none>        443/TCP     2d12h   <none>
+mongodb-service   ClusterIP   10.107.216.189   <none>        27017/TCP   105s    app=mongodb
+
+kubectl get all | grep mongodb
+pod/mongodb-deployment-6d9d7c68f6-rfmfw   1/1     Running   0          12m
+service/mongodb-service   ClusterIP   10.107.216.189   <none>        27017/TCP   4m8s
+deployment.apps/mongodb-deployment   1/1     1            1           12m
+replicaset.apps/mongodb-deployment-6d9d7c68f6   1         1         1       12m
+
+```
+
+Define mongo-express service by looking at https://hub.docker.com/_/mongo-express for configuration parameters.
+Target port is 8081.
+Needed are:
+- internal service adres ME_CONFIG_MONGODB_SERVER
+- credentials
+  - username ME_CONFIG_MONGODB_ADMINUSERNAME
+  - pasword ME_CONFIG_MONGODB_ADMINPASSWORD
+
+The internal service adres will be stored in a configmap. So other apps which use the mongo db can read the url there as well.
+
+```bash
+kubectl apply -f mongo-configmap.yaml 
+configmap/mongodb-configmap created
+
+kubectl apply -f mongo-express.yaml 
+deployment.apps/mongo-express created
+
+kubectl get pods
+NAME                                  READY   STATUS    RESTARTS   AGE
+mongo-express-5dd87b9fcf-kmwjt        1/1     Running   0          57s
+mongodb-deployment-6d9d7c68f6-rfmfw   1/1     Running   0          32m
+
+kubectl logs mongo-express-5dd87b9fcf-kmwjt
+Waiting for mongo:27017...
+/docker-entrypoint.sh: line 15: mongo: Try again
+/docker-entrypoint.sh: line 15: /dev/tcp/mongo/27017: Invalid argument
+No custom config.js found, loading config.default.js
+Welcome to mongo-express 1.0.2
+------------------------
+
+
+Mongo Express server listening at http://0.0.0.0:8081
+Server is open to allow connections from anyone (0.0.0.0)
+basicAuth credentials are "admin:pass", it is recommended you change this in your config.js!
+
+```
+
+Define an external service
+
+```bash
+kubectl apply -f mongo-express.yaml 
+deployment.apps/mongo-express unchanged
+service/mongo-express-service created
+
+kubectl get services
+NAME                    TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+kubernetes              ClusterIP      10.96.0.1        <none>        443/TCP          2d12h
+mongo-express-service   LoadBalancer   10.102.45.64     <pending>     8081:30000/TCP   37s
+mongodb-service         ClusterIP      10.107.216.189   <none>        27017/TCP        31m
+
+kubectl get service mongo-express-service -o wide
+NAME                    TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE   SELECTOR
+mongo-express-service   LoadBalancer   10.102.45.64   <pending>     8081:30000/TCP   76s   app=mongo-express
+
+# expose the external port
+minikube service mongo-express-service
+```
+# Layers of abstraction
 A deployment manages replicasets
 A replicaset manages pod
 A pod is an abstraction of a container
 
-## Install KVM
+# Install KVM
 check virtualisation
 ```bash
 lscpu | grep Virtualization
@@ -439,7 +811,7 @@ kubectl get nodes
 minikube status
 kubectl version # client/server version of kubernetes
 ```
-## Actual installation of KVM
+# Actual installation of KVM
 ```bash
 sudo apt update
 sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients virt-manager bridge-utils
