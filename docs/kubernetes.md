@@ -3,7 +3,7 @@
 See
 - https://www.youtube.com/watch?v=X48VuDVv0do
 
-1:45:00
+2:01:00 https://youtu.be/X48VuDVv0do?feature=shared&t=7313
 
 ## Intro
 Kubernetes is an open source container orchestration tool.
@@ -790,6 +790,257 @@ mongo-express-service   LoadBalancer   10.102.45.64   <pending>     8081:30000/T
 # expose the external port
 minikube service mongo-express-service
 ```
+
+# Namespaces
+A namespace can be used to organize resources. Like a virtual cluster inside a cluster.
+By default, there are 4 namespaces
+
+```bash
+kubectl get namespaces
+NAME              STATUS   AGE
+default           Active   3d
+kube-node-lease   Active   3d
+kube-public       Active   3d
+kube-system       Active   3d
+```
+
+- kubernetes-dashboard, not mentioned above, since dashboard as a plugin is not yet activated.
+- kube-system, not for custom usage. Contains system processes, master and kubectl processes.
+- kube-public, this contains public accessible data. A configmap which contains cluster information. ```kubectl cluster-info```
+- kube-node-lease, holds information of hartbeats of nodes to determine availability of nodes.
+- default, this is where all user defined resources end up unless one specifies a custom namespace.
+
+Create a namespace
+```bash
+kubectl create namespace my-namespace
+```
+
+An other way to create namespaces is by using a configuration file like
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongodb-configmap
+  namespace: my-namespace
+data:
+  database_url: "mongodb-service"
+```
+
+Why use namespaces?
+- To organize resources in groups and have overview.
+- Prevent resource name duplication of different teams or environments (test, production).
+- Share common resources between resources in different namespaces. For instance logging is uses by project A and project B.
+- Blue/green deployment to have multiple versions of an application active but share common resources.
+- Create restricions such as access and resource limits on a namespace. Resource quota per namespace.
+
+*Considerations for use namespaces*
+- You cannot access most resources from another namespace.
+  - configmaps and secrets are namespace specific. Even if the same resources are referenced in another namespace.
+  - a service can be referenced in an other namespace. This is accomplished by adding the namespace after the service. Example service name mysql-service in namespace database is referenced as mysql-service.database from any other namespace than database.
+  - some components are global in a cluster and don't live in a namespace. You cannot isolate them. Examples: volume, node.
+
+**Resources and namespace**
+
+```bash
+# not bound to a namespace
+kubectl api-resources --namespaced=false | sort
+apiservices                                      apiregistration.k8s.io/v1         false        APIService
+certificatesigningrequests          csr          certificates.k8s.io/v1            false        CertificateSigningRequest
+clusterrolebindings                              rbac.authorization.k8s.io/v1      false        ClusterRoleBinding
+clusterroles                                     rbac.authorization.k8s.io/v1      false        ClusterRole
+componentstatuses                   cs           v1                                false        ComponentStatus
+csidrivers                                       storage.k8s.io/v1                 false        CSIDriver
+csinodes                                         storage.k8s.io/v1                 false        CSINode
+customresourcedefinitions           crd,crds     apiextensions.k8s.io/v1           false        CustomResourceDefinition
+flowschemas                                      flowcontrol.apiserver.k8s.io/v1   false        FlowSchema
+ingressclasses                                   networking.k8s.io/v1              false        IngressClass
+mutatingwebhookconfigurations                    admissionregistration.k8s.io/v1   false        MutatingWebhookConfiguration
+NAME                                SHORTNAMES   APIVERSION                        NAMESPACED   KIND
+namespaces                          ns           v1                                false        Namespace
+nodes                                            metrics.k8s.io/v1beta1            false        NodeMetrics
+nodes                               no           v1                                false        Node
+persistentvolumes                   pv           v1                                false        PersistentVolume
+priorityclasses                     pc           scheduling.k8s.io/v1              false        PriorityClass
+prioritylevelconfigurations                      flowcontrol.apiserver.k8s.io/v1   false        PriorityLevelConfiguration
+runtimeclasses                                   node.k8s.io/v1                    false        RuntimeClass
+selfsubjectaccessreviews                         authorization.k8s.io/v1           false        SelfSubjectAccessReview
+selfsubjectreviews                               authentication.k8s.io/v1          false        SelfSubjectReview
+selfsubjectrulesreviews                          authorization.k8s.io/v1           false        SelfSubjectRulesReview
+storageclasses                      sc           storage.k8s.io/v1                 false        StorageClass
+subjectaccessreviews                             authorization.k8s.io/v1           false        SubjectAccessReview
+tokenreviews                                     authentication.k8s.io/v1          false        TokenReview
+validatingadmissionpolicies                      admissionregistration.k8s.io/v1   false        ValidatingAdmissionPolicy
+validatingadmissionpolicybindings                admissionregistration.k8s.io/v1   false        ValidatingAdmissionPolicyBinding
+validatingwebhookconfigurations                  admissionregistration.k8s.io/v1   false        ValidatingWebhookConfiguration
+volumeattachments                                storage.k8s.io/v1                 false        VolumeAttachment
+
+# bound to a namespace
+kubectl api-resources --namespaced=true | sort
+bindings                                 v1                             true         Binding
+configmaps                  cm           v1                             true         ConfigMap
+controllerrevisions                      apps/v1                        true         ControllerRevision
+cronjobs                    cj           batch/v1                       true         CronJob
+csistoragecapacities                     storage.k8s.io/v1              true         CSIStorageCapacity
+daemonsets                  ds           apps/v1                        true         DaemonSet
+deployments                 deploy       apps/v1                        true         Deployment
+endpoints                   ep           v1                             true         Endpoints
+endpointslices                           discovery.k8s.io/v1            true         EndpointSlice
+events                      ev           events.k8s.io/v1               true         Event
+events                      ev           v1                             true         Event
+horizontalpodautoscalers    hpa          autoscaling/v2                 true         HorizontalPodAutoscaler
+ingresses                   ing          networking.k8s.io/v1           true         Ingress
+jobs                                     batch/v1                       true         Job
+leases                                   coordination.k8s.io/v1         true         Lease
+limitranges                 limits       v1                             true         LimitRange
+localsubjectaccessreviews                authorization.k8s.io/v1        true         LocalSubjectAccessReview
+NAME                        SHORTNAMES   APIVERSION                     NAMESPACED   KIND
+networkpolicies             netpol       networking.k8s.io/v1           true         NetworkPolicy
+persistentvolumeclaims      pvc          v1                             true         PersistentVolumeClaim
+poddisruptionbudgets        pdb          policy/v1                      true         PodDisruptionBudget
+pods                                     metrics.k8s.io/v1beta1         true         PodMetrics
+pods                        po           v1                             true         Pod
+podtemplates                             v1                             true         PodTemplate
+replicasets                 rs           apps/v1                        true         ReplicaSet
+replicationcontrollers      rc           v1                             true         ReplicationController
+resourcequotas              quota        v1                             true         ResourceQuota
+rolebindings                             rbac.authorization.k8s.io/v1   true         RoleBinding
+roles                                    rbac.authorization.k8s.io/v1   true         Role
+secrets                                  v1                             true         Secret
+serviceaccounts             sa           v1                             true         ServiceAccount
+services                    svc          v1                             true         Service
+statefulsets                sts          apps/v1                        true         StatefulSet
+```
+
+# Cleanup
+From any directory with kubernetes files
+```bash
+for i in *.yaml 
+do 
+  echo $i
+  kubectl delete -f $i 
+done
+```
+
+# Demo namespaces
+
+```bash
+kubectl apply -f mysql-configmap.yaml 
+configmap/mysql-configmap created        # in the default namespace
+
+kubectl get configmaps
+NAME               DATA   AGE
+kube-root-ca.crt   1      3d12h
+mysql-configmap    1      25s
+
+kubectl get configmap                    # uses the default namespace (see next command)
+NAME               DATA   AGE
+kube-root-ca.crt   1      3d12h
+mysql-configmap    1      3m1s
+
+kubectl get configmap -n default
+NAME               DATA   AGE
+kube-root-ca.crt   1      3d12h
+mysql-configmap    1      3m6s
+
+kubectl get configmap mysql-configmap -o yaml
+apiVersion: v1
+data:
+  database_url: mysql-service.database
+kind: ConfigMap
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","data":{"database_url":"mysql-service.database"},"kind":"ConfigMap","metadata":{"annotations":{},"name":"mysql-configmap","namespace":"default"}}
+  creationTimestamp: "2025-04-05T18:33:52Z"
+  name: mysql-configmap
+  namespace: default                    # the namespace for the configmap
+  resourceVersion: "25422"
+  uid: 8e4f822c-823d-4cb4-953d-14ed7e546661
+
+
+# create namespace
+kubectl create namespace my-namespace
+namespace/my-namespace created
+
+# use namespace
+kubectl apply -f mysql-configmap.yaml --namespace=my-namespace
+configmap/mysql-configmap created
+
+# check namespace
+kubectl get configmap mysql-configmap -o yaml -n my-namespace
+apiVersion: v1
+data:
+  database_url: mysql-service.database
+kind: ConfigMap
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","data":{"database_url":"mysql-service.database"},"kind":"ConfigMap","metadata":{"annotations":{},"name":"mysql-configmap","namespace":"my-namespace"}}
+  creationTimestamp: "2025-04-05T18:40:12Z"
+  name: mysql-configmap
+  namespace: my-namespace
+  resourceVersion: "25727"
+  uid: 6179bf09-ced4-4840-99d0-ac991bd345a0
+
+```
+***Best Practice***
+Add namespace in the configuration file
+
+If for instance a team uses a specific namespace, multiple commands need a post fix -n <namespace>. 
+There is a tool (kubectx) which needs to be installed to do this for you.
+
+```bash
+sudo apt install kubectx
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following NEW packages will be installed:
+  kubectx
+0 upgraded, 1 newly installed, 0 to remove and 4 not upgraded.
+Need to get 7,832 kB of archives.
+After this operation, 34.2 MB of additional disk space will be used.
+Get:1 https://esm.ubuntu.com/apps/ubuntu noble-apps-security/main amd64 kubectx amd64 0.9.5-1ubuntu0.3+esm1 [7,832 kB]
+Fetched 7,832 kB in 1s (10.3 MB/s)   
+Selecting previously unselected package kubectx.
+(Reading database ... 204569 files and directories currently installed.)
+Preparing to unpack .../kubectx_0.9.5-1ubuntu0.3+esm1_amd64.deb ...
+Unpacking kubectx (0.9.5-1ubuntu0.3+esm1) ...
+Setting up kubectx (0.9.5-1ubuntu0.3+esm1) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+
+# kubens will show the known and current active namespaces
+kubens
+default              # current default namespace
+kube-node-lease
+kube-public
+kube-system
+kubernetes-dashboard
+my-namespace
+
+kubens my-namespace
+✔ Active namespace is "my-namespace"
+
+kubens
+default
+kube-node-lease
+kube-public
+kube-system
+kubernetes-dashboard
+my-namespace          # Current default namespace
+
+kubectl get configmap
+NAME               DATA   AGE
+kube-root-ca.crt   1      13m
+mysql-configmap    1      13m
+
+kubectl get configmap -n default
+NAME               DATA   AGE
+kube-root-ca.crt   1      3d12h
+
+
+```
+
 # Layers of abstraction
 A deployment manages replicasets
 A replicaset manages pod

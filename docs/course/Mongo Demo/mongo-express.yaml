@@ -30,6 +30,16 @@ spec:
                 secretKeyRef:
                   name: mongodb-secret
                   key: mongo-root-password
+            - name: ME_CONFIG_BASICAUTH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: mongo-username
+            - name: ME_CONFIG_BASICAUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: mongo-password
             - name: ME_CONFIG_MONGODB_SERVER
               valueFrom:
                 configMapKeyRef:
@@ -50,4 +60,4 @@ spec:
     - port: 8081
       protocol: TCP
       targetPort: 8081
-      nodePort: 30000 # must be between 30000-32767
+      nodePort: 30000   # must be between 30000-32767
