@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: myapp-ingress
+spec:
+  rules:                         # routing rules
+    - host: myapp.com            # map the name to the ip adress of the node which is the entry point!!!
+      http:                      # only specifies the protocol has noting to do with http(s)://myapp.com in the url!!!!
+        paths:
+          - backend:
+              serviceName: myapp-internal-service
+              servicePort: 8080

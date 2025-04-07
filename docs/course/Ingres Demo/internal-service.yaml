@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-internal-service
+spec:
+  selector:
+    app: myapp              # not specified type which is default ClusterIP
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080

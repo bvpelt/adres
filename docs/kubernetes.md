@@ -3,7 +3,7 @@
 See
 - https://www.youtube.com/watch?v=X48VuDVv0do
 
-2:01:00 https://youtu.be/X48VuDVv0do?feature=shared&t=7313
+2:12:00 https://youtu.be/X48VuDVv0do?feature=shared&t=7941
 
 ## Intro
 Kubernetes is an open source container orchestration tool.
@@ -1037,16 +1037,29 @@ mysql-configmap    1      13m
 kubectl get configmap -n default
 NAME               DATA   AGE
 kube-root-ca.crt   1      3d12h
-
-
 ```
 
-# Layers of abstraction
-A deployment manages replicasets
-A replicaset manages pod
-A pod is an abstraction of a container
+# Ingres
+The picture below shows how to use ingres from an external browser to connect to you internal service
+![ingres setup](images/ingressetup.png)
 
-# Install KVM
+Apart from an ingres configuration one needs an implementation for ingress which is the ingress controller.
+The ingress controller is responsible for evaluation and processing of ingress rules.
+The ingress controller
+- evaluates all the rules
+- manages redirections
+- is the entrypoint to the cluster
+- there are many third party implementations. Kubernetes has K8s Nginx Ingres Controller
+
+To use the ingres controller inside the K8s cluster you need an 
+- external server, such as for instance a proxy server
+- a public ip adress and open ports
+- an entrypoint to the cluster
+
+The setup is shown in the next figure
+![external to ingres](images/externaltoingres.png)
+
+
 check virtualisation
 ```bash
 lscpu | grep Virtualization
