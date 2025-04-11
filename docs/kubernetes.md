@@ -1,9 +1,11 @@
 # Kubernetes
 
+Using minikube. See https://minikube.sigs.k8s.io/docs/commands/ 
+
 See
 - https://www.youtube.com/watch?v=X48VuDVv0do
 
-2:12:00 https://youtu.be/X48VuDVv0do?feature=shared&t=7941
+2:35:00 https://youtu.be/X48VuDVv0do?feature=shared&t=9349
 
 ## Intro
 Kubernetes is an open source container orchestration tool.
@@ -921,6 +923,7 @@ do
   kubectl delete -f $i 
 done
 ```
+This script is put in [cleanup.bash](course/cleanup.bash) which can be used to go to one of the Demo directories to clean previous declared kubernetes resources.
 
 # Demo namespaces
 
@@ -1059,8 +1062,239 @@ To use the ingres controller inside the K8s cluster you need an
 The setup is shown in the next figure
 ![external to ingres](images/externaltoingres.png)
 
+## Example
+Install ingress on minikube, this uses the K8s version of the ingress controller.
+```bash
+minikube addons enable ingress
+💡  ingress is an addon maintained by Kubernetes. For any concerns contact minikube on GitHub.
+You can view the list of minikube maintainers at: https://github.com/kubernetes/minikube/blob/master/OWNERS
+    ▪ Using image registry.k8s.io/ingress-nginx/controller:v1.11.3
+    ▪ Using image registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.4.4
+    ▪ Using image registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.4.4
+🔎  Verifying ingress addon...
+🌟  The 'ingress' addon is enabled
 
-check virtualisation
+kubectl get pod -n kube-system
+NAME                               READY   STATUS    RESTARTS         AGE
+coredns-668d6bf9bc-fnn4h           1/1     Running   6 (35h ago)      7d
+etcd-minikube                      1/1     Running   6 (35h ago)      7d
+kube-apiserver-minikube            1/1     Running   6 (35h ago)      7d
+kube-controller-manager-minikube   1/1     Running   6 (35h ago)      7d
+kube-proxy-nwl2d                   1/1     Running   6 (35h ago)      7d
+kube-scheduler-minikube            1/1     Running   6 (35h ago)      7d
+metrics-server-7fbb699795-t9f9f    1/1     Running   3 (35h ago)      3d23h
+storage-provisioner                1/1     Running   13 (8m31s ago)   7d
+
+minikube addons list
+|-----------------------------|----------|--------------|--------------------------------|
+|         ADDON NAME          | PROFILE  |    STATUS    |           MAINTAINER           |
+|-----------------------------|----------|--------------|--------------------------------|
+| ambassador                  | minikube | disabled     | 3rd party (Ambassador)         |
+| amd-gpu-device-plugin       | minikube | disabled     | 3rd party (AMD)                |
+| auto-pause                  | minikube | disabled     | minikube                       |
+| cloud-spanner               | minikube | disabled     | Google                         |
+| csi-hostpath-driver         | minikube | disabled     | Kubernetes                     |
+| dashboard                   | minikube | enabled ✅    | Kubernetes                     |
+| default-storageclass        | minikube | enabled ✅    | Kubernetes                     |
+| efk                         | minikube | disabled     | 3rd party (Elastic)            |
+| freshpod                    | minikube | disabled     | Google                         |
+| gcp-auth                    | minikube | disabled     | Google                         |
+| gvisor                      | minikube | disabled     | minikube                       |
+| headlamp                    | minikube | disabled     | 3rd party (kinvolk.io)         |
+| inaccel                     | minikube | disabled     | 3rd party (InAccel             |
+|                             |          |              | [info@inaccel.com])            |
+| ingress                     | minikube | enabled ✅    | Kubernetes                     |
+| ingress-dns                 | minikube | disabled     | minikube                       |
+| inspektor-gadget            | minikube | disabled     | 3rd party                      |
+|                             |          |              | (inspektor-gadget.io)          |
+| istio                       | minikube | disabled     | 3rd party (Istio)              |
+| istio-provisioner           | minikube | disabled     | 3rd party (Istio)              |
+| kong                        | minikube | disabled     | 3rd party (Kong HQ)            |
+| kubeflow                    | minikube | disabled     | 3rd party                      |
+| kubevirt                    | minikube | disabled     | 3rd party (KubeVirt)           |
+| logviewer                   | minikube | disabled     | 3rd party (unknown)            |
+| metallb                     | minikube | disabled     | 3rd party (MetalLB)            |
+| metrics-server              | minikube | enabled ✅    | Kubernetes                     |
+| nvidia-device-plugin        | minikube | disabled     | 3rd party (NVIDIA)             |
+| nvidia-driver-installer     | minikube | disabled     | 3rd party (NVIDIA)             |
+| nvidia-gpu-device-plugin    | minikube | disabled     | 3rd party (NVIDIA)             |
+| olm                         | minikube | disabled     | 3rd party (Operator Framework) |
+| pod-security-policy         | minikube | disabled     | 3rd party (unknown)            |
+| portainer                   | minikube | disabled     | 3rd party (Portainer.io)       |
+| registry                    | minikube | disabled     | minikube                       |
+| registry-aliases            | minikube | disabled     | 3rd party (unknown)            |
+| registry-creds              | minikube | disabled     | 3rd party (UPMC Enterprises)   |
+| storage-provisioner         | minikube | enabled ✅    | minikube                       |
+| storage-provisioner-gluster | minikube | disabled     | 3rd party (Gluster)            |
+| storage-provisioner-rancher | minikube | disabled     | 3rd party (Rancher)            |
+| volcano                     | minikube | disabled     | third-party (volcano)          |
+| volumesnapshots             | minikube | disabled     | Kubernetes                     |
+| yakd                        | minikube | disabled     | 3rd party (marcnuri.com)       |
+|-----------------------------|----------|--------------|--------------------------------|
+
+# Create an ingress rule for the dashboard
+## Show active components
+kubectl get ns
+NAME                   STATUS   AGE
+default                Active   7d
+ingress-nginx          Active   9m40s
+kube-node-lease        Active   7d
+kube-public            Active   7d
+kube-system            Active   7d
+kubernetes-dashboard   Active   3d23h
+my-namespace           Active   3d11h
+
+## Show kubernetes-dashboard components
+kubectl get all -n kubernetes-dashboard
+NAME                                             READY   STATUS    RESTARTS      AGE
+pod/dashboard-metrics-scraper-5d59dccf9b-f9xft   1/1     Running   3 (35h ago)   3d23h
+pod/kubernetes-dashboard-7779f9b69b-kkglm        1/1     Running   3 (35h ago)   3d23h
+
+NAME                                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/dashboard-metrics-scraper   ClusterIP   10.97.142.245    <none>        8000/TCP   3d23h
+service/kubernetes-dashboard        ClusterIP   10.108.127.242   <none>        80/TCP     3d23h
+
+NAME                                        READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/dashboard-metrics-scraper   1/1     1            1           3d23h
+deployment.apps/kubernetes-dashboard        1/1     1            1           3d23h
+
+NAME                                                   DESIRED   CURRENT   READY   AGE
+replicaset.apps/dashboard-metrics-scraper-5d59dccf9b   1         1         1       3d23h
+replicaset.apps/kubernetes-dashboard-7779f9b69b        1         1         1       3d23h
+
+### There is a dashboard service and a pod which will be used to create the ingress rules
+kubectl apply -f dashboard-ingress.yaml 
+ingress.networking.k8s.io/dashboard-ingress created
+
+kubectl get ingress -n kubernetes-dashboard
+NAME                CLASS   HOSTS           ADDRESS         PORTS   AGE
+dashboard-ingress   nginx   dashboard.com   192.168.39.87   80      64s
+
+kubectl describe ingress dashboard-ingress -n kubernetes-dashboard
+Name:             dashboard-ingress
+Labels:           <none>
+Namespace:        kubernetes-dashboard
+Address:          192.168.39.87
+Ingress Class:    nginx
+Default backend:  <default>
+Rules:
+  Host           Path  Backends
+  ----           ----  --------
+  dashboard.com  
+                 /   kubernetes-dashboard:80 (10.244.0.37:9090)
+Annotations:     nginx.ingress.kubernetes.io/rewrite-target: /
+Events:
+  Type    Reason  Age                    From                      Message
+  ----    ------  ----                   ----                      -------
+  Normal  Sync    6m12s (x2 over 6m26s)  nginx-ingress-controller  Scheduled for sync
+
+```
+Other uses for ingress
+- map host/path for each path to different services in your kubernetes infrastructure
+- map subdomains subdomain.host to different services in your kubernetes infrastructure
+- using tls certificates (see image below). There are a number of requirements:
+  - The type of the secret needs to by kubernetes.io/tls. The data in the secret have the names:
+    - tls.crt the content of a base64 encoded certificate
+    - tls.key the content of a base64 encoded key
+  - The namespace of the secret needs to be in the same namespace as the ingres component
+  ![using tls certificates](images/ingress-tls.png)
+
+Create self signed certificate
+```bash
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -keyout tls.key \
+  -out tls.crt \
+  -subj "/CN=dashboard.com/O=dashboard"
+
+# convert generated certifictes to base64 encoded text  
+base64 -w 0 tls.crt > tls.crt.b64
+base64 -w 0 tls.key > tls.key.b64
+  
+kubectl apply -f dashboard.com.secret.yaml 
+secret/dashboard.com.secret-tls configured
+
+# Check certificate is known as a secret
+kubectl get secret dashboard.com.secret-tls -n kubernetes-dashboard
+NAME                       TYPE                DATA   AGE
+dashboard.com.secret-tls   kubernetes.io/tls   2      8m10s
+
+kubectl describe secret dashboard.com.secret-tls -n kubernetes-dashboard
+Name:         dashboard.com.secret-tls
+Namespace:    kubernetes-dashboard
+Labels:       <none>
+Annotations:  <none>
+
+Type:  kubernetes.io/tls
+
+Data
+====
+tls.crt:  1180 bytes
+tls.key:  1704 bytes
+
+# Delete old ingress definition for dashboard.com without tls
+kubectl delete -f dashboard-ingress.yaml 
+ingress.networking.k8s.io "dashboard-ingress" deleted
+
+# Define ingress definition for dashboard.com with tls
+kubectl apply -f dashboard-ingress-tls.yaml 
+ingress.networking.k8s.io/dashboard-ingress-tls created
+
+# When accessing https://dashboard.com you get an error message since this is a selfsigned certificate!!!!!
+```
+# Helm
+- Helm is a package manager for kubernetes
+  - usage: 
+    - package manager for kubernetes yaml files
+    - distribute the packaged yaml files in private and public repositories
+- Helm is a templating engine which uses a common blueprint and on the fly replace placeholders with actual values. A common uses case is provisioning a kubernetes configuration for an environment like production, test, development.
+
+## Package manager
+Add Elastic search to your existing kubernetes configuration. To do that you need:
+- a statefull set
+- a configmap
+- secrets
+- services
+- a K8s user with permissions
+
+Other people might need the same set to use Eleastic search and do the same research/testing to create the correct yaml files.
+Instead someone creates a Helm chart which contains all. And made that available in a Helm repository. So reuse is possible.
+There are public registries and companies might chose to setup a private registry for Helm charts with in company kubernetes configurations.
+
+## Links
+- Helm hub: https://hub.helm.sh/
+- Helm charts GitHub Project: https://github.com/helm/charts
+- Install Helm: https://helm.sh/docs/intro/install/
+
+## Helm chart structure
+A Helm chart has a directory structure. For instance:
+```text
+myhelmchart/       # Top level folder is the name of the chart
+ Chart.yaml        # Meta information about the chart
+ values.yaml       # Values for the template files
+ charts/           # Dependencies with other charts
+ templates/        # The actual template files
+                   # Optionally one can add README.md and Licence files
+                   
+Example for install
+
+helm install myhelmchart                   
+```
+
+Suppose you have a values.yaml file to overwrite the default values from this file one uses:
+```text
+helm install --values=my-values.yaml <chartname>
+```
+Where my-values.yaml contains a subset of the values in values.yaml. Only the subset of my-values.yaml are overwritten.
+
+![helm values](images/helmvalues.png)
+
+An a alternative to change specific values might be
+```text
+helm install --set version=2.0.0 <chartname>
+```
+
+
+# Check virtualisation
 ```bash
 lscpu | grep Virtualization
 Virtualization:                       VT-x
