@@ -5,7 +5,7 @@ Using minikube. See https://minikube.sigs.k8s.io/docs/commands/
 See
 - https://www.youtube.com/watch?v=X48VuDVv0do
 
-2:35:00 https://youtu.be/X48VuDVv0do?feature=shared&t=9349
+2:45:00 https://youtu.be/X48VuDVv0do?feature=shared&t=9954
 
 ## Intro
 Kubernetes is an open source container orchestration tool.
@@ -1292,7 +1292,114 @@ An a alternative to change specific values might be
 ```text
 helm install --set version=2.0.0 <chartname>
 ```
+## Architecture
+In Helm version 2, Helm is divide in a client and a server part. The server part is called Tiller which executes the Helm client commands.
+Tiller is a component in the kubernetes cluster.
+This helps in release management. Each version of a Helm chart is stored for reference.
+Downside is that Tiller has to much power/permissions in the Kubernetes cluster.
+For that reason Tilles is removed in Helm version 3.
 
+# Volumes
+There are three components for Kubernetes volumes:
+- persistence volumes
+- persistence volume claim
+- storage class
+
+When using a component such as a database in a pod, when restarting the pod the data is not saved. There is no data persistence out of the box!
+You need to configure that. One needs storage that doesnot depend on the pod lifecycle.
+You don't know on which node a pod starts, still storage must be available for the component regardless of the node the component starts on.
+Storage needs to survive a crash of the cluster. 
+Put together as requirements:
+- Storage must not depend on the pod lifecycle
+- Storage must be available on all nodes
+- Storage needs to survide a cluster crash
+
+A persistent volume fills that requirements. It is a cluster resource which is defined using a yaml file.
+example (NFS):
+
+```yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-name
+spec:
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Recycle
+  storageClassName: slow
+  mountOptions:
+    - hard
+    - nfsvers=4.0
+  nfs:
+    path: /dir/path/on/nfs/server
+    server: nfs-server-ip-addresss
+```
+Storage is taken from a physical device such as a disk or an nfs service. The persistent volume is merely an interface from kubernetes to the storage.
+You need to manage storage (backup/restore etc) outside Kubernetes.
+
+A google cloud example:
+```yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: test-volume
+  labels:
+    failure-domain.beta.kubernetes.io/zone: us-centrall-a__us-centrall-b
+spec:
+  capacity:
+    storage: 400Gi
+  accessModes:
+    - ReadWriteOnce
+  gcePersistentDisk:
+    pdName: my-data-disk
+    fsType: ext4
+```
+
+A localstorage example:
+```yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: example-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: local-storage
+  local:
+    path: /mnt/disk/ssd1
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values: 
+                - example-node
+```
+
+See [Volume types](https://kubernetes.io/docs/concepts/storage/volumes/#volume-types) for the different known Kubernetes volume types.
+
+Persistent Volumes are not namespaced, that is do not use any namespace and are accessible from any namespace.
+
+There are two kinds of Persistence Volumes:
+- Local
+- Remote
+Each with their own characteristics and use cases.
+
+Local Persistence Volumes violate requirement 
+- Storage must be available on all nodes. Since it is only defined on a specific node.
+- Storage needs to survide a cluster crash.
+For database persistence on should use remote storage.
+
+PV (Persistent Volumes) are resources which needs to be there when a pod which uses it is defined.
+Who defines it?
+There is an administrator in Kubernetes.
 
 # Check virtualisation
 ```bash
