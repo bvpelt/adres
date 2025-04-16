@@ -1562,6 +1562,9 @@ services:
 
 There are several service types in Kubernetes:
 - ClusterIP
+- Headless Service type is ClusterIP value none
+- NodePort
+- LoadBalancer
 
 ## ClusterIP
 Default type of a service. If you don't explicitly define the service type it will be a clusterip service.
@@ -1574,6 +1577,118 @@ kubectl get endpoints
 NAME         ENDPOINTS            AGE
 kubernetes   192.168.39.87:8443   14d
 ```
+
+Example of a multiport service
+![multi port example](images/multiportservice.png)
+
+
+In the service configuration you have to name the port (when there are more than 1 ports configured)
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - name: mongodb
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+    - name: node-exporter
+      protocol: TCP
+      port: 9216
+      targetPort: 9216
+```
+
+## Headless service
+
+This is used when a client wants to communicate with a specific pod directly. No service with load balancing needed.
+Usecases include:
+- communicating from a client to a statefull application (like a database)
+
+A client needs to get the adress of each individual pod it wants to communicat with.
+A client can achive this by:
+- API calls to the K8s API server
+  - the app is not longer loosly coupled. To closely tight to the K8s API
+  - inefficient
+- DNS Lookup to discover ip adresses of pods. This works if in the service configuration of the service clusterIP is set to none. In that case the ip adres of a pod is returned instead of the service ip adress.
+
+Example of Headless service
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service-headless
+spec:
+  clusterIP: none
+  selector:
+    app: mongodb
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+```
+
+## NodePort
+Create a service which is accessible at the defined portnumber for each workernode.
+
+![nodeport service](images/nodeportservice.png)
+
+The nodeport has a predefined range between 30000 - 32767.
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-service-nodeport
+spec:
+  type: NodePort
+  selector:
+    app: microservice-one
+  ports:
+    - protocol: TCP
+      port: 3200
+      targetPort: 3000
+      nodePort: 30008
+```
+
+![nodeport example](images/nodeportexample.png)
+
+Nodeport services are not secure. The clients have direct access to the worker nodes.
+NodePort services should not be used for external connections in a production environment.
+The better alternative is a LoadBalancer service.
+
+## LoadBalancer
+A service becomes available externally through a cloud provider loadbalancer.
+NodePort and clusterIP services are created automatically by Kubernetes.
+
+Example of a loadbalancer
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-service-loadbalancer
+spec:
+  type: LoadBalancer
+  selector:
+    app: microservice-one
+  ports:
+    - protocol: TCP
+      port: 3200
+      targetPort: 3000
+      nodePort: 30010
+```
+
+Example of a load balancer service
+
+![example load balancer](images/loadbalancerservice.png)
+
+![load balancer ports](images/loadbalancerports.png)
+
 
 
 # Check virtualisation
