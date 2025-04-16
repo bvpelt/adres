@@ -5,7 +5,7 @@ Using minikube. See https://minikube.sigs.k8s.io/docs/commands/
 See
 - https://www.youtube.com/watch?v=X48VuDVv0do
 
-2:45:00 https://youtu.be/X48VuDVv0do?feature=shared&t=9954
+3:24:00  https://youtu.be/X48VuDVv0do?feature=shared&t=12274
 
 ## Intro
 Kubernetes is an open source container orchestration tool.
@@ -647,10 +647,10 @@ Requirements
   Using environment variables in the mongo-expres deployment definition
 - Make mongo-expres accessible for a browser
 
-![Schematic view of kubernetes config](./images/mongosetup.png)
+![Schematic view of kubernetes config](images/mongosetup.png)
 
 The flow of a request from the browser is
-![Flow of an external request](./images/mongoflow.png)
+![Flow of an external request](images/mongoflow.png)
 
 Check the current content of the minikube cluster
 ```bash
@@ -1328,11 +1328,11 @@ spec:
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Recycle
+  persistentVolumeReclaimPolicy: Retain
   storageClassName: slow
   mountOptions:
     - hard
-    - nfsvers=4.0
+    - vers=4.0
   nfs:
     path: /dir/path/on/nfs/server
     server: nfs-server-ip-addresss
@@ -1399,7 +1399,182 @@ For database persistence on should use remote storage.
 
 PV (Persistent Volumes) are resources which needs to be there when a pod which uses it is defined.
 Who defines it?
-There is an administrator in Kubernetes.
+There are different roles in a Kubernetes cluster
+- Kubernetes administrator
+- Kubernetes user
+
+The administrator defines the cluster configuration and sets resources, memory, defines storage backends and persistent volumes based on needs of users
+The user (devops team) deploys apps in the cluster direct or through a ci/cd pipeline. A user has to refer (clain) the defined persistent volumes. Using a Persistent Volume Claim.
+exmple:
+
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-name
+spec:
+  storageClassName: manual
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+```
+The use of the persistent volume claim is depicted as
+![pvc](images/persvolclaim.png)
+
+In the pod/deployment specification you have to use the persistent volume claim.
+Example:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+    - name: myfrontend
+      image: nginx
+      volumeMounts:
+        - mountPath: "/var/www/html"
+          name: mypd
+  volumes:
+    - name: mypd
+      persistentVolumeClaim:
+        claimName: pvc-name    # This matches the name of the persistent volume claim
+```
+
+The Persistent Volume Claim must be in the same namespace as the pod/deployment.
+
+Two volumetypes are different
+- configmap
+- secret
+
+Both are local volumes. But not created through PV and PVC, but internal Kubernetes resources managed by Kubernetes.
+To use a configmap
+- create a configmap
+- mount the configmap in your pod/container
+Example:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+    - name: busybox-container
+      image: busybox
+      volumeMounts:
+        - name: config-dir
+          mountPath: /etc/config
+  volumes:
+    - name: config-dir
+      configMap:
+        name: dbconfigMap
+```
+There are different volume types: https://kubernetes.io/docs/concepts/storage/volumes/#volume-types
+
+A Pod can use different volume types at the same time in one configuration.
+
+To make managing persistent volumes simpler there is a Kubernetes Storage class.
+Storage class provisions Persistent Volumes dynamically ... whenever a persistent volume claim claims it.
+Provisioning storage may be automated by using the Storage class.
+
+Example:
+
+```yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: storage-class-name
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: io1
+  iopsPerGB: "10"
+  fsType: ext4
+```
+Storage class is an abstraction level that abstracts the underlying storage provider.
+
+Example howto use Storage class
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-name
+spec:
+
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: storage-class-name  # Needs to match the name of the StorageClass
+```
+
+# Statefull sets
+A Statefull set is a Kubernetes component used for statefull applications.
+Examples of statefull applications are: databases which persist/provision state, or any application that stores data to keep track of its state.
+Stateless applications are deployed using Deployment which make it possible to have several replica's of the same application.
+Statefull applications are deployed using StatefullSet component.
+
+## Deployment vs StatfullSet
+Deployments are replicated/scaled up or down easy.
+StatefullSets can't be created/deleted at random and can't be randomly accessed. Reason: the replica pods are not identical. They each have a unique identity.
+The StatfullSets maintains a sticky identity for each of the pods. 
+Why do Statefull applications need a pod identity?
+Only one instance is allowed to read/write the other's are only allowed to read. (Master [read/write] vs Slave [read]).
+The pod's don't have access to the same physical storage. They have the same data which is provisioned by a continuous synchronisation proces.
+Statefulsets have fixed ordered names [ $(statefulset name) - $(ordinal) ] where deployments have a random hash in the name.
+
+![master slave](images/masterslave.png)
+
+A new pod is only created if the previous one already exists (except for master).
+Deletetion is in reverse order, the last created one is deleted first.
+Each pod has its own dns name [ ${pod-name}.${governing service domain}] example: mysql-0.svc2, mysql-1.svc2, mysql-2.svc2.
+When a pod of a statefull application restarts:
+- ip adress changes
+- name and endpoint stay the same
+
+Replicating statefull apps:
+- is complex
+- Kubernetes helps
+- You still need to act
+  - configure cloning and data synchronisation
+  - make remote storage available
+  - managing and backup of data
+
+# Kubernetes Services
+In Kubernetes each pod has its own IP adress. Pods are ephemeral which means they can be destroyed at any time. When that happens and a new pod starts to 
+replace the old one, it gets a new IP adress. A service provides a stable ip adress even when the pod dies. Services are ment as a stable adress to access a pod.
+The service also provides loadbalancing.
+
+pods:
+- each one has own ip adres
+- are destoyed frequently
+
+services:
+- stable ip adress
+- loadbalancing
+- loose coupling
+- within and outside cluster
+
+There are several service types in Kubernetes:
+- ClusterIP
+
+## ClusterIP
+Default type of a service. If you don't explicitly define the service type it will be a clusterip service.
+
+![service forwarding](images/serviceforwarding.png)
+
+Kubernetes create endpoints. To view the endpoints
+```bash
+kubectl get endpoints
+NAME         ENDPOINTS            AGE
+kubernetes   192.168.39.87:8443   14d
+```
+
 
 # Check virtualisation
 ```bash
