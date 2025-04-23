@@ -1,0 +1,7 @@
+grafana:
+  dashboards:
+    springboot:
+      spring-boot-statistics:
+        gnetId: 19004
+        revision: 3
+        datasource: Prometheus

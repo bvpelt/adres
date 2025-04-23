@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: adres-app
+  labels:
+    app: adres-app
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/actuator/prometheus"
+    prometheus.io/port: "8081"
+spec:
+  type: NodePort
+  selector:
+    app: adres-app
+  ports:
+    - name: http-8080
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+    - name: http-8081
+      protocol: TCP
+      port: 8081
+      targetPort: 8081

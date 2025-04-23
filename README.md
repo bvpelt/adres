@@ -221,7 +221,7 @@ management:
 Metrics data are available at http://localhost:8081/actuator/prometheus
 
 
-[Prometheus config file](prometheus.yaml)
+[Prometheus config file](docs/prometheus.yaml)
 
 ```bash
  ~/Apps/prometheus-3.1.0.linux-amd64/prometheus --config.file=docs/prometheus.yaml 
@@ -280,7 +280,7 @@ Start dashboard ```sudo /bin/systemctl start grafana-server```
 
 Stop dashboard ```sudo /bin/systemctl stop grafana-server```
 
-[Grafana configuration file](kubernetes/grafana-springboot.json)
+[Grafana configuration file](docs/grafana-spring-boot.json)
 [Grafana example queries](https://signoz.io/guides/a-regex-in-query-in-grafana/)
 
 - [docker image](https://hub.docker.com/r/prom/prometheus)
@@ -462,6 +462,12 @@ minikube service angular-app --url
 minikube service grafana --url
 ```
 
+# Helm
+
+```bash
+# from the helm directory -- install monitoring in namespace monitoring
+helm install k8s-monitoring prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace  -f grafana-values.yaml
+```
 ## References
 
 - [Spring security](https://www.baeldung.com/security-spring)
