@@ -88,7 +88,9 @@ Forwarding from [::1]:3000 -> 3000
 ```
 
 # Helm Charts
-See https://www.youtube.com/watch?v=jUYNS90nq8U 
+See
+- https://www.youtube.com/watch?v=jUYNS90nq8U
+- https://www.youtube.com/watch?v=DQk8HOVlumI 
 
 ## Create Helm structure
 This can be done
@@ -398,4 +400,295 @@ TEST SUITE: None
 helm ls
 NAME         	NAMESPACE	REVISION	UPDATED                                 	STATUS  	CHART          	APP VERSION
 myadresapp-02	default  	2       	2025-04-19 21:08:45.690781389 +0200 CEST	deployed	adressapp-0.1.0	1.16.0   
+```
+
+# Microk8s tutorial
+
+## Helloworld
+```bash
+helm create helloworld
+Creating helloworld
+# The helloworld helm chart is generated
+
+tree helloworld/
+helloworld/
+├── charts
+├── Chart.yaml
+├── templates
+│    ├── deployment.yaml
+│    ├── _helpers.tpl
+│    ├── hpa.yaml
+│    ├── ingress.yaml
+│    ├── NOTES.txt
+│    ├── serviceaccount.yaml
+│    ├── service.yaml
+│    └── tests
+│        └── test-connection.yaml
+└── values.yaml
+
+4 directories, 10 files
+
+# Installing the helloworld helm chart from directory docs/course/Helm
+helm install myhelloworld helloworld
+NAME: myhelloworld
+LAST DEPLOYED: Fri Apr 25 19:59:19 2025
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+NOTES:
+1. Get the application URL by running these commands:
+  export NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].nodePort}" services myhelloworld)
+  export NODE_IP=$(kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+
+# Verify the installation
+helm list -a
+NAME        	NAMESPACE	REVISION	UPDATED                                 	STATUS  	CHART           	APP VERSION
+myhelloworld	default  	1       	2025-04-25 19:59:19.953331357 +0200 CEST	deployed	helloworld-0.1.0	1.16.0   
+
+kubectl get service
+NAME           TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
+kubernetes     ClusterIP   10.96.0.1     <none>        443/TCP        23d
+myhelloworld   NodePort    10.98.66.70   <none>        80:30943/TCP   27m
+
+# Get hostname of the node
+kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}"
+192.168.39.87
+
+# Check this with browser using adres http://192.168.39.87:30943/
+
+# Uninstall the myhelloworld helm chart
+helm uninstall myhelloworld
+release "myhelloworld" uninstalled
+```
+
+## Helm CLI
+
+```bash
+helm create helloworld
+Creating helloworld
+
+# Install helm chart
+helm install myhelloworldrelease helloworld/
+NAME: myhelloworldrelease
+LAST DEPLOYED: Fri Apr 25 20:43:49 2025
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=helloworld,app.kubernetes.io/instance=myhelloworldrelease" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace default port-forward $POD_NAME 8080:$CONTAINER_PORT
+
+# Verify installation
+helm ls
+NAME               	NAMESPACE	REVISION	UPDATED                                 	STATUS  	CHART           	APP VERSION
+myhelloworldrelease	default  	1       	2025-04-25 20:43:49.437830469 +0200 CEST	deployed	helloworld-0.1.0	1.16.0
+
+# Changes values.replicaCount 1 -> 2     
+# Apply changes
+helm upgrade myhelloworldrelease helloworld/
+Release "myhelloworldrelease" has been upgraded. Happy Helming!
+NAME: myhelloworldrelease
+LAST DEPLOYED: Fri Apr 25 20:49:48 2025
+NAMESPACE: default
+STATUS: deployed
+REVISION: 2
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=helloworld,app.kubernetes.io/instance=myhelloworldrelease" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace default port-forward $POD_NAME 8080:$CONTAINER_PORT
+
+helm ls
+NAME               	NAMESPACE	REVISION	UPDATED                                 	STATUS  	CHART           	APP VERSION
+myhelloworldrelease	default  	2       	2025-04-25 20:49:48.310371974 +0200 CEST	deployed	helloworld-0.1.0	1.16.0  
+
+# Rollback
+helm rollback myhelloworldrelease 1
+Rollback was a success! Happy Helming!
+
+helm ls
+NAME               	NAMESPACE	REVISION	UPDATED                                 	STATUS  	CHART           	APP VERSION
+myhelloworldrelease	default  	3       	2025-04-25 20:53:25.454976247 +0200 CEST	deployed	helloworld-0.1.0	1.16.0   
+
+# Debug and dry-run
+helm install myhelloworldrelease helloworld --debug --dry-run
+install.go:225: 2025-04-25 20:58:56.18007583 +0200 CEST m=+0.020813198 [debug] Original chart version: ""
+install.go:242: 2025-04-25 20:58:56.180109839 +0200 CEST m=+0.020847193 [debug] CHART PATH: /home/bvpelt/Develop/adres/docs/course/Helm/helloworld
+
+NAME: myhelloworldrelease
+LAST DEPLOYED: Fri Apr 25 20:58:56 2025
+NAMESPACE: default
+STATUS: pending-install
+REVISION: 1
+USER-SUPPLIED VALUES:
+{}
+
+COMPUTED VALUES:
+affinity: {}
+autoscaling:
+  enabled: false
+  maxReplicas: 100
+  minReplicas: 1
+  targetCPUUtilizationPercentage: 80
+fullnameOverride: ""
+image:
+  pullPolicy: IfNotPresent
+  repository: nginx
+  tag: ""
+imagePullSecrets: []
+ingress:
+  annotations: {}
+  className: ""
+  enabled: false
+  hosts:
+  - host: chart-example.local
+    paths:
+    - path: /
+      pathType: ImplementationSpecific
+  tls: []
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+nameOverride: ""
+nodeSelector: {}
+podAnnotations: {}
+podLabels: {}
+podSecurityContext: {}
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+replicaCount: 2
+resources: {}
+securityContext: {}
+service:
+  port: 80
+  type: ClusterIP
+serviceAccount:
+  annotations: {}
+  automount: true
+  create: true
+  name: ""
+tolerations: []
+volumeMounts: []
+volumes: []
+
+HOOKS:
+---
+# Source: helloworld/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "myhelloworldrelease-test-connection"
+  labels:
+    helm.sh/chart: helloworld-0.1.0
+    app.kubernetes.io/name: helloworld
+    app.kubernetes.io/instance: myhelloworldrelease
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['myhelloworldrelease:80']
+  restartPolicy: Never
+MANIFEST:
+---
+# Source: helloworld/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: myhelloworldrelease
+  labels:
+    helm.sh/chart: helloworld-0.1.0
+    app.kubernetes.io/name: helloworld
+    app.kubernetes.io/instance: myhelloworldrelease
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+automountServiceAccountToken: true
+---
+# Source: helloworld/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: myhelloworldrelease
+  labels:
+    helm.sh/chart: helloworld-0.1.0
+    app.kubernetes.io/name: helloworld
+    app.kubernetes.io/instance: myhelloworldrelease
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: helloworld
+    app.kubernetes.io/instance: myhelloworldrelease
+---
+# Source: helloworld/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myhelloworldrelease
+  labels:
+    helm.sh/chart: helloworld-0.1.0
+    app.kubernetes.io/name: helloworld
+    app.kubernetes.io/instance: myhelloworldrelease
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: helloworld
+      app.kubernetes.io/instance: myhelloworldrelease
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: helloworld-0.1.0
+        app.kubernetes.io/name: helloworld
+        app.kubernetes.io/instance: myhelloworldrelease
+        app.kubernetes.io/version: "1.16.0"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      serviceAccountName: myhelloworldrelease
+      containers:
+        - name: helloworld
+          image: "nginx:1.16.0"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=helloworld,app.kubernetes.io/instance=myhelloworldrelease" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace default port-forward $POD_NAME 8080:$CONTAINER_PORT
+
+
+https://youtu.be/DQk8HOVlumI?feature=shared&t=3147
 ```

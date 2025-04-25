@@ -847,6 +847,7 @@ Why use namespaces?
 ```bash
 # not bound to a namespace
 kubectl api-resources --namespaced=false | sort
+NAME                                SHORTNAMES   APIVERSION                        NAMESPACED   KIND
 apiservices                                      apiregistration.k8s.io/v1         false        APIService
 certificatesigningrequests          csr          certificates.k8s.io/v1            false        CertificateSigningRequest
 clusterrolebindings                              rbac.authorization.k8s.io/v1      false        ClusterRoleBinding
@@ -858,7 +859,6 @@ customresourcedefinitions           crd,crds     apiextensions.k8s.io/v1        
 flowschemas                                      flowcontrol.apiserver.k8s.io/v1   false        FlowSchema
 ingressclasses                                   networking.k8s.io/v1              false        IngressClass
 mutatingwebhookconfigurations                    admissionregistration.k8s.io/v1   false        MutatingWebhookConfiguration
-NAME                                SHORTNAMES   APIVERSION                        NAMESPACED   KIND
 namespaces                          ns           v1                                false        Namespace
 nodes                                            metrics.k8s.io/v1beta1            false        NodeMetrics
 nodes                               no           v1                                false        Node
@@ -879,6 +879,7 @@ volumeattachments                                storage.k8s.io/v1              
 
 # bound to a namespace
 kubectl api-resources --namespaced=true | sort
+NAME                        SHORTNAMES   APIVERSION                     NAMESPACED   KIND
 bindings                                 v1                             true         Binding
 configmaps                  cm           v1                             true         ConfigMap
 controllerrevisions                      apps/v1                        true         ControllerRevision
@@ -896,7 +897,6 @@ jobs                                     batch/v1                       true    
 leases                                   coordination.k8s.io/v1         true         Lease
 limitranges                 limits       v1                             true         LimitRange
 localsubjectaccessreviews                authorization.k8s.io/v1        true         LocalSubjectAccessReview
-NAME                        SHORTNAMES   APIVERSION                     NAMESPACED   KIND
 networkpolicies             netpol       networking.k8s.io/v1           true         NetworkPolicy
 persistentvolumeclaims      pvc          v1                             true         PersistentVolumeClaim
 poddisruptionbudgets        pdb          policy/v1                      true         PodDisruptionBudget
@@ -1407,7 +1407,24 @@ The administrator defines the cluster configuration and sets resources, memory, 
 The user (devops team) deploys apps in the cluster direct or through a ci/cd pipeline. A user has to refer (clain) the defined persistent volumes. Using a Persistent Volume Claim.
 exmple:
 
+(Free cloud storage for instance: https://www.oracle.com/cloud/free/ )
+
 ```yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: prod-db-pv
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/vda1/data/prod-db"  # or use NFS/CSI here
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

@@ -414,6 +414,7 @@ docker compose up
 ## Kubernetes
 See
 - https://www.youtube.com/watch?v=X48VuDVv0do
+
 ## Minikube
 See
 - docs https://minikube.sigs.k8s.io/docs/
@@ -427,6 +428,13 @@ minikube delete
 
 minikube start driver=docker
 
+# After installing kubectl
+#- sudo chown root:root /usr/local/bin/kubectl 
+#- sudo chmod 0755 /usr/local/bin/kubectl 
+kubectl version
+Client Version: v1.31.0
+Kustomize Version: v5.4.2
+Server Version: v1.32.0
 
 # create configmap for dashboards for grafana
 kubectl create configmap spring-boot-dashboard --from-file=docs/grafana-springboot.json
@@ -461,6 +469,9 @@ kubectl apply -f kubernetes/angular-app-service.yaml
 minikube service angular-app --url
 minikube service grafana --url
 ```
+## Microk8s
+See https://microk8s.io/
+
 
 # Helm
 
