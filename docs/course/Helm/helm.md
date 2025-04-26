@@ -468,7 +468,9 @@ release "myhelloworld" uninstalled
 helm create helloworld
 Creating helloworld
 
+#
 # Install helm chart
+#
 helm install myhelloworldrelease helloworld/
 NAME: myhelloworldrelease
 LAST DEPLOYED: Fri Apr 25 20:43:49 2025
@@ -487,8 +489,10 @@ helm ls
 NAME               	NAMESPACE	REVISION	UPDATED                                 	STATUS  	CHART           	APP VERSION
 myhelloworldrelease	default  	1       	2025-04-25 20:43:49.437830469 +0200 CEST	deployed	helloworld-0.1.0	1.16.0
 
+#
 # Changes values.replicaCount 1 -> 2     
 # Apply changes
+#
 helm upgrade myhelloworldrelease helloworld/
 Release "myhelloworldrelease" has been upgraded. Happy Helming!
 NAME: myhelloworldrelease
@@ -507,7 +511,9 @@ helm ls
 NAME               	NAMESPACE	REVISION	UPDATED                                 	STATUS  	CHART           	APP VERSION
 myhelloworldrelease	default  	2       	2025-04-25 20:49:48.310371974 +0200 CEST	deployed	helloworld-0.1.0	1.16.0  
 
+#
 # Rollback
+#
 helm rollback myhelloworldrelease 1
 Rollback was a success! Happy Helming!
 
@@ -515,7 +521,10 @@ helm ls
 NAME               	NAMESPACE	REVISION	UPDATED                                 	STATUS  	CHART           	APP VERSION
 myhelloworldrelease	default  	3       	2025-04-25 20:53:25.454976247 +0200 CEST	deployed	helloworld-0.1.0	1.16.0   
 
+#
 # Debug and dry-run
+# - Generate output used for install, no changes made
+#
 helm install myhelloworldrelease helloworld --debug --dry-run
 install.go:225: 2025-04-25 20:58:56.18007583 +0200 CEST m=+0.020813198 [debug] Original chart version: ""
 install.go:242: 2025-04-25 20:58:56.180109839 +0200 CEST m=+0.020847193 [debug] CHART PATH: /home/bvpelt/Develop/adres/docs/course/Helm/helloworld
@@ -690,5 +699,299 @@ NOTES:
   kubectl --namespace default port-forward $POD_NAME 8080:$CONTAINER_PORT
 
 
-https://youtu.be/DQk8HOVlumI?feature=shared&t=3147
+#
+# helm template
+# - Execute dry run with output to terminal no changes made
+#
+helm template helloworld/
+---
+# Source: helloworld/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: release-name-helloworld
+  labels:
+    helm.sh/chart: helloworld-0.1.0
+    app.kubernetes.io/name: helloworld
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+automountServiceAccountToken: true
+---
+# Source: helloworld/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-helloworld
+  labels:
+    helm.sh/chart: helloworld-0.1.0
+    app.kubernetes.io/name: helloworld
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: helloworld
+    app.kubernetes.io/instance: release-name
+---
+# Source: helloworld/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-helloworld
+  labels:
+    helm.sh/chart: helloworld-0.1.0
+    app.kubernetes.io/name: helloworld
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: helloworld
+      app.kubernetes.io/instance: release-name
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: helloworld-0.1.0
+        app.kubernetes.io/name: helloworld
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/version: "1.16.0"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      serviceAccountName: release-name-helloworld
+      containers:
+        - name: helloworld
+          image: "nginx:1.16.0"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+---
+# Source: helloworld/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "release-name-helloworld-test-connection"
+  labels:
+    helm.sh/chart: helloworld-0.1.0
+    app.kubernetes.io/name: helloworld
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['release-name-helloworld:80']
+  restartPolicy: Never
+
+#
+# helm lint 
+# - check syntax of helm charts
+#
+
+helm lint helloworld/
+==> Linting helloworld/
+[INFO] Chart.yaml: icon is recommended
+
+1 chart(s) linted, 0 chart(s) failed
+
+#
+# helm uninstall
+# - uninstall the helm chart
+#
+helm uninstall myhelloworldrelease
+release "myhelloworldrelease" uninstalled
+
 ```
+
+## Create custom helm chart
+
+### Create a python app
+See https://github.com/rahulwagh/python-flask-rest-api-project
+
+Project requirements [pyton-app](python-app/README.md)
+
+### Create helm chart
+
+```bash
+helm create python-flask-rest-api-project
+Creating python-flask-rest-api-project
+```
+
+Update created project
+- in Chart.yaml 
+  - change appVersion from "1.16.0" to "1.0 .0"
+- in values.yaml
+  - change image/repository from nginx to repository dockerpinguin/python-flask-rest-api-project
+  - change service/type from clusterIP to NodePort
+  - change livenessProbe from:
+```yaml
+livenessProbe: 
+  httpGet:
+    path: /
+    port: http
+```  
+    to 
+```yaml
+livenessProbe: {}
+```  
+- change readinessProbe from:
+```yaml
+readinessProbe: 
+  httpGet:
+    path: /
+    port: http
+```  
+    to 
+```yaml
+readinessProbe: {}
+```  
+
+- in templates/deployment.yaml
+  - change spec/template/spec/containers/ports/containerPort from 80 to 9001
+
+The helm chart is defined and ready.
+
+Check the helm chart
+
+```bash
+helm lint python-flask-rest-api-project/
+==> Linting python-flask-rest-api-project/
+[INFO] Chart.yaml: icon is recommended
+
+1 chart(s) linted, 0 chart(s) failed
+
+helm template python-flask-rest-api-project/
+---
+# Source: python-flask-rest-api-project/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: release-name-python-flask-rest-api-project
+  labels:
+    helm.sh/chart: python-flask-rest-api-project-0.1.0
+    app.kubernetes.io/name: python-flask-rest-api-project
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+automountServiceAccountToken: true
+---
+# Source: python-flask-rest-api-project/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-python-flask-rest-api-project
+  labels:
+    helm.sh/chart: python-flask-rest-api-project-0.1.0
+    app.kubernetes.io/name: python-flask-rest-api-project
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: python-flask-rest-api-project
+    app.kubernetes.io/instance: release-name
+---
+# Source: python-flask-rest-api-project/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-python-flask-rest-api-project
+  labels:
+    helm.sh/chart: python-flask-rest-api-project-0.1.0
+    app.kubernetes.io/name: python-flask-rest-api-project
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: python-flask-rest-api-project
+      app.kubernetes.io/instance: release-name
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: python-flask-rest-api-project-0.1.0
+        app.kubernetes.io/name: python-flask-rest-api-project
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/version: "1.0.0"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      serviceAccountName: release-name-python-flask-rest-api-project
+      containers:
+        - name: python-flask-rest-api-project
+          image: "dockerpinguin/python-flask-rest-api-project:python-rest-api:1.0.0"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 9001
+              protocol: TCP
+---
+# Source: python-flask-rest-api-project/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "release-name-python-flask-rest-api-project-test-connection"
+  labels:
+    helm.sh/chart: python-flask-rest-api-project-0.1.0
+    app.kubernetes.io/name: python-flask-rest-api-project
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['release-name-python-flask-rest-api-project:80']
+  restartPolicy: Never
+
+```
+
+### Install helm chart
+
+```bash
+helm install mypythonapp python-flask-rest-api-project/
+NAME: mypythonapp
+LAST DEPLOYED: Sat Apr 26 21:02:11 2025
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+NOTES:
+1. Get the application URL by running these commands:
+  export NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].nodePort}" services mypythonapp-python-flask-rest-api-project)
+  export NODE_IP=$(kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+```
+
+https://youtu.be/DQk8HOVlumI?feature=shared&t=4649

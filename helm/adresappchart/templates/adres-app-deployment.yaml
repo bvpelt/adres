@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: {{ .Values.appName }}
-          image: "{{ .Values.image.name }}:{{ .Values.image.version}}" dockerpinguin/adres:latest
+          image: "{{ .Values.image.name }}:{{ .Values.image.version}}"
           ports:
             - containerPort: 8080
             - containerPort: 8081

@@ -94,3 +94,4 @@ adres.trace.db
 /adresbook/Thumbs.db
 adresbook/src/app/core
 data
+venv
