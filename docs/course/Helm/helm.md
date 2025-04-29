@@ -841,7 +841,7 @@ Creating python-flask-rest-api-project
 
 Update created project
 - in Chart.yaml 
-  - change appVersion from "1.16.0" to "1.0 .0"
+  - change appVersion from "1.16.0" to "1.0.0"
 - in values.yaml
   - change image/repository from nginx to repository dockerpinguin/python-flask-rest-api-project
   - change service/type from clusterIP to NodePort
@@ -992,6 +992,107 @@ NOTES:
   export NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].nodePort}" services mypythonapp-python-flask-rest-api-project)
   export NODE_IP=$(kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}")
   echo http://$NODE_IP:$NODE_PORT
+  
+# Check deployment
+helm ls
+NAME       	NAMESPACE	REVISION	UPDATED                                 	STATUS  	CHART                              	APP VERSION
+mypythonapp	default  	1       	2025-04-26 21:02:11.304610307 +0200 CEST	deployed	python-flask-rest-api-project-0.1.0	1.0.0      
+
+kubectl get deployments
+NAME                                        READY   UP-TO-DATE   AVAILABLE   AGE
+mypythonapp-python-flask-rest-api-project   1/1     1            1           2d19h
+
+kubectl get service
+NAME                                        TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+kubernetes                                  ClusterIP   10.96.0.1      <none>        443/TCP        27d
+mypythonapp-python-flask-rest-api-project   NodePort    10.96.49.196   <none>        80:31513/TCP   2d19h
+
+# Get ip of node
+minikube ip
+192.168.39.87
+
+# Access the service on port 31513
+curl http://192.168.39.87:31513/hello
+{"data":"Hello World"}
 ```
 
-https://youtu.be/DQk8HOVlumI?feature=shared&t=4649
+### Using helm file
+What is helm file?
+
+An addon to helm to manage helm chars.
+
+See https://jhooq.com/helmfile-manage-helmchart/
+
+- Download helmfile from https://github.com/roboll/helmfile/releases/download/v0.144.0/helmfile_linux_amd64
+- sudo chmod 0555 ~/Downloads/helmfile_linux_amd64
+- sudo mv ~/Downloads/helmfile_linux_amd64 /usr/local/bin/helmfile
+- sudo chown root:root /usr/local/bin/helmfile
+
+```bash
+# Check helmfile installation and version
+helmfile -version
+helmfile version v0.144.0
+
+# From the ./docs/course/Helm directory
+helm create helloworld
+# This creates a helloworld helm chart
+
+# Install the helmfile
+helmfile sync
+Building dependency release=helloworldrelease, chart=helloworld
+Affected releases are:
+  helloworldrelease (helloworld) UPDATED
+
+Upgrading release=helloworldrelease, chart=helloworld
+Release "helloworldrelease" does not exist. Installing it now.
+NAME: helloworldrelease
+LAST DEPLOYED: Tue Apr 29 17:32:52 2025
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=helloworld,app.kubernetes.io/instance=helloworldrelease" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace default port-forward $POD_NAME 8080:$CONTAINER_PORT
+
+Listing releases matching ^helloworldrelease$
+helloworldrelease	default  	1       	2025-04-29 17:32:52.614108108 +0200 CEST	deployed	helloworld-0.1.0	1.16.0     
+
+
+UPDATED RELEASES:
+NAME                CHART        VERSION
+helloworldrelease   helloworld     0.1.0
+
+# Check installation
+helm ls
+NAME             	NAMESPACE	REVISION	UPDATED                                 	STATUS  	CHART           	APP VERSION
+helloworldrelease	default  	1       	2025-04-29 17:32:52.614108108 +0200 CEST	deployed	helloworld-0.1.0	1.16.0    
+
+# To uninstall the helloworld, change the helmfile. In the helmfile change installed: true -> installed: false
+# and run helm sync again.
+ helmfile sync
+Listing releases matching ^helloworldrelease$
+helloworldrelease	default  	1       	2025-04-29 17:32:52.614108108 +0200 CEST	deployed	helloworld-0.1.0	1.16.0     
+
+Affected releases are:
+  helloworldrelease (./helloworld) DELETED
+
+Deleting helloworldrelease
+release "helloworldrelease" uninstalled
+
+
+DELETED RELEASES:
+NAME
+helloworldrelease
+```
+
+To use github with helmfile one needs a plugin. See https://github.com/aslafy-z/helm-git. 
+
+
+https://youtu.be/DQk8HOVlumI?feature=shared&t=5809
+
+
+
+
