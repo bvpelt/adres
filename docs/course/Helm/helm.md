@@ -1088,10 +1088,263 @@ NAME
 helloworldrelease
 ```
 
+### Github plugin
+
 To use github with helmfile one needs a plugin. See https://github.com/aslafy-z/helm-git. 
 
+```bash
+helm plugin install https://github.com/aslafy-z/helm-git --version 1.3.0
+Installed plugin: helm-git
+```
 
-https://youtu.be/DQk8HOVlumI?feature=shared&t=5809
+Use [helmfile2.yaml](helmfile2.yaml) to install helloworld from a github repository from the ./adres home directory.
+
+```bash
+helmfile -f docs/course/Helm/helmfile2.yaml sync
+Adding repo helloworld git+https://github.com/rahulwagh/helmchart@helloworld?ref=master&sparse=0
+"helloworld" has been added to your repositories
+
+Affected releases are:
+  helloworld (helloworld/helloworld) UPDATED
+
+Upgrading release=helloworld, chart=helloworld/helloworld
+Release "helloworld" does not exist. Installing it now.
+NAME: helloworld
+LAST DEPLOYED: Fri May  2 20:47:45 2025
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+NOTES:
+1. Get the application URL by running these commands:
+  export NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].nodePort}" services helloworld)
+  export NODE_IP=$(kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+
+Listing releases matching ^helloworld$
+helloworld	default  	1       	2025-05-02 20:47:45.562763311 +0200 CEST	deployed	helloworld-0.1.0	1.16.0     
+
+
+UPDATED RELEASES:
+NAME         CHART                   VERSION
+helloworld   helloworld/helloworld     0.1.0
+
+# Verify the installation
+helm ls
+NAME      	NAMESPACE	REVISION	UPDATED                                 	STATUS  	CHART           	APP VERSION
+helloworld	default  	1       	2025-05-02 20:47:45.562763311 +0200 CEST	deployed	helloworld-0.1.0	1.16.0  
+```
+
+Copy helmfile2.yaml -> helmfile3.yaml and change installed true -> installed false
+
+```bash
+helmfile -f docs/course/Helm/helmfile3.yaml sync
+Adding repo helloworld git+https://github.com/rahulwagh/helmchart@helloworld?ref=master&sparse=0
+"helloworld" has been added to your repositories
+
+Listing releases matching ^helloworld$
+helloworld	default  	1       	2025-05-02 20:47:45.562763311 +0200 CEST	deployed	helloworld-0.1.0	1.16.0     
+
+Affected releases are:
+  helloworld (helloworld/helloworld) DELETED
+
+Deleting helloworld
+release "helloworld" uninstalled
+
+
+DELETED RELEASES:
+NAME
+helloworld
+
+helm ls
+NAME	NAMESPACE	REVISION	UPDATED	STATUS	CHART	APP VERSION
+```
+
+Helmfile can be used to install multiple helm chars using one helmfile. See https://jhooq.com/helmfile-manage-helmchart/ "Deploy multiple Helmcharts using Helmfile".
+
+
+# Helm Repository
+
+Searching the helm reporistory
+
+```bash
+helm search hub wordpress
+URL                                               	CHART VERSION	APP VERSION        	DESCRIPTION                                       
+https://artifacthub.io/packages/helm/kube-wordp...	0.1.0        	1.1                	this is my wordpress package                      
+https://artifacthub.io/packages/helm/wordpress-...	1.0.2        	1.0.0              	A Helm chart for deploying Wordpress+Mariadb st...
+https://artifacthub.io/packages/helm/bizlinked/...	24.2.4       	6.8.1              	WordPress is the world's most popular blogging ...
+https://artifacthub.io/packages/helm/bitnami/wo...	24.2.4       	6.8.1              	WordPress is the world's most popular blogging ...
+https://artifacthub.io/packages/helm/bitnami-ak...	15.2.13      	6.1.0              	WordPress is the world's most popular blogging ...
+...
+https://artifacthub.io/packages/helm/wordpresss...	1.1.0        	5.8.2              	Web publishing platform for building blogs and ...
+https://artifacthub.io/packages/helm/viveksahu2...	1.0.0        	2                  	This is my custom chart to deploy wordpress and...
+https://artifacthub.io/packages/helm/jinchi-cha...	0.2.0        	1.1.0              	Wordpress for Kubernetes                          
+https://artifacthub.io/packages/helm/six/wordress 	0.2.0        	1.1.0              	Wordpress for Kubernetes                          
+https://artifacthub.io/packages/helm/projet-dev...	0.1.0        	1.16.0             	A Helm chart for wordpress deployed on Azure Ku...
+https://artifacthub.io/packages/helm/wordpressm...	0.1.0        	1.1        
+```
+
+Get full url of the repository
+```bash
+helm search hub wordpress --max-col-width=0
+URL                                                                           	CHART VERSION	APP VERSION        	DESCRIPTION                                                                                                                                                                                       
+https://artifacthub.io/packages/helm/kube-wordpress/wordpress                 	0.1.0        	1.1                	this is my wordpress package                                                                                                                                                                      
+https://artifacthub.io/packages/helm/wordpress-mariadb/wordpress              	1.0.2        	1.0.0              	A Helm chart for deploying Wordpress+Mariadb stack on kubernetes.                                                                                                                                 
+https://artifacthub.io/packages/helm/bizlinked/wordpress                      	24.2.4       	6.8.1              	WordPress is the world's most popular blogging and content management platform. Powerful yet simple, everyone from students to global corporations use it to build beautiful, functional websites.
+https://artifacthub.io/packages/helm/bitnami/wordpress                        	24.2.4       	6.8.1              	WordPress is the world's most popular blogging and content management platform. Powerful yet simple, everyone from students to global corporations use it to build beautiful, functional websites.
+https://artifacthub.io/packages/helm/bitnami-aks/wordpress                    	15.2.13      	6.1.0              	WordPress is the world's most popular blogging and content management platform. Powerful yet simple, everyone from students to global corporations use it to build beautiful, functional websites.
+...
+https://artifacthub.io/packages/helm/jinchi-chart/wordress                    	0.2.0        	1.1.0              	Wordpress for Kubernetes                                                                                                                                                                          
+https://artifacthub.io/packages/helm/six/wordress                             	0.2.0        	1.1.0              	Wordpress for Kubernetes                                                                                                                                                                          
+https://artifacthub.io/packages/helm/projet-devops/wp-chart                   	0.1.0        	1.16.0             	A Helm chart for wordpress deployed on Azure Kubernete service                                                                                                                                    
+https://artifacthub.io/packages/helm/wordpressmysqlapp/wpmysql                	0.1.0        	1.1  
+```
+
+Which helm repos are already installed.
+
+```bash
+helm repo list
+NAME                	URL                                                                      
+helloworld          	git+https://github.com/rahulwagh/helmchart@helloworld?ref=master&sparse=0
+```
+
+Add the bitnami repository. Bitnami has a lot of usefull helmcharts.
+See https://github.com/bitnami/charts for a description of bitnami and the [charts](https://github.com/bitnami/charts/tree/main/bitnami) available.
+
+```bash
+helm repo add bitnami https://charts.bitnami.com/bitnami
+"bitnami" has been added to your repositories
+
+helm repo list
+NAME                	URL                                                                                             
+helloworld          	git+https://github.com/rahulwagh/helmchart@helloworld?ref=master&sparse=0
+bitnami             	https://charts.bitnami.com/bitnami   
+
+
+helm search repo postgres --max-col-width=0
+NAME                                             	CHART VERSION	APP VERSION	DESCRIPTION                                                                                                                                                                                         
+bitnami/postgresql                               	16.6.6       	17.4.0     	PostgreSQL (Postgres) is an open source object-relational database known for reliability and data integrity. ACID-compliant, it supports foreign keys, joins, views, triggers and stored procedures.
+bitnami/postgresql-ha                            	15.3.15      	17.4.0     	This PostgreSQL cluster solution includes the PostgreSQL replication manager, an open-source tool for managing replication and failover on PostgreSQL clusters.                                                                                                                                                                                            
+bitnami/cloudnative-pg                           	0.1.9        	1.25.1     	CloudNativePG is an open-source tool for managing PostgreSQL databases on Kubernetes, from setup to ongoing upkeep.                                                                                 
+bitnami/supabase                                 	5.3.6        	1.24.7     	DEPRECATED Supabase is an open source Firebase alternative. Provides all the necessary backend features to build your application in a scalable way. Uses PostgreSQL as datastore.                  
+bitnami/minio-operator                           	0.1.7        	7.1.1      	MinIO(R) Operator is a Kubernetes-native tool for deploying and managing high-performance, S3-compatible MinIO(R) object storage across hybrid cloud infrastructures.   
+```
+
+Get information for a helm chart
+```bash
+helm show readme bitnami/postgresql --version=16.6.6
+...shows README.md from bitnami/postgresql help chart...
+# Alternative https://github.com/bitnami/charts/blob/main/bitnami/postgresql/README.md
+
+
+helm show values bitnami/postgresql --version=16.6.6
+...shows values.yaml from bitnami/postgresql help chart...
+```
+
+# Helm Hook en Test
+
+![helm hooks](../../images/helm-hooks.png)
+
+During the helm installation there is a pre- and a post-install fase. During theses fases a hook to perform certain actions can be used.
+
+Usescase
+- before installing the helm chart one wants to define/start a cron job
+- after installing the helm chart one wants to run a cleanup script
+
+In the [documentation](https://helm.sh/docs/topics/charts_hooks/) there are other possible helm hooks defined.
+- pre-install
+- post-install
+- pre-delete
+- post-delete
+- pre-upgrade
+- post-upgrade
+- pre-rollback
+- post-rollback
+- test
+
+Helm hooks can be used for any k8s resource.
+
+In the [example](helloworld2) the [pre-install hook](helloworld2/templates/hooks/pre-install.yaml) will echo 'pre-install Pod is running' and wait 10 seconds.
+
+```bash
+helm install helloworld helloworld2
+NAME: helloworld
+LAST DEPLOYED: Sat May  3 20:38:37 2025
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+NOTES:
+1. Get the application URL by running these commands:
+  export NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].nodePort}" services helloworld-helloworld2)
+  export NODE_IP=$(kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+
+# Check jobs (should be deleted)
+kubectl get jobs
+No resources found in default namespace.
+
+# Check installation
+helm ls
+NAME      	NAMESPACE	REVISION	UPDATED                                 	STATUS  	CHART            	APP VERSION
+helloworld	default  	1       	2025-05-03 20:38:37.875132524 +0200 CEST	deployed	helloworld2-0.1.0	1.16.0    
+
+# Uninstall
+helm uninstall helloworld
+release "helloworld" uninstalled
+
+# Check installation
+helm ls
+NAME	NAMESPACE	REVISION	UPDATED	STATUS	CHART	APP VERSION
+```
+
+Helm test is used to validate the helm chart. Compare it to a unit test of the software.
+
+```tree helloworld2```
+![directory tree](../../images/helm-chart-tree.png)
+
+In the templates/tests directorie there is a default generated test test-connection.yaml.
+
+After installation
+
+```bash
+helm install helloworld helloworld2
+NAME: helloworld
+LAST DEPLOYED: Sat May  3 20:54:07 2025
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+NOTES:
+1. Get the application URL by running these commands:
+  export NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].nodePort}" services helloworld-helloworld2)
+  export NODE_IP=$(kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+
+helm ls
+NAME      	NAMESPACE	REVISION	UPDATED                                 	STATUS  	CHART            	APP VERSION
+helloworld	default  	1       	2025-05-03 20:54:07.566816043 +0200 CEST	deployed	helloworld2-0.1.0	1.16.0 
+```
+
+the helm test can be executed
+
+```bash
+helm test helloworld
+NAME: helloworld
+LAST DEPLOYED: Sat May  3 20:54:07 2025
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE:     helloworld-helloworld2-test-connection
+Last Started:   Sat May  3 20:56:01 2025
+Last Completed: Sat May  3 20:56:04 2025
+Phase:          Succeeded
+NOTES:
+1. Get the application URL by running these commands:
+  export NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].nodePort}" services helloworld-helloworld2)
+  export NODE_IP=$(kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+
+```
+
+https://youtu.be/DQk8HOVlumI?feature=shared&t=7557
 
 
 

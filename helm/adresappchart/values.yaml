@@ -1,8 +1,0 @@
-namespace: default
-
-appName: adresapp
-databaseApp: postgres
-
-image:
-  name: dockerpinguin/adres
-  version: latest
