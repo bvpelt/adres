@@ -1,0 +1,11 @@
+global:
+  postgresql:
+    auth:
+      postgresPassword: postgres
+      username: testuser
+      password: 12345
+      database: adres
+
+
+metrics:
+  enabled: true

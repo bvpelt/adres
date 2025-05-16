@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "adres-app.fullname" . }}-test-connection"
+  labels:
+    {{- include "adres-app.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:
+        - "{{ include "adres-app.fullname" . }}:{{ (index .Values.service.ports 1).port }}/actuator/app-health"
+  restartPolicy: Never

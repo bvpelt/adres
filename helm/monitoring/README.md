@@ -1239,4 +1239,5 @@ Expose the grafanaservice on http://127.0.0.1:8080/
 
 ```bash
 kubectl port-forward svc/grafana -n monitoring 8080:3000 &
+# Gives access to http://localhost:8080/
 ```
