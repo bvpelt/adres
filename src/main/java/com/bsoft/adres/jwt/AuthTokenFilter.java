@@ -87,11 +87,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             if (requestUri.startsWith("/adres/api/v1")) {
                 log.trace("requestUri match /adres/api/v1: {}", requestUri);
                 String refererHeader = request.getHeader("Referer");
-                String ipAdres = getClientIpAddr(request);
+                String ipAddress = getClientIpAddr(request);
                 if ((xapiHeader == null) || (!apiKeyService.isValidApiKey(xapiHeader))) {
-                    log.error("doFilterInternal - No (valid) X-API-KEY, referer: {}, ipadres: {}", (refererHeader != null ? refererHeader : ""), ipAdres);
+                    log.error("doFilterInternal - No (valid) X-API-KEY, referer: {}, ipaddress: {}", (refererHeader != null ? refererHeader : ""), ipAddress);
                     throw new ServletException("X-API-KEY has invalid format or is not known!");
                 }
+//                log.info("doFilterInternal - X-API-KEY, referer: {}, ipaddress: {}", (refererHeader != null ? refererHeader : ""), ipAddress);
             }
         }
     }
