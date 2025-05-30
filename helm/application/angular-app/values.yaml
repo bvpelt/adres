@@ -138,4 +138,5 @@ tolerations: []
 affinity: {}
 
 env:
-  API_BASE_URL: "http://adres-app:8080/adres/api/v1"
+  API_BASE_URL: "http://minikube:31065/adres/api/v1"
+  ADRES_APP_PROXY_URL: "http://adres-app:8080"

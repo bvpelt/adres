@@ -1,0 +1,58 @@
+{
+  "httpClient": {
+    "handler": {
+      "backend": {
+        "xhrFactory": {}
+      },
+      "injector": {
+        "parent": {
+          "parent": {},
+          "source": "Platform: core",
+          "scopes": {},
+          "records": {},
+          "_ngOnDestroyHooks": {},
+          "_onDestroyHooks": [],
+          "_destroyed": false,
+          "injectorDefTypes": {}
+        },
+        "source": "e",
+        "scopes": {},
+        "records": {},
+        "_ngOnDestroyHooks": {},
+        "_onDestroyHooks": [],
+        "_destroyed": false,
+        "injectorDefTypes": {}
+      },
+      "pendingTasks": {
+        "taskId": 8,
+        "pendingTasks": {},
+        "hasPendingTasks": {
+          "closed": false,
+          "currentObservers": [],
+          "observers": [],
+          "isStopped": false,
+          "hasError": false,
+          "thrownError": null,
+          "_value": true
+        }
+      }
+    }
+  },
+  "basePath": "http://localhost:8080/adres/api/v1",
+  "defaultHeaders": {
+    "normalizedNames": {},
+    "lazyUpdate": null,
+    "headers": {}
+  },
+  "configuration": {
+    "apiKeys": {
+      "api_key": "f0583805-03f6-4c7f-8e40-f83f55b7c077"
+    },
+    "username": "",
+    "password": "",
+    "accessToken": "",
+    "basePath": "http://adres-app:8080/adres/api/v1",
+    "credentials": {}
+  },
+  "encoder": {}
+}
